@@ -143,7 +143,7 @@
 
 .AttributesSectionMask1
 {
-	width: 139px;
+	width: 140px;
 	height: 160px;
 	opacity-mask: url("file://{images}/custom_game/character/iw_character_attribute_hex_mask1.tga");
 	overflow: clip;
@@ -151,7 +151,7 @@
 
 .AttributesSectionMask2
 {
-	width: 139px;
+	width: 140px;
 	height: 160px;
 	opacity-mask: url("file://{images}/custom_game/character/iw_character_attribute_hex_mask2.tga");
 	overflow: clip;

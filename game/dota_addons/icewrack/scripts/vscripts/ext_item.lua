@@ -17,7 +17,7 @@ local stExtItemTypeEnum =
 	IW_ITEM_TYPE_WEAPON_1H = 1,        IW_ITEM_TYPE_WEAPON_2H = 2,        IW_ITEM_TYPE_WEAPON_SWORD = 3,     IW_ITEM_TYPE_WEAPON_MACE = 4,
 	IW_ITEM_TYPE_WEAPON_AXE = 5,       IW_ITEM_TYPE_WEAPON_DAGGER = 6,    IW_ITEM_TYPE_WEAPON_STAFF = 7,     IW_ITEM_TYPE_WEAPON_BOW = 8,
 	IW_ITEM_TYPE_WEAPON_AMMO = 9,      IW_ITEM_TYPE_ARMOR_MAIL = 10,      IW_ITEM_TYPE_ARMOR_LEATHER = 11,   IW_ITEM_TYPE_ARMOR_CLOTH = 12,
-	IW_ITEM_TYPE_ARMOR_HEAD = 13       IW_ITEM_TYPE_ARMOR_BODY = 14,      IW_ITEM_TYPE_ARMOR_HANDS = 15,     IW_ITEM_TYPE_ARMOR_FEET = 16,
+	IW_ITEM_TYPE_ARMOR_HEAD = 13,      IW_ITEM_TYPE_ARMOR_BODY = 14,      IW_ITEM_TYPE_ARMOR_HANDS = 15,     IW_ITEM_TYPE_ARMOR_FEET = 16,
 	IW_ITEM_TYPE_ARMOR_WAIST = 17,     IW_ITEM_TYPE_ARMOR_SHIELD = 18,    IW_ITEM_TYPE_JEWELRY_AMULET = 19,  IW_ITEM_TYPE_JEWELRY_RING = 20,
 	IW_ITEM_TYPE_USEABLE_POTION = 21,  IW_ITEM_TYPE_USEABLE_ELIXIR = 22,  IW_ITEM_TYPE_USEABLE_WAND = 23,    IW_ITEM_TYPE_USEABLE_RECIPE = 24,
 	IW_ITEM_TYPE_USEABLE_BOOK = 25,    IW_ITEM_TYPE_USEABLE_FOOD = 26,    IW_ITEM_TYPE_REAGENT_HERB = 27,    IW_ITEM_TYPE_REAGENT_METAL = 28,
@@ -35,17 +35,17 @@ local stExtItemSlotEnum =
 local stExtItemFlagEnum =
 {
 	IW_ITEM_FLAG_NONE = 0,
-	IW_ITEM_FLAG_HIDDEN = 1,
-	IW_ITEM_FLAG_UNIQUE = 2,
-	IW_ITEM_FLAG_QUEST = 4,
-	IW_ITEM_FLAG_ATTACK_SOURCE = 8,
-	IW_ITEM_FLAG_MAIN_HAND_ONLY = 16,
-	IW_ITEM_FLAG_OFF_HAND_ONLY = 32,
-	IW_ITEM_FLAG_CANNOT_UNEQUIP = 64,
-	IW_ITEM_FLAG_REQUIRES_AMMO = 128,
-	IW_ITEM_FLAG_THROWN = 256,
-	IW_ITEM_FLAG_CAN_ACTIVATE = 512,
-	IW_ITEM_FLAG_CAN_READ = 1024,
+	IW_ITEM_FLAG_HIDDEN = 1,				--TODO: Do not display this item in the Inventory list
+	IW_ITEM_FLAG_UNIQUE = 2,				--TODO: A character cannot carry more than one of this item at a time
+	IW_ITEM_FLAG_QUEST = 4,					--TODO: Quest-related item, cannot be dropped
+	IW_ITEM_FLAG_ATTACK_SOURCE = 8,			--Use the stats of this item when performing an attack
+	IW_ITEM_FLAG_MAIN_HAND_ONLY = 16,		--TODO: This item can only be equipped in the main hand
+	IW_ITEM_FLAG_OFF_HAND_ONLY = 32,		--TODO: This item can only be equipped in the off hand
+	IW_ITEM_FLAG_CANNOT_UNEQUIP = 64,		--This item cannot be unequipped (TODO: Make it so that these items don't autoequip)
+	IW_ITEM_FLAG_REQUIRES_AMMO = 128,		--TODO: If this item is an attack source, it needs ammo in the other hand to attack with
+	IW_ITEM_FLAG_THROWN = 256,				--TODO: When attacking with this item, remove a stack
+	IW_ITEM_FLAG_CAN_ACTIVATE = 512,		--This item has the "Activate" context menu option
+	IW_ITEM_FLAG_CAN_READ = 1024,			--This item has the "Read" context menu option
 }
 
 for k,v in pairs(stExtItemTypeEnum) do _G[k] = v end
