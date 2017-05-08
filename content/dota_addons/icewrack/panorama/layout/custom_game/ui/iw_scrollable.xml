@@ -1,0 +1,10 @@
+<root>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_scrollable.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="ScrollableRoot">
+		<Panel hittest="false" id="Scrollable" />
+	</Panel>
+</root>

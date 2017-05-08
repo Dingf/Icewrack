@@ -1,0 +1,73 @@
+.ScrollbarRoot
+{
+}
+
+.ScrollFillContainer
+{
+	width: 100%;
+	height: 100%;
+	padding: 7px 7px 7px 7px;
+	blur: gaussian(1.5);
+}
+
+.ScrollbarFill
+{
+	width: 100%;
+	height: 100%;
+	background-color: #000000;
+}
+
+.ScrollbarContainer
+{
+	height: 100%;
+}
+
+.ScrollbarRegion
+{
+	width: 38px;
+	height: 38px;
+}
+
+.ScrollbarButton
+{
+	width: 38px;
+	height: 38px;
+}
+
+.ScrollbarButtonOverlay
+{
+	margin-top: 2px;
+	margin-left: 2px;
+	transform-origin: 50% 50%;
+	horizontal-align: center;
+	vertical-align: center;
+	opacity: 0.25;
+}
+
+.ScrollbarButtonOverlay:hover
+{
+	opacity: 1.0;
+}
+
+.HorizontalOverlay
+{
+	transform: rotateZ(-90deg);
+}
+
+#Button2
+{
+	horizontal-align: right;
+	vertical-align: bottom;
+}
+
+.ScrollbarVerticalStyle
+{
+	horizontal-align: right;
+	height: 100%;
+}
+
+.ScrollbarHorizontalStyle
+{
+	vertical-align: bottom;
+	width: 100%;
+}

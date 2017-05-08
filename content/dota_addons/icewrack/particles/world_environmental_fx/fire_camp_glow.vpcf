@@ -1,0 +1,137 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	_class = "CParticleSystemDefinition"
+	m_BoundingBoxMin = [ -10.0, -10.0, -100.0 ]
+	m_BoundingBoxMax = [ 10.0, 10.0, -100.0 ]
+	m_flConstantLifespan = 9999999999.0
+	m_nMaxParticles = 250
+	m_bShouldSort = false
+	m_Operators = 
+	[
+		{
+			_class = "C_OP_Decay"
+		},
+		{
+			_class = "C_OP_RampScalarLinear"
+			m_RateMin = -0.1
+			m_RateMax = 0.1
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_InterpolateRadius"
+			m_flStartScale = 0.1
+			m_flEndScale = 1.5
+			m_flBias = 0.75
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_FadeOutSimple"
+			m_flFadeOutTime = 0.75
+		},
+		{
+			_class = "C_OP_LerpEndCapScalar"
+			m_nFieldOutput = 16
+			m_flOutput = 0.0
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_LerpEndCapScalar"
+			m_nFieldOutput = 7
+			m_flOutput = 0.0
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_BasicMovement"
+			m_Gravity = [ 0.0, 0.0, 25.0 ]
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_FadeInSimple"
+		},
+		{
+			_class = "C_OP_Noise"
+			m_flOutputMax = 1000.0
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_OscillateScalar"
+			m_RateMin = 0.5
+			m_RateMax = 0.5
+			m_flEndTime_min = 1000000.0
+			m_flEndTime_max = 1000000.0
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_InterpolateRadius"
+			m_bDisableOperator = true
+		},
+	]
+	m_Renderers = 
+	[
+		{
+			_class = "C_OP_RenderSprites"
+			m_nOrientationType = 3
+			m_flMaxSize = 0.4
+			m_flAnimationRate = 0.25
+			m_bFitCycleToLifetime = true
+			m_flSelfIllumAmount = 1.0
+			m_nSequenceCombineMode = "2"
+			m_bAdditive = true
+			m_nRefractBlurType = "2"
+			m_flOverbrightFactor = 5.0
+			m_hTexture = resource:"materials/particle/basic_glow.vtex"
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_RenderDeferredLight"
+			m_flRadiusScale = 2.5
+			m_flAlphaScale = 15.0
+			m_ColorScale = [ 168, 33, 0 ]
+			m_hTexture = resource:"materials/particle/particle_glow_03.vtex"
+		},
+	]
+	m_Initializers = 
+	[
+		{
+			_class = "C_INIT_RandomRadius"
+			m_flRadiusMin = 175.0
+			m_flRadiusMax = 200.0
+		},
+		{
+			_class = "C_INIT_RandomAlpha"
+			m_nAlphaMin = 80
+			m_nAlphaMax = 96
+		},
+		{
+			_class = "C_INIT_CreateWithinSphere"
+			m_fRadiusMax = 32.0
+		},
+		{
+			_class = "C_INIT_RandomLifeTime"
+			m_fLifetimeMin = 0.5
+			m_fLifetimeMax = 0.6
+		},
+	]
+	m_Emitters = 
+	[
+		{
+			_class = "C_OP_ContinuousEmitter"
+			m_flEmissionDuration = -1.0
+			m_flEmitRate = 50.0
+			m_flOpStartFadeInTime = 0.25
+			m_flOpEndFadeInTime = 1.5
+			m_flOpStartFadeOutTime = 2.5
+			m_flOpEndFadeOutTime = 4.5
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_ContinuousEmitter"
+			m_flEmitRate = 10.0
+		},
+		{
+			_class = "C_OP_InstantaneousEmitter"
+			m_nParticlesToEmit = 1
+			m_bDisableOperator = true
+		},
+	]
+}

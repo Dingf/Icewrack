@@ -1,0 +1,44 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/partybar/iw_partybar_member.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/partybar/iw_partybar_member.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="PartyBarMember" onload="OnPartyBarMemberLoad()">
+		<Panel class="PartyBarValues">
+			<Panel onmouseover="ShowHPLabel()" onmouseout="HideHPLabel()" onactivate="ToggleHPLabel()" class="PartyBarValueContainer" id="HPContainer">
+				<Panel class="PartyBarValueFill" id="HPBar" />
+				<Label hittest="false" class="PartyBarValueLabel" id="HPLabel" text="/" />
+			</Panel>
+			<Panel onmouseover="ShowMPLabel()" onmouseout="HideMPLabel()" onactivate="ToggleMPLabel()" class="PartyBarValueContainer" id="MPContainer">
+				<Panel class="PartyBarValueFill" id="MPBar" />
+				<Label hittest="false" class="PartyBarValueLabel" id="MPLabel" text="/" />
+			</Panel>
+			<Panel onmouseover="ShowSPLabel()" onmouseout="HideSPLabel()" onactivate="ToggleSPLabel()" class="PartyBarValueContainer" id="SPContainer">
+				<Panel class="PartyBarValueFill" id="SPBar" />
+				<Label hittest="false" class="PartyBarValueLabel" id="SPLabel" text="/" />
+			</Panel>
+		</Panel>
+		<Panel hittest="false" class="PartyBarActionContainer" id="ActionContainer">
+			<Panel hittest="false" class="PartyBarActionFill" />
+			<Image hittest="false" class="PartyBarActionImage" id="ActionImage" src="file://{images}/spellicons/default.png" />
+			<Label hittest="false" class="PartyBarActionLabel" id="ActionLabel" text="" />
+		</Panel>
+		<Panel onactivate="OnSelectPortraitUnit()" ondblclick="OnCenterPortraitUnit()" class="PartyBarPortraitContainer" id="PortraitContainer">
+			<Image hittest="false" class="PartyBarPortrait" id="Portrait" src="file://{images}/portraits/default.png" />
+			<Image hittest="false" class="PartyBarDeathPortrait" id="DeathPortrait" src="file://{images}/portraits/death_overlay.png" />
+		</Panel>
+		<Image hittest="false" class="PartyBarOverlay" />
+		<Image hittest="false" class="PartyBarSecondarySelectOverlay" id="SecondarySelectOverlay"/>
+		<Image hittest="false" class="PartyBarPrimarySelectOverlay" id="PrimarySelectOverlay"/>
+		<Panel onactivate="OnIndicatorPressed()" class="PartyBarIndicator">
+			<Image id="IndicatorOff" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_off.tga"/>
+			<Image id="IndicatorOn" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_on.tga"/>
+			<Image id="IndicatorNS" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_ns.tga"/>
+		</Panel>
+	</Panel>
+</root>

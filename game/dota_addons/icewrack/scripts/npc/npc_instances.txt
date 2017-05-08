@@ -1,0 +1,116 @@
+"IcewrackInstanceList"
+{
+	"1"
+	{
+		"Name"			"npc_dota_hero_axe"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"2"
+	{
+		"Name"			"npc_dota_hero_dragon_knight"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"3"
+	{
+		"Name"			"npc_dota_hero_drow_ranger"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"4"
+	{
+		"Name"			"npc_dota_hero_bounty_hunter"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+	
+	"5"
+	{
+		"Name"			"npc_dota_hero_lina"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"6"
+	{
+		"Name"			"npc_dota_hero_omniknight"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"7"
+	{
+		"Name"			"npc_dota_hero_legion_commander"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"8"
+	{
+		"Name"			"npc_dota_hero_kunkka"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"9"
+	{
+		"Name"			"npc_dota_hero_warlock"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"10"
+	{
+		"Name"			"npc_dota_hero_crystal_maiden"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"11"
+	{
+		"Name"			"npc_dota_hero_tusk"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"12"
+	{
+		"Name"			"npc_dota_hero_alchemist"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"13"
+	{
+		"Name"			"npc_iw_blacksmith"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	
+
+	
+
+	"10000"
+	{
+		"Name"			"npc_dota_hero_windrunner"
+		"Team"			"DOTA_TEAM_BADGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+	"10001"
+	{
+		"Name"			"prop_iw_test_treasure_chest"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_CONTAINER"
+	}
+	"10002"
+	{
+		"Name"			"npc_iw_expedition_merc_1"
+		"Team"			"DOTA_TEAM_BADGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+}

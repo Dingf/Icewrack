@@ -1,0 +1,23 @@
+.ContextMenuItemRoot
+{
+	width: 100px;
+	padding: 4px;
+	padding-left: 8px;
+}
+
+.ContextMenuItemRoot:hover
+{
+	background-color: gradient(linear, 0% 0%, 100% 0%, from(#444444c0), to(#00000000));
+}
+
+.ContextMenuItemRoot Label
+{
+	font-size: 16px;
+	color: #ffffff40;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.ContextMenuItemRoot:hover Label
+{
+	color: #ffffffff;
+}

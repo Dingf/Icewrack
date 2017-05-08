@@ -1,0 +1,17 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/inventory/iw_inventory_slot.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/inventory/iw_inventory_slot.js" />
+	</scripts>
+	
+	<Panel draggable="true" class="InventorySlotRoot" onload="OnInventorySlotLoad()" onmouseover="OnInventorySlotMouseOver()" onmouseout="OnInventorySlotMouseOut()">
+		<Panel id="Background" />
+		<Panel class="InventorySlotOverlay" id="Overlay" />
+		<Image hittest="false" class="InventorySlotItemTexture" id="ItemTexture" />
+		<Label hittest="false" class="InventorySlotStackCount" id="StackCount" text=""/>
+	</Panel>
+</root>

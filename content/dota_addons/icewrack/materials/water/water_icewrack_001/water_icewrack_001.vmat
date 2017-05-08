@@ -1,0 +1,75 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "water_dota.vfx"
+
+	//---- Flow ----
+	F_FLOW_NORMALS 1
+
+	//---- Reflection ----
+	F_USE_FOG_COLOR 1
+
+	//---- Color ----
+	g_vTexCoordScale "[0.100 0.100]"
+
+	//---- Flow ----
+	g_flFlowTimeScale "0.500"
+
+	//---- Flow Noise ----
+	g_flNoiseStrength "1.000"
+	g_flNoiseUvScale "0.0005"
+	TextureNoise "materials/water/water_icewrack_001/water_noise.tga"
+
+	//---- Flow Normals ----
+	g_flNormalFlowLerpExp "1.000"
+	g_flNormalFlowTimeIntervalInSeconds "0.500"
+	g_flNormalFlowUvScrollDistance "0.180"
+	g_flNormalUvScale "500.000"
+	g_flWorldPositionScale "0.750"
+	TextureFlow "materials/water/water_icewrack_001/dota_flowmap_flow.tga"
+
+	//---- Low End ----
+	g_flLowEndBaseBloom "0.100"
+	g_flLowEndBloomPower "0.100"
+	g_flLowEndReflectionPower "2.000"
+	g_flLowEndSurfaceFactor "0.500"
+	g_flLowEndSurfaceMinimumColor "0.400"
+	g_flLowEndSurfaceOpacity "1.000"
+	g_vLowEndReflectionColor "[0.129412 0.188235 0.235294 0.000000]"
+	g_vLowEndReflectionDir "[-0.450 -0.500 0.499]"
+	g_vLowEndSurfaceColor "[0.129412 0.188235 0.172549 0.000000]"
+
+	//---- Normal Map ----
+	g_flBumpStrength "2.500"
+	TextureNormal "materials/water/water_icewrack_001/water_river_normal_sharp_temp_normal.tga"
+
+	//---- Reflections ----
+	g_flReflectance "0.100"
+	g_flReflectionAmount "0.070"
+	g_vReflectionTint "[0.749020 0.749020 0.749020 0.000000]"
+
+	//---- Refractions ----
+	g_flRefractionAmount "1.000"
+	g_flWaterDepth "256.000"
+	g_flWaterFogShadowFactor "1.000"
+	g_vRefractionTint "[0.184314 0.309804 0.309804 1.000000]"
+	g_vWaterFogColor "[0.117647 0.117647 0.117647 0.000000]"
+
+	//---- Specular ----
+	g_flBaseBloom "0.050"
+	g_flBloomPower "1.000"
+	g_flReflectionPower "1.000"
+	g_vReflectionColor "[0.070588 0.164706 0.188235 0.000000]"
+	g_vReflectionDir "[-0.450 -0.500 0.499]"
+
+	Attributes
+	{
+		mapbuilder.nonsolid "1"
+		mapbuilder.water "1"
+		RepresentativeTextureWidth "1024"
+		RepresentativeTextureHeight "512"
+		mapbuilder.nonsolid "1.000000"
+		mapbuilder.water "1.000000"
+	}
+}

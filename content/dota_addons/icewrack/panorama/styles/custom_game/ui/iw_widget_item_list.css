@@ -1,0 +1,129 @@
+.ItemListRoot
+{
+	width: 520px;
+	height: 736px;
+}
+
+.ItemListContent
+{
+	width: 492px;
+	height: 460px;
+	background-color: #000000C0;
+	margin-top: 258px;
+}
+
+.ItemListContainer
+{
+	margin-top: 32px;
+	width: 100%;
+	height: 100%;
+	overflow: clip;
+}
+
+.ItemListHitbox
+{
+	width: 492px;
+	height: 460px;
+	margin-top: 258px;
+}
+
+.ItemListBody
+{
+	height: fit-children;
+	flow-children: down;
+	overflow: clip;
+}
+
+.ItemListTabContainer
+{
+	margin-top: 157px;
+	width: 492px;
+	flow-children: right;
+}
+
+.ItemListTabLabel
+{
+	color: #ffffff40;
+	width: 492px;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: center;
+	margin-top: 230px;
+	margin-left: 0px;
+}
+
+.ItemListSorter
+{
+	width: 100%;
+	height: 32px;
+	flow-children: right;
+	border-bottom: 2px solid #ffffff10;
+}
+
+.ItemListSorterDivider
+{
+	width: 0px;
+	height: 100%;
+	background-color: #80808010;
+}
+
+.ItemListSorterRightCategory
+{
+	height: 100%;
+	width: fit-children;
+	margin-right: 4px;
+	flow-children: right;
+}
+
+.ItemListSorterLeftCategory
+{
+	height: 100%;
+	width: fit-children;
+	margin-right: 4px;
+	flow-children: left;
+}
+
+.ItemListSorterSpacer
+{
+	height: 100%;
+	width: 40px;
+}
+
+.ItemListSorterLabel
+{
+	text-align: center;
+	vertical-align: center;
+	color: #ffffff30;
+	font-size: 18px;
+	font-weight: bold;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.ItemListSorterDirectionIcon
+{
+	height: 24px;
+	width: 9px;
+	margin-left: 2px;
+	vertical-align: center;
+	opacity: 0.4;
+}
+
+.DirectionIconSortAscending
+{
+	transform: scale3d(1.0, -1.0, 1.0);
+}
+
+#NameCategory
+{
+	width: 256px;
+}
+
+#ValueCategory
+{
+	width: 72px;
+}
+
+#WeightCategory
+{
+	width: 72px;
+}

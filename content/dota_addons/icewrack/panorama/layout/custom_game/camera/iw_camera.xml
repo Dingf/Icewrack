@@ -1,0 +1,10 @@
+<root>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/camera/iw_camera.js" />
+	</scripts>
+
+	<Panel hittest="false" class="IcewrackCameraRoot">
+		<Panel hittest="false" id="Camera" />
+	</Panel>
+</root>

@@ -1,0 +1,18 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/sidebar/iw_sidebar.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/sidebar/iw_sidebar.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="SideBarRoot">
+		<Panel hittest="false" id="SideBar">
+			<Panel class="SideBarWindow" onmouseover="OnMouseOver()" onmouseout="OnMouseOut()">
+				<Panel hittest="false" class="SideBarIconContainer" id="IconContainer"/>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

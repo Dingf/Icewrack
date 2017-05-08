@@ -1,0 +1,19 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_window.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_button.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_scrollbar.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_icon_label.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_tab.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_window.js" />
+	</scripts>
+	
+	<Panel draggable="true" hittest="true" class="WindowRoot" onload="OnWindowLoad()">
+		<Image hittest="false" class="WindowBG" src="file://{images}/custom_game/ui/iw_window_bg.tga" />
+		<Label hittest="false" class="WindowTitle" id="Title" text="" />
+	</Panel>
+</root>

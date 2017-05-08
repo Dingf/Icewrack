@@ -1,0 +1,23 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/aam/iw_aam_condition_item.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_dropdown_menu.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_dropdown_text.js" />
+		<include src="file://{resources}/scripts/custom_game/aam/iw_aam_condition_item.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="AAMConditionItemRoot" onload="OnAAMConditionItemLoad()">
+		<Label class="AAMConditionItemStart" text="•" />
+		<Panel hittest="true" class="AAMConditionItemBody" id="Body" />
+		<Button hittest="true" class="AAMConditionItemButton" id="InvertButton" onactivate="OnAAMConditionItemInvertActivate()">
+			<Image src="file://{images}/custom_game/aam/iw_aam_invert.tga" />
+		</Button>
+		<Button hittest="true" class="AAMConditionItemButton" id="DeleteButton" onactivate="OnAAMConditionItemDeleteActivate()">
+			<Image src="file://{images}/custom_game/aam/iw_aam_close_x.tga" />
+		</Button>
+	</Panel>
+</root>

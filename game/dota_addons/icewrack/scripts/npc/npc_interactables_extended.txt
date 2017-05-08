@@ -1,0 +1,40 @@
+"IcewrackExtendedPropDefinitions"
+{
+	"prop_iw_anvil"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_WORLD_OBJECT"
+		"InteractRange"		"64"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+
+	"prop_iw_tanning_rack"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_WORLD_OBJECT"
+		"InteractRange"		"64"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+
+	"prop_iw_snowforge"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_WORLD_OBJECT"
+		"InteractRange"		"64"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+
+	"prop_iw_test_treasure_chest"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_CONTAINER"
+		"InteractRange"		"64"
+
+		"LootList"		"test"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+}

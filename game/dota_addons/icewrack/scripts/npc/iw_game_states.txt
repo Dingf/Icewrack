@@ -1,0 +1,71 @@
+//Note: These are default values. The actual values
+//      may change in-game and when loading a save
+"IcewrackGameStates"
+{
+	"game"
+	{
+		"start_gold_0"		"1000"
+		"start_gold_1"		"500"
+		"start_gold_2"		"250"
+		"start_gold_3"		"100"
+		"hero_selection"	"0"
+	}
+
+	"party"
+	{
+		"axe"
+		{
+			"approval"	"0"
+			"active"	"0"
+		}
+		"dk"
+		{
+			"approval"	"0"
+			"active"	"0"
+		}
+		"drow"
+		{
+			"approval"	"0"
+			"active"	"0"
+		}
+		"bh"
+		{
+			"approval"	"0"
+			"active"	"0"
+		}
+		"lina"
+		{
+			"approval"	"0"
+			"active"	"0"
+		}
+		"omni"
+		{
+			"approval"	"0"
+			"active"	"0"
+		}
+		"warlock"
+		{
+			"approval"	"0"
+			"active"	"0"
+		}
+		"rylai"
+		{
+			"approval"	"0"
+			"active"	"0"
+		}
+		"legion"
+		{
+			"approval"	"0"
+			"active"	"0"
+		}
+	}
+
+	"dialogue"
+	{
+		"legion"
+		{
+			"intro"		"0"
+			"intro_name"	"0"
+		}
+	}
+}

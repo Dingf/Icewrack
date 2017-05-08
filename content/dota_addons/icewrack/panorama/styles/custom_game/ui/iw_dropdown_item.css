@@ -1,0 +1,18 @@
+.DropdownMenuItemRoot Label
+{
+	color: #ffffff40;
+	font-size: 18px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.DropdownMenuItemRoot:hover Label
+{
+	color: #ffffffff;
+}
+
+.DropdownMenuItemRoot:hover
+{
+	background-color: gradient(linear, 0% 0%, 100% 0%, from(#444444c0), to(#00000000));
+}

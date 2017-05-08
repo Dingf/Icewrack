@@ -1,0 +1,21 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/aam/iw_aam_loader.css" />
+	</styles>
+	
+	<snippets>
+		<snippet name="AAMLoaderEntrySnippet">
+			<Panel class="AAMLoaderEntry">
+				<Label hittest="false" class="AAMLoaderEntryText" id="EntryText"/>
+			</Panel>
+		</snippet>
+	</snippets>
+	
+	<Panel class="AAMLoaderContentRoot">
+		<Label class="AAMLoaderTitleText" text="#iw_ui_aam_load_tactics" />
+		<Panel class="AAMLoaderListBackground" id="Background" />
+		<Panel class="AAMLoaderEntryList" id="EntryList">
+			<Panel class="AAMLoaderEntryListContainer" id="EntryListContainer" />
+		</Panel>
+	</Panel>
+</root>

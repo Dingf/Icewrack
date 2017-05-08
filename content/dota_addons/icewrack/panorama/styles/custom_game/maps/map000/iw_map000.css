@@ -1,0 +1,202 @@
+.CharacterSelectRoot
+{
+    width: 100%;
+    height: 100%;
+	opacity: 0.0;
+}
+
+.CharacterSelectFillerGroup
+{
+    width: 100%;
+    height: 100%;
+	flow-children: down;
+}
+
+.CharacterSelectFillerTop
+{
+    width: 95%;
+    height: 5%;
+	horizontal-align: right;
+}
+
+.CharacterSelectFillerBottom
+{
+    width: 100%;
+    height: 95%;
+}
+
+.CharacterSelectHeroGroup
+{
+	width: 100%;
+	height: 100%;
+}
+
+.CharacterSelectDifficultyGroup
+{
+	width: 100%;
+	height: 100%;
+	visibility: collapse;
+}
+
+.CharacterSelectFlowGroup
+{
+	width: 100%;
+	height: 100%;
+	horizontal-align: center;
+	flow-children: down;
+}
+
+.CharacterSelectTitle
+{
+	color: #ffffffff;
+	font-size: 64;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	text-shadow: 0px 0px 2px 2.0 #00000040;
+	horizontal-align: center;
+}
+
+.CharacterSelectIntroContainer
+{
+	background-color: gradient(linear, 0% 0%, 0% 100%, from(#000000c0), to(#00000080));
+	width: 800px;
+	height: fit-children;
+	horizontal-align: center;
+	flow-children: down;
+	border-radius: 5px;
+}
+
+.CharacterSelectIntro
+{
+	width: 720px;
+	color: #ffffffc0;
+	font-size: 22;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: center;
+	horizontal-align: center;
+	vertical-align: top;
+}
+
+.CharacterSelectDifficulty
+{
+	width: 1200px;
+	color: #ffffffc0;
+	font-size: 28;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	horizontal-align: center;
+	vertical-align: top;
+	text-align: center;
+	padding-top: 32px;
+}
+
+.CharacterSelectDivider
+{
+	horizontal-align: center;
+}
+
+.CharacterSelectIconContainer
+{
+	horizontal-align: center;
+	flow-children: right;
+	margin-bottom: 16px;
+}
+
+.CharacterSelectIcon
+{
+	margin-right: 16px;
+}
+
+.CharacterSelectButtonGroup
+{
+	width: 100%;
+	horizontal-align: center;
+	vertical-align: bottom;
+}
+
+.CharacterSelectDifficultyButtonGroup
+{
+	width: fit-children;
+	flow-children: right;
+	horizontal-align: center;
+	vertical-align: bottom;
+}
+
+.CharacterSelectDifficultyButton
+{
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+.CharacterSelectLeftButton
+{
+	margin-left: 24px;
+	margin-bottom: 16px;
+	horizontal-align: left;
+}
+
+.CharacterSelectRightButton
+{
+	margin-right: 24px;
+	margin-bottom: 16px;
+	horizontal-align: right;
+}
+
+.CharacterSelectBlackout
+{
+	background-color: #000000ff;
+	width: 100%;
+	height: 100%;
+	opacity: 0.0;
+}
+
+.BlackoutActive
+{
+	animation-name: BlackoutFadeIn;
+	animation-duration: 0.25s;
+	animation-timing-function: ease-in;
+	animation-iteration-count: 1;
+}
+
+@keyframes 'BlackoutFadeIn'
+{
+	0%
+	{
+	    opacity: 0.0;
+	}
+	50%
+	{
+	    opacity: 0.5;
+	}
+	100%
+	{
+	    opacity: 1.0;
+	}
+}
+	
+.BlackoutInactive
+{
+	animation-name: BlackoutFadeOut;
+	animation-duration: 0.25s;
+	animation-timing-function: ease-in;
+	animation-iteration-count: 1;
+}
+
+@keyframes 'BlackoutFadeOut'
+{
+	0%
+	{
+	    opacity: 1.0;
+	}
+	50%
+	{
+	    opacity: 0.5;
+	}
+	100%
+	{
+	    opacity: 0.0;
+	}
+}
+
+.Spacer64px
+{
+	height: 64px;
+}

@@ -1,0 +1,136 @@
+.AbilityRoot
+{
+	width: 100%;
+	height: 100%;
+}
+
+#Abilities
+{
+	width: fit-children;
+	height: fit-children;
+	horizontal-align: center;
+	vertical-align: center;
+}
+
+.AbilitySkillIconContainer
+{
+	background-image: url("file://{images}/custom_game/ability/iw_ability_icon_bar.tga");
+	width: 640px;
+	height: 64px;
+}
+
+.AbilityBackground
+{
+	opacity: 0.75;
+}
+
+.AbilityListContainer
+{
+	x: 56px;
+	y: 190px;
+	width: 256px;
+	height: 504px;
+	overflow: clip clip;
+}
+
+.AbilityList
+{
+	width: 100%;
+	flow-children: down;
+}
+
+.AbilityDetailsContainer
+{
+	x: 344px;
+	y: 296px;
+	width: 642px;
+	height: 400px;
+	overflow: clip clip;
+}
+
+.AbilityListTabGroup
+{
+	x: 57px;
+	y: 92px;
+	width: 254px;
+	flow-children: right;
+	overflow: clip clip;
+}
+
+.AbilityListTabContainer
+{
+	flow-children: right;
+}
+
+.AbilityListTabSpacer
+{
+	width: 100%;
+}
+
+.AbilityListTabLabel
+{
+	x: 57px;
+	y: 162px;
+	color: #ffffff40;
+	width: 254px;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: center;
+}
+
+.AbilitySearchContainer
+{
+	x: 760px;
+	y: 108px;
+	height: 32px;
+	width: 224px;
+}
+
+.AbilitySearchIcon
+{
+	x: 728px;
+	y: 108px;
+	width: 32px;
+	height: 32px;
+	opacity: 0.1;
+}
+
+.AbilitySearchText
+{
+	color: #ffffff40;
+	width: 100%;
+	font-size: 18;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	vertical-align: center;
+}
+
+#IconContainer1
+{
+	x: 344px;
+	y: 160px;
+}
+
+#IconContainer2
+{
+	x: 344px;
+	y: 216px;
+	brightness: 0.75;
+}
+
+#DetailsBackground
+{
+	x: 336px;
+	y: 288px;
+}
+
+#ListBackground
+{
+	x: 48px;
+	y: 152px;
+}
+
+#SearchBackground
+{
+	x: 720px;
+	y: 100px;
+}

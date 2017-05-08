@@ -1,0 +1,43 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/actionbar/iw_actionbar_icon.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/actionbar/iw_actionbar_icon.js" />
+	</scripts>
+	
+	<Panel draggable="true" class="ActionBarIcon" onload="OnActionBarIconLoad()" onmouseover="OnActionBarIconMouseOver()" onmouseout="OnActionBarIconMouseOut()">
+		<Button class="ActionBarIconButton" onactivate="OnActionBarIconActivate()" ondblclick="OnActionBarIconDoubleClick()" oncontextmenu="OnActionBarIconContextMenu()">
+			<Image hittest="false" id="AbilityTexture" src="file://{images}/spellicons/default.png"/>
+			<Panel hittest="false" class="CooldownContainer" id="Cooldown">
+				<Panel hittest="false" class="CooldownLeftContainer">
+					<Panel hittest="false" class="CooldownHalfFillContainer" id="LeftCDContainer">
+						<Panel hittest="false" class="CooldownHalfFill" id="LeftCDFill"/>
+					</Panel>
+				</Panel>
+				<Panel hittest="false" class="CooldownHalfFillContainer" id="RightCDContainer">
+					<Panel hittest="false" class="CooldownHalfFill" id="RightCDFill"/>
+				</Panel>
+			</Panel>
+			<Image hittest="false" id="RefreshOverlay"  src="file://{images}/custom_game/actionbar/iw_actionbar_icon_refresh.tga"/>
+			<Label hittest="false" id="CooldownLabel" text="" />
+			<Image hittest="false" id="ManaIndicator" src="file://{images}/custom_game/actionbar/iw_actionbar_icon_mana_overlay.tga"/>
+			<Label hittest="false" id="ManaLabel" text="" />
+			<Image hittest="false" id="StaminaIndicator" src="file://{images}/custom_game/actionbar/iw_actionbar_icon_stamina_overlay.tga"/>
+			<Label hittest="false" id="StaminaLabel" text="" />
+			<Image hittest="false" id="Overlay" src="file://{images}/custom_game/actionbar/iw_actionbar_icon_overlay.tga"/>
+			<Panel hittest="false" class="AbilityStateContainer">
+				<Image hittest="false" id="ActiveStateOverlay" src="file://{images}/custom_game/actionbar/iw_actionbar_icon_state_active.tga"/>
+				<Image hittest="false" id="ToggleStateOverlay" src="file://{images}/custom_game/actionbar/iw_actionbar_icon_state_toggle.tga"/>
+				<Image hittest="false" id="AutocastStateOverlay" src="file://{images}/custom_game/actionbar/iw_actionbar_icon_state_autocast.tga"/>
+			</Panel>
+			<Panel hittest="false" class="ActionBarIconDragContainer" id="DragContainer">
+				<Panel hittest="false" class="ActionBarIconDragBackground" />
+				<Image hittest="false" class="ActionBarIconDragImage" id="DragImage" />
+				<Image hittest="false" src="file://{images}/custom_game/actionbar/iw_actionbar_icon_overlay.tga"/>
+			</Panel>
+		</Button>
+	</Panel>
+</root>

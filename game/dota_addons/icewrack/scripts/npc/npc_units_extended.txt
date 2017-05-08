@@ -1,0 +1,512 @@
+"IcewrackExtendedUnitDefinitions"
+{
+	//Default non-zero property values. These can be overriden by individual units.
+	"default"
+	{
+		"ManaRegenFlat"			"0.25"
+		"BaseAttackTime"		"1.7"
+		"BaseCritChance"		"0.05"
+		"BaseCritMultiplier"		"0.5"
+		"MaxResistPhysical"		"75"
+		"MaxResistFire"			"75"
+		"MaxResistCold"			"75"
+		"MaxResistLightning"		"75"
+		"MaxResistDeath"		"75"
+		"LifestealRate"			"0.1"
+		"VisibilityBase"		"1.0"
+	}
+
+	"npc_dota_hero_axe"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitHeight"			"128"
+		"CorpseTime"			"39"
+		"IsPlayableHero"		"1"
+
+		"EquipFlags"			"58719294"
+
+		"MaxStaminaFlat"		"50"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"275"
+
+		"AccuracyFlat"			"60"
+		"DodgeFlat"			"0"
+
+		"StrengthFlat"			"29"
+		"EnduranceFlat"			"28"
+		"AgilityFlat"			"10"
+		"PerceptionFlat"			"12"
+		"IntelligenceFlat"		"12"
+		"WisdomFlat"			"9"
+
+		"DamageCrushBase"		"10"
+		"DamageCrushVar"		"17"
+
+		"SkillTwoHanded"		"4"
+		"SkillUnarmed"			"4"
+		"SkillSurvival"			"4"
+
+		"MovementNoiseFlat"		"5"
+	}
+
+	"npc_dota_hero_dragon_knight"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitHeight"			"128"
+		"CorpseTime"			"35"
+		"IsPlayableHero"		"1"
+
+		"EquipFlags"			"58719261"
+
+		"MaxStaminaFlat"		"50"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"250"
+
+		"AccuracyFlat"			"65"
+		"DodgeFlat"			"0"
+
+		"StrengthFlat"			"22"
+		"EnduranceFlat"			"25"
+		"AgilityFlat"			"12"
+		"PerceptionFlat"			"10"
+		"IntelligenceFlat"		"13"
+		"WisdomFlat"			"18"
+
+		"ResistFire"			"50"
+		"MaxResistFire"			"90"
+
+		"TalentFire"			"2"
+		"TalentOneHanded"		"2"
+		"TalentHeavyArmor"		"3"
+		"TalentSmithing"		"2"
+
+		"MovementNoiseFlat"		"5"
+	}
+
+	"npc_dota_hero_drow_ranger"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_RANGED"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitHeight"			"128"
+		"CorpseTime"			"105"
+		"IsPlayableHero"		"1"
+
+		"EquipFlags"			"4294967295"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"300"
+
+		"MaxStaminaFlat"		"50"
+
+		"AccuracyFlat"			"80"
+		"DodgeFlat"			"30"
+
+		"StrengthFlat"			"15"
+		"EnduranceFlat"			"16"
+		"AgilityFlat"			"25"
+		"PerceptionFlat"			"19"
+		"IntelligenceFlat"		"12"
+		"WisdomFlat"			"13"
+
+		"ResistCold"			"50"
+		"MaxResistCold"			"15"
+
+		"TalentMarksmanship"		"3"
+		"TalentHerbalism"		"2"
+		"TalentWoodworking"		"2"
+		"TalentLeatherworking"		"2"
+
+		"MovementNoiseFlat"		"3"
+	}
+
+	"npc_dota_hero_bounty_hunter"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitHeight"			"128"
+		"CorpseTime"			"89"
+		"IsPlayableHero"		"1"
+
+		"EquipFlags"			"66582613"
+
+		"MaxStaminaFlat"		"50"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"300"
+
+		"AccuracyFlat"			"70"
+		"DodgeFlat"			"25"
+
+		"StrengthFlat"			"13"
+		"EnduranceFlat"			"15"
+		"AgilityFlat"			"18"
+		"PerceptionFlat"			"24"
+		"IntelligenceFlat"		"21"
+		"WisdomFlat"			"900"
+
+		"TalentOneHanded"		"3"
+		"TalentLightArmor"		"2"
+		"TalentStealth"			"3"
+
+		"MovementNoiseFlat"		"2"
+	}
+
+	"npc_dota_hero_lina"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MAGIC"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitFlags"			""
+		"UnitHeight"			"128"
+		"CorpseTime"			"59"
+		"IsPlayableHero"		"1"
+
+		"EquipFlags"			"58191872"
+
+		"MaxStaminaFlat"		"50"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"770"
+		"MovementSpeedFlat"		"250"
+
+		"BaseCritChance"		"1.0"
+
+		"AccuracyFlat"			"50"
+		"DodgeFlat"			"0"
+
+		"StrengthFlat"			"8"
+		"EnduranceFlat"			"10"
+		"AgilityFlat"			"11"
+		"PerceptionFlat"			"23"
+		"IntelligenceFlat"		"33"
+		"WisdomFlat"			"15"
+
+		"ResistFire"			"1000"
+		"MaxResistFire"			"25"
+
+		"DamageFireBase"		"9"
+		"DamageFireVar"			"6"
+
+		"TalentFire"			"4"
+		"TalentAir"			"2"
+		"TalentLife"			"1"
+	}
+
+	"npc_dota_hero_omniknight"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitHeight"			"128"
+		"CorpseTime"			"80"
+		"IsPlayableHero"		"1"
+
+		"EquipFlags"			"58194958"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"275"
+
+		"MaxStaminaFlat"		"50"
+		"HealthRegenFlat"		"10000.0"
+
+		"AccuracyFlat"			"65"
+		"DodgeFlat"			"0"
+
+		"StrengthFlat"			"21"
+		"EnduranceFlat"			"23"
+		"AgilityFlat"			"10"
+		"PerceptionFlat"			"8"
+		"IntelligenceFlat"		"15"
+		"WisdomFlat"			"23"
+
+		"TalentLife"			"2"
+		"TalentSpirit"			"3"
+		"TalentMetamagic"		"2"
+		"TalentHeavyArmor"		"2"
+
+		"MovementNoiseFlat"		"5"
+	}
+
+	"npc_dota_hero_legion_commander"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitHeight"			"128"
+		"CorpseTime"			"39"
+		"IsPlayableHero"		"1"
+
+		"EquipFlags"			"58719294"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"275"
+		"MaxStaminaFlat"		"50"
+
+		"AccuracyFlat"			"0"
+		"DodgeFlat"			"-70"
+
+		"StrengthFlat"			"49"
+		"EnduranceFlat"			"30"
+		"AgilityFlat"			"20"
+		"PerceptionFlat"			"44"
+		"IntelligenceFlat"		"18"
+		"WisdomFlat"			"14"
+
+		"MovementNoiseFlat"		"5"
+	}
+
+	"npc_dota_hero_warlock"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MAGIC"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitHeight"			"128"
+		"IsPlayableHero"		"1"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"250"
+		"MaxStaminaFlat"		"50"
+
+		"AccuracyFlat"			"10000"
+		"DodgeFlat"			"0"
+
+		"CarryCapacity"			"70"
+
+		"Strength"			"19"
+		"Endurance"			"20"
+		"Agility"			"10"
+		"Perception"			"24"
+		"Intelligence"			"51"
+		"Wisdom"			"51"
+
+		"MovementNoiseFlat"		"5"
+	}
+
+	"npc_dota_hero_crystal_maiden"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MAGIC"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			""
+		"UnitHeight"			"128"
+		"IsPlayableHero"		"1"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"250"
+		"MaxStaminaFlat"		"50"
+		"ManaRegenFlat"			"0.4"
+
+		"AccuracyFlat"			"10000"
+		"DodgeFlat"			"0"
+
+		"CarryCapacity"			"70"
+
+		"StrengthFlat"			"17"
+		"EnduranceFlat"			"33"
+		"AgilityFlat"			"16"
+		"PerceptionFlat"			"12"
+		"IntelligenceFlat"		"62"
+		"WisdomFlat"			"35"
+
+		"MovementNoiseFlat"		"5"
+	}
+
+	"npc_dota_hero_tusk"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitHeight"			"128"
+		"IsPlayableHero"		"1"
+
+		"EquipFlags"			"58719294"
+
+		"MaxStaminaFlat"		"50"
+
+		"AccuracyFlat"			"0"
+		"DodgeFlat"			"-70"
+
+		"CarryCapacity"			"100"
+
+		"StrengthFlat"			"52"
+		"EnduranceFlat"			"48"
+		"AgilityFlat"			"19"
+		"PerceptionFlat"			"20"
+		"IntelligenceFlat"		"12"
+		"WisdomFlat"			"16"
+	}
+
+	"npc_dota_hero_alchemist"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitHeight"			"128"
+
+		"EquipFlags"			"58719294"
+
+		"MaxStaminaFlat"		"50"
+
+		"AccuracyFlat"			"0"
+		"DodgeFlat"			"-70"
+
+		"CarryCapacity"			"100"
+
+		"StrengthFlat"			"52"
+		"EnduranceFlat"			"48"
+		"AgilityFlat"			"19"
+		"PerceptionFlat"			"20"
+		"IntelligenceFlat"		"12"
+		"WisdomFlat"			"16"
+	}
+	
+	"npc_iw_blacksmith"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			""
+		"UnitHeight"			"128"
+	}
+
+	"npc_iw_training_target"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_MECHANICAL"
+		"UnitFlags"			"IW_UNIT_FLAG_CANNOT_BE_DAMAGED IW_UNIT_FLAG_NO_CORPSE"
+		"UnitHeight"			"128"
+
+		"HealthRegenFlat"		"1000.0"
+		"DodgeFlat"			"-1000"
+
+		"HealMultiplier"		"-100"
+		"DrainMultiplier"		"-100"
+		"KnockbackMultiplier"		"-100"
+	}
+
+
+	"npc_iw_expedition_merc_1"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			""
+		"UnitHeight"			"64"
+
+		"BaseAttackTime"		"1.0"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"250"
+		"MaxStaminaFlat"		"100"
+
+		"AccuracyFlat"			"50"
+		"DodgeFlat"			"0"
+
+		"DamagePhysicalBase"		"17"
+		"DamagePhysicalVar"		"5"
+
+		"VisionMask"			"63"
+		"BehaviorAggressiveness"	"3"
+		"BehaviorCooperativeness"	"1"
+		"BehaviorSafety"		"3"
+	}
+	
+	"npc_iw_expedition_merc_2"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
+		"UnitType"			"IW_UNIT_TYPE_RANGED"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			""
+		"UnitHeight"			"64"
+
+		"BaseAttackTime"		"1.0"
+		"AttackRange"			"600"
+		"MovementSpeedFlat"		"200"
+		"MaxStaminaFlat"		"50"
+
+		"AccuracyFlat"			"20"
+		"DodgeFlat"			"0"
+
+		"DamagePhysicalBase"		"11"
+		"DamagePhysicalVar"		"6"
+
+		"VisionMask"			"127"
+		"BehaviorAggressiveness"	"3"
+		"BehaviorCooperativeness"	"1"
+	}
+
+	"npc_dota_hero_windrunner"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_HERO"
+		"UnitType"			"IW_UNIT_TYPE_MAGIC"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			""
+		"UnitHeight"			"128"
+		"CorpseTime"			"49"
+		"IsPlayableHero"		"1"
+
+		"EquipFlags"			"58191872"
+
+		"BaseAttackTime"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"300"
+		"MaxStaminaFlat"		"50"
+
+		"AttackRange"			"650"
+		"ManaRegenFlat"			"0.35"
+
+		"BaseCritChance"		"1.0"
+		"LifestealPercent"		"100"
+		"MaxHealthPercentRegen"		"100"
+
+		"AccuracyFlat"			"0"
+		"DodgeFlat"			"0"
+
+		"ArmorPierceFlat"		"20"
+
+		"CarryCapacity"			"50"
+		"ResistLightning"		"75"
+
+		"EffectAvoidShock"		"50"
+		"EffectDurationBleed"		"100"
+
+		"StrengthFlat"			"13"
+		"EnduranceFlat"			"18"
+		"AgilityFlat"			"22"
+		"PerceptionFlat"			"46"
+		"IntelligenceFlat"		"49"
+		"WisdomFlat"			"33"
+
+		"DamageFireBase"		"9"
+		"DamageFireVar"			"6"
+
+		"MovementNoiseFlat"		"10"
+
+		"LootTable"			"test"
+	}
+}

@@ -1,0 +1,14 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/pause/iw_pause.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/pause/iw_pause.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="PauseRoot">
+		<Panel hittest="false" class="PauseScreenFill" id="ScreenFill" />
+	</Panel>
+</root>

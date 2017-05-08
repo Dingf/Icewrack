@@ -1,0 +1,26 @@
+"IcewrackLootTableDefinitions"
+{
+	"test"
+	{
+		"1"
+		{
+			"LootList"	"drop_list_test"
+			"Precondition"	""
+			"Chance"	"100"
+		}
+
+		"2"
+		{
+			"LootList"	"drop_list_test2"
+			"Precondition"	""
+			"Chance"	"100"
+		}
+
+		"3"
+		{
+			"LootList"	"drop_list_test3"
+			"Precondition"	""
+			"Chance"	"100"
+		}
+	}
+}

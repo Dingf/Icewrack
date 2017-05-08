@@ -1,0 +1,22 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/character/iw_character.css" />
+	</styles>
+	
+	<Panel hittest="false" class="CharacterContentRoot">
+		<Panel hittest="false" class="CharacterPortraitContainer">
+			<Image hittest="false" class="CharacterPortraitTexture" id="Portrait" src="file://{images}/portraits/npc_dota_hero_warlock.png" />
+			<Image hittest="false" class="CharacterPortraitFrame" src="file://{images}/custom_game/character/iw_character_portrait_frame.tga" />
+		</Panel>
+		<Panel hittest="false" class="CharacterInfobox" id="Infobox" />
+		<Panel hittest="false" class="CharacterContentBackground" id="ContentBackground" />
+		<Panel class="CharacterContentContainer" id="ContentContainer">
+			<Panel hittest="false" class="CharacterContent" id="Content" />
+		</Panel>
+		<Panel hittest="false" class="CharacterContentTabGroup">
+			<Panel hittest="false" class="CharacterContentTabContainer" id="TabContainer" />
+			<Image hittest="false" class="CharacterContentTabSpacer" src="file://{images}/custom_game/ui/iw_window_tab_spacer.tga" />
+		</Panel>
+		<Label hittest="false" class="CharacterContentTabLabel" id="TabLabel" text="" />
+	</Panel>
+</root>

@@ -1,0 +1,90 @@
+.CharacterInfoboxBackground
+{
+	opacity: 0.75;
+}
+
+.CharacterInfoboxContainer
+{
+	x: 8px;
+	y: 8px;
+	width: 240px;
+	height: 192px;
+	flow-children: down;
+	padding: 8px 12px 0px 12px;
+}
+
+.CharacterInfoboxTitleLabel
+{
+	width: 100%;
+	height: 24px;
+	color: #ffffff80;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: left;
+	text-overflow: ellipsis;
+}
+
+.CharacterInfoboxSubtitleLabel
+{
+	width: 100%;
+	height: 20px;
+	color: #ffffff20;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: left;
+	text-overflow: ellipsis;
+}
+
+.CharacterInfoboxDivider
+{
+	width: 224px;
+	height: 2px;
+	background-color: #ffffff10;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+.CharacterInfoboxStatContainer
+{
+	width: 100%;
+	height: fill-parent-flow(1.0);
+	flow-children: down;
+}
+
+.CharacterInfoboxStatRow
+{
+	width: 100%;
+	height: fit-children;
+	flow-children: right;
+	margin: 4px 0px 4px 0px;
+}
+
+.CharacterInfoboxStat
+{
+	width: fill-parent-flow(1.0);
+	height: 16px;
+	padding: 0px 4px 0px 4px;
+	tooltip-arrow-position: 12.5% 50%;
+	tooltip-position: top left;
+}
+
+.CharacterInfoboxStat:hover
+{
+	background-color: gradient(linear, 0% 0%, 100% 0%, from(#44444440), to(#10101000));
+}
+
+.CharacterInfoboxStatIcon
+{
+	width: 16px;
+	height: 16px;
+	horizontal-align: left;
+}
+
+.CharacterInfoboxStatLabel
+{
+	color: #ffffff80;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	horizontal-align: right;
+	text-overflow: clip;
+}

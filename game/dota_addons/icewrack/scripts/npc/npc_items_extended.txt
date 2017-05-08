@@ -1,0 +1,92 @@
+"IcewrackExtendedItemDefinitions"
+{
+	"item_test_component"
+	{
+		"ItemType"		""
+
+		"Properties"
+		{
+			"IW_PROPERTY_DMG_PIERCE_BASE"			{ "1" "3" }
+			"IW_PROPERTY_DMG_PIERCE_VAR"			{ "2" "4" }
+		}
+	}
+
+	"item_test"
+	{
+		"ItemType"		"IW_ITEM_TYPE_WEAPON_2H IW_ITEM_TYPE_WEAPON_BOW"
+		"ItemSlots"		"IW_INVENTORY_SLOT_MAIN_HAND"
+		"ItemFlags"		"IW_ITEM_FLAG_IS_ATTACK_SOURCE"
+		"ItemWeight"		"10.0"
+		"ItemValue"		"3000"
+
+		"MaxStacks"		"3"
+
+		"ItemComponents"
+		{
+			"item_test_component#0"		"75"
+			"item_test_component#1"		"50"
+		}
+
+		"Properties"
+		{
+			"IW_PROPERTY_ATTACK_RANGE"			"1400"
+			"IW_PROPERTY_DMG_PIERCE_BASE"			"1"
+			"IW_PROPERTY_DMG_PIERCE_VAR"			"3"
+			"IW_PROPERTY_DMG_LIGHT_BASE"			"1"
+			"IW_PROPERTY_DMG_LIGHT_VAR"			"31"
+			"IW_PROPERTY_BASE_ATTACK_TIME"			"2.4"
+			"IW_PROPERTY_CRIT_CHANCE_FLAT"			"0.05"
+			"IW_PROPERTY_CRIT_MULTI_FLAT"			"0.5"
+			"IW_PROPERTY_CHANCE_SHOCK"			"100"
+			"IW_PROPERTY_IGNORE_ARMOR_PCT"			"75"
+		}
+	}
+
+	"item_test2"
+	{
+		"ItemType"		"IW_ITEM_TYPE_ARMOR_LEATHER IW_ITEM_TYPE_ARMOR_HEAD"
+		"ItemSlots"		"IW_INVENTORY_SLOT_HEAD IW_INVENTORY_SLOT_FEET"
+		"ItemWeight"		"12.3"
+		"ItemValue"		"12000"
+
+		"ItemComponents"
+		{
+			"item_test_component#0"		"75"
+			"item_test_component#1"		"50"
+		}
+	}
+
+	"item_test3"
+	{
+		"ItemType"		"IW_ITEM_TYPE_ARMOR_LEATHER IW_ITEM_TYPE_ARMOR_HEAD"
+		"ItemSlots"		"IW_INVENTORY_SLOT_HEAD IW_INVENTORY_SLOT_FEET"
+		"ItemWeight"		"3.1"
+		"ItemValue"		"22000"
+
+		"ItemComponents"
+		{
+			"item_test_component#0"		"75"
+			"item_test_component#1"		"50"
+		}
+	}
+
+	"item_test_potion"
+	{
+		"ItemType"		"IW_ITEM_TYPE_CONSUMABLE_POTION"
+		"ItemFlags"		"IW_ITEM_FLAG_CAN_ACTIVATE"
+		"ItemWeight"		"0.1"
+		"ItemValue"		"1000"
+
+		"DatadrivenEvents"
+		{
+			"ABILITY_EVENT_ON_SPELL_START"
+			{
+				"HealHP"
+				{
+					"Amount"	"50"
+				}
+			}
+		}
+
+	}
+}

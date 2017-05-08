@@ -1,0 +1,20 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_window.css" />
+		<include src="file://{resources}/styles/custom_game/ui/iw_window_popup.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_window.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_window_popup.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="WindowPopupRoot" onload="OnWindowPopupLoad()">
+		<Panel hittest="true" class="WindowPopupSpace" id="PopupSpace" onactivate="OnWindowPopupSpaceActivate()" />
+		<Panel draggable="true" hittest="true" class="WindowPopupMain" id="PopupMain">
+			<Image hittest="false" src="file://{images}/custom_game/ui/iw_window_popup_bg.tga" />
+			<Panel hittest="false" class="WindowPopupContent" id="PopupContent"/>
+		</Panel>
+	</Panel>
+</root>

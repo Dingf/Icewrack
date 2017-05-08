@@ -1,0 +1,36 @@
+"UI.Invalid"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_2d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"value0"		"sounds/ui/ui_general_deny.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"2.000000"
+					}
+					"pitch"
+					{
+						"value"		"1.000000"
+					}
+					"limiter_on"
+					{
+						"value"		"0.000000"
+					}
+				}
+			}
+		}
+	}
+}

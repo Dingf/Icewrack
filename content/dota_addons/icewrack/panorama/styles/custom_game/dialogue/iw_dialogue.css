@@ -1,0 +1,196 @@
+.DialogueRoot
+{
+	width: 100%;
+	height: 100%;
+}
+
+#Dialogue
+{
+	width: 100%;
+	height: 100%;
+	opacity: 0.0;
+}
+
+.DialogueFill
+{
+	width: 100%;
+	height: 100%;
+}
+
+.DialogueBackgroundContainer
+{
+	width: 100%;
+	height: fit-children;
+	vertical-align: bottom;
+	flow-children: down;
+}
+
+.DialogueBlurEdge
+{
+	width: 100%;
+}
+
+.DialogueBackground
+{
+	width: 100%;
+	height: 232px;
+	background-color: #000000;
+}
+
+.DialogueContentContainer
+{
+	width: 100%;
+	height: 22%;
+	vertical-align: bottom;
+	flow-children: right;
+}
+
+.DialogueSpeakerContainer
+{
+	width: 240px;
+	vertical-align: center;
+	margin-bottom: 16px;
+}
+
+.DialoguePortraitContainer
+{
+	height: fit-children;
+	width: fit-children;
+	horizontal-align: center;
+	vertical-align: center;
+}
+
+.DialoguePortrait
+{
+	width: 160px;
+	height: 160px;
+}
+
+.DialogueName
+{
+	color: #ffffffff;
+	font-size: 36;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	margin-bottom: 12px;
+	margin-left: 16px;
+}
+
+.DialogueTextContainer
+{
+	width: fill-parent-flow(1.0);
+	height: 85%;
+	vertical-align: center;
+	margin-top: 16px;
+	flow-children: down;
+}
+
+.DialogueText
+{
+	color: #ffffff80;
+	font-size: 24;
+	font-family: Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	height: 100%;
+	margin-left: 16px;
+	margin-right: 16px;
+}
+
+.DialogueDivider
+{
+	vertical-align: center;
+	margin-top: 8px;
+	margin-right: 8px;
+	opacity: 0.8;
+}
+
+.DialogueOptionContainer
+{
+	width: 25%;
+	height: 90%;
+	background-color: #000000;
+	vertical-align: center;
+	margin-top: 8px;
+}
+
+.DialogueOptionBlurContainer
+{
+	width: 100%;
+	height: 100%;
+}
+
+.DialogueOptionBlurTop
+{
+	width: 100%;
+	vertical-align: top;
+}
+
+.DialogueOptionBlurBottom
+{
+	width: 100%;
+	vertical-align: bottom;
+}
+
+.DialogueOptionScrollContainer
+{
+	width: 100%;
+	height: 192px;
+	vertical-align: center;
+	background-color: #000000;
+	overflow: clip;
+}
+
+.DialogueOptionTextContainer
+{
+	width: 100%;
+	height: fit-children;
+	background-color: #000000;
+	padding-right: 16px;
+	flow-children: down;
+}
+
+.DialogueActive
+{
+	animation-name: DialogueFadeIn;
+	animation-duration: 0.4s;
+	animation-timing-function: ease-in;
+	animation-iteration-count: 1;
+}
+
+@keyframes 'DialogueFadeIn'
+{
+	0%
+	{
+	    opacity: 0.0;
+	}
+	50%
+	{
+	    opacity: 0.5;
+	}
+	100%
+	{
+	    opacity: 1.0;
+	}
+}
+
+.DialogueInactive
+{
+	animation-name: DialogueFadeOut;
+	animation-duration: 0.4s;
+	animation-timing-function: ease-in;
+	animation-iteration-count: 1;
+}
+
+@keyframes 'DialogueFadeOut'
+{
+	0%
+	{
+	    opacity: 1.0;
+	}
+	50%
+	{
+	    opacity: 0.5;
+	}
+	100%
+	{
+	    opacity: 0.0;
+	}
+}

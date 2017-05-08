@@ -1,0 +1,19 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/sidebar/iw_sidebar_icon.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/sidebar/iw_sidebar_icon.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="SideBarIconRoot" onload="OnSidebarIconLoad()">
+		<Button class="SideBarIconButton" onactivate="OnSidebarIconActivate()" onmouseover="OnSidebarIconMouseOver()" onmouseout="OnSidebarIconMouseOut()">
+			<Image hittest="false" id="DownState" src="file://{images}/custom_game/sidebar/iw_sidebar_icon_down.tga" />
+			<Image hittest="false" id="UpState" src="file://{images}/custom_game/sidebar/iw_sidebar_icon_up.tga" />
+			<Image hittest="false" class="SideBarIconTexture" id="IconTexture"/>
+			<Image hittest="false" id="IconOverlay" src="file://{images}/custom_game/sidebar/iw_sidebar_icon_overlay.tga" />
+		</Button>
+	</Panel>
+</root>

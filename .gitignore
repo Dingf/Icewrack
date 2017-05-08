@@ -39,3 +39,19 @@ luac.out
 *.x86_64
 *.hex
 
+# Custom (Server)
+*.vpk
+*.*_c
+*.bin
+*.cfg
+*.swf
+network_measurement.txt
+*.sh
+
+# Custom (Client)
+*.vmap
+*.jpg
+*.gif
+*.tga
+*.png
+*.dmx

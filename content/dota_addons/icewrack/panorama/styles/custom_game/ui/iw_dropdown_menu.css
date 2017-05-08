@@ -1,0 +1,51 @@
+.DropdownMenuRoot
+{
+	margin-top: 6px;
+	flow-children: down;
+	border: 2px solid #111111FF;
+}
+
+.DropdownMenuBody
+{
+	flow-children: right;
+	background-color: #00000080;
+}
+
+.DropdownLabel
+{
+	color: #ffffffc0;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+.DropdownButton
+{
+	background-color: #00000000;
+	width: 24px;
+	height: 26px;
+}
+
+.DropdownButtonActive
+{
+	background-color: #303030ff;
+}
+
+.DropdownButton Image
+{
+	vertical-align: center;
+	opacity: 0.25;
+}
+
+.DropdownButton:hover Image
+{
+	opacity: 1.0;
+}
+
+.DropdownMenuList
+{
+	height: 0px;
+	background-color: #303030;
+	flow-children: down;
+}

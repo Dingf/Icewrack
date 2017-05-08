@@ -1,0 +1,82 @@
+"IcewrackInstanceData"
+{
+	"1"
+	{
+		"Position"		"2272 -992 0"
+		"Forward"		"0 1 0"
+	}
+
+	"2"
+	{
+		"Position"		"3200 -1344 0"
+		"Forward"		"1 -1 0"
+	}
+
+	"3"
+	{
+		"Position"		"2750 0 512"
+		"Forward"		"-1 -1 0"
+	}
+
+	"4"
+	{
+		"Position"		"2720 -2784 512"
+		"Forward"		"-1 0.5 0"
+	}
+
+	"5"
+	{
+		"Position"		"3400 -2100 512"
+		"Forward"		"0 -1 0"
+	}
+
+	"6"
+	{
+		"Position"		"1920 -2464 0"
+		"Forward"		"1 -0.5 0"
+	}
+
+	"7"
+	{
+		"Position"		"1920 384 0"
+		"Forward"		"-1 -1 0"
+
+		"Modifiers"
+		{
+			"internal_animation:modifier_internal_animation"
+			{
+				"animation"	"ACT_DOTA_LOADOUT"
+				"rate"		"1.0"
+				"weight"	"1.0"
+				"duration"	"-1.0"
+			}
+		}
+	}
+
+	"13"
+	{
+		"Position"		"1120 2080 0"
+		"Forward"		"1 -1 0"
+	}
+
+
+	"10000"
+	{
+		"Position"		"-256 2789 1000"
+		"Forward"		"1 0 0"
+	}
+	"10001"
+	{
+		"Position"		"-55 2688 1000"
+		"Forward"		"1 0 0"
+
+		"Precondition"		"game.hero_selection != 1"
+	}
+	"10002"
+	{
+		"Position"		"-2838 -1744 1026"
+		"Forward"		"1 0 0"
+		"LastWaypoint"		"50"
+		"NextWaypoint"		"48"
+	}
+}

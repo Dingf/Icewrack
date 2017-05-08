@@ -1,0 +1,205 @@
+.PartyBarOverlay
+{
+	background-image: url("file://{images}/custom_game/partybar/iw_partybar_overlay.tga");
+	width: 320px;
+	height: 128px;
+}
+
+.PartyBarPrimarySelectOverlay
+{
+	width: 117px;
+	height: 117px;
+	margin-left: 6px;
+	margin-top: 6px;
+	opacity: 1.0;
+	animation-name: SelectOverlayAnim;
+	animation-duration: 30s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+
+.PartyBarSecondarySelectOverlay
+{
+	width: 117px;
+	height: 117px;
+	margin-left: 6px;
+	margin-top: 6px;
+	opacity: 0.75;
+	animation-name: SelectOverlayAnim;
+	animation-duration: 30s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+@keyframes 'SelectOverlayAnim'
+{
+	0%
+	{
+	    transform: rotateZ(0deg);
+		opacity: 1.0;
+	}
+
+	25%
+	{
+	    transform: rotateZ(90deg);
+		opacity: 0.5;
+	}
+
+	50%
+	{
+	    transform: rotateZ(180deg);
+		opacity: 1.0;
+	}
+
+	75%
+	{
+	    transform: rotateZ(270deg);
+		opacity: 0.5;
+	}
+	
+	100%
+	{
+	    transform: rotateZ(359deg);
+		opacity: 1.0;
+	}
+}
+
+.PartyBarPortraitContainer
+{
+	opacity-mask: url("file://{images}/custom_game/partybar/iw_partybar_portrait_mask.tga");
+	width: 108px;
+	height: 108px;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+.PartyBarPortraitContainer Image
+{
+	width: 108px;
+	height: 108px;
+}
+
+.PartyBarDeathState
+{
+	brightness: 0.5;
+	saturation: 0.0;
+}
+
+.PartyBarDeathPortrait
+{
+	visibility: collapse;
+}
+
+.PartyBarValues
+{
+	margin-top: 11px;
+	flow-children: down;
+}
+
+.PartyBarValueContainer
+{
+	width: 182px;
+	height: 16px;
+	margin-left: 134px; 
+}
+
+.PartyBarValueFill
+{
+	width: 182px;
+	height: 16px;
+}
+
+.PartyBarValueLabel
+{
+	color: #ffffff;
+	text-align: center;
+	text-shadow: 0px 0px 2px 3.0 #000000ff;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	width: 182px;
+	height: 16px;
+}
+
+.PartyBarIndicator
+{
+	width: 36px;
+	height: 36px;
+	margin-left: 98px;
+	overflow: clip;
+}
+
+.PartyBarActionContainer
+{
+	background-color: gradient(linear, 0% 0%, 100% 100%, from(#000000ff), color-stop(0.9, #000000c0), to(#00000000));
+	width: 240px;
+	height: 40px;
+	x: 80px;
+	y: 72px;
+}
+
+.PartyBarActionFill
+{
+	background-color: gradient(linear, 0% 0%, 100% 100%, from(#000000ff), to(#00000000));
+	width: 100%;
+	height: 100%;
+}
+
+.PartyBarActionImage
+{
+	width: 32px;
+	height: 32px;
+	border: 2px solid #ffffff20;
+	x: 48px;
+	y: 4px;
+}
+
+.PartyBarActionLabel
+{
+	color: #ffffff80;
+	width: 148px;
+	height: 16px;
+	x: 88px;
+	y: 10px;
+	font-size: 16;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	font-weight: bold;
+	text-shadow: 0px 0px 2px 2.0 #000000ff;
+}
+
+#SecondarySelectOverlay
+{
+	background-image: url("file://{images}/custom_game/partybar/iw_partybar_select_overlay_secondary.tga");
+}
+
+#PrimarySelectOverlay
+{
+	background-image: url("file://{images}/custom_game/partybar/iw_partybar_select_overlay_primary.tga");
+}
+
+#HPBar
+{
+	background-image: url("file://{images}/custom_game/partybar/iw_partybar_hp_fill.tga");
+}
+
+#MPBar
+{
+	background-image: url("file://{images}/custom_game/partybar/iw_partybar_mp_fill.tga");
+}
+
+#SPBar
+{
+	background-image: url("file://{images}/custom_game/partybar/iw_partybar_sp_fill.tga");
+}
+
+#DeathMask
+{
+	margin-left: 10px;
+	margin-top: 10px;
+	opacity: 0.9;
+}
+
+.DeathOverlay
+{
+	saturation: 0.0;
+}

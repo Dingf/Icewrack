@@ -1,0 +1,12 @@
+#Overlay
+{
+	margin-top: 3px;
+	horizontal-align: center;
+	width: 64px;
+	height: 64px;
+}
+
+.TabInactive
+{
+	opacity: 0.1;
+}

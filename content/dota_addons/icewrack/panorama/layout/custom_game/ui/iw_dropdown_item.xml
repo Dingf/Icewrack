@@ -1,0 +1,13 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_dropdown_item.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/ui/iw_dropdown_item.js" />
+	</scripts>
+	
+	<Panel class="DropdownMenuItemRoot" onload="OnDropdownItemLoad()" onmouseover="OnDropdownItemMouseOver()" onmouseout="OnDropdownItemMouseOut()" onactivate="OnDropdownItemActivate()">
+		<Label id="Text" text="Lorem ipsum"/>
+	</Panel>
+</root>

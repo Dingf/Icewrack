@@ -1,0 +1,10 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/inventory/iw_inventory.css" />
+	</styles>
+	
+	<Panel hittest="false" class="InventoryLeftContentRoot">
+		<Panel hittest="false" class="InventoryLeftAttribContainer1" id="LeftAttribs1" />
+		<Panel hittest="false" class="InventoryLeftAttribContainer2" id="LeftAttribs2" />
+	</Panel>
+</root>

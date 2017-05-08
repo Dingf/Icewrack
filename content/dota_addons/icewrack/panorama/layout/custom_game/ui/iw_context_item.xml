@@ -1,0 +1,12 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_context_item.css" />
+	</styles>
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_context_item.js" />
+	</scripts>
+	<Panel class="ContextMenuItemRoot" onactivate="OnContextItemActivate()">
+		<Label id="Text" text="Lorem ipsum"/>
+	</Panel>
+</root>

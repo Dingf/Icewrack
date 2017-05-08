@@ -1,0 +1,34 @@
+"IcewrackInstanceData"
+{
+	"1"
+	{
+		"Position"		"-384 0 128"
+		"Forward"		"296 -56 0"
+	}
+
+	"2"
+	{
+		"Position"		"-224 96 128"
+		"Forward"		"208 -160 0"
+	}
+	"3"
+	{
+		"Position"		"-48 144 128"
+		"Forward"		"96 -208 0"
+	}
+	"4"
+	{
+		"Position"		"176 144 128"
+		"Forward"		"-96 -208 0"
+	}
+	"5"
+	{
+		"Position"		"352 96 128"
+		"Forward"		"-208 -160 0"
+	}
+	"6"
+	{
+		"Position"		"512 0 128"
+		"Forward"		"-296 -56 0"
+	}
+}

@@ -1,0 +1,15 @@
+"IcewrackAbilityComboDefinitions"
+{
+	"iw_combo_shatter"
+	{
+		"1"
+		{
+			"1"		"status_frozen"
+			"2"		"windrunner_windrun"
+		}
+		"2"
+		{
+			"1"		"iw_placeholder_force"
+		}
+	}
+}

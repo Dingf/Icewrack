@@ -1,0 +1,12 @@
+"AddonInfo"
+
+{
+
+	"TeamCount"		"1"
+	"maps"			"main_menu"
+	"IsPlayable"		"1"
+	"main_menu"
+	{
+		"MaxPlayers"                    "1"
+	}
+}

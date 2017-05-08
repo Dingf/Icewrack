@@ -1,0 +1,18 @@
+.IconTexture
+{
+	width: 16px;
+	height: 16px;
+	margin-left: 7px;
+	margin-top: 7px;
+	tooltip-position: top;
+	tooltip-arrow-position: 45% 50%;
+}
+
+.LabelText
+{
+	color: #ffffff80;
+	font-size: 14px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	margin-top: 8px;
+	margin-left: 12px;
+}

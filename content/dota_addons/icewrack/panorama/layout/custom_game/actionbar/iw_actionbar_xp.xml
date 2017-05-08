@@ -1,0 +1,13 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/actionbar/iw_actionbar_xp.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/actionbar/iw_actionbar_xp.js" />
+	</scripts>
+	
+	<Panel onload="OnXPLoad()" onmouseover="OnXPMouseOver()" onmouseout="OnXPMouseOut()" class="ActionBarXPRoot">
+		<Panel class="ActionBarXPFill" id="XPFill" />
+	</Panel>
+</root>

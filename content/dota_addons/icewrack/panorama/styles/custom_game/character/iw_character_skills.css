@@ -1,0 +1,147 @@
+.SkillsRoot
+{
+	width: 100%;
+	height: 100%;
+	flow-children: right;
+}
+
+.SkillEntryContainer
+{
+	width: fill-parent-flow(1.0);
+	height: 100%;
+	padding: 8px 8px 8px 8px;
+	flow-children: down;
+}
+
+.SkillTitle
+{
+	width: 100%;
+	height: 28px;
+	margin-bottom: 2px;
+	flow-children: right;
+}
+
+.SkillTitle Label
+{
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	font-size: 18px;
+	font-weight: bold;
+	color: #ffffff;
+}
+
+.SkillEntry
+{
+	width: 100%;
+	height: 28px;
+	margin-bottom: 2px;
+	flow-children: right;
+	tooltip-position: top;
+	tooltip-arrow-position: 14px 50%;
+}
+
+.SkillEntry:hover
+{
+	background-color: gradient(linear, 0% 0%, 100% 0%, from(#44444440), to(#00000000));
+}
+
+.SkillEntryIcon
+{
+	width: 24px;
+	height: 24px;
+	margin: 2px 8px 2px 8px;
+}
+
+.SkillEntryTitleLabel
+{
+	width: 160px;
+	color: #ffffff40;
+	font-size: 18px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	vertical-align: center;
+}
+
+.SkillEntryLevelContainer
+{
+	width: 40px;
+	height: 100%;
+}
+
+.SkillEntryLevelAligner
+{
+	horizontal-align: center;
+	vertical-align: bottom;
+	flow-children: right;
+}
+
+.SkillEntryLevelLabel
+{
+	color: #ffffff40;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: center;
+	vertical-align: center;
+}
+
+.SkillEntryBonusLabel
+{
+	color: #00ff0040;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: center;
+}
+
+.SkillEntryCostLabel
+{
+	width: 48px;
+	color: #ffffff40;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: center;
+	vertical-align: bottom;
+}
+
+.SkillEntryCostLabelAllocated
+{
+	color: #00ff0040;
+}
+
+.SkillEntryAddButton
+{
+	width: 24px;
+	height: 24px;
+	opacity: 0.01;
+	overflow: clip;
+	vertical-align: bottom;
+}
+
+.SkillEntryAddButtonEnabled
+{
+	opacity: 0.3;
+}
+
+.SkillEntryAddButtonAllocated
+{
+	opacity: 0.3;
+	wash-color: #00ff00;
+}
+
+.SkillEntryAddButtonEnabled:hover
+{
+	opacity: 1.0;
+	brightness: 4.0;
+}
+
+.SkillEntryAddButtonAllocated:hover
+{
+	opacity: 1.0;
+	brightness: 4.0;
+}
+
+#LeftContainer
+{
+}
+
+#zzz
+{
+}
+

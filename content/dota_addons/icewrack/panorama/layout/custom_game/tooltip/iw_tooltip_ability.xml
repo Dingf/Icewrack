@@ -1,0 +1,39 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/tooltip/iw_tooltip_ability.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/tooltip/iw_tooltip_ability.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="TooltipAbilityRoot" ontooltiploaded="OnTooltipAbilityLoad()">
+		<Panel hittest="false" class="TooltipAbilityHeader">
+			<Image hittest="false" class="TooltipAbilityIcon" id="Icon" />
+			<Panel hittest="false" class="TooltipAbilityHeaderContent">
+				<Label hittest="false" class="TooltipAbilityTitle" id="Title" />
+				<Panel hittest="false" class="TooltipAbilityDivider" />
+				<Label hittest="false" class="TooltipAbilityBehaviorLabel" id="Behavior" />
+				<Panel hittest="false" class="TooltipAbilitySkillContainer" id="SkillContainer" />
+			</Panel>
+		</Panel>
+		<Panel hittest="false" class="TooltipAbilityDivider" />
+		<Label hittest="false" html="true" class="TooltipAbilityDescriptionLabel" id="Description" />
+		
+		<Panel hittest="false" class="TooltipAbilityCostContainer">
+			<Panel hittest="false" class="TooltipAbilityCost" id="ManaCost">
+				<Image hittest="false" class="TooltipAbilityCostIcon" id="ManaIcon" src="file://{images}/custom_game/icons/iw_icon_tooltip_mana.tga" />
+				<Label hittest="false" class="TooltipAbilityCostLabel" id="ManaLabel" />
+			</Panel>
+			<Panel hittest="false" class="TooltipAbilityCost" id="StaminaCost">
+				<Image hittest="false" class="TooltipAbilityCostIcon" id="StaminaIcon" src="file://{images}/custom_game/icons/iw_icon_tooltip_stamina.tga" />
+				<Label hittest="false" class="TooltipAbilityCostLabel" id="StaminaLabel" />
+			</Panel>
+			<Panel hittest="false" class="TooltipAbilityCost" id="CooldownCost">
+				<Image hittest="false" class="TooltipAbilityCostIcon" id="CooldownIcon" src="file://{images}/custom_game/icons/iw_icon_tooltip_cooldown.tga" />
+				<Label hittest="false" class="TooltipAbilityCostLabel" id="CooldownLabel" />
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

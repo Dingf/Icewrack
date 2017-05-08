@@ -1,0 +1,56 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/character/iw_character_skills.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/iw_instance.js" />
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/character/iw_character_skills.js" />
+	</scripts>
+	
+	<snippets>
+		<snippet name="SkillEntrySnippet">
+			<Panel class="SkillEntry">
+				<Image hittest="false" class="SkillEntryIcon" id="Icon" />
+				<Label class="SkillEntryTitleLabel" id="Title" text="" />
+				<Panel hittest="false" class="SkillEntryLevelContainer">
+					<Panel hittest="false" class="SkillEntryLevelAligner">
+						<Label hittest="false" class="SkillEntryLevelLabel" id="Level" text="1" />
+						<Label hittest="false" class="SkillEntryBonusLabel" id="Bonus" text="+2" />
+						
+					</Panel>
+				</Panel>
+				<Label hittest="false" class="SkillEntryCostLabel" id="Cost" text="" />
+				<Image class="SkillEntryAddButton" id="AddButton" src="file://{images}/custom_game/character/iw_character_skills_add.tga" />
+			</Panel>
+		</snippet>
+	</snippets>
+	
+	<Panel hittest="false" class="SkillsRoot" onload="OnSkillsLoad()">
+		<Panel hittest="false" class="SkillEntryContainer" id="LeftContainer">
+			<Panel hittest="false" class="SkillTitle">
+				<Image hittest="false" class="SkillEntryIcon" id="Icon" />
+				<Label hittest="false" class="SkillEntryTitleLabel" id="Title" text="" />
+				<Panel hittest="false" class="SkillEntryLevelContainer">
+					<Panel hittest="false" class="SkillEntryLevelAligner">
+						<Label hittest="false" class="SkillEntryLevelLabel" id="Level" text="#iw_ui_character_skills_level" />
+					</Panel>
+				</Panel>
+				<Label hittest="false" class="SkillEntryCostLabel" id="Cost" text="#iw_ui_character_skills_cost" />
+			</Panel>
+		</Panel>
+		<Panel hittest="false" class="SkillEntryContainer" id="RightContainer">
+			<Panel hittest="false" class="SkillTitle">
+				<Image hittest="false" class="SkillEntryIcon" id="Icon" />
+				<Label hittest="false" class="SkillEntryTitleLabel" id="Title" text="" />
+				<Panel hittest="false" class="SkillEntryLevelContainer">
+					<Panel hittest="false" class="SkillEntryLevelAligner">
+						<Label hittest="false" class="SkillEntryLevelLabel" id="Level" text="#iw_ui_character_skills_level" />
+					</Panel>
+				</Panel>
+				<Label hittest="false" class="SkillEntryCostLabel" id="Cost" text="#iw_ui_character_skills_cost" />
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

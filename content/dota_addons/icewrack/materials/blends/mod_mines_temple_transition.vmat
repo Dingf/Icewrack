@@ -1,0 +1,97 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "multiblend.vfx"
+
+	//---- Color Tint ----
+	F_LAYER_BORDER_TINT 1 // Old
+
+	//---- Normal Maps ----
+	F_NORMAL_MAP 1
+
+	//---- Specular ----
+	F_SPECULAR 1
+
+	//---- World Space UVs ----
+	F_WORLDSPACE_UVS 1
+
+	//---- Global ----
+	g_flSpecularBloom "0.000"
+	g_flSpecularIntensity "1.000"
+
+	//---- Layer 0 ----
+	g_flTexCoordRotate0 "0.000"
+	g_flTexCoordScale0 "4.000"
+	g_vColorTint0 "[0.709804 0.619608 0.513726 1.000000]"
+	g_vColorTintB0 "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset0 "[0.000 0.000]"
+	g_vTexCoordScroll0 "[0.000 0.000]"
+	TextureBloom0 "materials/default/default_bloom.tga"
+	TextureColor0 "materials/blends/tile_ground001b_color.tga"
+	TextureNormal0 "materials/default/default_normal.tga"
+	TextureReflectance0 "materials/blends/tile_ground001b_refl.tga"
+	TextureSelfIllumMask0 "materials/default/default_selfillum.tga"
+	TextureTintMask0 "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Layer 1 ----
+	g_flTexCoordRotate1 "0.000"
+	g_flTexCoordScale1 "6.000"
+	g_vColorTint1 "[0.349020 0.341176 0.329412 1.000000]"
+	g_vTexCoordOffset1 "[0.000 0.000]"
+	g_vTexCoordScroll1 "[0.000 0.000]"
+	TextureBloom1 "materials/default/default_bloom.tga"
+	TextureColor1 "materials/blends/gravel002_color.tga"
+	TextureNormal1 "materials/default/default_normal.tga"
+	TextureReflectance1 "materials/blends/gravel002_refl.tga"
+	TextureRevealMask1 "materials/blends/gravel002_color_a.tga"
+	TextureSelfIllumMask1 "materials/default/default_selfillum.tga"
+
+	//---- Layer 2 ----
+	g_flTexCoordRotate2 "30.000"
+	g_flTexCoordScale2 "4.000"
+	g_vColorTint2 "[0.380392 0.372549 0.360784 1.000000]"
+	g_vTexCoordOffset2 "[0.000 0.000]"
+	g_vTexCoordScroll2 "[0.000 0.000]"
+	TextureBloom2 "materials/default/default_bloom.tga"
+	TextureColor2 "materials/blends/stone001_color.tga"
+	TextureNormal2 "materials/default/default_normal.tga"
+	TextureReflectance2 "[0.094000 0.094000 0.094000 0.000000]"
+	TextureRevealMask2 "materials/blends/stone001_color_a.tga"
+	TextureSelfIllumMask2 "materials/default/default_selfillum.tga"
+
+	//---- Layer 3 ----
+	g_flTexCoordRotate3 "0.000"
+	g_flTexCoordScale3 "6.000"
+	g_vColorTint3 "[0.533333 0.521569 0.509804 1.000000]"
+	g_vTexCoordOffset3 "[0.000 0.000]"
+	g_vTexCoordScroll3 "[0.000 0.000]"
+	TextureBloom3 "materials/default/default_bloom.tga"
+	TextureColor3 "materials/blends/cliff_wall002_color.tga"
+	TextureNormal3 "materials/default/default_normal.tga"
+	TextureReflectance3 "[0.101961 0.101961 0.101961 0.000000]"
+	TextureRevealMask3 "materials/blends/cliff_wall002_color_a.tga"
+	TextureSelfIllumMask3 "materials/default/default_selfillum.tga"
+
+	//---- Normal Map ----
+	g_flBumpStrength "1.000"
+
+	Attributes
+	{
+		dota.nav.walkable "1"
+		dota.tile_path.opacity "1"
+		dota.tile_path.width "130"
+		RepresentativeTextureWidth "2048"
+		RepresentativeTextureHeight "2048"
+		dota.nav.walkable "1.000000"
+		dota.tile_path.falloff "0.660000"
+		dota.tile_path.layer1_opacity "1.750000"
+		dota.tile_path.layer1_sharpness "0.500000"
+		dota.tile_path.layer2_opacity "1.500000"
+		dota.tile_path.layer2_sharpness "0.950000"
+		dota.tile_path.layer3_opacity "1.750000"
+		dota.tile_path.layer3_sharpness "0.500000"
+		dota.tile_path.opacity "1.000000"
+		dota.tile_path.width "130.000000"
+	}
+}

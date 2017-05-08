@@ -1,0 +1,17 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ability/iw_ability_skill_icon.css" />
+	</styles>
+
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ability/iw_ability_skill_icon.js" />
+	</scripts>
+
+	<Panel class="AbilitySkillIcon"
+		onactivate="OnAbilitySkillIconActivate()"
+		onmouseover="OnAbilitySkillIconMouseOver()"
+		onmouseout="OnAbilitySkillIconMouseOut()">
+		<Image hittest="false" class="AbilitySkillIconTexture" id="Texture"/>
+	</Panel>
+</root>

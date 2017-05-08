@@ -1,0 +1,26 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/minimap/iw_minimap.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/minimap/iw_minimap.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="MinimapRoot">
+		<Panel hittest="false" id="Minimap">
+			<Panel hittest="false" class="MinimapContainer" id="Container">
+				<Panel hittest="false" class="MinimapBackground" id="Background"/>
+				<Image class="MinimapTexture" id="Texture"/>
+			</Panel>
+			<Image hittest="false" class="MinimapOverlay" src="file://{images}/custom_game/minimap/iw_minimap_overlay.tga"/>
+			<Button onactivate="OnZoomIn()" class="MinimapZoomInButton">
+				<Image src="file://{images}/custom_game/minimap/iw_minimap_zoom_in.tga"/>
+			</Button>
+			<Button onactivate="OnZoomOut()" class="MinimapZoomOutButton">
+				<Image src="file://{images}/custom_game/minimap/iw_minimap_zoom_out.tga"/>
+			</Button>
+			<Image hittest="false" class="MinimapPointer" id="Pointer" src="file://{images}/custom_game/minimap/iw_minimap_pointer.tga"/>
+		</Panel>
+	</Panel>
+</root>

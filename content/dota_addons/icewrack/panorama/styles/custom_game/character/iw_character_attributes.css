@@ -1,0 +1,259 @@
+.AttributesRoot
+{
+	width: 100%;
+	height: 100%;
+	overflow: clip clip;
+	flow-children: right;
+}
+
+.AttributeListSpacer
+{
+	background-color: #ff0000;
+	height: 0px;
+	width: 100%;
+}
+
+.AttributeList
+{
+	width: 256px;
+	height: fit-children;
+	background-color: #00000080;
+	border-right: 2px solid #181818ff;
+	padding: 8px 8px 8px 8px;
+	flow-children: down;
+}
+
+.AttributeListEntry
+{
+	width: 100%;
+	flow-children: down;
+}
+
+.AttributeListEntryTitle
+{
+	width: 100%;
+	flow-children: right;
+}
+
+.AttributeTitleLabel
+{
+	color: #ffffff80;
+	font-size: 20px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	font-weight: bold;
+	text-align: center;
+}
+
+.AttributeListEntryValue
+{
+	height: 24px;
+	flow-children: right;
+	horizontal-align: right;
+}
+
+.AttributeValueLabel
+{
+	color: #ffffff80;
+	font-size: 20px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	font-weight: bold;
+}
+
+.AttributeValueLabelAllocated
+{
+	color: #00ff0080;
+}
+
+.AttributeBonusLabel
+{
+	color: #00ff0080;
+	font-size: 20px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	font-weight: bold;
+}
+
+.AttributeBonusLabelNegative
+{
+	color: #ff000080;
+}
+
+.AttributeDetails
+{
+	width: 100%;
+	padding-left: 16px;
+	padding-right: 8px;
+	margin-bottom: 12px;
+	flow-children: down;
+}
+
+.AttributeDetailLabel
+{
+	color: #ffffff20;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	font-weight: light;
+}
+
+.AttributeDetailLabelAllocated
+{
+	color: #00ff0040;
+}
+
+.AttributesGraphContainer
+{
+	width: fill-parent-flow(1.0);
+	height: 100%;
+}
+
+.AttributesGraph
+{
+	width: 100%;
+	height: 100%;
+}
+
+.AttributesGraphBG
+{
+	horizontal-align: center;
+	vertical-align: center;
+	y: 8px;
+}
+
+.AttributeSectionContainer
+{
+	width: 100%;
+	height: 100%;
+	opacity: 0.05;
+}
+
+.AttributeSectionFill
+{
+	x: -256px;
+	width: 512px;
+	height: 512px;
+	background-color:#ffffff;
+	box-shadow: #ffffff 0px 0px 2px 0px;
+	transform-origin: 50% 0%;
+}
+
+.AttributeIconContainer
+{
+	width: 100%;
+	height: 100%;
+}
+
+.AttributesSectionMask1
+{
+	width: 139px;
+	height: 160px;
+	opacity-mask: url("file://{images}/custom_game/character/iw_character_attribute_hex_mask1.tga");
+	overflow: clip;
+}
+
+.AttributesSectionMask2
+{
+	width: 139px;
+	height: 160px;
+	opacity-mask: url("file://{images}/custom_game/character/iw_character_attribute_hex_mask2.tga");
+	overflow: clip;
+}
+
+.AttributesGraphNode
+{
+	width: 56px;
+	height: 56px;
+}
+
+.AttributesIcon
+{
+	tooltip-position: right top left bottom;
+	tooltip-arrow-position: 50% 50%;
+}
+
+.AttributesIcon:hover
+{
+	brightness: 2.0;
+}
+
+.AttributeIconOverlay
+{
+	horizontal-align: center;
+	vertical-align: center;
+}
+
+.AttributeSection1
+{
+	x: 180px;
+	y: 64px;
+}
+
+.AttributeSection2
+{
+	x: 180px;
+	y: 144px;
+}
+
+.AttributeSection3
+{
+	x: 180px;
+	y: 224px;
+}
+
+.AttributeSection4
+{
+	x: 40px;
+	y: 224px;
+}
+
+.AttributeSection5
+{
+	x: 40px;
+	y: 144px;
+}
+
+.AttributeSection6
+{
+	x: 40px;
+	y: 64px;
+}
+
+.AttributesIcon1
+{
+	x: 148px;
+	y: 32px;
+}
+
+.AttributesIcon2
+{
+	x: 286px;
+	y: 112px;
+}
+
+.AttributesIcon3
+{
+	x: 286px;
+	y: 272px;
+}
+
+.AttributesIcon4
+{
+	x: 148px;
+	y: 352px;
+}
+
+.AttributesIcon5
+{
+	x: 10px;
+	y: 272px;
+}
+
+.AttributesIcon6
+{
+	x: 10px;
+	y: 112px;
+}
+
+.AttributesPointsLabel
+{
+	x: 240px;
+	y: 32px;
+}

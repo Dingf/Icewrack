@@ -1,0 +1,30 @@
+#PartyBar
+{
+	flow-children: down;
+}
+
+.PartyBarMemberContainer
+{
+	flow-children: down;
+	margin-top: 12px;
+	margin-left: 12px;
+}
+
+.PartyBarMemberLayout
+{
+	padding-bottom: 12px;
+}
+
+.PartyBarButtonGroup
+{
+	margin-left: 12px;
+	flow-children: right;
+}
+
+.PartyBarButton
+{
+	width: 40px;
+	height: 40px;
+	margin-left: 16px;
+	background-color: #ff00ff10;
+}

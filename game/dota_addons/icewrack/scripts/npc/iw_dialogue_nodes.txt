@@ -1,0 +1,51 @@
+"IcewrackDialogueNodeDefinitions"
+{
+	"1"
+	{
+		"Text"		"dialogue_legion_intro02_lina01"
+		"InstanceID"	"7"
+		"Precondition"	""
+		"Postcondition"	""
+		"Options"
+		{
+			"1"
+			{
+				"Text"		"dialogue_legion_intro02_lina01_op1"
+				"NextNode"	"2"
+				"Precondition"	""
+				"Postcondition"	""
+			}
+			"2"
+			{
+				"Text"		"dialogue_legion_intro02_lina01_op2"
+				"NextNode"	"2"
+				"Precondition"	""
+				"Postcondition"	""
+			}
+			"3"
+			{
+				"Text"		"dialogue_legion_intro02_lina01_op3"
+				"NextNode"	"0"
+				"Precondition"	""
+				"Postcondition"	""
+			}
+		}
+	}
+	"2"
+	{
+		"Text"		"dialogue_legion_intro02_lina02"
+		"InstanceID"	"6"
+		"Precondition"	""
+		"Postcondition"	""
+		"Options"
+		{
+			"1"
+			{
+				"Text"		"dialogue_legion_intro02_lina02_op1"
+				"NextNode"	"0"
+				"Precondition"	""
+				"Postcondition"	""
+			}
+		}
+	}
+}

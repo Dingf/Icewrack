@@ -1,0 +1,50 @@
+"IcewrackLoadoutDefinitions"
+{
+	"default1"
+	{
+		"Slot"		"1"
+		"Model"		"models/heroes/drow/invisiblebox_drow_weapon.vmdl"
+	}
+
+	"default2"
+	{
+		"Slot"		"2"
+		"Model"		"models/heroes/drow/drow_cape.vmdl"
+	}
+
+	"default3"
+	{
+		"Slot"		"3"
+		"Model"		"models/heroes/drow/drow_bracers.vmdl"
+	}
+
+	"default4"
+	{
+		"Slot"		"4"
+		"Model"		"models/heroes/drow/drow_shoulders.vmdl"
+	}
+
+	"default5"
+	{
+		"Slot"		"5"
+		"Model"		"models/heroes/drow/drow_legs.vmdl"
+	}
+
+	"default6"
+	{
+		"Slot"		"6"
+		"Model"		"models/heroes/drow/drow_haircowl.vmdl"
+	}
+
+	"default7"
+	{
+		"Slot"		"7"
+		"Model"		"models/heroes/drow/drow_quiver.vmdl"
+	}
+
+	"item_test"
+	{
+		"Slot"		"1"
+		"Model"		"models/items/drow/iceburst_bow.vmdl"
+	}
+}

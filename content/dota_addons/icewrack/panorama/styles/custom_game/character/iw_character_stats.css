@@ -1,0 +1,9 @@
+.CharacterStatsRoot
+{
+	width: 800px;
+	height: 800px;
+	padding-left: 16px;
+	padding-top: 16px;
+	flow-children: down;
+	background-color: #00ff0010;
+}

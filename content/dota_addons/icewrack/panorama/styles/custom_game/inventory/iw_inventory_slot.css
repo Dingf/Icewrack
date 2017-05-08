@@ -1,0 +1,40 @@
+.InventorySlotRoot
+{
+	tooltip-position: right left;
+	tooltip-arrow-position: 0px 16px;
+}
+
+.InventorySlotOverlay
+{
+	margin-left: 7px;
+	margin-top: 7px;
+}
+
+.InventorySlotItemTexture
+{
+	horizontal-align: center;
+	vertical-align: center;
+}
+
+.InventorySlotStackCount
+{
+	background-color: #000000f0;
+	color: #ffffff80;
+	font-size: 18px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: right;
+	vertical-align: bottom;
+	horizontal-align: right;
+	margin-right: 12px;
+	margin-bottom: 8px;
+}
+
+.PotentialEquip
+{
+	background-color: #80808008;
+}
+
+.CannotEquip
+{
+	background-color: #00000008;
+}

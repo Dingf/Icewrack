@@ -1,0 +1,12 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_windows.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/ui/iw_windows.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="WindowsRoot">
+	</Panel>
+</root>

@@ -1,0 +1,43 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/dialogue/iw_dialogue.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/dialogue/iw_dialogue_option.js" />
+		<include src="file://{resources}/scripts/custom_game/dialogue/iw_dialogue.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="DialogueRoot" onload="OnDialogueLoad()">
+		<Panel hittest="false" id="Dialogue">
+			<Panel hittest="true" class="DialogueFill" id="Fill"/>
+			<Panel hittest="false" class="DialogueBackgroundContainer">
+				<Image hittest="false" class="DialogueBlurEdge" src="file://{images}/custom_game/dialogue/iw_dialogue_blur_edge_1.tga" />
+				<Panel hittest="true" class="DialogueBackground" />
+			</Panel>
+			<Panel hittest="false" class="DialogueContentContainer">
+				<Panel hittest="false" class="DialogueSpeakerContainer">
+					<Panel hittest="false" class="DialoguePortraitContainer">
+						<Image hittest="false" class="DialoguePortrait" id="Portrait" src="file://{images}/portraits/default.png" />
+						<Image hittest="false" class="DialoguePortrait" src="file://{images}/custom_game/dialogue/iw_dialogue_portrait_shadow.tga" />
+					</Panel>
+				</Panel>
+				<Panel hittest="false" class="DialogueTextContainer">
+					<Label hittest="false" class="DialogueName" id="Name" text="" />
+					<Label hittest="false" class="DialogueText" id="Text" text="" />
+				</Panel>
+				<Image hittest="false" class="DialogueDivider" src="file://{images}/custom_game/dialogue/iw_dialogue_divider.tga" />
+				<Panel hittest="false" class="DialogueOptionContainer">
+					<Panel hittest="false" class="DialogueOptionScrollContainer" id="ScrollContainer">
+						<Panel hittest="false" class="DialogueOptionTextContainer" id="TextContainer"/>
+					</Panel>
+					<Panel hittest="false" class="DialogueOptionBlurContainer">
+						<Image hittest="false" class="DialogueOptionBlurTop" src="file://{images}/custom_game/dialogue/iw_dialogue_blur_edge_3.tga" />
+						<Image hittest="false" class="DialogueOptionBlurBottom" src="file://{images}/custom_game/dialogue/iw_dialogue_blur_edge_2.tga" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

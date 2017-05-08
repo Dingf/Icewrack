@@ -1,0 +1,26 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_widget_buff_icon.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_buff_icon.js" />
+	</scripts>
+	
+	<Panel class="BuffIconRoot" onload="OnBuffIconLoad()" onmouseover="OnBuffIconMouseOver()" onmouseout="OnBuffIconMouseOut()">
+		<Image hittest="false" class="BuffIconTexture" id="ModifierTexture" src="file://{images}/spellicons/default.png"/>
+		<Image hittest="false" class="BuffIconShadow" src="file://{images}/custom_game/ui/buff_icon/iw_buff_icon_shadow.tga"/>
+		<Panel hittest="false" class="DurationContainer" id="Duration">
+			<Image hittest="false" class="DurationBackground" src="file://{images}/custom_game/ui/buff_icon/iw_buff_icon_background.tga"/>
+			<Panel class="DurationFillContainer">
+				<Panel hittest="false" class="DurationLeftContainer">
+					<Panel hittest="false" class="DurationHalfFill" id="LeftDurationFill"/>
+				</Panel>
+				<Panel hittest="false" class="DurationHalfFill" id="RightDurationFill"/>
+			</Panel>
+			<Image hittest="false" class="DurationBackground" src="file://{images}/custom_game/ui/buff_icon/iw_buff_icon_overlay.tga"/>
+		</Panel>
+		<Label hittest="false" id="StackLabel" text="" />
+	</Panel>
+</root>

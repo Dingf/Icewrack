@@ -1,0 +1,93 @@
+.AAMConditionRoot
+{
+	width: 960px;
+	flow-children: down;
+}
+
+.AAMMainConditionPriorityLabel
+{
+	vertical-align: center;
+	width: 42px;
+	color: #ffffffc0;
+	font-size: 32px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	font-weight: bold;
+	text-align: center;
+}
+
+.AAMMainConditionIcon
+{
+	width: 32px;
+	height: 32px;
+	margin: 5px;
+	border: 2px solid #111111FF;
+	tooltip-position: top right;
+}
+
+.AAMMainCondition
+{
+	width: 100%;
+	padding-bottom: 8px;
+	flow-children: right;
+}
+
+.AAMMainCondition:hover
+{
+	background-color: gradient(linear, 0% 0%, 100% 0%, from(#44444440), to(#00000000));
+}
+
+.AAMMainConditionBody
+{
+	height: fit-children;
+	width: 768px;
+	flow-children: right-wrap;
+}
+
+.AAMMainConditionBody Label
+{
+	color: #ffffffc0;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	margin-top: 7px;
+}
+
+.AAMConditionIcon
+{
+	opacity: 0.25;
+	vertical-align: center;
+}
+
+.AAMConditionButton
+{
+	opacity: 0.15;
+	vertical-align: center;
+}
+
+.AAMConditionButton:hover
+{
+	opacity: 0.5;
+}
+
+.AAMConditionItemContainer
+{
+	width: 100%;
+	margin-left: 64px;
+	margin-bottom: 16px;
+	flow-children: down;
+}
+
+.AAMConditionItemList
+{
+	width: 100%;
+	flow-children: down;
+}
+
+.AAMAddConditionPanel
+{
+	flow-children: right;
+}
+
+.AAMConditionInvalid
+{
+	opacity: 0.1;
+}

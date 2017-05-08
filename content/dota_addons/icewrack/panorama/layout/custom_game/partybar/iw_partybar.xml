@@ -1,0 +1,17 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/partybar/iw_partybar.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/partybar/iw_partybar_member.js" />
+		<include src="file://{resources}/scripts/custom_game/partybar/iw_partybar.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="PartyBarRoot">
+		<Panel hittest="false" id="PartyBar">
+			<Panel hittest="false" class="PartyBarMemberContainer" id="MemberContainer"/>
+		</Panel>
+	</Panel>
+</root>

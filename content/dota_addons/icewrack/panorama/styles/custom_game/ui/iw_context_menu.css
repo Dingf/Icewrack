@@ -1,0 +1,26 @@
+.ContextMenuRoot
+{
+	flow-children: down;
+	background-color: #303030;
+}
+
+.InventoryMenuButton
+{
+	width: 100px;
+	height: 32px;
+	border: 0px solid black;
+	padding: 4px;
+	padding-left: 8px;
+}
+
+#DropTargetHighlight
+{
+	background-color: gradient( radial, 50% -20%, 0% 0%, 80% 80%, from( #FFFFFF ), to( #FFFFFF00 ) );
+	opacity: 1;
+}
+
+#Contents
+{
+	padding: 0px;
+	margin: 0px;
+}

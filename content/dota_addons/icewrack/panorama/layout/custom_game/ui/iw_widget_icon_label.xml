@@ -1,0 +1,20 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_widget_icon_label.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_icon_label.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="IconLabelRoot" onload="OnIconLabelLoad()">
+		<Panel id="IconContainer" onmouseover="OnIconLabelMouseOver()" onmouseout="OnIconLabelMouseOut()">
+			<Panel hittest="false" id="IconBackground" />
+			<Image hittest="false" class="IconTexture" id="Icon" />
+		</Panel>
+		<Panel id="LabelContainer" onmouseover="OnIconLabelMouseOver()" onmouseout="OnIconLabelMouseOut()">
+			<Panel hittest="false" id="LabelBackground" />
+			<Label hittest="false" class="LabelText" id="Label" text="" />
+		</Panel>
+	</Panel>
+</root>

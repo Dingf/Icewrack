@@ -1,0 +1,232 @@
+	// No spaces in event names, max length 32
+// All strings are case sensitive
+//
+// valid data key types are:
+//   string : a zero terminated string
+//   bool   : unsigned int, 1 bit
+//   byte   : unsigned int, 8 bit
+//   short  : signed int, 16 bit
+//   long   : signed int, 32 bit
+//   float  : float, 32 bit
+//   uint64 : unsigned int 64 bit
+//   local  : any data, but not networked to clients
+//
+// following key names are reserved:
+//   local      : if set to 1, event is not networked to clients
+//   unreliable : networked, but unreliable
+//   suppress   : never fire this event
+//   time	: firing server time
+//   eventid	: holds the event ID
+
+"CustomEvents"
+{
+	"iw_quit"	{}
+
+	"iw_change_level"
+	{
+		"map"		"string"
+	}
+
+	"iw_save_game"
+	{
+		"mode"		"int"
+	}
+
+	"iw_map_transition"
+	{
+		"map"		"string"
+	}
+
+	"iw_ext_entity_load"
+	{
+		"entindex"	"int"
+	}
+
+	"iw_sfs_save_start"
+	{
+		"filename"	"string"
+	}
+
+	"iw_sfs_save_data"
+	{
+		"data"		"string"
+	}
+
+	"iw_sfs_save_end"	{}
+
+	"iw_character_attributes_confirm"
+	{
+		"entindex"	"int"
+		"1"		"int"
+		"2"		"int"
+		"3"		"int"
+		"4"		"int"
+		"5"		"int"
+		"6"		"int"
+	}
+
+	"iw_character_skills_confirm"
+	{
+		"entindex"	"int"
+		"value"		"string"
+	}
+
+	"iw_inventory_equip_item"
+	{
+		"entindex"	"int"
+		"slot"		"byte"
+		"itemindex"	"int"
+	}
+
+	"iw_inventory_drop_item"
+	{
+		"entindex"	"int"
+		"itemindex"	"int"
+	}
+
+	"iw_inventory_use_item"
+	{
+		"entindex"	"int"
+		"itemindex"	"int"
+	}
+
+	"iw_inventory_use_finish"
+	{
+		"entindex"	"int"
+		"itemindex"	"int"
+	}
+
+	"iw_lootable_interact"
+	{
+		"entindex"	"int"
+		"lootable"	"int"
+	}
+
+	"iw_lootable_take_item"
+	{
+		"entindex"	"int"
+		"lootable"	"int"
+		"itemindex"	"int"
+	}
+
+	"iw_lootable_store_item"
+	{
+		"entindex"	"int"
+		"lootable"	"int"
+		"itemindex"	"int"
+	}
+
+	"iw_character_select_stage"
+	{
+		"stage"		"int"
+	}
+
+	"iw_character_select_examine"
+	{
+		"entindex"	"int"
+	}
+
+	"iw_character_select_start"
+	{
+		"entindex"	"int"
+		"difficulty"	"int"
+	}
+
+	"iw_aam_change_state"
+	{
+		"entindex"	"int"
+		"state"		"byte"
+		"hidden"	"bool"
+	}
+
+	"iw_aam_update_condition"
+	{
+		"entindex"	"int"
+		"priority"	"int"
+		"ability"	"string"
+		"flags1"	"int"
+		"flags2"	"int"
+		"invmask"	"int"
+	}
+
+	"iw_aam_move_condition"
+	{
+		"entindex"	"int"
+		"old_priority"	"int"
+		"new_priority"	"int"
+	}
+
+	"iw_aam_delete_condition"
+	{
+		"entindex"	"int"
+		"priority"	"int"
+	}
+
+	"iw_aam_save"
+	{
+		"entindex"	"int"
+		"name"		"string"
+	}
+
+	"iw_aam_load"
+	{
+		"entindex"	"int"
+		"name"		"string"
+	}
+
+	"iw_aam_delete_automator"
+	{
+		"entindex"	"int"
+		"name"		"string"
+	}
+
+	"iw_dialogue_start"
+	{
+		"id"		"int"
+		"entindex"	"int"
+		"text"		"string"
+	}
+
+	"iw_dialogue_option"
+	{
+		"value"		"int"
+		"text"		"string"
+	}
+
+	"iw_dialogue_end"	{}
+
+	"iw_dialogue_hide"	{}
+
+	"iw_party_select"
+	{
+		"value"		"int"
+	}
+
+	"iw_menu_option"
+	{
+		"name"		"string"
+	}
+	
+	"iw_toggle_run"
+	{
+		"entindex"	"int"
+	}
+
+	"iw_actionbar_ability"
+	{
+		"value"		"int"
+	}
+
+	"iw_actionbar_bind"
+	{
+		"slot"		"int"
+		"entindex"	"int"
+		"ability"	"int"
+	}
+
+	"iw_ability_combo"
+	{
+		"name"		"string"
+	}
+}
+

@@ -1,0 +1,14 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/dialogue/iw_dialogue_option.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/dialogue/iw_dialogue_option.js" />
+	</scripts>
+	
+	<Panel hittest="true" class="DialogueOptionRoot" onmouseover="OnDialogueOptionMouseOver()" onactivate="OnDialogueOptionActivate()">
+		<Label class="DialogueOptionText" id="Text" text="" />
+	</Panel>
+</root>

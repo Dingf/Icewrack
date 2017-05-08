@@ -1,0 +1,24 @@
+.SideBarIconTexture
+{
+	width: 36px;
+	height: 36px;
+	horizontal-align: center;
+	vertical-align: center;
+}
+
+.SideBarIconButton
+{
+	tooltip-position: left;
+}
+
+.IsActive
+{
+	brightness: 5.0;
+}
+
+.IsDown
+{
+	width: 32px;
+	height: 32px;
+	brightness: 0.25;
+}

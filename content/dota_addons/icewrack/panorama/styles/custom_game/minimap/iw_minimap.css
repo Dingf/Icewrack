@@ -1,0 +1,62 @@
+.MinimapRoot
+{
+	width: 100%;
+	height: 100%;
+}
+
+#Minimap
+{
+	width: 100%;
+	height: 100%;
+}
+
+.MinimapContainer
+{
+	opacity-mask: url("file://{images}/custom_game/minimap/iw_minimap_mask.tga");
+	width: 220px;
+	height: 220px;
+	horizontal-align: right;
+	margin-top: 12px;
+	margin-right: 12px;
+	overflow: clip;
+}
+
+.MinimapBackground
+{
+	width: 220px;
+	height: 220px;
+	background-color: #000000ff;
+}
+
+.MinimapOverlay
+{
+	horizontal-align: right;
+}
+
+.MinimapPointer
+{
+	horizontal-align: right;
+	margin-right: 110px;
+	margin-top: 3px;
+	transform-origin: 50% 100%;
+}
+
+.MinimapZoomInButton
+{
+	horizontal-align: right;
+	margin-right: 50px;
+	margin-top: 4px;
+}
+
+.MinimapZoomOutButton
+{
+	horizontal-align: right;
+	margin-right: 4px;
+	margin-top: 50px;
+}
+
+.MinimapIconDead
+{
+	saturation: 0.0;
+	brightness: 0.5;
+}

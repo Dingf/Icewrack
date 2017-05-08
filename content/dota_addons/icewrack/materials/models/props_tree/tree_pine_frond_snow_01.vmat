@@ -1,0 +1,44 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "global_lit_simple.vfx"
+
+	//---- Normal Maps ----
+	F_NORMAL_MAP 1
+
+	//---- Specular ----
+	F_SPECULAR 1
+
+	//---- Translucent ----
+	F_ALPHA_TEST 1
+
+	//---- Color ----
+	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	TextureColor "materials/models/props_tree/tree_pine_frond_snow_01_color_psd_b1de482.tga"
+
+	//---- Normal Map ----
+	g_flBumpStrength "0.500"
+	TextureNormal "materials/models/props_tree/tree_pine_frond_snow_01_normal.tga"
+
+	//---- Self Illum ----
+	TextureSelfIllumMask "[0.000000 0.000000 0.000000 0.000000]"
+
+	//---- Specular ----
+	g_flSpecularBloom "0.400"
+	g_flSpecularIntensity "0.500"
+	TextureBloom "[0.000000 0.000000 0.000000 0.000000]"
+	TextureReflectance "materials/models/props_tree/tree_pine_frond_01_refl.tga"
+
+	//---- Translucent ----
+	g_flAlphaTestReference "0.700"
+	TextureTranslucency "materials/models/props_tree/tree_pine_frond_snow_01_trans.tga"
+
+	Attributes
+	{
+		RepresentativeTextureWidth "1024"
+		RepresentativeTextureHeight "2048"
+	}
+}

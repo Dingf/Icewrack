@@ -1,0 +1,73 @@
+"IcewrackMapInfo"
+{
+	"main_menu"
+	{
+		"ID"		"1"
+		"revealed"	"1"
+		"override"	"1"
+		"type"		"IW_MAP_TYPE_OUTSIDE"
+		"left"		"-4096"
+		"top"		"-4096"
+		"right"		"4096"
+		"bottom"	"4096"
+	}
+
+	"map000"
+	{
+		"ID"		"2"
+		"revealed"	"1"
+		"override"	"1"
+		"type"		"IW_MAP_TYPE_OUTSIDE"
+		"left"		"-4096"
+		"top"		"-4096"
+		"right"		"4096"
+		"bottom"	"4096"
+	}
+	"map101"
+	{
+		"ID"		"3"
+		"type"		"IW_MAP_TYPE_OUTSIDE IW_MAP_TYPE_TOWN"
+		"left"		"-4096"
+		"top"		"-4096"
+		"right"		"4096"
+		"bottom"	"4096"
+	}
+	"map102"
+	{
+		"ID"		"4"
+		"type"		"IW_MAP_TYPE_OUTSIDE"
+		"left"		"-8192"
+		"top"		"-8192"
+		"right"		"8192"
+		"bottom"	"8192"
+	}
+	"map103"
+	{
+		"ID"		"5"
+		"type"		"IW_MAP_TYPE_INSIDE"
+		"left"		"-4096"
+		"top"		"-4096"
+		"right"		"4096"
+		"bottom"	"4096"
+		"vision"	"0.25"
+	}
+	"mazetest1"
+	{
+		"ID"		"1000"
+		"name"		"Maze Test 1"
+		"type"		"IW_MAP_TYPE_OUTSIDE"
+		"left"		"-4096"
+		"top"		"-4096"
+		"right"		"4096"
+		"bottom"	"4096"
+	}
+	"ramptest"
+	{
+		"ID"		"1000"
+		"type"		"IW_MAP_TYPE_OUTSIDE"
+		"left"		"-4096"
+		"top"		"-4096"
+		"right"		"4096"
+		"bottom"	"4096"
+	}
+}

@@ -1,0 +1,47 @@
+.ItemEntryRoot
+{
+	width: 460px;
+	height: 32px;
+	padding-left: 4px;
+	flow-children: right;
+	tooltip-arrow-position: 8% 50%;
+	tooltip-position: top bottom;
+}
+
+.ItemEntryIcon
+{
+	margin-top: 4px;
+	margin-left: 4px;
+	opacity: 0.15;
+}
+
+.ItemEntryNameContainer
+{
+	width: 256px;
+	margin-top: 8px;
+	margin-left: 8px;
+	flow-children: right;
+}
+
+.ItemEntryName
+{
+	color: #ffffff20;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.ItemEntryValue
+{
+	color: #ffffff20;
+	width: 72px;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	margin-top: 8px;
+	margin-left: 4px;
+	text-align: right;
+}
+
+.ItemEntryRoot:hover
+{
+	background-color: gradient(linear, 0% 0%, 100% 0%, from(#44444440), to(#00000000));
+}

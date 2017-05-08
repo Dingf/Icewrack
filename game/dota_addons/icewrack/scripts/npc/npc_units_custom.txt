@@ -1,0 +1,546 @@
+// Units File
+"DOTAUnits"
+{
+	"npc_iw_generic_dummy"
+	{										
+		// General
+		//----------------------------------------------------------------
+		"BaseClass"				"npc_dota_base"
+		"Model"					"models/development/invisiblebox.mdl"
+		"SoundSet"				""
+		"Level"					"0"
+		"ModelScale"				"0.01"
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_SMALL"
+		"HealthBarOffset"			"120"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_FLY"
+		"MovementSpeed"				"100"
+		"MovementTurnRate"			"0.5"
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"
+		"MagicalResistance"			"0"
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"5000"
+		"StatusHealthRegen"			"0"
+		"StatusMana"				"5000"
+		"StatusManaRegen"			"1000"
+
+		// Team
+		//----------------------------------------------------------------
+		"TeamName"				"DOTA_TEAM_NEUTRALS"
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
+		"UnitRelationshipClass"			"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"
+		"VisionNighttimeRange"			"0"
+
+		// Inventory
+		//----------------------------------------------------------------
+		"HasInventory"				"1"
+	}
+
+	"npc_iw_avoidance_zone"
+	{										
+		// General
+		//----------------------------------------------------------------
+		"BaseClass"				"npc_dota_base_additive"
+		"Model"					"models/props_structures/iw_training_dummy.vmdl"
+		"SoundSet"				""
+		"Level"					"0"
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_SMALL"
+		"HealthBarOffset"			"120"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
+		"MovementSpeed"				"0"		// Speed.
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"
+		"MagicalResistance"			"0"
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"5000"
+		"StatusHealthRegen"			"0"
+		"StatusMana"				"5000"
+		"StatusManaRegen"			"1000"
+
+		// Team
+		//----------------------------------------------------------------
+		"TeamName"				"DOTA_TEAM_NEUTRALS"
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
+		"UnitRelationshipClass"			"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"
+		"VisionNighttimeRange"			"0"
+	}
+
+	"npc_iw_training_target"
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"					"models/props_structures/iw_training_dummy.vmdl"
+		"BaseClass"				"npc_dota_creep_siege"
+		"GameSoundsFile"			"soundevents/game_sounds_creeps.vsndevts"
+		"Level"					"1"
+		"ModelScale" 				"1"
+	
+		// Abilities
+		//----------------------------------------------------------------
+		"Ability1"				""			// Ability 1
+		"Ability2"				""			// Ability 2
+		"Ability3"				""			// Ability 3
+		"Ability4"				""			// Ability 4
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// Physical protection.
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"			"DOTA_UNIT_CAP_NO_ATTACK"
+		"AttackDamageMin"			"1"		// Damage range min.
+		"AttackDamageMax"			"1"		// Damage range max.
+		
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"				"0"			// Experience earn.
+		"BountyGoldMin"				"0"			// Gold earned min.
+		"BountyGoldMax"				"0"			// Gold earned max.
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
+		"MovementSpeed"				"0"		// Speed.
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"50000"		// Base health.
+		"StatusHealthRegen"			"5000"			// Health regeneration rate.
+		"StatusMana"				"0"			// Base mana.
+		"StatusManaRegen"			"0"			// Mana regeneration rate.		 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"		// Range of vision during day light.
+		"VisionNighttimeRange"			"0"		// Range of vision at night time.
+	}
+
+	"npc_iw_blacksmith"
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"					"models/props_gameplay/shopkeeper_fountain/shopkeeper_fountain.vmdl"
+		"BaseClass"				"npc_dota_base"
+		"Level"					"1"
+		"ModelScale" 				"1"
+	
+		// Abilities
+		//----------------------------------------------------------------
+		"Ability1"				""			// Ability 1
+		"Ability2"				""			// Ability 2
+		"Ability3"				""			// Ability 3
+		"Ability4"				""			// Ability 4
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// Physical protection.
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"			"DOTA_UNIT_CAP_NO_ATTACK"
+		"AttackDamageMin"			"1"		// Damage range min.
+		"AttackDamageMax"			"1"		// Damage range max.	   
+
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"				"0"			// Experience earn.
+		"BountyGoldMin"				"0"			// Gold earned min.
+		"BountyGoldMax"				"0"			// Gold earned max.
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_GROUND"
+		"MovementSpeed"				"100"		// Speed.
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"100"		// Base health.
+		"StatusHealthRegen"			"0"			// Health regeneration rate.
+		"StatusMana"				"0"			// Base mana.
+		"StatusManaRegen"			"0"			// Mana regeneration rate. 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"		// Range of vision during day light.
+		"VisionNighttimeRange"			"0"		// Range of vision at night time.
+	}
+
+	"npc_iw_expedition_merc_1"
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"					"models/creeps/lane_creeps/creep_radiant_melee/radiant_melee.vmdl"
+		"BaseClass"				"npc_dota_creature"
+		"GameSoundsFile"			"soundevents/game_sounds_creeps.vsndevts"
+		"SoundSet"				"n_creep_Melee"
+		"Level"					"1"
+		"ModelScale" 				"1"
+	
+		// Abilities
+		//----------------------------------------------------------------
+		"Ability1"				""			// Ability 1
+		"Ability2"				""			// Ability 2
+		"Ability3"				""			// Ability 3
+		"Ability4"				""			// Ability 4
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"5"			// Physical protection.
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"			"DOTA_UNIT_CAP_MELEE_ATTACK"
+		"AttackDamageMin"			"18"		// Damage range min.
+		"AttackDamageMax"			"22"		// Damage range max.
+		"AttackRate"				"1.0"		// Speed of attack.
+		"AttackAnimationPoint"			"0.4"		// Normalized time in animation cycle to attack.
+		"AttackAcquisitionRange"		"0"		// Range within a target can be acquired.
+		"AttackRange"				"100"		// Range within a target can be attacked.
+		"ProjectileModel"			""			// Particle system model for projectile.
+		"ProjectileSpeed"			"0"			// Speed of projectile.		   
+
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"				"63"			// Experience earn.
+		"BountyGoldMin"				"0"			// Gold earned min.
+		"BountyGoldMax"				"0"			// Gold earned max.
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_GROUND"
+		"MovementSpeed"				"325"		// Speed.
+		"MovementTurnRate"			"0.2"
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"150"		// Base health.
+		"StatusHealthRegen"			"0"			// Health regeneration rate.
+		"StatusMana"				"0"			// Base mana.
+		"StatusManaRegen"			"0"			// Mana regeneration rate.		 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"1800"		// Range of vision during day light.
+		"VisionNighttimeRange"			"800"		// Range of vision at night time.
+
+		// Team
+		//----------------------------------------------------------------
+		"TeamName"				"DOTA_TEAM_NEUTRALS"
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
+		"UnitRelationshipClass"			"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+	}
+
+	"npc_iw_expedition_merc_2"
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"					"models/creeps/lane_creeps/creep_radiant_ranged/radiant_ranged.vmdl"
+		"BaseClass"				"npc_dota_creature"
+		"GameSoundsFile"			"soundevents/game_sounds_creeps.vsndevts"
+		"SoundSet"				"n_creep_Ranged"
+		"Level"					"1"
+		"ModelScale" 				"1"
+	
+		// Abilities
+		//----------------------------------------------------------------
+		"Ability1"				""			// Ability 1
+		"Ability2"				""			// Ability 2
+		"Ability3"				""			// Ability 3
+		"Ability4"				""			// Ability 4
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"2"			// Physical protection.
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"			"DOTA_UNIT_CAP_RANGED_ATTACK"
+		"AttackDamageMin"			"11"		// Damage range min.
+		"AttackDamageMax"			"17"		// Damage range max.
+		"AttackRate"				"1.7"		// Speed of attack.
+		"AttackAnimationPoint"			"0.4"		// Normalized time in animation cycle to attack.
+		"AttackAcquisitionRange"		"0"		// Range within a target can be acquired.
+		"AttackRange"				"600"		// Range within a target can be attacked.
+		"ProjectileModel"			"particles/neutral_fx/satyr_trickster_projectile.vpcf"			// Particle system model for projectile.
+		"ProjectileSpeed"			"900"			// Speed of projectile.		   
+
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"				"48"			// Experience earn.
+		"BountyGoldMin"				"0"			// Gold earned min.
+		"BountyGoldMax"				"0"			// Gold earned max.
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_GROUND"
+		"MovementSpeed"				"325"		// Speed.
+		"MovementTurnRate"			"0.2"
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"80"		// Base health.
+		"StatusHealthRegen"			"0"			// Health regeneration rate.
+		"StatusMana"				"100"			// Base mana.
+		"StatusManaRegen"			"0"			// Mana regeneration rate.		 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"1800"		// Range of vision during day light.
+		"VisionNighttimeRange"			"800"		// Range of vision at night time.
+
+		// Team
+		//----------------------------------------------------------------
+		"TeamName"				"DOTA_TEAM_NEUTRALS"						// Team name.
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_PIERCE"
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
+		"UnitRelationshipClass"			"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+	}
+
+	"prop_iw_anvil"
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"					"models/props_gameplay/iw_anvil.vmdl"
+		"BaseClass"				"npc_dota_base"
+		"Level"					"1"
+		"ModelScale" 				"0.75"
+	
+		// Abilities
+		//----------------------------------------------------------------
+		"Ability1"				""			// Ability 1
+		"Ability2"				""			// Ability 2
+		"Ability3"				""			// Ability 3
+		"Ability4"				""			// Ability 4
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// Physical protection.
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"			"DOTA_UNIT_CAP_NO_ATTACK"
+		"AttackDamageMin"			"1"		// Damage range min.
+		"AttackDamageMax"			"1"		// Damage range max.
+		
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"				"0"			// Experience earn.
+		"BountyGoldMin"				"0"			// Gold earned min.
+		"BountyGoldMax"				"0"			// Gold earned max.
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
+		"MovementSpeed"				"0"		// Speed.
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"100"		// Base health.
+		"StatusHealthRegen"			"0"			// Health regeneration rate.
+		"StatusMana"				"0"			// Base mana.
+		"StatusManaRegen"			"0"			// Mana regeneration rate.		 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"		// Range of vision during day light.
+		"VisionNighttimeRange"			"0"		// Range of vision at night time.
+	}
+
+	"prop_iw_tanning_rack"
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"					"models/props_gameplay/iw_tanning_rack.vmdl"
+		"BaseClass"				"npc_dota_base"
+		"Level"					"1"
+		"ModelScale" 				"1"
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_SMALL"
+		"RingRadius"				"64"
+	
+		// Abilities
+		//----------------------------------------------------------------
+		"Ability1"				""			// Ability 1
+		"Ability2"				""			// Ability 2
+		"Ability3"				""			// Ability 3
+		"Ability4"				""			// Ability 4
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// Physical protection.
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"			"DOTA_UNIT_CAP_NO_ATTACK"
+		"AttackDamageMin"			"1"		// Damage range min.
+		"AttackDamageMax"			"1"		// Damage range max.
+		
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"				"0"			// Experience earn.
+		"BountyGoldMin"				"0"			// Gold earned min.
+		"BountyGoldMax"				"0"			// Gold earned max.
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
+		"MovementSpeed"				"0"		// Speed.
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"100"		// Base health.
+		"StatusHealthRegen"			"0"			// Health regeneration rate.
+		"StatusMana"				"0"			// Base mana.
+		"StatusManaRegen"			"0"			// Mana regeneration rate.		 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"		// Range of vision during day light.
+		"VisionNighttimeRange"			"0"		// Range of vision at night time.
+	}
+
+	"prop_iw_snowforge"
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"					"models/development/hitbox_large.vmdl"
+		"BaseClass"				"npc_dota_base"
+		"Level"					"1"
+		"ModelScale" 				"1"
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_HUGE"
+		"RingRadius"				"200"
+	
+		// Abilities
+		//----------------------------------------------------------------
+		"Ability1"				""			// Ability 1
+		"Ability2"				""			// Ability 2
+		"Ability3"				""			// Ability 3
+		"Ability4"				""			// Ability 4
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// Physical protection.
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"			"DOTA_UNIT_CAP_NO_ATTACK"
+		"AttackDamageMin"			"1"		// Damage range min.
+		"AttackDamageMax"			"1"		// Damage range max.
+		
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"				"0"			// Experience earn.
+		"BountyGoldMin"				"0"			// Gold earned min.
+		"BountyGoldMax"				"0"			// Gold earned max.
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
+		"MovementSpeed"				"0"		// Speed.
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"100"		// Base health.
+		"StatusHealthRegen"			"0"			// Health regeneration rate.
+		"StatusMana"				"0"			// Base mana.
+		"StatusManaRegen"			"0"			// Mana regeneration rate.		 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"		// Range of vision during day light.
+		"VisionNighttimeRange"			"0"		// Range of vision at night time.
+	}
+
+	"prop_iw_test_treasure_chest"
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"					"models/props_gameplay/treasure_chest001.vmdl"
+		"BaseClass"				"npc_dota_base"
+		"Level"					"1"
+		"ModelScale" 				"1"
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_SMALL"
+		"RingRadius"				"64"
+	
+		// Abilities
+		//----------------------------------------------------------------
+		"Ability1"				""			// Ability 1
+		"Ability2"				""			// Ability 2
+		"Ability3"				""			// Ability 3
+		"Ability4"				""			// Ability 4
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// Physical protection.
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"			"DOTA_UNIT_CAP_NO_ATTACK"
+		"AttackDamageMin"			"1"		// Damage range min.
+		"AttackDamageMax"			"1"		// Damage range max.
+		
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"				"0"			// Experience earn.
+		"BountyGoldMin"				"0"			// Gold earned min.
+		"BountyGoldMax"				"0"			// Gold earned max.
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
+		"MovementSpeed"				"0"		// Speed.
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"100"		// Base health.
+		"StatusHealthRegen"			"0"			// Health regeneration rate.
+		"StatusMana"				"0"			// Base mana.
+		"StatusManaRegen"			"0"			// Mana regeneration rate.		 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"		// Range of vision during day light.
+		"VisionNighttimeRange"			"0"		// Range of vision at night time.
+	}
+
+}

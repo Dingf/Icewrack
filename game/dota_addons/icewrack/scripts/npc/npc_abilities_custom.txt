@@ -1,0 +1,479 @@
+// Dota Heroes File
+"DOTAAbilities"
+{
+	"internal_dummy_buff"
+	{
+		"BaseClass"				"ability_datadriven"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_HIDDEN"
+		
+		"Modifiers"
+		{
+			"modifier_internal_dummy_buff"
+			{
+				"Passive"						"1"
+				"IsHidden"						"1"
+				"States"
+				{
+					"MODIFIER_STATE_FLYING"				"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_ATTACK_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_INVULNERABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_NOT_ON_MINIMAP"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_NOT_ON_MINIMAP_FOR_ENEMIES"	"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_NO_HEALTH_BAR"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_NO_UNIT_COLLISION"		"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_OUT_OF_GAME"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_PROVIDES_VISION"		"MODIFIER_STATE_VALUE_DISABLED"
+				}
+			}
+
+			"modifier_test"
+			{
+				"Passive"						"1"
+				"IsHidden"						"1"
+				"States"
+				{
+					"MODIFIER_STATE_BLIND"				"MODIFIER_STATE_VALUE_ENABLED"
+				}
+			}
+			
+		}
+	}
+
+	"internal_animation"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_internal_animation"			"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"internal_clear_slot"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+	}
+
+	"internal_loadout_stance"
+	{
+		 General
+		-------------------------------------------------------------------------------------------------------------
+		"BaseClass"				"ability_datadriven"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_HIDDEN"
+
+		"Modifiers"
+		{
+			"modifier_internal_loadout_stance"
+			{
+				"Passive"						"1"
+				"IsHidden"						"1"
+				"OverrideAnimation"					"ACT_DOTA_LOADOUT"
+			}
+		}
+			
+	}
+
+	"status_bash"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_status_bash"				"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"status_maim"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_status_maim"				"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_maim_elite"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_maim_boss"			"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"status_bleed"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_status_bleed"				"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_bleed_elite"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_bleed_boss"			"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"status_burning"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_status_burning"			"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"status_chill"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_status_chill"				"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_chill_elite"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_chill_boss"			"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"status_frozen"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_status_frozen"			"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"status_weaken"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_status_weaken"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_weaken_elite"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_weaken_boss"			"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"status_wet"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_status_wet"				"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"aam_do_nothing"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+	}
+
+	"aam_skip_to_condition"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+	}
+
+	"aam_skip_remaining"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+	}
+
+	"aam_attack"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	}
+
+	"aam_hold_position"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_TOGGLE"
+
+		"Modifiers"
+		{
+			"modifier_aam_hold_position"		"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"aam_move_away_from"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	}
+
+	"aam_move_towards"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	}
+
+	"aam_move_in_front_of"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	}
+
+	"aam_move_behind"
+	{
+		"BaseClass"				"ability_lua"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	}
+
+	"inventory_error_full"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+	}
+
+	"iw_axe_berserkers_call"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"axe_berserkers_call"
+
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.4"
+
+		"AbilityCooldown"			"24.0"
+	}
+
+	"iw_axe_battle_hunger"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_TOGGLE | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"AbilityTextureName"			"axe_battle_hunger"
+
+		"MaxLevel"				"1"
+
+		"Modifiers"
+		{
+			"modifier_iw_axe_battle_hunger"		"LUA_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"lifesteal"			"50"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"second_wind"			"50"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"attack_speed"			"200"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"health_loss"			"2.5"
+			}
+		}
+	}
+
+	"iw_axe_counter_helix"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"axe_counter_helix"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.2"
+		"AbilityAOERadius"			"275"
+
+		"AbilityCooldown"			"1.0"
+	}
+
+	"iw_axe_culling_blade"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"		
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityTextureName"			"axe_culling_blade"
+
+		"MaxLevel"				"1"
+		"AbilityCastRange"			"150"
+		"AbilityCastPoint"			"0.3"
+
+		"AbilityCooldown"			"12.0"
+	}
+
+
+	"iw_bounty_hunter_trapjaw"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_MECHANICAL"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+		"AbilityTextureName"			"bounty_hunter_shuriken_toss"
+
+		"MaxLevel"				"1"
+		"AbilityCastRange"			"650"
+		"AbilityCastPoint"			"0.3"
+	
+		"AbilityCooldown"			"10.0"
+		"AbilityManaCost"               	"15"
+
+		"Modifiers"
+		{
+			"modifier_lolz"			"LUA_MODIFIER_ON_UPGRADE"
+		}
+
+	}
+
+	"iw_bounty_hunter_jinada"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"bounty_hunter_jinada"
+
+		"MaxLevel"				"1"
+	
+		"AbilityCooldown"			"10.0"
+	}
+
+	"iw_bounty_hunter_wind_walk"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL"
+		"AbilityTextureName"			"bounty_hunter_wind_walk"
+
+		"MaxLevel"				"1"
+
+		"AbilityCastPoint"			"0.0"
+	
+		"AbilityCooldown"			"15.0"
+		"AbilityManaCost"               	"20"
+	}
+
+	"iw_bounty_hunter_track"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"bounty_hunter_track"
+
+		"MaxLevel"				"1"
+	}
+
+
+
+	"iw_test_marksmanship"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"drow_ranger_marksmanship"
+
+		"MaxLevel"				"1"
+	}
+
+	"iw_test_shackleshot"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"windrunner_shackleshot"
+
+		"MaxLevel"				"1"
+	}
+
+	"iw_test_powershot"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"windrunner_powershot"
+
+		"MaxLevel"				"1"
+	}
+
+	"iw_test_windrun"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"windrunner_windrun"
+
+		"MaxLevel"				"1"
+	}
+
+	"iw_test_focus_fire"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"windrunner_focus_fire"
+
+		"MaxLevel"				"1"
+	}
+
+	"iw_combo_shatter"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	}
+
+	"iw_placeholder_force"
+	{
+		"BaseClass"				"ability_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	}
+}

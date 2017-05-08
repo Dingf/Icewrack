@@ -1,0 +1,34 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "global_lit_simple.vfx"
+
+	//---- Scroll UV ----
+	F_SCROLL_UV 2 // Scroll All Textures
+
+	//---- Translucent ----
+	F_ADDITIVE_BLEND 1
+	F_TRANSLUCENT 1
+
+	//---- Color ----
+	g_vColorTint "[0.749020 0.835294 1.000000 0.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	TextureColor "materials/models/effects/iw_cloud_scroll_00_color.tga"
+
+	//---- Scroll UV ----
+	g_flScrollUvSpeed "0.500"
+	g_vScrollUvDirection "[-1.000 0.000]"
+	TextureScrollSpeed "[0.125000 0.125000 0.125000 0.000000]"
+
+	//---- Translucent ----
+	g_flOpacityScale "1.000"
+	TextureTranslucency "materials/models/effects/iw_cloud_scroll_00_trans.tga"
+
+	Attributes
+	{
+		RepresentativeTextureWidth "1024"
+		RepresentativeTextureHeight "1024"
+	}
+}

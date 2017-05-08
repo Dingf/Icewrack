@@ -1,0 +1,41 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/aam/iw_aam_condition.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_dropdown_menu.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_dropdown_text.js" />
+		<include src="file://{resources}/scripts/custom_game/aam/iw_aam_condition_item.js" />
+		<include src="file://{resources}/scripts/custom_game/aam/iw_aam_condition.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="AAMConditionRoot" onload="OnAAMConditionLoad()">
+		<Panel hittest="true" class="AAMMainCondition">
+			<Panel hittest="false" class="AAMMainConditionOrder">
+				<Label class="AAMMainConditionPriorityLabel" id="PriorityLabel" text="1" />
+			</Panel>
+			<Panel hittest="false" class="AAMMainConditionBody" id="ConditionBody">
+				<Image hittest="true" class="AAMMainConditionIcon" id="ConditionIcon" src="file://{images}/spellicons/default.png"/>
+			</Panel>
+			<Button hittest="true" class="AAMConditionButton" id="UpButton" onactivate="OnAAMConditionMoveUp()">
+				<Image src="file://{images}/custom_game/aam/iw_aam_arrow_up.tga" />
+			</Button>
+			<Button hittest="true" class="AAMConditionButton" id="DownButton" onactivate="OnAAMConditionMoveDown()">
+				<Image src="file://{images}/custom_game/aam/iw_aam_arrow_down.tga" />
+			</Button>
+			<Button hittest="true" class="AAMConditionButton" id="DeleteButton" onactivate="OnAAMConditionDelete()">
+				<Image src="file://{images}/custom_game/aam/iw_aam_close_x.tga" />
+			</Button>
+		</Panel>
+		<Panel hittest="true" class="AAMConditionItemContainer" id="ConditionItemContainer">
+			<Panel hittest="false" class="AAMConditionItemList" id="ConditionItemList" />
+			<Panel hittest="false" class="AAMAddConditionPanel" id="AddCondition">
+				<Button class="AAMConditionIcon" id="AddButton">
+					<Image src="file://{images}/custom_game/aam/iw_aam_add_condition.tga" />
+				</Button>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

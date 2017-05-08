@@ -1,0 +1,98 @@
+.TooltipAbilityRoot
+{
+	width: 320px;
+	flow-children: down;
+}
+
+.TooltipAbilityHeader
+{
+	flow-children: right;
+}
+
+.TooltipAbilityIcon
+{
+	width: 64px;
+	height: 64px;
+	margin-right: 12px;
+	border: 2px solid #000000;
+	box-shadow: #00000080 0px 0px 4px 0px;
+}
+
+.TooltipAbilityHeaderContent
+{
+	width: fill-parent-flow(1.0);
+	flow-children: down;
+}
+
+.TooltipAbilityTitle
+{
+	color: #ffffff;
+	font-size: 18px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+}
+
+.TooltipAbilitySkillContainer
+{
+	width: 214px;
+	overflow: clip;
+	flow-children: right;
+	vertical-align: center;
+}
+
+.TooltipAbilitySkillIcon
+{
+	width: 16px;
+	height: 16px;
+}
+
+.TooltipAbilityBehaviorLabel
+{
+	color: #ffffffc0;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.TooltipAbilityDivider
+{
+	height: 1px;
+	width: 100%;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	background-color: #ffffff20;
+}
+
+.TooltipAbilityDescriptionLabel
+{
+	color: #ffffff80;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.TooltipAbilityCostContainer
+{
+	width: 100%;
+	flow-children: right;
+	margin-top: 8px;
+}
+
+.TooltipAbilityCost
+{
+	width: fill-parent-flow(1.0);
+	flow-children: right;
+	margin-right: 8px;
+}
+
+.TooltipAbilityCostIcon
+{
+	width: 20px;
+	height: 20px;
+	margin-right: 4px;
+}
+
+.TooltipAbilityCostLabel
+{
+	color: #ffffff30;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	vertical-align: center;
+}

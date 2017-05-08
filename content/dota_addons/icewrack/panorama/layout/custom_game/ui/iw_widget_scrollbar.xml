@@ -1,0 +1,30 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_widget_scrollbar.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_stretchbox.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_scrollbar.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="ScrollbarRoot" onload="OnScrollbarLoad()" onmouseover="OnScrollFillMouseOver()" onmouseout="OnScrollFillMouseOut()">
+		<Panel class="ScrollFillContainer" id="Fill">
+			<Panel class="ScrollbarFill" />
+		</Panel>
+		<Panel class="ScrollbarContainer" id="ScrollContainer">
+			<Panel draggable="true" class="ScrollbarThumb" id="Thumb"/>
+			<Panel class="ScrollbarRegion" id="ScrollRegion1" />
+			<Panel class="ScrollbarRegion" id="ScrollRegion2" />
+		</Panel>
+		<Button hittest="false" class="ScrollbarButton" id="Button1">
+			<Panel hittest="false" class="ScrollButtonBackground" id="Background1" />
+			<Image class="ScrollbarButtonOverlay" id="Overlay1" src="file://{images}/custom_game/ui/iw_window_scrollbar_up.tga"/>
+		</Button>
+		<Button hittest="false" class="ScrollbarButton" id="Button2">
+			<Panel hittest="false" class="ScrollButtonBackground" id="Background2" />
+			<Image class="ScrollbarButtonOverlay" id="Overlay2" src="file://{images}/custom_game/ui/iw_window_scrollbar_down.tga"/>
+		</Button>
+	</Panel>
+</root>

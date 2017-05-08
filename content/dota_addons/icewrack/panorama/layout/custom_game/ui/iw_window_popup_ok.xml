@@ -1,0 +1,17 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_window_popup_ok.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_button.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_window_popup_ok.js" />
+	</scripts>
+	
+	<Panel class="WindowPopupRoot" onload="OnWindowPopupOKLoad()" onactivate="ClosePopup()" oncontextmenu="ClosePopup()" oncancel="ClosePopup()">
+		<Panel class="WindowPopup" id="PopupOK" onactivate="DoNothing()" oncontextmenu="DoNothing()">
+			<Label id="PopupText" text="Lorem ipsum dolor sit amet." />
+		</Panel>
+	</Panel>
+</root>

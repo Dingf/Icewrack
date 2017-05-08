@@ -1,0 +1,21 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/aam/iw_aam.css" />
+	</styles>
+	
+	<Panel hittest="false" class="AAMContentRoot">
+		<Panel hittest="false" class="AAMConditionBackground" id="Background" />
+		<Panel hittest="false" class="AAMConditionContainer" id="ConditionContainer">
+			<Panel hittest="false" class="AAMConditionContent" id="Conditions" />
+		</Panel>
+			
+		<Panel hittest="false" class="AAMTitleBar" id="TitleBar" />
+		<TextEntry class="AAMTitleText" id="TitleText" text="" maxchars="32"/>
+		<Button hittest="false" class="AAMStateButton" id="StateButton">
+			<Panel hittest="true" id="TooltipHitbox"/>
+			<Image hittest="false" id="TextureOff" src="file://{images}/custom_game/aam/iw_aam_state_off.tga" />
+			<Image hittest="false" id="TextureOn" src="file://{images}/custom_game/aam/iw_aam_state_on.tga" />
+			<Image hittest="false" id="TextureNS" src="file://{images}/custom_game/aam/iw_aam_state_not_selected.tga" />
+		</Button>
+	</Panel>
+</root>

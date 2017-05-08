@@ -1,0 +1,760 @@
+"IcewrackExtendedModifierDefinitions"
+{
+	"internal_animation"
+	{
+		"modifier_internal_animation"
+		{
+			"IsHidden"			"1"
+			"IsStrict"			"1"
+			"Duration"			"%duration"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_OVERRIDE_ANIMATION"			"%animation"
+				"MODIFIER_PROPERTY_OVERRIDE_ANIMATION_RATE"		"%rate"
+				"MODIFIER_PROPERTY_OVERRIDE_ANIMATION_WEIGHT"		"%weight"
+				"MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS"	"%translate"
+			}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"internal_attack"
+	{
+		"modifier_internal_attack"
+		{
+			"IsHidden"			"1"
+			"ScriptFile"			"scripts/vscripts/mechanics/attack.lua"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE_ILLUSION"		"-100"
+			}
+			"DatadrivenEvents"
+			{
+				"MODIFIER_EVENT_ON_ATTACK_LANDED"
+				{
+					"AttackDamage"
+					{
+						"Percent"	"100.0"
+					}
+				}
+
+				"MODIFIER_EVENT_ON_ATTACK"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/mechanics/attack.lua"
+						"Function"	"OnAttack"
+					}
+				}
+				
+				"MODIFIER_EVENT_ON_ATTACK_START"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/mechanics/attack.lua"
+						"Function"	"OnAttackStart"
+					}
+				}
+			}
+		}
+	}
+
+	"internal_attribute_bonus"
+	{
+		"modifier_internal_attribute_bonus"
+		{
+			"IsHidden"			"1"
+			"ScriptFile"			"scripts/vscripts/mechanics/attributes.lua"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"internal_skill_bonus"
+	{
+		"modifier_internal_skill_bonus"
+		{
+			"IsHidden"			"1"
+			"ScriptFile"			"scripts/vscripts/mechanics/skills.lua"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"internal_stamina"
+	{
+		"modifier_internal_stamina"
+		{
+			"IsHidden"			"1"
+			"ScriptFile"			"scripts/vscripts/mechanics/stamina.lua"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"internal_movement_noise"
+	{
+		"modifier_internal_movement_noise"
+		{
+			"IsHidden"			"1"
+			
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"
+			{
+				"MODIFIER_EVENT_ON_INTERVAL_THINK"
+				{
+					"ThinkInterval"		"0.1"
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/mechanics/movement_noise.lua"
+						"Function"	"OnIntervalThink"
+					}
+				}
+			}
+		}
+	}
+
+	"status_bash"
+	{
+		"modifier_status_bash"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"5.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_STUN"
+			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+
+			"VisualEffect"			"particles/generic_gameplay/generic_stunned.vpcf"
+			"VisualAttachType"		"PATTACH_OVERHEAD_FOLLOW"
+			"SoundEffect"			"Icewrack.Bash"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_STUNNED"	"MODIFIER_STATE_VALUE_ENABLED"
+			}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_OVERRIDE_ANIMATION"		"ACT_DOTA_DISABLED"
+			}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"status_maim"
+	{
+		"modifier_status_maim"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_SLOW"
+			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+
+			"VisualEffect"			"particles/generic_gameplay/effect_maim.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"VisualStatus"			"particles/status_fx/status_effect_iw_maim.vpcf"
+			"SoundEffect"			"Icewrack.Maim"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-50"
+			}
+			"DatadrivenEvents"		{}
+		}
+
+		"modifier_status_maim_elite"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_SLOW"
+			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+
+			"VisualEffect"			"particles/generic_gameplay/effect_maim.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"VisualStatus"			"particles/status_fx/status_effect_iw_maim.vpcf"
+			"SoundEffect"			"Icewrack.Maim"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-20"
+			}
+			"DatadrivenEvents"		{}
+		}
+
+		"modifier_status_maim_boss"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_SLOW"
+			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+
+			"VisualEffect"			"particles/generic_gameplay/effect_maim.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"VisualStatus"			"particles/status_fx/status_effect_iw_maim.vpcf"
+			"SoundEffect"			"Icewrack.Maim"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-10"
+			}
+			"DatadrivenEvents"		{}
+		}
+	}
+	
+	"status_bleed"
+	{
+		"modifier_status_bleed"
+		{
+			"IsHidden"			"0"
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"4.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_BLEED"
+			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+
+			"VisualEffect"			"particles/generic_gameplay/effect_bleed.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"SoundEffect"			"Icewrack.Bleed"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT MODIFIER_ATTRIBUTE_MULTIPLE"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TOOLTIP"	"%bleed_damage"
+			}
+			"DatadrivenEvents"
+			{
+				"MODIFIER_EVENT_ON_INTERVAL_THINK"
+				{
+					"ThinkInterval"		"0.1"
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/mechanics/damage_over_time.lua"
+						"Function"	"OnIntervalThink"
+						"Damage"	"%bleed_damage"
+						"DamageType"	"IW_DAMAGE_TYPE_PIERCE"
+						"Interval"	"0.1"
+					}
+				}
+			}
+		}
+	}
+
+	"status_burning"
+	{
+		"modifier_status_burning"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"5.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_BURNING"
+
+			"VisualEffect"			"particles/generic_gameplay/generic_burning_debuff.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"SoundEffect"			"Icewrack.BurningLoop"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TOOLTIP"	"5.0"
+			}
+			"DatadrivenEvents"
+			{
+				"MODIFIER_EVENT_ON_INTERVAL_THINK"
+				{
+					"ThinkInterval"		"0.1"
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/mechanics/damage_over_time.lua"
+						"Function"	"OnIntervalThink"
+						"Damage"	"5.0%"
+						"DamageType"	"IW_DAMAGE_TYPE_FIRE"
+						"Interval"	"0.1"
+					}
+				}
+			}
+		}
+
+		"modifier_status_burning_elite"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"5.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_BURNING"
+
+			"VisualEffect"			"particles/generic_gameplay/generic_burning_debuff.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"SoundEffect"			"Icewrack.BurningLoop"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TOOLTIP"	"2.0"
+			}
+			"DatadrivenEvents"
+			{
+				"MODIFIER_EVENT_ON_INTERVAL_THINK"
+				{
+					"ThinkInterval"		"0.1"
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/mechanics/damage_over_time.lua"
+						"Function"	"OnIntervalThink"
+						"Damage"	"2.0%"
+						"DamageType"	"IW_DAMAGE_TYPE_FIRE"
+						"Interval"	"0.1"
+					}
+				}
+			}
+		}
+
+		"modifier_status_burning_boss"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"5.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_BURNING"
+
+			"VisualEffect"			"particles/generic_gameplay/generic_burning_debuff.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"SoundEffect"			"Icewrack.BurningLoop"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TOOLTIP"	"1.0"
+			}
+			"DatadrivenEvents"
+			{
+				"MODIFIER_EVENT_ON_INTERVAL_THINK"
+				{
+					"ThinkInterval"		"0.1"
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/mechanics/damage_over_time.lua"
+						"Function"	"OnIntervalThink"
+						"Damage"	"1.0%"
+						"DamageType"	"IW_DAMAGE_TYPE_FIRE"
+						"Interval"	"0.1"
+					}
+				}
+			}
+		}
+	}
+
+	"status_chill"
+	{
+		"modifier_status_chill"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_CHILL"
+
+			"VisualEffect"			"particles/units/heroes/hero_lich/lich_slowed_cold.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"VisualStatus"			"particles/status_fx/status_effect_iceblast.vpcf"
+			"SoundEffect"			"Icewrack.Chill"
+
+			"Properties"
+			{
+				"IW_PROPERTY_CAST_SPEED"	"-100"
+			}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-50"
+				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"-100"
+				"MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE"		"-50"
+				"MODIFIER_PROPERTY_TOOLTIP"				"-100"
+			}
+			"DatadrivenEvents"		{}
+		}
+
+		"modifier_status_chill_elite"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_CHILL"
+
+			"VisualEffect"			"particles/units/heroes/hero_lich/lich_slowed_cold.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"VisualStatus"			"particles/status_fx/status_effect_iceblast.vpcf"
+			"SoundEffect"			"Icewrack.Chill"
+
+			"Properties"
+			{
+				"IW_PROPERTY_CAST_SPEED"	"-50"
+			}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-25"
+				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"-50"
+				"MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE"		"-25"
+				"MODIFIER_PROPERTY_TOOLTIP"				"-50"
+			}
+			"DatadrivenEvents"		{}
+		}
+
+		"modifier_status_chill_boss"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_CHILL"
+
+			"VisualEffect"			"particles/generic_gameplay/generic_slowed_cold.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"VisualStatus"			"particles/status_fx/status_effect_iceblast.vpcf"
+			"SoundEffect"			"Icewrack.Chill"
+
+			"Properties"
+			{
+				"IW_PROPERTY_CAST_SPEED"	"-20"
+			}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-10"
+				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"-20"
+				"MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE"		"-10"
+				"MODIFIER_PROPERTY_TOOLTIP"				"-20"
+			}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"status_frozen"
+	{
+		"modifier_status_frozen"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_FREEZE"
+
+			"VisualEffect"			"particles/generic_gameplay/generic_slowed_cold.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"VisualStatus"			"particles/status_fx/status_effect_iw_freeze.vpcf"
+			"VisualStatusPriority"		"2"
+			"SoundEffect"			"Icewrack.Freeze"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_STUNNED"	"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_FROZEN"		"MODIFIER_STATE_VALUE_ENABLED"
+			}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"status_weaken"
+	{
+		"modifier_status_weaken"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_WEAKEN"
+
+			"VisualStatus"			"particles/status_fx/status_effect_iw_weaken.vpcf"
+
+			"Properties"
+			{
+				"IW_PROPERTY_DAMAGE_MULTI"	"50"
+				"IW_PROPERTY_HEAL_MULTI"	"-50"
+			}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TOOLTIP"	"50"
+			}
+			"DatadrivenEvents"		{}
+		}
+
+		"modifier_status_weaken_elite"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_WEAKEN"
+
+			"VisualStatus"			"particles/status_fx/status_effect_iw_weaken.vpcf"
+
+			"Properties"
+			{
+				"IW_PROPERTY_DAMAGE_MULTI"	"20"
+				"IW_PROPERTY_HEAL_MULTI"	"-20"
+			}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TOOLTIP"	"20"
+			}
+			"DatadrivenEvents"		{}
+		}
+
+		"modifier_status_weaken_boss"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"10.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_WEAKEN"
+
+			"VisualStatus"			"particles/status_fx/status_effect_iw_weaken.vpcf"
+
+			"Properties"
+			{
+				"IW_PROPERTY_DAMAGE_MULTI"	"10"
+				"IW_PROPERTY_HEAL_MULTI"	"-10"
+			}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TOOLTIP"	"10"
+			}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"status_wet"
+	{
+		"modifier_status_wet"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"30.0"
+			"StatusEffect"			"IW_STATUS_EFFECT_WET"
+
+			"VisualEffect"			"particles/generic_gameplay/effect_wet.vpcf"
+			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
+			"VisualStatus"			"particles/status_fx/status_effect_gush.vpcf"
+			"SoundEffect"			"Icewrack.WetLoop"
+
+			"Properties"
+			{
+				"IW_PROPERTY_RESIST_FIRE"	"50"
+				"IW_PROPERTY_RESIST_COLD"	"-50"
+				"IW_PROPERTY_RESIST_LIGHT"	"-50"
+			}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TOOLTIP"	"50"
+			}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"aam_hold_position"
+	{
+		"modifier_aam_hold_position"
+		{
+			"IsHidden"			"1"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"iw_axe_battle_hunger"
+	{
+		"modifier_iw_axe_battle_hunger"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/axe/modifier_iw_axe_battle_hunger.lua"
+
+			"VisualEffect"			"particles/units/heroes/hero_axe/axe_battle_hunger.vpcf"
+			"VisualAttachType"		"PATTACH_OVERHEAD_FOLLOW"
+			"SoundEffect"			"Hero_Axe.Battle_Hunger"
+
+			"Properties"
+			{
+				"IW_PROPERTY_LIFESTEAL_PCT"			"%lifesteal"
+				"IW_PROPERTY_SECONDWIND_PCT"			"%second_wind"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"%attack_speed"
+			}
+			"DatadrivenEvents" {}
+		}
+	}
+
+
+
+
+
+
+
+
+	"iw_bounty_hunter_trapjaw"
+	{
+		"modifier_lolz"
+		{
+			"Properties" { }
+
+			"IsHidden"			"1"
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE"
+			"DatadrivenStates" { }
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_HEALTH_BONUS"		"100"
+			}
+			"DatadrivenEvents" { }
+		}
+	}
+
+	"item_test"
+	{
+		"modifier_item_test"
+		{
+			"Properties"
+			{
+				"IW_PROPERTY_ATTR_STR_FLAT"			{"1" "100"}
+				"IW_PROPERTY_ATTR_END_FLAT"			{"1" "100"}
+				"IW_PROPERTY_ATTR_AGI_FLAT"			{"1" "100"}
+				"IW_PROPERTY_ATTR_PER_FLAT"			{"1" "100"}
+				"IW_PROPERTY_ATTR_INT_FLAT"			{"1" "100"}
+				"IW_PROPERTY_ATTR_WIS_FLAT"			{"1" "100"}
+			}
+
+			"IsHidden"			"1"
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates" { }
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_MANA_BONUS"			"50"
+			}
+			"DatadrivenEvents"
+			{
+				"MODIFIER_EVENT_ON_ATTACK_LANDED"
+				{
+					"Damage"
+					{
+						"DamageType"			"IW_DAMAGE_TYPE_PHYSICAL"
+						"MinDamage"			"10"
+						"MaxDamage"			"20"
+						"CanCrit"			"1"
+						"CanDodge"			"0"
+						"CanLifesteal"			"1"
+						"IgnoreMagicImmunity"		"1"
+					}
+				}
+			}
+		}
+	}
+
+	"item_test2"
+	{
+		"modifier_item_test2"
+		{
+
+			"Properties"
+			{
+				"IW_PROPERTY_FATIGUE_MULTI"			"50"
+			}
+
+			"IsHidden"			"1"
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates" { }
+			"DatadrivenProperties" { }
+			"DatadrivenEvents" { }
+		}
+	}
+
+	"item_test3"
+	{
+		"modifier_item_test3"
+		{
+
+			"Properties"
+			{
+				"IW_PROPERTY_FATIGUE_MULTI"			"25"
+			}
+
+			"IsHidden"			"1"
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates" { }
+			"DatadrivenProperties" { }
+			"DatadrivenEvents" { }
+		}
+	}
+
+	"item_test_component"
+	{
+		"modifier_item_test_component"
+		{
+			"Properties" { }
+
+			"IsHidden"			"1"
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates" { }
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_HEALTH_BONUS"		{"50" "50"}
+			}
+			"DatadrivenEvents" { }
+		}
+	}
+}

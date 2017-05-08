@@ -1,0 +1,42 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_widget_item_entry.css" />
+		<include src="file://{resources}/styles/custom_game/ui/iw_widget_item_list.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_context_item.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_context_menu.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_item_actions.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_scrollbar.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_tab.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_item_entry.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_item_list.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="ItemListRoot" onload="OnItemListLoad()">
+		<Panel class="ItemListHitbox" id="Hitbox"/>
+		<Panel hittest="false" class="ItemListContent" id="ListContent">
+			<Panel hittest="false" class="ItemListSorter" id="ListSorter">
+				<Panel hittest="false" class="ItemListSorterSpacer" />
+				<Panel class="ItemListSorterRightCategory" id="NameCategory" onactivate="OnItemListNameSort()">
+					<Label class="ItemListSorterLabel" text="#iw_ui_item_list_name"/>
+					<Image class="ItemListSorterDirectionIcon" id="SortDirection" src="file://{images}/custom_game/ui/iw_arrow_small.tga"/>
+				</Panel>
+				<Panel class="ItemListSorterLeftCategory" id="ValueCategory" onactivate="OnItemListValueSort()">
+					<Label class="ItemListSorterLabel" text="#iw_ui_item_list_value"/>
+					<Image class="ItemListSorterDirectionIcon" id="SortDirection" src="file://{images}/custom_game/ui/iw_arrow_small.tga"/>
+				</Panel>
+				<Panel class="ItemListSorterLeftCategory" id="WeightCategory" onactivate="OnItemListWeightSort()">
+					<Label class="ItemListSorterLabel" text="#iw_ui_item_list_weight"/>
+					<Image class="ItemListSorterDirectionIcon" id="SortDirection" src="file://{images}/custom_game/ui/iw_arrow_small.tga"/>
+				</Panel>
+			</Panel>
+			<Panel hittest="false" class="ItemListContainer" id="ListContainer">
+				<Panel hittest="false" class="ItemListBody" id="ListBody" />
+			</Panel>
+		</Panel>
+		<Panel hittest="false" class="ItemListTabContainer" id="TabContainer" />
+	</Panel>
+</root>

@@ -1,0 +1,35 @@
+<root>
+	<script>
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_TIMEOFDAY, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_HEROES, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_MENU_BUTTONS, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_BAR_BACKGROUND, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ACTION_PANEL, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ACTION_MINIMAP, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_PANEL, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_HERO_SELECTION_TEAMS, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_HERO_SELECTION_GAME_NAME, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_HERO_SELECTION_CLOCK, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ENDGAME, false);
+	</script>
+	
+	<Panel>
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/maps/map000/iw_map000.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/maps/main_menu/iw_main_menu.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/camera/iw_camera.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/pause/iw_pause.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/sidebar/iw_sidebar.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/actionbar/iw_actionbar.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/partybar/iw_partybar.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/statusbar/iw_statusbar.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/minimap/iw_minimap.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/dialogue/iw_dialogue.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/character/iw_character.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/inventory/iw_inventory.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/ability/iw_ability.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/aam/iw_aam.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/lootable/iw_lootable.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/ui/iw_scrollable.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/iw_globals.xml" />
+	</Panel>
+</root>

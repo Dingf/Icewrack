@@ -1,0 +1,100 @@
+.CharacterRoot
+{
+	width: 100%;
+	height: 100%;
+}
+
+#Character
+{
+	width: fit-children;
+	height: fit-children;
+	horizontal-align: center;
+	vertical-align: center;
+}
+
+.CharacterPortraitContainer
+{
+	x: 48px;
+	y: 144px;
+}
+
+.CharacterPortraitFrame
+{
+	width: 256px;
+	height: 332px;
+}
+
+.CharacterPortraitTexture
+{
+	horizontal-align: center;
+	vertical-align: center;
+	width: 224px;
+	height: 300px;
+}
+
+.CharacterInfobox
+{
+	x: 48px;
+	y: 488px;
+}
+
+.CharacterContentBackground
+{
+	x: 320px;
+	y: 218px;
+	opacity: 0.75;
+}
+
+.CharacterContentContainer
+{
+	x: 328px;
+	y: 256px;
+}
+
+.CharacterContent
+{
+	width: 656px;
+	height: 432px;
+	overflow: clip clip;
+}
+
+.CharacterContentTabGroup
+{
+	x: 328px;
+	y: 157px;
+	width: 656px;
+	flow-children: right;
+	overflow: clip clip;
+}
+
+.CharacterContentTabContainer
+{
+	flow-children: right;
+}
+
+.CharacterContentTabSpacer
+{
+	width: 100%;
+}
+
+.CharacterContentTabLabel
+{
+	x: 328px;
+	color: #ffffff40;
+	width: 656px;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-align: center;
+	margin-top: 230px;
+	margin-left: 0px;
+}
+
+.CharacterAttributePointsIconLabel
+{
+	position: 772px 184px 0px;
+}
+
+.CharacterSkillPointsIconLabel
+{
+	position: 884px 184px 0px;
+}

@@ -1,0 +1,134 @@
+.WindowRoot
+{
+	width: 100%;
+	height: 100%;
+}
+
+.WindowBG
+{
+	opacity-mask: url("file://{images}/custom_game/ui/window/iw_window_mask.tga");
+}
+
+.WindowTitle
+{
+	color: #ffffffff;
+	height: 64px;
+	width: 320px;
+	font-size: 40;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	text-align: center;
+	horizontal-align: center;
+	margin-top: 24px;
+}
+
+.WindowNameTitle
+{
+	color: #ffffff80;
+	font-size: 28;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	horizontal-align: center;
+	y: 108px;
+}
+
+.WindowDivider
+{
+	horizontal-align: center;
+	margin-top: 88px;
+}
+
+.WindowNameBar
+{
+	horizontal-align: center;
+	margin-top: 92px;
+}
+
+.WindowContent
+{
+	width: 1040px;
+	height: 736px;
+}
+
+.WindowLeftContent
+{
+	width: 520px;
+	height: 736px;
+}
+
+.WindowRightContent
+{
+	x: 520px;
+	width: 520px;
+	height: 736px;
+}
+
+.WindowFadeIn
+{
+	opacity: 1.0;
+	animation-name: FadeInAnim;
+	animation-duration: 0.15s;
+	animation-timing-function: linear;
+	animation-iteration-count: 1;
+}
+
+.WindowFadeOut
+{
+	opacity: 0.0;
+	animation-name: FadeOutAnim;
+	animation-duration: 0.15s;
+	animation-timing-function: linear;
+	animation-iteration-count: 1;
+}
+
+@keyframes 'FadeInAnim'
+{
+	0%
+	{
+	    opacity: 0.0;
+	}
+
+	50%
+	{
+	    opacity: 0.5;
+	}
+	
+	100%
+	{
+	    opacity: 1.0;
+	}
+}
+
+@keyframes 'FadeOutAnim'
+{
+	0%
+	{
+	    opacity: 1.0;
+	}
+
+	50%
+	{
+	    opacity: 0.5;
+	}
+	
+	100%
+	{
+	    opacity: 0.0;
+	}
+}
+
+.WindowCloseButton
+{
+	x: 993px;
+	y: 50px;
+}
+
+.WindowLeftButton
+{
+	x: 350px;
+	y: 110px;
+}
+
+.WindowRightButton
+{
+	x: 662px;
+	y: 110px;
+}

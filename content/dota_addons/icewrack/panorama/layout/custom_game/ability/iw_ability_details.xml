@@ -1,0 +1,41 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ability/iw_ability_details.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ability/iw_ability_details.js" />
+	</scripts>
+	
+	<snippets>
+		<snippet name="AbilityDetailsStatSnippet">
+			<Panel hittest="false" class="AbilityDetailsStat">
+				<Label class="AbilityDetailsStatLabel" id="Title" />
+				<Label class="AbilityDetailsStatLabel" id="Value" />
+			</Panel>
+		</snippet>
+	</snippets>
+	
+	<Panel hittest="true" class="AbilityDetailsRoot">
+		<Panel hittest="false" class="AbilityDetailsHeader">
+			<Image hittest="false" class="AbilityDetailsIcon" id="Icon" src="file://{images}/spellicons/default.png"/>
+			<Panel hittest="false" class="AbilityDetailsHeaderContent">
+				<Panel hittest="false" class="AbilityDetailsTitleContainer">
+					<Label class="AbilityDetailsTitleLabel" id="TitleLabel" />
+					<Panel hittest="false" class="AbilityDetailsSkillContainer" id="SkillContainer" />
+				</Panel>
+				<Panel hittest="false" class="AbilityDetailsDivider" />
+				<Panel hittest="false" class="AbilityDetailsHeaderGroup">
+					<Panel hittest="false" class="AbilityDetailsStatsContainer" id="StatsContainer" />
+					<Panel hittest="false" class="AbilityDetailsComboContainer" id="ComboContainer" />
+				</Panel>
+			</Panel>
+		</Panel>
+		<Panel hittest="false" class="AbilityDetailsDivider" />
+		<Label class="AbilityDetailsDescriptionLabel" id="DescriptionLabel" />
+		<Panel hittest="false" class="AbilityDetailsNotesContainer" id="NotesContainer"/>
+		<Panel hittest="false" class="AbilityDetailsDivider" />
+		<Label class="AbilityDetailsLoreLabel" id="LoreLabel" />
+	</Panel>
+</root>

@@ -1,0 +1,215 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	_class = "CParticleSystemDefinition"
+	m_nMaxParticles = 128
+	m_Children =
+	[
+		{
+			m_ChildRef = resource:"particles/generic_gameplay/generic_hit_physical_m_c.vpcf"
+		},
+		{
+			m_ChildRef = resource:"particles/generic_gameplay/generic_hit_physical_m_b.vpcf"
+		},
+	]
+	m_bShouldHitboxesFallbackToRenderBounds = false
+	m_Operators =
+	[
+		{
+			_class = "C_OP_BasicMovement"
+			m_Gravity =
+			[
+				0.000000,
+				0.000000,
+				-1000.000000,
+			]
+			m_fDrag = 0.025000
+		},
+		{
+			_class = "C_OP_FadeAndKill"
+		},
+		{
+			_class = "C_OP_InterpolateRadius"
+			m_flEndScale = 0.000000
+			m_flBias = 0.250000
+		},
+		{
+			_class = "C_OP_RampScalarSpline"
+			m_RateMin = -15.000000
+			m_RateMax = 15.000000
+			m_flEndTime_min = 0.900000
+			m_flBias = 0.750000
+			m_nField = 4
+			m_bEaseOut = true
+		},
+		{
+			_class = "C_OP_RotateVector"
+			m_vecRotAxisMin =
+			[
+				-1.000000,
+				-1.000000,
+				-1.000000,
+			]
+			m_vecRotAxisMax =
+			[
+				1.000000,
+				1.000000,
+				1.000000,
+			]
+			m_flRotRateMin = -180.000000
+		},
+		{
+			_class = "C_OP_PositionLock"
+			m_bDisableOperator = true
+			m_flStartTime_min = -1.000000
+			m_flStartTime_max = -1.000000
+		},
+	]
+	m_Renderers =
+	[
+		{
+			_class = "C_OP_RenderSprites"
+			m_hTexture = resource:"materials/particle/impact/fleks.vtex"
+			m_nOrientationType = 3
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_OP_RenderModels"
+			m_ModelList =
+			[
+				{
+					m_model = resource:"models/particle/good_siege_parts.vmdl"
+				},
+			]
+			m_nBodyGroupField = 14
+			m_nSubModelField = 13
+			m_nAnimationField = 10
+			m_nManualFrameField = 14
+			m_flAnimationRate = 40.000000
+			m_bAnimated = true
+		},
+	]
+	m_Initializers =
+	[
+		{
+			_class = "C_INIT_RandomLifeTime"
+			m_fLifetimeMin = 1.750000
+			m_fLifetimeMax = 2.000000
+		},
+		{
+			_class = "C_INIT_CreateWithinSphere"
+			m_fSpeedMin = 120.000000
+			m_fSpeedMax = 120.000000
+			m_LocalCoordinateSystemSpeedMin =
+			[
+				-100.000000,
+				0.000000,
+				132.000000,
+			]
+			m_LocalCoordinateSystemSpeedMax =
+			[
+				100.000000,
+				0.000000,
+				264.000000,
+			]
+			m_fRadiusMin = 24.000000
+			m_fRadiusMax = 32.000000
+			m_vecDistanceBias =
+			[
+				0.000000,
+				0.000000,
+				1.000000,
+			]
+		},
+		{
+			_class = "C_INIT_RandomRadius"
+			m_flRadiusMin = 0.150000
+			m_flRadiusMax = 0.300000
+		},
+		{
+			_class = "C_INIT_RandomColor"
+			m_ColorMin =
+			[
+				113,
+				113,
+				113,
+				255,
+			]
+			m_ColorMax =
+			[
+				164,
+				164,
+				164,
+				255,
+			]
+		},
+		{
+			_class = "C_INIT_RandomRotation"
+		},
+		{
+			_class = "C_INIT_RandomSequence"
+			m_nSequenceMin = 40
+			m_nSequenceMax = 43
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_INIT_RandomSecondSequence"
+			m_nSequenceMax = 8
+		},
+		{
+			_class = "C_INIT_NormalOffset"
+			m_OffsetMin =
+			[
+				-5.000000,
+				-5.000000,
+				-5.000000,
+			]
+			m_OffsetMax =
+			[
+				-5.000000,
+				-5.000000,
+				5.000000,
+			]
+			m_bNormalize = true
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_INIT_VelocityRandom"
+			m_fSpeedMin = 75.000000
+			m_fSpeedMax = 100.000000
+		},
+		{
+			_class = "C_INIT_OffsetVectorToVector"
+			m_vecOutputMin =
+			[
+				-1.000000,
+				-1.000000,
+				-1.000000,
+			]
+			m_bDisableOperator = true
+		},
+		{
+			_class = "C_INIT_CreateOnModel"
+			m_bDisableOperator = true
+		},
+	]
+	m_Emitters =
+	[
+		{
+			_class = "C_OP_InstantaneousEmitter"
+			m_nParticlesToEmit = 3
+			m_flStartTimeMax = 0.000000
+		},
+	]
+	m_ForceGenerators =
+	[
+		{
+			_class = "C_OP_RandomForce"
+			m_MaxForce =
+			[
+				100.000000,
+				100.000000,
+				500.000000,
+			]
+		},
+	]
+}

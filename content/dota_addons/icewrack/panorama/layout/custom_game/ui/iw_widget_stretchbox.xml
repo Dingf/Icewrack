@@ -1,0 +1,28 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_widget_stretchbox.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_stretchbox.js" />
+	</scripts>
+	
+	<Panel class="StretchBoxRoot" onload="OnStretchBoxLoad()">
+		<Panel class="StretchBoxRowContainer">
+			<Image hittest="false" id="TopLeft" src="file://{images}/custom_game/ui/iw_stretchbox_tl.tga" />
+			<Image hittest="false" id="TopMid" src="file://{images}/custom_game/ui/iw_stretchbox_tm.tga" />
+			<Image hittest="false" id="TopRight" src="file://{images}/custom_game/ui/iw_stretchbox_tr.tga" />
+		</Panel>
+		<Panel class="StretchBoxRowContainer">
+			<Image hittest="false" id="MidLeft" src="file://{images}/custom_game/ui/iw_stretchbox_ml.tga" />
+			<Image hittest="false" id="Center" src="file://{images}/custom_game/ui/iw_stretchbox_c.tga" />
+			<Image hittest="false" id="MidRight" src="file://{images}/custom_game/ui/iw_stretchbox_mr.tga" />
+		</Panel>
+		<Panel class="StretchBoxRowContainer">
+			<Image hittest="false" id="BottomLeft" src="file://{images}/custom_game/ui/iw_stretchbox_bl.tga" />
+			<Image hittest="false" id="BottomMid" src="file://{images}/custom_game/ui/iw_stretchbox_bm.tga" />
+			<Image hittest="false" id="BottomRight" src="file://{images}/custom_game/ui/iw_stretchbox_br.tga" />
+		</Panel>
+	</Panel>
+</root>

@@ -1,0 +1,153 @@
+.AbilityDetailsRoot
+{
+	width: 100%;
+	height: fit-children;
+	padding: 16px 40px 16px 16px;
+	flow-children: down;
+}
+
+.AbilityDetailsHeader
+{
+	width: 100%;
+	flow-children: right;
+}
+
+.AbilityDetailsIcon
+{
+	width: 96px;
+	height: 96px;
+	margin-right: 16px;
+	border: 2px solid #ffffff10;
+}
+
+.AbilityDetailsHeaderContent
+{
+	width: 100%;
+	flow-children: down;
+}
+
+.AbilityDetailsTitleContainer
+{
+	width: 100%;
+	flow-children: right;
+}
+
+.AbilityDetailsSkillContainer
+{
+	width: fill-parent-flow(1.0);
+	height: 100%;
+	flow-children: left;
+	vertical-align: bottom;
+	horizontal-align: right;
+	margin-right: 8px;
+}
+
+.AbilityDetailsSkillIcon
+{
+	width: 24px;
+	height: 24px;
+}
+
+.AbilityDetailsTitleLabel
+{
+	color: #ffffff80;
+	font-size: 24px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+}
+
+.AbilityDetailsDivider
+{
+	height: 1px;
+	width: 100%;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	background-color: #ffffff20;
+}
+
+.AbilityDetailsHeaderGroup
+{
+	width: 100%;
+	height: 64px;
+	flow-children: right;
+}
+
+.AbilityDetailsStatsContainer
+{
+	height: 100%;
+	flow-children: down-wrap;
+}
+
+.AbilityDetailsStat
+{
+	padding-right: 32px;
+	flow-children: right;
+}
+
+.AbilityDetailsStatLabel
+{
+	color: #ffffff40;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.AbilityDetailsComboContainer
+{
+	height: 100%;
+	flow-children: right;
+}
+
+.AbilityDetailsComboLabel
+{
+	color: #ffffff40;
+	font-size: 56px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	vertical-align: center;
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+.AbilityDetailsComboIcon
+{
+	width: 48px;
+	height: 48px;
+	vertical-align: center;
+	border: 2px solid #ffffff08;
+	margin-left: 3px;
+	margin-right: 3px;
+	tooltip-position: top;
+}
+
+.AbilityDetailsSpacer
+{
+	height: 16px;
+}
+
+.AbilityDetailsDescriptionLabel
+{
+	color: #ffffff40;
+	font-size: 20px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.AbilityDetailsNotesContainer
+{
+	width: 100%;
+	flow-children: down;
+	margin-left: 32px;
+}
+
+.AbilityDetailsNotesLabel
+{
+	color: #ffffff30;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.AbilityDetailsLoreLabel
+{
+	color: #ffffff20;
+	font-size: 18px;
+	font-style: italics;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	margin-right: 16px;
+}

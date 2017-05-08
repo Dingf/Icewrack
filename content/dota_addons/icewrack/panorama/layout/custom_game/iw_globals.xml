@@ -1,0 +1,15 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/iw_globals.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/iw_globals.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="GlobalsRoot">
+		<Panel hittest="false" class="WindowsRoot" id="WindowSpace" />
+		<Panel hittest="false" class="MenuRoot" id="MenuSpace" />
+	</Panel>
+</root>

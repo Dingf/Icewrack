@@ -1,0 +1,25 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ability/iw_ability_entry.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ability/iw_ability_entry.js" />
+	</scripts>
+	
+	<Panel draggable="true" class="AbilityEntryRoot" onload="OnAbilityEntryLoad()"
+		onactivate="OnAbilityEntryActivate()"
+		oncontextmenu="OnAbilityEntryContextMenu()"
+		onmouseover="OnAbilityEntryMouseOver()"
+		onmouseout="OnAbilityEntryMouseOut()">
+		<Image hittest="true" class="AbilityEntryIcon" id="Icon"
+			onmouseover="OnAbilityEntryIconMouseOver()"
+			onmouseout="OnAbilityEntryIconMouseOut()"/>
+		<Label hittest="false" class="AbilityEntryLabel" id="Label"/>
+		<Panel hittest="false" class="AbilityEntrySkillGroup">
+			<Panel hittest="false" class="AbilityEntrySkillContainer" id="SkillsContainer1" />
+			<Panel hittest="false" class="AbilityEntrySkillContainer" id="SkillsContainer2" />
+		</Panel>
+	</Panel>
+</root>

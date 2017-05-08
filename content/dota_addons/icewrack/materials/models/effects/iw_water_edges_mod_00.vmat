@@ -1,0 +1,49 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "global_lit_simple.vfx"
+
+	//---- 2-Sided Rendering ----
+	F_RENDER_BACKFACES 1
+
+	//---- Scroll UV ----
+	F_SCROLL_UV 1 // Scroll Color Only
+
+	//---- Specular ----
+	F_SPECULAR 1
+
+	//---- Translucent ----
+	F_ADDITIVE_BLEND 1
+	F_TRANSLUCENT 1
+
+	//---- Color ----
+	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	TextureColor "materials/models/effects/water_edges_mod_00_color.tga"
+
+	//---- Scroll UV ----
+	g_flScrollUvSpeed "0.350"
+	g_vScrollUvDirection "[-1.000 -0.250]"
+	TextureScrollSpeed "materials/models/effects/water_edges_00_scroll_g.tga"
+
+	//---- Self Illum ----
+	TextureSelfIllumMask "[0.000000 0.000000 0.000000 0.000000]"
+
+	//---- Specular ----
+	g_flSpecularBloom "0.000"
+	g_flSpecularIntensity "1.000"
+	TextureBloom "[0.000000 0.000000 0.000000 0.000000]"
+	TextureReflectance "[0.000000 0.000000 0.000000 0.000000]"
+
+	//---- Translucent ----
+	g_flOpacityScale "1.000"
+	TextureTranslucency "materials/models/effects/water_edges_00_scroll_trans.tga"
+
+	Attributes
+	{
+		RepresentativeTextureWidth "1024"
+		RepresentativeTextureHeight "1024"
+	}
+}

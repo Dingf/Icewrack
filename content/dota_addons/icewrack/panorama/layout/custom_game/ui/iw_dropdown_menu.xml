@@ -1,0 +1,21 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_dropdown_menu.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_dropdown_item.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_dropdown_menu.js" />
+	</scripts>
+	
+	<Panel hittest="true" class="DropdownMenuRoot" onload="OnDropdownMenuLoad()" onmouseout="OnDropdownMenuMouseOut()">
+		<Panel class="DropdownMenuBody" id="Body">
+			<Label class="DropdownLabel" id="Label" text=""/>
+			<Button class="DropdownButton" id="Button" onactivate="OnDropdownButtonActivate()">
+				<Image id="Overlay" src="file://{images}/custom_game/ui/iw_window_scrollbar_down.tga"/>
+			</Button>
+		</Panel>
+		<Panel class="DropdownMenuList" id="DropdownList" />
+	</Panel>
+</root>

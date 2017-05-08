@@ -1,0 +1,90 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "multiblend.vfx"
+
+	//---- Color Tint ----
+	F_TINT_MASK 1
+
+	//---- Normal Maps ----
+	F_NORMAL_MAP 1
+
+	//---- Specular ----
+	F_SPECULAR 1
+
+	//---- World Space UVs ----
+	F_WORLDSPACE_UVS 1
+
+	//---- Global ----
+	g_flSpecularBloom "0.000"
+	g_flSpecularIntensity "0.100"
+
+	//---- Layer 0 ----
+	g_flTexCoordRotate0 "0.000"
+	g_flTexCoordScale0 "4.000"
+	g_vColorTint0 "[0.709804 0.619608 0.513726 1.000000]"
+	g_vColorTintB0 "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset0 "[0.000 0.000]"
+	g_vTexCoordScroll0 "[0.000 0.000]"
+	TextureBloom0 "materials/default/default_bloom.tga"
+	TextureColor0 "materials/blends/tile_ground001b_color.tga"
+	TextureNormal0 "materials/default/default_normal.tga"
+	TextureReflectance0 "materials/blends/tile_ground001b_refl.tga"
+	TextureSelfIllumMask0 "materials/default/default_selfillum.tga"
+	TextureTintMask0 "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Layer 1 ----
+	g_flTexCoordRotate1 "0.000"
+	g_flTexCoordScale1 "4.000"
+	g_vColorTint1 "[0.623529 0.545098 0.450980 1.000000]"
+	g_vColorTintB1 "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset1 "[0.000 0.000]"
+	g_vTexCoordScroll1 "[0.000 0.000]"
+	TextureBloom1 "materials/default/default_bloom.tga"
+	TextureColor1 "materials/blends/tile_ground001_color_psd_69df1b8.tga"
+	TextureNormal1 "materials/default/default_normal.tga"
+	TextureReflectance1 "[0.184314 0.184314 0.184314 0.000000]"
+	TextureRevealMask1 "materials/blends/tile_ground001_color_psd_69df1b8_a.tga"
+	TextureSelfIllumMask1 "materials/default/default_selfillum.tga"
+	TextureTintMask1 "materials/default/default_mask.tga"
+
+	//---- Layer 2 ----
+	g_flTexCoordRotate2 "0.000"
+	g_flTexCoordScale2 "4.000"
+	g_vColorTint2 "[0.490196 0.388235 0.317647 1.000000]"
+	g_vColorTintB2 "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset2 "[0.000 0.000]"
+	g_vTexCoordScroll2 "[0.000 0.000]"
+	TextureBloom2 "materials/default/default_bloom.tga"
+	TextureColor2 "materials/blends/tile_ground001_color.tga"
+	TextureNormal2 "materials/default/default_normal.tga"
+	TextureReflectance2 "materials/blends/tile_ground001_refl.tga"
+	TextureRevealMask2 "materials/blends/tile_ground001_color_a.tga"
+	TextureSelfIllumMask2 "materials/default/default_selfillum.tga"
+	TextureTintMask2 "materials/default/default_mask.tga"
+
+	//---- Layer 3 ----
+	g_flTexCoordRotate3 "0.000"
+	g_flTexCoordScale3 "4.000"
+	g_vColorTint3 "[0.596078 0.521569 0.443137 1.000000]"
+	g_vColorTintB3 "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset3 "[0.000 0.000]"
+	g_vTexCoordScroll3 "[0.000 0.000]"
+	TextureBloom3 "materials/default/default_bloom.tga"
+	TextureColor3 "materials/blends/sand002_color_psd_d3d9584.tga"
+	TextureNormal3 "materials/default/default_normal.tga"
+	TextureReflectance3 "[0.000000 0.000000 0.000000 0.000000]"
+	TextureRevealMask3 "materials/blends/sand002_color_psd_d3d9584_a.tga"
+	TextureSelfIllumMask3 "materials/default/default_selfillum.tga"
+	TextureTintMask3 "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Normal Map ----
+	g_flBumpStrength "0.750"
+
+	Attributes
+	{
+		RepresentativeTextureWidth "2048"
+		RepresentativeTextureHeight "2048"
+	}
+}

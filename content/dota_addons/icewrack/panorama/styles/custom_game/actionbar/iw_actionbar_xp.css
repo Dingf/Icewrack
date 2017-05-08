@@ -1,0 +1,22 @@
+.ActionBarXPRoot
+{
+	height: 7px;
+	width: 738px;
+	tooltip-position: top right left bottom;
+}
+
+.ActionBarXPFill
+{
+	background-image: url("file://{images}/custom_game/actionbar/iw_actionbar_xp_fill.tga");
+	height: 7px;
+	width: 738px;
+}
+
+.Test
+{
+	background-color: #ff0000;
+	color: #ff000020;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	font-weight: light;
+}

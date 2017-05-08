@@ -1,0 +1,28 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ability/iw_ability.css" />
+	</styles>
+	
+	<Panel hittest="false" class="AbilityContentRoot">
+		<Panel hittest="false" class="AbilitySkillIconContainer" id="IconContainer1" />
+		<Panel hittest="false" class="AbilitySkillIconContainer" id="IconContainer2" />
+		
+		<Panel hittest="false" class="AbilityBackground" id="DetailsBackground" />
+		<Panel class="AbilityDetailsContainer" id="DetailsContainer" />
+		<Panel hittest="false" class="AbilityBackground" id="ListBackground" />
+		<Panel class="AbilityListContainer" id="ListContainer">
+			<Panel hittest="false" class="AbilityList" id="List" />
+		</Panel>
+		<Panel hittest="false" class="AbilityListTabGroup">
+			<Panel hittest="false" class="AbilityListTabContainer" id="TabContainer" />
+			<Image hittest="false" class="AbilityListTabSpacer" src="file://{images}/custom_game/ui/iw_window_tab_spacer.tga" />
+		</Panel>
+		<Label hittest="false" class="AbilityListTabLabel" id="TabLabel" text="" />
+		
+		<Panel hittest="false" class="AbilitySearchBackground" id="SearchBackground" />
+		<Image hittest="false" class="AbilitySearchIcon" src="file://{images}/custom_game/ability/iw_ability_search_icon.tga" />
+		<Panel hittest="false" class="AbilitySearchContainer">
+			<TextEntry class="AbilitySearchText" id="SearchText" text="" maxchars="32"/>
+		</Panel>
+	</Panel>
+</root>

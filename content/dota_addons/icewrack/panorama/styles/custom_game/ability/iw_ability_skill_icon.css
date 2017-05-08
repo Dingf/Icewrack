@@ -1,0 +1,19 @@
+.AbilitySkillIcon
+{
+	background-color: #000000ff;
+	opacity-mask: url("file://{images}/custom_game/icons/skills/iw_skill_icon_mask.tga");
+	width: 32px;
+	height: 32px;
+	tooltip-position: top;
+}
+
+.AbilitySkillIcon:hover
+{
+	brightness: 2.0;
+}
+
+.AbilitySkillIconDisabled
+{
+	opacity: 0.05;
+	saturation: 0.0;
+}

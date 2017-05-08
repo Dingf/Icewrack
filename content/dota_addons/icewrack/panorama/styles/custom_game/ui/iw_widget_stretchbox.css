@@ -1,0 +1,9 @@
+.StretchBoxRoot
+{
+	flow-children: down;
+}
+
+.StretchBoxRowContainer
+{
+	flow-children: right;
+}
