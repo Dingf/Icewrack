@@ -10,7 +10,6 @@ var stItemEntryIcons =
 	"iw_icon_dagger",
 	"iw_icon_staff",
 	"iw_icon_bow",
-	null,
 	"iw_icon_ammo",		//TODO: Add me
 	
 	null,
@@ -30,6 +29,7 @@ var stItemEntryIcons =
 	"iw_icon_wand",
 	"iw_icon_scroll",
 	"iw_icon_book",
+	"iw_icon_food",		//TODO: Add me
 	
 	"iw_icon_herb",
 	"iw_icon_metal",
@@ -47,9 +47,11 @@ var IW_ITEM_FLAG_ATTACK_SOURCE = 8;
 var IW_ITEM_FLAG_MAIN_HAND_ONLY = 16;
 var IW_ITEM_FLAG_OFF_HAND_ONLY = 32;
 var IW_ITEM_FLAG_CANNOT_UNEQUIP = 64;
-var IW_ITEM_FLAG_USES_AMMO = 128;
+var IW_ITEM_FLAG_REQUIRES_AMMO = 128;
 var IW_ITEM_FLAG_CAN_ACTIVATE = 256;
-var IW_ITEM_FLAG_CAN_READ = 512;
+var IW_ITEM_FLAG_THROWN = 256,
+var IW_ITEM_FLAG_CAN_ACTIVATE = 512,
+var IW_ITEM_FLAG_CAN_READ = 1024,
 
 function OnItemEntryUpdate(hContextPanel, tArgs)
 {
