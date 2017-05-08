@@ -53,8 +53,6 @@
 
 	"iw_bounty_hunter_trapjaw"
 	{
-		"ScriptFile"		"scripts/vscripts/test.lua"
-
 		"AbilitySkill"		"122"
 		"ManaCost"		"50"
 		"StaminaCost"		"20"

@@ -46,7 +46,11 @@ luac.out
 *.cfg
 *.swf
 network_measurement.txt
+rich_presence_persistent_data.txt
+server_log.txt
 *.sh
+*.soc
+*.tmp
 
 # Custom (Client)
 *.vmap

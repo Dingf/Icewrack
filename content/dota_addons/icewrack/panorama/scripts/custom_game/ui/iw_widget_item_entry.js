@@ -4,13 +4,14 @@ var stItemEntryIcons =
 [
 	null,
 	null,
-	null,
 	"iw_icon_sword",
 	"iw_icon_mace",
 	"iw_icon_axe",
 	"iw_icon_dagger",
 	"iw_icon_staff",
 	"iw_icon_bow",
+	null,
+	"iw_icon_ammo",		//TODO: Add me
 	
 	null,
 	null,
@@ -24,10 +25,10 @@ var stItemEntryIcons =
 	"iw_icon_amulet",
 	"iw_icon_ring",
 	
-	"iw_icon_wand",
 	"iw_icon_potion",
-	"iw_icon_scroll",
 	"iw_icon_flask",
+	"iw_icon_wand",
+	"iw_icon_scroll",
 	"iw_icon_book",
 	
 	"iw_icon_herb",
@@ -36,8 +37,19 @@ var stItemEntryIcons =
 	"iw_icon_cloth",
 	"iw_icon_wood",
 	"iw_icon_jewel",
-	"iw_icon_reagent",
 ];
+
+var IW_ITEM_FLAG_NONE = 0;
+var IW_ITEM_FLAG_HIDDEN = 1;
+var IW_ITEM_FLAG_UNIQUE = 2;
+var IW_ITEM_FLAG_QUEST = 4;
+var IW_ITEM_FLAG_ATTACK_SOURCE = 8;
+var IW_ITEM_FLAG_MAIN_HAND_ONLY = 16;
+var IW_ITEM_FLAG_OFF_HAND_ONLY = 32;
+var IW_ITEM_FLAG_CANNOT_UNEQUIP = 64;
+var IW_ITEM_FLAG_USES_AMMO = 128;
+var IW_ITEM_FLAG_CAN_ACTIVATE = 256;
+var IW_ITEM_FLAG_CAN_READ = 512;
 
 function OnItemEntryUpdate(hContextPanel, tArgs)
 {
@@ -193,9 +205,9 @@ function OnItemEntryContextMenu()
 	var hContextMenu = $.GetContextPanel()._hContextMenu;
 	
 	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_EQUIP, state:((nItemSlots !== 0) && (!bEquipped)) });
-	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_UNEQUIP, state:(((nItemFlags & 4) === 0) && (bEquipped)) });
-	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_USE, state:((nItemFlags & 1) !== 0) });
-	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_READ, state:((nItemFlags & 2) !== 0) });
+	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_UNEQUIP, state:(((nItemFlags & IW_ITEM_FLAG_CANNOT_UNEQUIP) === 0) && (bEquipped)) });
+	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_USE, state:((nItemFlags & IW_ITEM_FLAG_CAN_ACTIVATE) !== 0) });
+	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_READ, state:((nItemFlags & IW_ITEM_FLAG_CAN_READ) !== 0) });
 	
 	var nContextFilter = $.GetContextPanel().GetAttributeInt("filter", 0);
 	for (var i = 1; i < ITEM_ACTION_MAX; i++)
