@@ -1,5 +1,6 @@
 "use strict";
 
+
 var MAX_PARTY_MEMBERS = 4;
 
 var nLastSelectTime = 0;

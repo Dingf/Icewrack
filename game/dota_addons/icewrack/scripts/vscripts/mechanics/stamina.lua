@@ -4,20 +4,35 @@ if IsServer() and not modifier_internal_stamina then
 modifier_internal_stamina = class({})
 modifier_internal_stamina._tDeclareFunctionList =
 {
-	MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT
+	MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
+	MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
 }
 
 function modifier_internal_stamina:GetModifierAttackSpeedBonus_Constant(args)
 	local hEntity = self:GetParent()
 	local fStaminaPercent = hEntity:GetStamina()/hEntity:GetMaxStamina()
 	if fStaminaPercent < 0.1 then
-		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -150)
-		return -150
+		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -100)
+		return -100
 	elseif fStaminaPercent < 0.25 then
 		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -50)
 		return -50
 	else
 		return 0
+	end
+end
+
+function modifier_internal_stamina:GetModifierMoveSpeedBonus_Percentage(args)
+	local hEntity = self:GetParent()
+	if hEntity:GetRunMode() then
+		local fStaminaPercent = hEntity:GetStamina()/hEntity:GetMaxStamina()
+		if fStaminaPercent < 0.1 then
+			return -50
+		elseif fStaminaPercent < 0.25 then
+			return -25
+		else
+			return 0
+		end
 	end
 end
 
@@ -42,13 +57,17 @@ function modifier_internal_stamina:OnIntervalThink()
 		end
 		if not GameRules:IsGamePaused() then
 			if hEntity:IsMoving() and hEntity._bRunMode then
-				fStamina = fStamina - (hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_PCT)/100))/30.0
-				hEntity._fStaminaRegenTime = math.max(hEntity._fStaminaRegenTime, GameRules:GetGameTime() + 3.0)
+				local fStaminaDrain = hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_PCT)/100)/30.0
+				hEntity:SpendStamina(fStaminaDrain)
+				fStamina = hEntity:GetStamina()
+			elseif hEntity:IsAttacking() then
+				hEntity:SpendStamina(0)
 			end
 		
+			local fStaminaRegenTime = hEntity:GetStaminaRegenTime()
 			if fStamina ~= fMaxStamina then
 				local fStaminaRegenPerSec = hEntity:GetStaminaRegen()
-				if GameRules:GetGameTime() > hEntity._fStaminaRegenTime then
+				if GameRules:GetGameTime() > fStaminaRegenTime then
 					fStaminaRegenPerSec = fStaminaRegenPerSec + (0.1 * fMaxStamina) * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_SP_REGEN_PCT)/100.0)
 				end
 				if hEntity:IsMoving() then
@@ -57,11 +76,12 @@ function modifier_internal_stamina:OnIntervalThink()
 				hEntity:SetStamina(fStamina + fStaminaRegenPerSec/30.0)
 				hEntity._fLastStaminaPercent = fStamina/fMaxStamina
 			end
-			if hEntity._tNetTable then
-				if fStamina ~= hEntity._tNetTable.stamina or fMaxStamina ~= hEntity._tNetTable.stamina_max then
-					hEntity._tNetTable.stamina = fStamina
-					hEntity._tNetTable.stamina_max = fMaxStamina
-					hEntity._tNetTable.stamina_time = hEntity._fStaminaRegenTime
+			local tNetTable = hEntity._tNetTable
+			if tNetTable then
+				if fStamina ~= tNetTable.stamina or fMaxStamina ~= tNetTable.stamina_max or fStaminaRegenTime ~= tNetTable.stamina_time then
+					tNetTable.stamina = fStamina
+					tNetTable.stamina_max = fMaxStamina
+					tNetTable.stamina_time = fStaminaRegenTime
 					hEntity:UpdateNetTable(true)
 				end
 			end

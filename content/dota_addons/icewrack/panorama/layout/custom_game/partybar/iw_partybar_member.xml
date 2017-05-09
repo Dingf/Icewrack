@@ -19,6 +19,7 @@
 				<Label hittest="false" class="PartyBarValueLabel" id="MPLabel" text="/" />
 			</Panel>
 			<Panel onmouseover="ShowSPLabel()" onmouseout="HideSPLabel()" onactivate="ToggleSPLabel()" class="PartyBarValueContainer" id="SPContainer">
+				<Panel class="PartyBarValueFill" id="SPRechargeBar" />
 				<Panel class="PartyBarValueFill" id="SPBar" />
 				<Label hittest="false" class="PartyBarValueLabel" id="SPLabel" text="/" />
 			</Panel>
@@ -35,10 +36,9 @@
 		<Image hittest="false" class="PartyBarOverlay" />
 		<Image hittest="false" class="PartyBarSecondarySelectOverlay" id="SecondarySelectOverlay"/>
 		<Image hittest="false" class="PartyBarPrimarySelectOverlay" id="PrimarySelectOverlay"/>
-		<Panel onactivate="OnIndicatorPressed()" class="PartyBarIndicator">
+		<Panel class="PartyBarIndicator" onmouseover="OnIndicatorMouseOver()" onmouseout="OnIndicatorMouseOut()" id="Indicator">
 			<Image id="IndicatorOff" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_off.tga"/>
 			<Image id="IndicatorOn" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_on.tga"/>
-			<Image id="IndicatorNS" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_ns.tga"/>
 		</Panel>
 	</Panel>
 </root>

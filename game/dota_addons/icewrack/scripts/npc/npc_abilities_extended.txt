@@ -25,6 +25,8 @@
 	"iw_axe_counter_helix"
 	{
 		"StaminaCost"		"15"
+
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA"
 		
 		"AbilityCastAnimation"
 		{
@@ -39,6 +41,8 @@
 	"iw_axe_culling_blade"
 	{
 		"StaminaCost"		"25"
+
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA"
 		
 		"AbilityCastAnimation"
 		{

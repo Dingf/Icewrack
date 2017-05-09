@@ -60,6 +60,7 @@ CExtAbility = setmetatable({ _tIndexTableList = {} }, { __call =
 		setmetatable(hAbility, tExtIndexTable)
 		
 		hAbility._bIsExtendedAbility = true
+		
 		hAbility._tModifierList = {}
 		hAbility._tActiveModifierList = {}
 		hAbility._tModifierSeeds = {}

@@ -102,12 +102,14 @@
 	width: 182px;
 	height: 16px;
 	margin-left: 134px; 
+	opacity-mask: url("file://{images}/custom_game/partybar/iw_partybar_fill_mask.tga");
 }
 
 .PartyBarValueFill
 {
 	width: 182px;
 	height: 16px;
+	border-right: 1px solid #00000080;
 }
 
 .PartyBarValueLabel
@@ -189,6 +191,12 @@
 
 #SPBar
 {
+	background-image: url("file://{images}/custom_game/partybar/iw_partybar_sp_fill.tga");
+}
+
+#SPRechargeBar
+{
+	opacity: 0.5;
 	background-image: url("file://{images}/custom_game/partybar/iw_partybar_sp_fill.tga");
 }
 

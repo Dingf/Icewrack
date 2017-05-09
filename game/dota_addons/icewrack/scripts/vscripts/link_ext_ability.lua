@@ -31,6 +31,8 @@ stExtAbilityFlagEnum =
 	IW_ABILITY_FLAG_ONLY_CAST_NO_COMBAT = 512,
 	IW_ABILITY_FLAG_DOES_NOT_REQ_VISION = 1024,
 	IW_ABILITY_FLAG_CAN_CAST_IN_TOWN    = 2048,		--TODO: Implement me
+	IW_ABILITY_FLAG_CONSIDERED_SPELL    = 4096,
+	IW_ABILITY_FLAG_USES_ATTACK_STAMINA = 8192,
 }
 
 stExtAbilitySkillEnum = 
@@ -215,6 +217,15 @@ function CExtAbilityLinker:GetStaminaCost(nLevel)
 		local tStaminaCosts = self._tAbilityCosts.StaminaCost
 		if not nLevel or nLevel == -1 then nLevel = self:GetLevel() end
 		fStaminaCost = tStaminaCosts[nLevel] or 0
+	end
+	
+	local nAbilityFlags = self:GetAbilityFlags()
+	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_USES_ATTACK_STAMINA) then
+		local _, hAttackSource = next(hEntity._tAttackSourceTable)
+		if not hAttackSource then
+			hAttackSource = hEntity
+		end
+		fStaminaCost = fStaminaCost + hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hAttackSource:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
 	end
 	
 	if IsServer() then

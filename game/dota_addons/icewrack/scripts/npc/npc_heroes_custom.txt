@@ -121,7 +121,7 @@
 		"AttackDamageMax"		"0"
 		"AttackRange"			"0"
 		"AttackAcquisitionRange"	"1200"
-		"ProjectileSpeed"		"2400"
+		"ProjectileSpeed"		"1800"
 		"ArmorPhysical"			"0"
 		"MagicalResistance"		"0"
 		"StatusHealth"			"50"

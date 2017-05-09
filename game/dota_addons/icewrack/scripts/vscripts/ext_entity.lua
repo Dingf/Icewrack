@@ -185,6 +185,7 @@ CExtEntity = setmetatable({}, { __call =
 			{
 				attack_source = {},
 				current_action = "",
+				run_mode = hEntity._bRunMode,
 				stamina = hEntity._fStamina,
 				stamina_max = hEntity:GetMaxStamina(),
 				stamina_time = hEntity._fStaminaRegenTime,
@@ -246,6 +247,10 @@ end
 
 function CExtEntity:GetStamina()
     return math.min(self._fStamina, self:GetMaxStamina())
+end
+
+function CExtEntity:GetStaminaRegenTime()
+    return self._fStaminaRegenTime
 end
 
 function CExtEntity:IsMassive()
@@ -423,10 +428,8 @@ function CExtEntity:RefreshManaRegen()
 end
 
 function CExtEntity:RefreshMovementSpeed()
-	local fMovementSpeed = self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_FLAT)
-	if self._bRunMode then
-		fMovementSpeed = fMovementSpeed + (self:GetAttributeValue(IW_ATTRIBUTE_AGILITY) * 1.0)
-	else
+	local fMovementSpeed = self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_FLAT) + (self:GetAttributeValue(IW_ATTRIBUTE_AGILITY) * 1.0)
+	if not self._bRunMode then
 		fMovementSpeed = fMovementSpeed * 0.5
 	end
 	fMovementSpeed = fMovementSpeed * (self:GetFatigueMultiplier() + self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT)/100)
@@ -436,13 +439,16 @@ end
 function CExtEntity:SetRunMode(bRunMode)
 	if type(bRunMode) == "boolean" then
 		self._bRunMode = bRunMode
+		if self._tNetTable then
+			self._tNetTable.run_mode = bRunMode
+		end
 		self:RefreshMovementSpeed()
+		self:UpdateNetTable(true)
 	end
 end
 
 function CExtEntity:ToggleRunMode()
-	self._bRunMode = (not self._bRunMode)
-	self:RefreshMovementSpeed()
+	self:SetRunMode(not self._bRunMode)
 end
 
 function CExtEntity:SetStamina(fStamina)
@@ -452,7 +458,7 @@ end
 function CExtEntity:SpendStamina(fStamina)
 	if fStamina >= 0 then
 		self._fStamina = math.max(0, self:GetStamina() - fStamina)
-		self._fStaminaRegenTime = math.max(self._fStaminaRegenTime, GameRules:GetGameTime() + 3.0)
+		self._fStaminaRegenTime = math.max(self._fStaminaRegenTime, GameRules:GetGameTime() + 5.0)
 	end
 end
 
@@ -481,7 +487,7 @@ function CExtEntity:RefreshEntity()
 	self:RefreshHealthRegen()
 	self:RefreshManaRegen()
 	self:RefreshMovementSpeed()
-	self:SetAcquisitionRange(self:GetAttackRange())
+	self:SetAcquisitionRange(self:GetAttackRange() + 300.0)
 	
 	self:SetBaseMagicalResistanceValue(self:GetFatigueMultiplier())		--Hack to get fatigue multiplier on client side lua without nettables
 	

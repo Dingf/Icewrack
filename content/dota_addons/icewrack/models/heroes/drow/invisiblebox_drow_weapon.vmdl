@@ -7,7 +7,7 @@ CVModel CVModel_0
 		[
 			CVmesh
 			{
-				string m_meshName = "invisiblebox_drow"
+				string m_meshName = "invisiblebox_drow_weapon"
 				string m_meshFile = "models/heroes/drow/invisiblebox_drow_weapon.dmx"
 				string m_materialSearchPath = ""
 				bool m_bSkinParentedObjects = true

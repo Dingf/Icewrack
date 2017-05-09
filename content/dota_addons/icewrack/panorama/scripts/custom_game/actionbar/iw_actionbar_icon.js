@@ -308,14 +308,24 @@ function OnActionBarIconRefresh(hContextPanel, tArgs)
 			}
 			
 			var szAbilityName = Abilities.GetAbilityName(nAbilityIndex);
-			var tAbilityTemplate = CustomNetTables.GetTableValue("abilities", szAbilityName);
-			if (tAbilityTemplate && (tAbilityTemplate.stamina > 0) && bIsAbilityActivated)
+			var tSpellbookTemplate = CustomNetTables.GetTableValue("spellbook", nCasterIndex);
+			if (tSpellbookTemplate && bIsAbilityActivated)
 			{
-				var tEntityData = CustomNetTables.GetTableValue("entities", nCasterIndex);
-				var nStaminaCost = tAbilityTemplate.stamina * (tEntityData ? tEntityData.fatigue : 1.0);
-				hContextPanel.FindChildTraverse("StaminaIndicator").visible = true;
-				hContextPanel.FindChildTraverse("StaminaLabel").visible = true;
-				hContextPanel.FindChildTraverse("StaminaLabel").text = "" + nStaminaCost.toFixed(0);
+				var tSpellList = tSpellbookTemplate.Spells
+				for (var k in tSpellList)
+				{
+					if (tSpellList[k].entindex === nAbilityIndex)
+					{
+						var nStaminaCost = tSpellList[k].stamina;
+						if (nStaminaCost > 0)
+						{
+							hContextPanel.FindChildTraverse("StaminaIndicator").visible = true;
+							hContextPanel.FindChildTraverse("StaminaLabel").visible = true;
+							hContextPanel.FindChildTraverse("StaminaLabel").text = "" + nStaminaCost.toFixed(0);
+						}
+						break;
+					}
+				}
 			}
 			
 			UpdateActionBarIconCooldown(hContextPanel);

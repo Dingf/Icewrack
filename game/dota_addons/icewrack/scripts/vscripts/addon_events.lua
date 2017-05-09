@@ -29,6 +29,11 @@ function CIcewrackGameMode:OnEntitySpawned(keys)
 		hEntity:SetBaseMoveSpeed(0)
 		hEntity:AddNoDraw()
 	end
+	
+	--TODO: Testing code; Delete me
+	if hEntity:GetUnitName() == "npc_dota_hero_windrunner" then
+		hEntity:SetControllableByPlayer(0, true)
+	end
 end
 
 function CIcewrackGameMode:OnEntityKilled(keys)

@@ -1,10 +1,45 @@
 "use strict";
 
-function OnIndicatorPressed()
+
+function OnIndicatorMouseOverThink()
 {
-	var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
-	var tEntityAAMInfo = CustomNetTables.GetTableValue("aam", parseInt(nEntityIndex));
-	GameEvents.SendCustomGameEventToServer("iw_aam_change_state", { entindex:nEntityIndex, state:(tEntityAAMInfo.State+1)%3, hidden:false });
+	if ($.GetContextPanel()._bMouseOver)
+	{
+		var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
+		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
+		if (tEntityData)
+		{
+			var nRunMode = tEntityData.run_mode;
+			if (nRunMode === 0)
+			{
+				$.DispatchEvent("DOTAShowTextTooltip", $("#Indicator"), $.Localize("#iw_ui_run_mode_off"));
+			}
+			else
+			{
+				$.DispatchEvent("DOTAShowTextTooltip", $("#Indicator"), $.Localize("#iw_ui_run_mode_on"));
+			}
+		}
+		$.Schedule(0.03, OnIndicatorMouseOverThink);
+	}
+	else
+	{
+		$.GetContextPanel()._bTooltipVisible = false;
+		$.DispatchEvent("DOTAHideTextTooltip", $("#Indicator"));
+	}
+	return 0.03
+}
+
+
+function OnIndicatorMouseOver()
+{
+	$.GetContextPanel()._bTooltipVisible = false;
+	$.GetContextPanel()._bMouseOver = true;
+	OnIndicatorMouseOverThink();
+}
+
+function OnIndicatorMouseOut()
+{
+	$.GetContextPanel()._bMouseOver = false;
 }
 
 function ShowHPLabel()
@@ -204,13 +239,17 @@ function UpdatePartyBarMemberValues()
 		$("#MPLabel").text = Math.floor(fMana) + " / " + Math.floor(fMaxMana);
 		$("#MPBar").style.width = ((fMana * 182)/((fMaxMana === 0) ? 1 : fMaxMana)) + "px";
 		
-		var tCharacterData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-		var fStamina = bIsEntityAlive ? tCharacterData.stamina : 0;
-		var fMaxStamina = tCharacterData.stamina_max;
+		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
+		var fStamina = bIsEntityAlive ? tEntityData.stamina : 0;
+		var fMaxStamina = tEntityData.stamina_max;
 		$("#SPLabel").text = Math.floor(fStamina) + " / " + Math.floor(fMaxStamina);
 		$("#SPBar").style.width = ((fStamina * 182)/((fMaxStamina === 0) ? 1 : fMaxStamina)) + "px";
 		
-		var szActionName = tCharacterData.current_action;
+		var fCurrentRegenTime = bIsEntityAlive ? Game.GetGameTime() - tEntityData.stamina_time + 5.0 : 0;
+		var fStaminaRegenTime = 5.0;
+		$("#SPRechargeBar").style.width = ((fCurrentRegenTime * 182)/fStaminaRegenTime) + "px";
+		
+		var szActionName = tEntityData.current_action;
 		if (szActionName && bIsEntityAlive)
 		{
 			$("#ActionImage").SetImage("file://{images}/spellicons/" + szActionName + ".png");
@@ -222,12 +261,9 @@ function UpdatePartyBarMemberValues()
 			$("#ActionContainer").visible = false;
 		}
 		
-		var tEntityAAMInfo = CustomNetTables.GetTableValue("aam", parseInt(nEntityIndex));
-		var nState = tEntityAAMInfo.State;
-		
-		$("#IndicatorOff").visible = ((nState === 0) || (!bIsEntityAlive));
-		$("#IndicatorOn").visible = ((nState === 1) && (bIsEntityAlive));
-		$("#IndicatorNS").visible = ((nState === 2) && (bIsEntityAlive));
+		var nRunMode = tEntityData.run_mode;
+		$("#IndicatorOff").visible = ((nRunMode === 0) || (!bIsEntityAlive));
+		$("#IndicatorOn").visible = ((nRunMode === 1) && (bIsEntityAlive));
 	}
 	$.Schedule(0.03, UpdatePartyBarMemberValues);
 }
@@ -240,7 +276,6 @@ function OnPartyBarMemberLoad()
 	$("#MPLabel").visible = false;
 	$("#SPLabel").visible = false;
 	$("#IndicatorOn").visible = false;
-	$("#IndicatorNS").visible = false;
 	
 	var hContextPanel = $.GetContextPanel();
 	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);

@@ -79,7 +79,12 @@ end
 
 function CSpellbook:UpdateNetTable()
 	if self._bIsSpellbook then
-		CustomNetTables:SetTableValue("spellbook", tostring(self._hEntity:entindex()), self._tNetTable);
+		local tNetTable = self._tNetTable
+		for k,v in pairs(tNetTable.Spells) do
+			local hAbility = EntIndexToHScript(v.entindex)
+			v.stamina = hAbility:GetStaminaCost()
+		end
+		CustomNetTables:SetTableValue("spellbook", tostring(self._hEntity:entindex()), tNetTable);
 	end
 	CustomNetTables:SetTableValue("spellbook", "combos", CSpellbook._stAbilityCombos);
 end

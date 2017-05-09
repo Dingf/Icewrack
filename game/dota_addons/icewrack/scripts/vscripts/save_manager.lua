@@ -294,6 +294,7 @@ local function SaveEntityData(hInstance)
 	tEntityTable.Team = hInstance:GetTeamNumber()
 	tEntityTable.State = (hInstance:GetMainControllingPlayer() == 0) and IW_SAVE_STATE_PERSISTENT or IW_SAVE_STATE_ENABLED
 	tEntityTable.LastMap = GetMapName()
+	tEntityTable.RunMode = hInstance:GetRunMode() and 1 or 0
 	
 	tEntityTable.Properties = {}
 	for k,v in pairs(stIcewrackPropertyEnum) do
@@ -840,6 +841,9 @@ local function LoadEntityValues()
 				end
 				hEntity:SetMana(tEntityData.Mana)
 				hEntity:SetStamina(tEntityData.Stamina)
+				if tEntityData.RunMode == 1 then
+					hEntity:SetRunMode(true)
+				end
 				
 				if IsValidNPCEntity(hEntity) then
 					local fCurrentTime = GameRules:GetGameTime()

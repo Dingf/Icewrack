@@ -4,6 +4,7 @@
 	"default"
 	{
 		"ManaRegenFlat"			"0.25"
+		"StaminaUsageRunFlat"		"5"
 		"BaseAttackTime"		"1.7"
 		"BaseCritChance"		"0.05"
 		"BaseCritMultiplier"		"0.5"
@@ -28,6 +29,7 @@
 		"EquipFlags"			"58719294"
 
 		"MaxStaminaFlat"		"50"
+		"StaminaUsageAttackFlat"	"5"
 
 		"BaseAttackTime"		"1.7"
 		"AttackRange"			"100"
