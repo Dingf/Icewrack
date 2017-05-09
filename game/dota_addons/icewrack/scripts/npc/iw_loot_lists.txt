@@ -22,5 +22,12 @@
 			"Precondition"	""
 			"Chance"	"100"
 		}
+
+		"3"
+		{
+			"LootList"	"drop_list_test_axe"
+			"Precondition"	""
+			"Chance"	"100"
+		}
 	}
 }

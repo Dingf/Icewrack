@@ -163,6 +163,20 @@
 		}
 	}
 
+	"item_test_axe"
+	{
+		"BaseClass"				"item_lua"
+		"ScriptFile"				"ext_item"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"AbilityTextureName"			"item_reaver"
+		
+		"Modifiers"
+		{
+			"modifier_item_test_axe"		"IW_MODIFIER_ON_EQUIP"
+		}
+	}
+
 	"item_test_potion"
 	{
 		"BaseClass"				"item_lua"

@@ -330,4 +330,5 @@ function OnOverviewLoad()
 	RegisterCustomEventHandler($.GetContextPanel(), "CharacterContentHide", OnOverviewHide);
 	
 	CustomNetTables.SubscribeNetTableListener("entities", OnOverviewEntityUpdate);
+	CustomNetTables.SubscribeNetTableListener("inventory", OnOverviewEntityUpdate);
 }

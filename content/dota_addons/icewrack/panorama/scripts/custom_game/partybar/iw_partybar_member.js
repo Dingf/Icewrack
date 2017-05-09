@@ -1,6 +1,5 @@
 "use strict";
 
-
 function OnIndicatorMouseOverThink()
 {
 	if ($.GetContextPanel()._bMouseOver)
@@ -29,7 +28,6 @@ function OnIndicatorMouseOverThink()
 	return 0.03
 }
 
-
 function OnIndicatorMouseOver()
 {
 	$.GetContextPanel()._bTooltipVisible = false;
@@ -40,6 +38,15 @@ function OnIndicatorMouseOver()
 function OnIndicatorMouseOut()
 {
 	$.GetContextPanel()._bMouseOver = false;
+}
+
+function OnIndicatorActivate()
+{
+	var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
+	if (nEntityIndex !== -1)
+	{
+		GameEvents.SendCustomGameEventToServer("iw_toggle_run", { entindex:nEntityIndex });
+	}
 }
 
 function ShowHPLabel()
@@ -243,7 +250,7 @@ function UpdatePartyBarMemberValues()
 		var fStamina = bIsEntityAlive ? tEntityData.stamina : 0;
 		var fMaxStamina = tEntityData.stamina_max;
 		$("#SPLabel").text = Math.floor(fStamina) + " / " + Math.floor(fMaxStamina);
-		$("#SPBar").style.width = ((fStamina * 182)/((fMaxStamina === 0) ? 1 : fMaxStamina)) + "px";
+		$("#SPBar").style.width = (Math.floor(fStamina * 182)/((fMaxStamina === 0) ? 1 : fMaxStamina)) + "px";
 		
 		var fCurrentRegenTime = bIsEntityAlive ? Game.GetGameTime() - tEntityData.stamina_time + 5.0 : 0;
 		var fStaminaRegenTime = 5.0;

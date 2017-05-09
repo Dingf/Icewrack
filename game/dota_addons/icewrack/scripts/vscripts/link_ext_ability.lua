@@ -25,14 +25,17 @@ stExtAbilityFlagEnum =
 	IW_ABILITY_FLAG_ONLY_CAST_AT_NIGHT  = 8,
 	IW_ABILITY_FLAG_CAN_TARGET_CORPSES  = 16,
 	IW_ABILITY_FLAG_ONLY_TARGET_CORPSES = 32,
-	IW_ABILITY_FLAG_CAN_TARGET_PROPS    = 64,		--TODO: Implement me
-	IW_ABILITY_FLAG_ONLY_TARGET_PROPS   = 128,		--TODO: Implement me
+	IW_ABILITY_FLAG_CAN_TARGET_OBJECTS  = 64,		--TODO: Implement me
+	IW_ABILITY_FLAG_ONLY_TARGET_OBJECTS = 128,		--TODO: Implement me
 	IW_ABILITY_FLAG_ONLY_CAST_IN_COMBAT = 256,
 	IW_ABILITY_FLAG_ONLY_CAST_NO_COMBAT = 512,
 	IW_ABILITY_FLAG_DOES_NOT_REQ_VISION = 1024,
 	IW_ABILITY_FLAG_CAN_CAST_IN_TOWN    = 2048,		--TODO: Implement me
-	IW_ABILITY_FLAG_CONSIDERED_SPELL    = 4096,
-	IW_ABILITY_FLAG_USES_ATTACK_STAMINA = 8192,
+	IW_ABILITY_FLAG_USES_ATTACK_STAMINA = 4096,
+	IW_ABILITY_FLAG_KEYWORD_SPELL       = 8192,
+	IW_ABILITY_FLAG_KEYWORD_ATTACK      = 16384,
+	IW_ABILITY_FLAG_KEYWORD_SINGLE      = 32768,
+	IW_ABILITY_FLAG_KEYWORD_AOE         = 65536,
 }
 
 stExtAbilitySkillEnum = 
@@ -130,7 +133,11 @@ function CExtAbilityLinker:GetAOERadius()
 			return hBaseFunction(self)
 		end
 	end
-	return self.BaseClass.GetAOERadius(self)
+	if IsServer() then
+		return self._nAbilityAOERadius
+	else
+		return self.BaseClass.GetAOERadius(self)
+	end
 end
 
 function CExtAbilityLinker:GetCastRange(vLocation, hTarget)
@@ -227,12 +234,7 @@ function CExtAbilityLinker:GetStaminaCost(nLevel)
 		end
 		fStaminaCost = fStaminaCost + hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hAttackSource:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
 	end
-	
-	if IsServer() then
-		fStaminaCost = fStaminaCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
-	else
-		fStaminaCost = fStaminaCost * (hEntity and hEntity:GetMagicalArmorValue() or 1.0)
-	end
+	fStaminaCost = fStaminaCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
 	return floor(fStaminaCost)
 end
 
@@ -374,18 +376,6 @@ function CExtAbilityLinker:CastFilterResult(vLocation, hTarget)
 		self._bSkillFailed = false
 		self._bCastFilterLock = true
 		CTimer(0.03, function() self._bCastFilterLock = nil end)
-		--[[local hEntity = self:GetCaster()
-		local nAbilitySkill = self:GetSkillRequirements()
-		for i=1,4 do
-			local nLevel = bit32.extract(nAbilitySkill, (i-1)*8, 3)
-			local nSkill = bit32.extract(nAbilitySkill, ((i-1)*8)+3, 5)
-			if nSkill ~= 0 then
-				if hEntity:GetPropertyValue(IW_PROPERTY_SKILL_FIRE + nSkill - 1) < nLevel then
-					self._bSkillFailed = true
-					return UF_FAIL_CUSTOM
-				end
-			end
-		end]]
 		
 		self._bFlagsFailed = false
 		if not self:EvaluateFlags(vLocation, hTarget) then
@@ -435,20 +425,25 @@ function CExtAbilityLinker:GetCustomCastError(vLocation, hTarget)
 		if self._bStaminaFailed then return "#iw_error_cast_sp" end
 	end
 	
-	local args = nil
-	local hBaseFunction = nil
-	if vLocation then
-		hBaseFunction = self._hBaseGetCustomCastErrorLocation
-		args = vLocation
-	elseif hTarget then
-		hBaseFunction = self._hBaseGetCustomCastErrorTarget
-		args = hTarget
-	else
-		hBaseFunction = self._hBaseGetCustomCastError
-	end
-	
-	if hBaseFunction and type(hBaseFunction) == "function" then
-		return hBaseFunction(self, args) or UF_SUCCESS
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local args = nil
+		local hBaseFunction = nil
+		if vLocation then
+			hBaseFunction = tBaseFunctions.GetCustomCastErrorLocation
+			args = vLocation
+		elseif hTarget then
+			hBaseFunction = tBaseFunctions.GetCustomCastErrorTarget
+			args = hTarget
+		else
+			hBaseFunction = tBaseFunctions.GetCustomCastError
+		end
+		if hBaseFunction and type(hBaseFunction) == "function" then
+			local szErrorString = hBaseFunction(self, args)
+			if szErrorString then
+				return szErrorString
+			end
+		end
 	end
 	return ""
 end
@@ -478,6 +473,13 @@ function CExtAbilityLinker:GetCustomCastErrorTarget(hTarget)
 end
 
 function CExtAbilityLinker:OnAbilityPhaseStart()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.OnAbilityPhaseStart
+		if hBaseFunction then
+			return hBaseFunction(self)
+		end
+	end
 	return true
 end
 
@@ -596,6 +598,7 @@ function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemp
 	hExtAbility._nAbilityTargetType = GetFlagValue(tBaseTemplate.AbilityUnitTargetType, DOTA_UNIT_TARGET_TYPE)
 	hExtAbility._nAbilityTargetFlags = GetFlagValue(tBaseTemplate.AbilityUnitTargetFlags, DOTA_UNIT_TARGET_FLAGS)
 	hExtAbility._nAbilityFlags = GetFlagValue(tExtTemplate.AbilityFlags, stExtAbilityFlagEnum)
+	hExtAbility._nAbilityAOERadius = tonumber(tBaseTemplate.AbilityAOERadius) or 0
 	
 	hExtAbility._bIsWeatherAbility = (tExtTemplate.IsWeather == 1)
 	

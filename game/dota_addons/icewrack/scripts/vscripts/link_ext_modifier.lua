@@ -289,6 +289,7 @@ local function OnModifierCreatedDefault(self, keys)
 			end
 		end
 		if next(tNetTableModifierArgs) ~= nil then
+			--TODO: Investigate a better method of passing modifier args
 			self._tModifierNetTable[nModifierID] = tNetTableModifierArgs
 			CustomNetTables:SetTableValue("modifier_args", szModifierName, self._tModifierNetTable)
 			CTimer(3.0, function() self._tModifierNetTable[nModifierID] = nil end)

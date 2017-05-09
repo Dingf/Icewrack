@@ -3,6 +3,8 @@
 	"iw_axe_berserkers_call"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_berserkers_call.lua"
+
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_AOE"
 		
 		"StaminaCost"		"30"
 		
@@ -24,10 +26,14 @@
 
 	"iw_axe_counter_helix"
 	{
-		"StaminaCost"		"15"
+		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_counter_helix.lua"
 
-		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA"
+		"StaminaCost"		"10"
+
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA IW_ABILITY_FLAG_KEYWORD_ATTACK IW_ABILITY_FLAG_KEYWORD_AOE"
 		
+		"EquipTypeFlags"	"IW_ITEM_TYPE_WEAPON_2H"
+
 		"AbilityCastAnimation"
 		{
 			"npc_dota_hero_axe"
@@ -40,10 +46,12 @@
 
 	"iw_axe_culling_blade"
 	{
-		"StaminaCost"		"25"
+		"StaminaCost"		"15"
 
-		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA"
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA IW_ABILITY_FLAG_KEYWORD_ATTACK"
 		
+		"EquipTypeFlags"	"IW_ITEM_TYPE_WEAPON_2H"
+
 		"AbilityCastAnimation"
 		{
 			"npc_dota_hero_axe"

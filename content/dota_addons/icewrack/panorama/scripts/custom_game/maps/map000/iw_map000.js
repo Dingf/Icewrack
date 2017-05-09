@@ -47,7 +47,7 @@ function OnCharacterActivate()
 			for (var k in tEntitySpellList)	
 			{
 				var hIcon = $("#SkillIcon" + (++nNumSkillIcons));
-				var nAbilityIndex = tEntitySpellList[k].entindex;
+				var nAbilityIndex = parseInt(k);
 				/*for (var k2 in tEntitySpellUnits)
 				{
 					nAbilityIndex = Entities.GetAbilityByName(tEntitySpellUnits[k2], k);

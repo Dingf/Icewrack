@@ -71,6 +71,34 @@
 		}
 	}
 
+	"item_test_axe"
+	{
+		"ItemType"		"IW_ITEM_TYPE_WEAPON_2H IW_ITEM_TYPE_WEAPON_AXE"
+		"ItemSlots"		"IW_INVENTORY_SLOT_MAIN_HAND"
+		"ItemFlags"		"IW_ITEM_FLAG_ATTACK_SOURCE"
+		"ItemWeight"		"15.0"
+		"ItemValue"		"1"
+
+		"MaxStacks"		"1"
+
+		"ItemComponents"
+		{
+			"item_test_component#0"		"75"
+			"item_test_component#1"		"50"
+		}
+
+		"Properties"
+		{
+			"IW_PROPERTY_ATTACK_RANGE"			"150"
+			"IW_PROPERTY_ATTACK_SP_FLAT"			"8"
+			"IW_PROPERTY_DMG_SLASH_BASE"			"25"
+			"IW_PROPERTY_DMG_SLASH_VAR"			"6"
+			"IW_PROPERTY_BASE_ATTACK_TIME"			"3.1"
+			"IW_PROPERTY_CRIT_CHANCE_FLAT"			"0.05"
+			"IW_PROPERTY_CRIT_MULTI_FLAT"			"0.5"
+		}
+	}
+
 	"item_test_potion"
 	{
 		"ItemType"		"IW_ITEM_TYPE_CONSUMABLE_POTION"

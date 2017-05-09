@@ -265,7 +265,6 @@ end
 function CExtEntity:UpdateNetTable(bSkipProperties)
 	if self._tNetTable then
 		if not bSkipProperties then
-			self:SetPropertyValue(IW_PROPERTY_ATK_SPEED_DUMMY, self:GetIncreasedAttackSpeed() * 100)		--Only used for clientside display, since Panorama truncates to int
 			local tPropertiesBase = self._tNetTable.properties_base
 			local tPropertiesBonus = self._tNetTable.properties_bonus
 			for k,v in pairs(stIcewrackPropertyEnum) do
@@ -489,6 +488,7 @@ function CExtEntity:RefreshEntity()
 	self:RefreshMovementSpeed()
 	self:SetAcquisitionRange(self:GetAttackRange() + 300.0)
 	
+	self:SetPropertyValue(IW_PROPERTY_ATK_SPEED_DUMMY, self:GetIncreasedAttackSpeed() * 100)		--Only used for clientside display, since Panorama truncates to int
 	self:SetBaseMagicalResistanceValue(self:GetFatigueMultiplier())		--Hack to get fatigue multiplier on client side lua without nettables
 	
 	self:UpdateNetTable()

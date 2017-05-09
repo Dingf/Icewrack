@@ -80,9 +80,9 @@ CExtItem = setmetatable({}, { __call =
 		
 		hItem._bIsExtendedItem = true
 		
-		hItem._nItemType  = GetBitshiftedFlagValue(tExtItemTemplate.ItemType or "", stExtItemTypeEnum)
-		hItem._nItemSlots = GetBitshiftedFlagValue(tExtItemTemplate.ItemSlots or "", stExtItemSlotEnum)
-		hItem._nItemFlags = GetFlagValue(tExtItemTemplate.ItemFlags or "", stExtItemFlagEnum)
+		hItem._nItemType  = GetBitshiftedFlagValue(tExtItemTemplate.ItemType, stExtItemTypeEnum)
+		hItem._nItemSlots = GetBitshiftedFlagValue(tExtItemTemplate.ItemSlots, stExtItemSlotEnum)
+		hItem._nItemFlags = GetFlagValue(tExtItemTemplate.ItemFlags, stExtItemFlagEnum)
 		
 		hItem._nIdentifyLevel = tonumber(tExtItemTemplate.IdentifyLevel) or 0
 		hItem._bIsIdentified = (hItem._nIdentifyLevel == 0)
@@ -114,6 +114,8 @@ CExtItem = setmetatable({}, { __call =
 			end
 		end
 		
+		hItem._tPropertySeeds = {}
+		hItem._tPropertyList = {}
 		for k,v in pairs(tExtItemTemplate.Properties or {}) do
 			if stIcewrackPropertyEnum[k] then
 				local nPropertyID = stIcewrackPropertyEnum[k]
@@ -123,7 +125,9 @@ CExtItem = setmetatable({}, { __call =
 					k2 = tonumber(k2)
 					v2 = tonumber(v2)
 					if type(k2) == "number" and type(v2) == "number" then
-						hItem:SetPropertyValue(nPropertyID, k2 + (RandomInt(0, 65535) % v2))
+						hItem._tPropertySeeds[nPropertyID] = RandomInt(0, 2147483647)
+						hItem._tPropertyList[nPropertyID] = v
+						hItem:SetPropertyValue(nPropertyID, k2 + (hItem._tPropertySeeds[nPropertyID] % v2))
 					end
 				elseif szPropertyType == "number" then
 					hItem:SetPropertyValue(nPropertyID, v)

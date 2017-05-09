@@ -81,7 +81,7 @@ function CSpellbook:UpdateNetTable()
 	if self._bIsSpellbook then
 		local tNetTable = self._tNetTable
 		for k,v in pairs(tNetTable.Spells) do
-			local hAbility = EntIndexToHScript(v.entindex)
+			local hAbility = EntIndexToHScript(k)
 			v.stamina = hAbility:GetStaminaCost()
 		end
 		CustomNetTables:SetTableValue("spellbook", tostring(self._hEntity:entindex()), tNetTable);
@@ -129,8 +129,9 @@ function CSpellbook:UnlearnAbility(szAbilityName)
 		end
 		self._tSpellList[szAbilityName]:RemoveAbility(szAbilityName)
 		self._tSpellList[szAbilityName] = nil
+		
 		for k,v in pairs(self._tNetTable.Spells) do
-			if EntIndexToHScript(v.entindex):GetAbilityName() == szAbilityName then
+			if EntIndexToHScript(k):GetAbilityName() == szAbilityName then
 				table.remove(self._tNetTable.Spells, k)
 				break
 			end
@@ -170,12 +171,11 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel)
 			hAbility:SetLevel(nLevel)
 			hAbility:SetOwner(hEntity)
 			self._tSpellList[szAbilityName] = hSpellUnit
-			table.insert(self._tNetTable.Spells,
+			self._tNetTable.Spells[hAbility:entindex()] =
 			{
-				entindex = hAbility:entindex(),
 				skills = hAbility:GetSkillRequirements(),
 				stamina = hAbility:GetStaminaCost(),
-			})
+			}
 			self:UpdateNetTable()
 			return hAbility
 		else

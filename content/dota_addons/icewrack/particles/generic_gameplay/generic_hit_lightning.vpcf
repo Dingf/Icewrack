@@ -2,7 +2,7 @@
 {
 	_class = "CParticleSystemDefinition"
 	m_nMaxParticles = 32
-	m_Children =
+	m_Children = 
 	[
 		{
 			m_ChildRef = resource:"particles/generic_gameplay/generic_hit_lightning_b.vpcf"
@@ -12,7 +12,7 @@
 		},
 	]
 	m_bShouldHitboxesFallbackToRenderBounds = false
-	m_Operators =
+	m_Operators = 
 	[
 		{
 			_class = "C_OP_Decay"
@@ -30,19 +30,19 @@
 			_class = "C_OP_SetChildControlPoints"
 		},
 	]
-	m_Renderers =
+	m_Renderers = 
 	[
 		{
 			_class = "C_OP_RenderSprites"
 			m_bAdditive = true
 			m_bDisableZBuffering = true
 			m_hTexture = resource:"materials/particle/particle_glow_04.vtex"
-			m_flMaxSize = 0.400000
-			m_flStartFadeSize = 0.800000
-			m_flEndFadeSize = 1.000000
+			m_flMaxSize = 0.4
+			m_flStartFadeSize = 0.8
+			m_flEndFadeSize = 1.0
 		},
 	]
-	m_Initializers =
+	m_Initializers = 
 	[
 		{
 			_class = "C_INIT_RandomRotation"
@@ -53,51 +53,56 @@
 		},
 		{
 			_class = "C_INIT_RandomLifeTime"
-			m_fLifetimeMin = 0.250000
-			m_fLifetimeMax = 0.500000
+			m_fLifetimeMin = 0.25
+			m_fLifetimeMax = 0.5
 		},
 		{
 			_class = "C_INIT_RandomRadius"
-			m_flRadiusMin = 50.000000
-			m_flRadiusMax = 78.000000
+			m_flRadiusMin = 50.0
+			m_flRadiusMax = 78.0
 		},
 		{
 			_class = "C_INIT_RandomAlpha"
-			m_nAlphaMin = 16
-			m_nAlphaMax = 32
+			m_nAlphaMin = 8
+			m_nAlphaMax = 16
 		},
 		{
 			_class = "C_INIT_CreateOnModel"
-			m_vecDirectionBias =
-			[
-				0.000000,
-				0.000000,
-				0.100000,
-			]
+			m_vecDirectionBias = [ 0.0, 0.0, 0.1 ]
 		},
 		{
 			_class = "C_INIT_RandomColor"
-			m_ColorMin =
-			[
-				52,
-				75,
-				248,
-				255,
-			]
-			m_ColorMax =
-			[
-				140,
-				140,
-				231,
-				255,
-			]
+			m_ColorMin = [ 52, 75, 248, 255 ]
+			m_ColorMax = [ 140, 140, 231, 255 ]
 		},
 	]
-	m_Emitters =
+	m_Emitters = 
 	[
 		{
 			_class = "C_OP_InstantaneousEmitter"
 			m_nParticlesToEmit = 16
+		},
+	]
+	m_controlPointConfigurations = 
+	[
+		{
+			m_name = "preview"
+			m_drivers = 
+			[
+				{
+					m_iAttachType = "PATTACH_WORLDORIGIN"
+					m_vecOffset = [ 0.0, 0.0, 0.0 ]
+					m_angOffset = [ null, null, null ]
+					m_entityName = "self"
+				},
+				{
+					m_iControlPoint = 1
+					m_iAttachType = "PATTACH_WORLDORIGIN"
+					m_vecOffset = [ 0.0, 0.0, 0.0 ]
+					m_angOffset = [ null, null, null ]
+					m_entityName = "self"
+				},
+			]
 		},
 	]
 }

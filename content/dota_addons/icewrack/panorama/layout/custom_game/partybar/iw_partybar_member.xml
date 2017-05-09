@@ -36,7 +36,10 @@
 		<Image hittest="false" class="PartyBarOverlay" />
 		<Image hittest="false" class="PartyBarSecondarySelectOverlay" id="SecondarySelectOverlay"/>
 		<Image hittest="false" class="PartyBarPrimarySelectOverlay" id="PrimarySelectOverlay"/>
-		<Panel class="PartyBarIndicator" onmouseover="OnIndicatorMouseOver()" onmouseout="OnIndicatorMouseOut()" id="Indicator">
+		<Panel onmouseover="OnIndicatorMouseOver()"
+			onmouseout="OnIndicatorMouseOut()"
+			onactivate="OnIndicatorActivate()"
+			class="PartyBarIndicator" id="Indicator">
 			<Image id="IndicatorOff" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_off.tga"/>
 			<Image id="IndicatorOn" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_on.tga"/>
 		</Panel>

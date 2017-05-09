@@ -94,8 +94,9 @@ function OnTooltipAbilityLoad()
 		$("#ManaCost").visible = (nManaCost > 0);
 		$("#ManaLabel").text = nManaCost.toFixed(0) + "";
 		
-		var nStaminaCost = tAbilityTemplate ? tAbilityTemplate.stamina : 0;
-		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
+		var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
+		var tSpellData = tEntitySpellbook.Spells[nAbilityIndex];
+		var nStaminaCost = tSpellData ? tSpellData.stamina : 0;
 		nStaminaCost *= tEntityData ? tEntityData.fatigue : 1.0;
 		$("#StaminaCost").visible = (nStaminaCost > 0);
 		$("#StaminaLabel").text = nStaminaCost.toFixed(0) + "";
@@ -105,7 +106,50 @@ function OnTooltipAbilityLoad()
 		$("#CooldownLabel").text = Math.round(nCooldown * 100)/100 + "";
 		
 		$("#Title").text = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName);
-		$("#Description").text = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName + "_Description");
+		
+		var szLocalizedText = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName + "_Description");
+		var tSpecialSections = szLocalizedText.match(/[^{}]+(?=})/g);
+		var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
+		
+		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
+		var fSpellpower = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER);
+		var szFormattedText = "";
+		for (var i = 0; i < tTextSections.length; i++)
+		{
+			szFormattedText += tTextSections[i];
+			if (tSpecialSections[i])
+			{
+				var tAbilitySpecials = tSpecialSections[i].split("|");
+				var fSpecialBaseValue = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecials[0]);
+				if (typeof(fSpecialBaseValue) === "number")
+				{
+					var fSpecialBonusValue = 0;
+					var fSpecialTotal = fSpecialBaseValue
+					if (tAbilitySpecials.length > 1)
+					{
+						var fSpecialBonus = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecials[1]);
+						if (typeof(fSpecialBonus) === "number")
+						{
+							fSpecialBonusValue = fSpecialBonus;
+						}
+					}
+					
+					fSpecialTotal += fSpecialBonusValue * fSpellpower
+					szFormattedText += "<font color=\"#ffffff\">";
+					if (GameUI.IsAltDown() && (fSpecialBonusValue > 0))
+					{
+						szFormattedText = szFormattedText + "</font><font color=\"#ffffff\">(" + fSpecialBaseValue + " + " + fSpecialBonusValue + "x)";
+					}
+					else
+					{
+						szFormattedText += Math.round(fSpecialTotal * 100)/100;
+					}
+					szFormattedText += "</font>";
+				}
+			}
+		}
+		
+		$("#Description").text = szFormattedText;
 		
 		var szAbilityTextureName = nAbilityIndex ? Abilities.GetAbilityTextureName(nAbilityIndex) : tAbilityTemplate.texture;
 		$("#Icon").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");

@@ -32,7 +32,7 @@ function OnAbilityListLoad(hContextPanel, tArgs)
 		var tEntitySpellList = tEntitySpellbook.Spells;
 		for (var k in tEntitySpellList)
 		{
-			var nAbilityIndex = tEntitySpellList[k].entindex;
+			var nAbilityIndex = parseInt(k);
 			var szLocalizedAbilityName = $.Localize("DOTA_Tooltip_Ability_" + Abilities.GetAbilityName(nAbilityIndex));
 			var hEntry = CreateAbilityEntry(hAbilityList, "Ability" + nAbilityIndex, nEntityIndex, nAbilityIndex);
 			

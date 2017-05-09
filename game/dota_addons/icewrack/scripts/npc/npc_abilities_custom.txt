@@ -321,9 +321,17 @@
 
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.2"
-		"AbilityAOERadius"			"275"
 
 		"AbilityCooldown"			"1.0"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"damage"			"110"
+			}
+		}
 	}
 
 	"iw_axe_culling_blade"

@@ -621,6 +621,8 @@
 		{
 			"ScriptFile"			"scripts/vscripts/abilities/axe/modifier_iw_axe_battle_hunger.lua"
 
+			"Texture"			"axe_battle_hunger"
+
 			"VisualEffect"			"particles/units/heroes/hero_axe/axe_battle_hunger.vpcf"
 			"VisualAttachType"		"PATTACH_OVERHEAD_FOLLOW"
 			"SoundEffect"			"Hero_Axe.Battle_Hunger"
@@ -731,6 +733,23 @@
 			"Properties"
 			{
 				"IW_PROPERTY_FATIGUE_MULTI"			"25"
+			}
+
+			"IsHidden"			"1"
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates" { }
+			"DatadrivenProperties" { }
+			"DatadrivenEvents" { }
+		}
+	}
+
+	"item_test_axe"
+	{
+		"modifier_item_test_axe"
+		{
+			"Properties"
+			{
+				"IW_PROPERTY_ATTR_STR_FLAT"			{"50" "100"}
 			}
 
 			"IsHidden"			"1"

@@ -63,18 +63,15 @@ modifier_internal_skill_bonus._tDeclareFunctionList =
 
 function modifier_internal_skill_bonus:GetModifierAttackSpeedBonus_Constant(args)
 	local hEntity = self:GetParent()
-	local hInventory = hEntity:GetInventory()
-	if hInventory then
-		local hMainWeapon = hInventory:GetEquippedItem(IW_INVENTORY_SLOT_MAIN_HAND)
-		if hMainWeapon then
-			local nWeaponType = hMainWeapon:GetItemType()
-			if bit32.band(nWeaponType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_BOW - 1)) then
-				return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_MARKSMAN) * 25
-			elseif bit32.band(nWeaponType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_2H - 1)) then
-				return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_TWOHAND) * 25
-			elseif bit32.band(nWeaponType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_1H - 1)) then
-				return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ONEHAND) * 25
-			end
+	local _, hAttackSource = next(hEntity._tAttackSourceTable)
+	if hAttackSource then
+		local nItemType = hAttackSource:GetItemType()
+		if bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_BOW - 1)) then
+			return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_MARKSMAN) * 25
+		elseif bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_2H - 1)) then
+			return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_TWOHAND) * 25
+		elseif bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_1H - 1)) then
+			return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ONEHAND) * 25
 		end
 	end
 	return 0
@@ -83,24 +80,25 @@ end
 
 function modifier_internal_skill_bonus:OnRefresh()
 	local hEntity = self:GetParent()
-	local hInventory = hEntity:GetInventory()
-	if hInventory then
-		local hMainWeapon = hInventory:GetEquippedItem(IW_INVENTORY_SLOT_MAIN_HAND)
-		if hMainWeapon then
-			local nWeaponType = hMainWeapon:GetItemType()
-			if bit32.band(nWeaponType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_BOW - 1)) then
-				self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_MARKSMAN) * 25)
-			elseif bit32.band(nWeaponType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_2H - 1)) then
-				self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_TWOHAND) * 25)
-			elseif bit32.band(nWeaponType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_1H - 1)) then
-				self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ONEHAND) * 25)
-			else
-				self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, 0)
-			end
-			self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_BASE, 0)
+	local _, hAttackSource = next(hEntity._tAttackSourceTable)
+	if hAttackSource then
+		local nItemType = hAttackSource:GetItemType()
+		if bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_BOW - 1)) then
+			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_MARKSMAN) * 25)
+		elseif bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_2H - 1)) then
+			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_TWOHAND) * 25)
+		elseif bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_1H - 1)) then
+			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ONEHAND) * 25)
 		else
-			self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_BASE, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_UNARMED) * 20)
+			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, 0)
 		end
+		self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_BASE, 0)
+		self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_VAR, 0)
+	else
+		--TODO: Add base unarmed damage
+		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, 0)
+		self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_BASE, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_UNARMED) * 10)
+		self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_VAR, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_UNARMED) * 10)
 	end
 	
 	self:SetPropertyValue(IW_PROPERTY_ARMOR_CRUSH_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ARMOR) * 20)

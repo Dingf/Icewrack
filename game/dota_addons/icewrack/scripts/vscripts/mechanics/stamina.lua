@@ -73,6 +73,7 @@ function modifier_internal_stamina:OnIntervalThink()
 				if hEntity:IsMoving() then
 					fStaminaRegenPerSec = fStaminaRegenPerSec * 0.5
 				end
+				fStaminaRegenPerSec = 9999999.0
 				hEntity:SetStamina(fStamina + fStaminaRegenPerSec/30.0)
 				hEntity._fLastStaminaPercent = fStamina/fMaxStamina
 			end

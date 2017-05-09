@@ -26,7 +26,7 @@ end
 
 function GetBitshiftedFlagValue(szFlagString, tEnumTable)
 	local nFlagValue = 0
-	for k in string.gmatch(szFlagString, "[%w_]+") do
+	for k in string.gmatch(szFlagString or "", "[%w_]+") do
 		if tEnumTable[k] then
 			nFlagValue = nFlagValue + bit32.lshift(1, tEnumTable[k] - 1)
 		end

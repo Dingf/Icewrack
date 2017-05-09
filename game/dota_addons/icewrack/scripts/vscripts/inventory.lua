@@ -75,6 +75,9 @@ function CInventory:RefreshInventory()
 		--TODO: Create a rooted modifier here for when the entity is overencumbered
 	else
 	end
+	for k,v in pairs(self._tEquippedItems) do
+		self._tNetTableItemList[v:entindex()] = v:UpdateNetTable()
+	end
 	self:UpdateNetTable()
 end
 
@@ -174,6 +177,7 @@ function CInventory:EquipItem(hItem, nSlot)
 				self._tEquippedItems[i] = hItem
 				self._tNetTableItemList[hItem:entindex()] = hItem:UpdateNetTable()
 				self._tNetTableEquippedItems[i] = hItem:entindex()
+				self:RefreshInventory()
 				hEntity:RefreshEntity()
 				hEntity:RefreshLoadout()
 				return true
@@ -193,11 +197,11 @@ function CInventory:UnequipItem(nSlot)
 		end
 		hItem:RemoveModifiers(IW_MODIFIER_ON_EQUIP)
 		hItem:RemoveChild(hEntity)
-		hEntity:RefreshEntity()
 		self._tEquippedItems[nSlot] = nil
 		self._tNetTableItemList[hItem:entindex()] = hItem:UpdateNetTable()
 		self._tNetTableEquippedItems[nSlot] = nil
 		self:RefreshInventory()
+		hEntity:RefreshEntity()
 		hEntity:RefreshLoadout()
 		return true
 	end

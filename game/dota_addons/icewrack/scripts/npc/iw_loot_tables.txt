@@ -34,4 +34,13 @@
 			"Max"		"1"
 		}
 	}
+	"drop_list_test_axe"
+	{
+		"item_test_axe"
+		{
+			"Weight"	"5"
+			"Min"		"1"
+			"Max"		"1"
+		}
+	}
 }

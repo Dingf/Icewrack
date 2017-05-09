@@ -363,6 +363,11 @@ local function SaveItemData(hInstance)
 		tItemTable.ModifierSeeds[k] = tModifierSeeds
 	end
 	
+	tItemTable.PropertySeeds = {}
+	for k,v in pairs(hInstance._tPropertySeeds) do
+		tItemTable.PropertySeeds[k] = v
+	end
+	
 	tItemTable.ComponentList = {}
 	for k,v in pairs(hInstance._tComponentList) do
 		tItemTable.ComponentList[k:GetInstanceID()] = v
@@ -533,6 +538,17 @@ local function LoadItemData(nItemIndex, tItemData)
 			for k2,v2 in pairs(v) do
 				hItem._tModifierSeeds[k][tonumber(k2)] = v2
 			end
+		end
+		for k,v in pairs(tItemData.PropertySeeds or {}) do
+			local nPropertyID = tonumber(k)
+			local tPropertyTable = hItem._tPropertyList[nPropertyID]
+			if tPropertyTable then
+				local k2,v2 = next(tPropertyTable)
+				k2 = tonumber(k2)
+				v2 = tonumber(v2)
+				hItem:SetPropertyValue(nPropertyID, k2 + (v % v2))
+			end
+			hItem._tPropertySeeds[nPropertyID] = v
 		end
 		for k,v in pairs(tItemData.ComponentList or {}) do
 			local hComponent = LoadItemData(k, tItemSaveList[k])

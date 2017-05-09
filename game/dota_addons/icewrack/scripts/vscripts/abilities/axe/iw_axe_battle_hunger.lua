@@ -1,6 +1,7 @@
 iw_axe_battle_hunger = class({})
 
 function iw_axe_battle_hunger:OnToggle()
+	local hEntity = self:GetCaster()
 	if self:GetToggleState() then
 		local tModifierArgs =
 		{
@@ -8,9 +9,9 @@ function iw_axe_battle_hunger:OnToggle()
 			second_wind = self:GetSpecialValueFor("second_wind"),
 			attack_speed = self:GetSpecialValueFor("attack_speed"),
 		}
-		self:GetCaster():AddNewModifier(self:GetCaster(), self, "modifier_iw_axe_battle_hunger", tModifierArgs)
+		hEntity:AddNewModifier(hEntity, self, "modifier_iw_axe_battle_hunger", tModifierArgs)
 	else
-		local hModifier = self:GetCaster():FindModifierByName("modifier_iw_axe_battle_hunger")
+		local hModifier = hEntity:FindModifierByName("modifier_iw_axe_battle_hunger")
 		if hModifier ~= nil then
 			hModifier:Destroy()
 		end

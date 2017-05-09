@@ -4,7 +4,7 @@
 	"default"
 	{
 		"ManaRegenFlat"			"0.25"
-		"StaminaUsageRunFlat"		"5"
+		"StaminaUsageRunFlat"		"3"
 		"BaseAttackTime"		"1.7"
 		"BaseCritChance"		"0.05"
 		"BaseCritMultiplier"		"0.5"
@@ -44,9 +44,6 @@
 		"PerceptionFlat"			"12"
 		"IntelligenceFlat"		"12"
 		"WisdomFlat"			"9"
-
-		"DamageCrushBase"		"10"
-		"DamageCrushVar"		"17"
 
 		"SkillTwoHanded"		"4"
 		"SkillUnarmed"			"4"
@@ -182,6 +179,7 @@
 		"EquipFlags"			"58191872"
 
 		"MaxStaminaFlat"		"50"
+		"StaminaUsageRunFlat"		"0"
 
 		"BaseAttackTime"		"1.7"
 		"AttackRange"			"770"

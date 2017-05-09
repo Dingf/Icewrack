@@ -39,14 +39,14 @@ function GetOverviewAttackRange(tSourceData, nEntityIndex)
 function GetOverviewAccuracy(tSourceData, nEntityIndex)
 {
 	var fBaseAccuracy = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ACCURACY_FLAT) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_AGI_FLAT) * 2.0);
-	var fIncAccuracy = 1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ACCURACY_PCT);
+	var fIncAccuracy = 1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ACCURACY_PCT)/100.0;
 	return Math.floor(fBaseAccuracy * fIncAccuracy);
 }
 
 function GetOverviewCritChance(tSourceData, nEntityIndex)
 {
 	var fBaseCritChance = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_CHANCE_FLAT);
-	var fIncCritChance = 1.0 + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_PER_FLAT) * 0.05) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_CHANCE_PCT)/100.0;
+	var fIncCritChance = 1.0 + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_CUN_FLAT) * 0.05) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_CHANCE_PCT)/100.0;
 	if (fBaseCritChance > 0.0)
 	{
 		return (fBaseCritChance * fIncCritChance * 100.0).toFixed(2) + "%";
@@ -56,7 +56,7 @@ function GetOverviewCritChance(tSourceData, nEntityIndex)
 function GetOverviewCritMultiplier(tSourceData, nEntityIndex)
 {
 	var fBaseCritMultiplier = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_MULTI_FLAT);
-	var fIncCritMultiplier = (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_PER_FLAT) * 0.05) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_MULTI_PCT)/100.0;
+	var fIncCritMultiplier = (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_CUN_FLAT) * 0.05) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_MULTI_PCT)/100.0;
 	
 	if (fBaseCritMultiplier > 0.0)
 	{

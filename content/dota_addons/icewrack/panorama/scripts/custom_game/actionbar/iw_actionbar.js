@@ -78,10 +78,11 @@ function OnActionBarTooltipUpdate(hContext, tArgs)
 		for (var k in tEntitySpellList)
 		{
 			var hIcon = $("#TooltipIcon" + (nNumTooltipIcons + 1));
-			var nAbilityIndex = tEntitySpellList[k].entindex;
+			var nAbilityIndex = parseInt(k);
+			var szAbilityTextureName = Abilities.GetAbilityTextureName(nAbilityIndex);
 			hIcon.SetAttributeInt("abilityindex", nAbilityIndex);
 			hIcon.SetAttributeInt("caster", nEntityIndex);
-			DispatchCustomEvent(hIcon, "ActionBarIconRefresh");
+			hIcon.FindChildTraverse("AbilityTexture").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
 			hIcon.visible = true;
 			nNumTooltipIcons++;
 		}

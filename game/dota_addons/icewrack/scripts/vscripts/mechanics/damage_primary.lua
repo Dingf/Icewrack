@@ -24,6 +24,7 @@ require("mechanics/effect_lifesteal")
 require("mechanics/effect_manashield")
 require("mechanics/effect_secondwind")
 require("visuals/msg_fx")
+require("visuals/damage_visuals")
 require("ext_entity")
 require("npc")
 
@@ -49,7 +50,6 @@ local function ApplyDamageEffect(hVictim, hAttacker, nDamageType, fDamage, fEffe
 		ApplyWeaken(hVictim, hAttacker, fDamagePercentHP)
 	end
 end
-
 
 function DealPrimaryDamage(self, keys)
 	local hVictim = keys.target
@@ -135,6 +135,7 @@ function DealPrimaryDamage(self, keys)
 					hVictim:DetectEntity(hAttacker, IW_COMBAT_LINGER_TIME)
 					hVictim:AddThreat(hAttacker, fDamageAmount + fBonusThreat, true)
 				end
+				CreateDamageVisuals(hVictim, nDamageType, bIsCrit)
 				hVictim:ModifyHealth(math.max(0, hVictim:GetHealth() - fDamageAmount), hAttacker, true, 0)
 				hVictim:SpendStamina(0)
 				bDamageResult = true
@@ -165,8 +166,8 @@ function DealAttackDamage(self, keys)
 		local fDamagePercent = (keys.Percent or 100)/100.0
 		keys.damage = {}
 		for k,v in pairs(stIcewrackDamageTypeEnum) do
-			local fMinDamage = (bIsUnarmed and hSource:GetDamageMin(v) or hSource:GetBaseDamageMin(v)) * fDamagePercent
-			local fMaxDamage = (bIsUnarmed and hSource:GetDamageMax(v) or hSource:GetBaseDamageMax(v)) * fDamagePercent
+			local fMinDamage = hSource:GetDamageMin(v) * fDamagePercent
+			local fMaxDamage = hSource:GetDamageMax(v) * fDamagePercent
 			--Strength bonus physical attack damage
 			if v >= IW_DAMAGE_TYPE_CRUSH and v <= IW_DAMAGE_TYPE_PIERCE then
 				fMinDamage = fMinDamage * (1.0 + hAttacker:GetAttributeValue(IW_ATTRIBUTE_STRENGTH)/100.0)
@@ -182,10 +183,12 @@ function DealAttackDamage(self, keys)
 		if keys.CanDodge then
 			local fBonusAccuracy = keys.BonusAccuracy or 0
 			if not PerformAccuracyCheck(hVictim, hAttacker, fBonusAccuracy) then
-				hVictim:DetectEntity(hAttacker, IW_COMBAT_LINGER_TIME)
-				hVictim:AddThreat(hAttacker, fTotalDamage * 0.25, true)
-				ShowMissMessage(hAttacker)
-				return 0
+				if IsValidNPCEntity(hVictim) then
+					hVictim:DetectEntity(hAttacker, IW_COMBAT_LINGER_TIME)
+					hVictim:AddThreat(hAttacker, fTotalDamage * 0.25, true)
+				end
+				ShowMissMessage(hVictim)
+				return false
 			end
 		end
 		return DealPrimaryDamage(self, keys)
