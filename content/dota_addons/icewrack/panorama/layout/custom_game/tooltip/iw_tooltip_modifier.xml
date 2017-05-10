@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/tooltip/iw_tooltip_modifier.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/tooltip/iw_tooltip_modifier.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="TooltipModifierRoot" ontooltiploaded="OnTooltipModifierLoad()">
+		<Label hittest="false" class="TooltipModifierTitle" id="Title" />
+		<Panel hittest="false" class="TooltipModifierDivider" />
+		<Label hittest="false" html="true" class="TooltipModifierDescriptionLabel" id="Description" />
+	</Panel>
+</root>

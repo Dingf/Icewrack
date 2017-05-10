@@ -293,10 +293,7 @@
 			"Properties"			{}
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
 			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_TOOLTIP"	"5.0"
-			}
+			"DatadrivenProperties"		{}
 			"DatadrivenEvents"
 			{
 				"MODIFIER_EVENT_ON_INTERVAL_THINK"
@@ -306,83 +303,16 @@
 					{
 						"ScriptFile"	"scripts/vscripts/mechanics/damage_over_time.lua"
 						"Function"	"OnIntervalThink"
-						"Damage"	"5.0%"
+						"Damage"	"%burn_damage"
 						"DamageType"	"IW_DAMAGE_TYPE_FIRE"
+						"UsePercent"	"1"
 						"Interval"	"0.1"
 					}
 				}
 			}
 		}
 
-		"modifier_status_burning_elite"
-		{
-			"IsDebuff"			"1"
-			"IsDispellable"			"1"
-			"Duration"			"5.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_BURNING"
-
-			"VisualEffect"			"particles/generic_gameplay/generic_burning_debuff.vpcf"
-			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
-			"SoundEffect"			"Icewrack.BurningLoop"
-
-			"Properties"			{}
-			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_TOOLTIP"	"2.0"
-			}
-			"DatadrivenEvents"
-			{
-				"MODIFIER_EVENT_ON_INTERVAL_THINK"
-				{
-					"ThinkInterval"		"0.1"
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/mechanics/damage_over_time.lua"
-						"Function"	"OnIntervalThink"
-						"Damage"	"2.0%"
-						"DamageType"	"IW_DAMAGE_TYPE_FIRE"
-						"Interval"	"0.1"
-					}
-				}
-			}
-		}
-
-		"modifier_status_burning_boss"
-		{
-			"IsDebuff"			"1"
-			"IsDispellable"			"1"
-			"Duration"			"5.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_BURNING"
-
-			"VisualEffect"			"particles/generic_gameplay/generic_burning_debuff.vpcf"
-			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
-			"SoundEffect"			"Icewrack.BurningLoop"
-
-			"Properties"			{}
-			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_TOOLTIP"	"1.0"
-			}
-			"DatadrivenEvents"
-			{
-				"MODIFIER_EVENT_ON_INTERVAL_THINK"
-				{
-					"ThinkInterval"		"0.1"
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/mechanics/damage_over_time.lua"
-						"Function"	"OnIntervalThink"
-						"Damage"	"1.0%"
-						"DamageType"	"IW_DAMAGE_TYPE_FIRE"
-						"Interval"	"0.1"
-					}
-				}
-			}
-		}
+		
 	}
 
 	"status_chill"

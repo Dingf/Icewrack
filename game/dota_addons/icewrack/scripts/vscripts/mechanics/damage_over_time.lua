@@ -22,19 +22,10 @@ function OnIntervalThink(self, keys)
 	end
 	
 	if not self._fBaseDamage then
-		local fBaseDamage = keys.Damage or 0.0;
-		if type(fBaseDamage) == "string" then
-			local szSuffix = string.sub(fBaseDamage, string.len(fBaseDamage), -1)
-			if szSuffix == "%" then
-				fBaseDamage = tonumber(string.sub(fBaseDamage, 0, -2))
-				fBaseDamage = fBaseDamage/100.0 * keys.target:GetMaxHealth()
-			end
-			if type(fBaseDamage) ~= "number" then
-				LogMessage("Failed to parse damage value \"" .. keys.Damage .. "\" for modifier \"" .. self:GetName() .. "\"", LOG_SEVERITY_WARNING)
-				return
-			end
+		self._fBaseDamage = (type(keys.Damage) == "number") and keys.Damage or 0.0
+		if keys.UsePercent and keys.UsePercent ~= 0 then
+			self._fBaseDamage = self._fBaseDamage/100.0 * keys.target:GetMaxHealth()
 		end
-		self._fBaseDamage = fBaseDamage
 	end
 	
 	if not self._fDamageInterval then

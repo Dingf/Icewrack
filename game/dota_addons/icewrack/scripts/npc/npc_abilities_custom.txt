@@ -116,8 +116,6 @@
 		"Modifiers"
 		{
 			"modifier_status_bleed"				"LUA_MODIFIER_NO_TRIGGER"
-			"modifier_status_bleed_elite"			"LUA_MODIFIER_NO_TRIGGER"
-			"modifier_status_bleed_boss"			"LUA_MODIFIER_NO_TRIGGER"
 		}
 	}
 

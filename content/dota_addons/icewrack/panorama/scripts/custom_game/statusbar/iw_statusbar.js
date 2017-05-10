@@ -21,7 +21,6 @@ function UpdateStatusBarEntity(nEntityIndex)
 			continue;
 
 		var szModifierName = Buffs.GetName(nEntityIndex, nBuffIndex);
-		var szTextureName = Buffs.GetTexture(nEntityIndex, nBuffIndex);
 		var nLastEntityIndex = $.GetContextPanel().GetAttributeInt("last_entindex", -1);
 		if (nBuffCount >= $.GetContextPanel()._tBuffIcons.length)
 		{

@@ -277,6 +277,19 @@ local function OnModifierCreatedDefault(self, keys)
 			keys = tModifierArgsTable[tostring(self:RetrieveModifierID())]
 			if keys then RecordModifierArgs(self, keys) end
 		end
+		
+		local tModifierStringBuilder = {}
+		for k,v in pairs(keys) do
+			if k ~= "texture" then
+				table.insert(tModifierStringBuilder, k)
+				table.insert(tModifierStringBuilder, "=")
+				table.insert(tModifierStringBuilder, v)
+				table.insert(tModifierStringBuilder, " ")
+			end
+		end
+		table.insert(tModifierStringBuilder, "texture=")
+		table.insert(tModifierStringBuilder, self._szTextureName)
+		self._szTextureArgsString = table.concat(tModifierStringBuilder, "")
 	elseif IsServer() and IsValidInstance(hTarget) then
 		self = CExtModifier(CInstance(self))
 		RecordModifierArgs(self, keys)
@@ -368,6 +381,10 @@ function OnRefresh(self)
 	for k,v in ipairs(self._tOnRefreshList) do
 		v(self)
 	end
+end
+
+function GetTexture(self)
+	return self._szTextureArgsString
 end
 
 local function ParseDatadrivenStates(hLuaModifier, tLinkLuaModifierTemplate)
@@ -577,11 +594,8 @@ for k,v in pairs(stExtModifierData) do
 				hLuaModifier.GetEffectAttachType = function() return hLuaModifier._nVisualAttachType end
 			end
 			
-			if tLinkLuaModifierTemplate.Texture then
-				hLuaModifier.GetTexture = function() return tLinkLuaModifierTemplate.Texture end
-			else
-				hLuaModifier.GetTexture = function() return k end
-			end
+			hLuaModifier._szTextureName = tLinkLuaModifierTemplate.Texture or k
+			hLuaModifier.GetTexture = GetTexture
 		else
 			hLuaModifier.ApplyPropertyValues = ApplyPropertyValues
 			hLuaModifier.RemovePropertyValues = RemovePropertyValues

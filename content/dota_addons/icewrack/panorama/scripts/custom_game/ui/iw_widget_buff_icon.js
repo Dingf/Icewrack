@@ -6,13 +6,18 @@ function OnBuffIconMouseOver()
 	var nBuffIndex = $.GetContextPanel().GetAttributeInt("buffindex", -1);
 	if ((nEntityIndex !== -1) && (nBuffIndex !== -1))
 	{
-		$.DispatchEvent("DOTAShowBuffTooltip", $.GetContextPanel(), nEntityIndex, nBuffIndex, Entities.IsEnemy(nEntityIndex));
+		var szTooltipArgs = "buffindex=" + nBuffIndex + "&entindex=" + nEntityIndex;
+		$.DispatchEvent("UIShowCustomLayoutParametersTooltip", "ModifierTooltip", "file://{resources}/layout/custom_game/tooltip/iw_tooltip_modifier.xml", szTooltipArgs);
+		
+		
+		//$.DispatchEvent("DOTAShowBuffTooltip", $.GetContextPanel(), nEntityIndex, nBuffIndex, Entities.IsEnemy(nEntityIndex));
 	}
 }
 
 function OnBuffIconMouseOut()
 {
-	$.DispatchEvent("DOTAHideBuffTooltip");
+	$.DispatchEvent("UIHideCustomLayoutTooltip", "ModifierTooltip");
+	//$.DispatchEvent("DOTAHideBuffTooltip");
 }
 
 function UpdateBuffIcon(hPanel)
@@ -69,6 +74,14 @@ function OnBuffIconSetValue(hContextPanel, tArgs)
 	var nBuffIndex = tArgs.buffindex;
 	var szModifierName = Buffs.GetName(nEntityIndex, nBuffIndex);
 	var szTextureName = Buffs.GetTexture(nEntityIndex, nBuffIndex);
+	
+    var szTextureRegex = /texture=(\w+)/g;
+	var tResults = szTextureRegex.exec(szTextureName);
+	if (tResults)
+	{
+		szTextureName = tResults[1];
+	}
+	
 	hContextPanel.FindChildTraverse("ModifierTexture").SetImage("file://{images}/spellicons/" + szTextureName + ".png");
 	hContextPanel.SetAttributeString("modifier_name", szModifierName);
 	hContextPanel.SetAttributeInt("entindex", nEntityIndex);

@@ -8,6 +8,7 @@ function iw_axe_battle_hunger:OnToggle()
 			lifesteal = self:GetSpecialValueFor("lifesteal"),
 			second_wind = self:GetSpecialValueFor("second_wind"),
 			attack_speed = self:GetSpecialValueFor("attack_speed"),
+			health_loss = self:GetSpecialValueFor("health_loss"),
 		}
 		hEntity:AddNewModifier(hEntity, self, "modifier_iw_axe_battle_hunger", tModifierArgs)
 	else

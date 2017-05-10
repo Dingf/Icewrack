@@ -2,17 +2,17 @@ function ApplyBurning(hVictim, hAttacker)
 	local hModifier = hVictim:FindModifierByName("modifier_status_wet")
 	if not hModifier then
 		local nUnitClass = hVictim:GetUnitClass()
-		local szModifierName = "modifier_status_burning"
+		local fBurnPercent = 5.0
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
-			szModifierName = "modifier_status_burning_elite"
+			fBurnPercent = 2.0
 		elseif nUnitClass == IW_UNIT_CLASS_BOSS or nUnitClass == IW_UNIT_CLASS_ACT_BOSS then
-			szModifierName = "modifier_status_burning_boss"
+			fBurnPercent = 1.0
 		end
 		local hModifier = hVictim:FindModifierByName(szModifierName)
 		if hModifier then
 			hModifier:ForceRefresh()
 		else
-			AddModifier("status_burning", szModifierName, hVictim, hAttacker)
+			AddModifier("status_burning", "modifier_status_burning", hVictim, hAttacker, { burn_damage=fBurnPercent })
 		end
 	end
 end

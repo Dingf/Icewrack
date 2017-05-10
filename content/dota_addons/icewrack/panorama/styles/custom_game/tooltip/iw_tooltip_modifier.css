@@ -1,0 +1,28 @@
+.TooltipModifierRoot
+{
+	width: 320px;
+	flow-children: down;
+}
+
+.TooltipModifierTitle
+{
+	color: #ffffff;
+	font-size: 18px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+}
+
+.TooltipModifierDivider
+{
+	height: 1px;
+	width: 100%;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	background-color: #ffffff20;
+}
+
+.TooltipModifierDescriptionLabel
+{
+	color: #ffffff80;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}

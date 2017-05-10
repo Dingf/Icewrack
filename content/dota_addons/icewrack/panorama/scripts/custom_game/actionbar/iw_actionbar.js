@@ -180,7 +180,6 @@ function UpdateActionBarBuffs(nEntityIndex)
 			continue;
 		
 		var szModifierName = Buffs.GetName(nEntityIndex, nBuffIndex);
-		var szTextureName = Buffs.GetTexture(nEntityIndex, nBuffIndex);
 		if (nBuffCount >= tBuffIcons.length)
 		{
 			var hIcon = CreateBuffIcon(hContainer, "BuffIcon" + (nBuffCount + 1), nEntityIndex, nBuffIndex);
