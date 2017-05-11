@@ -94,10 +94,20 @@ function OnTooltipAbilityLoad()
 		$("#ManaCost").visible = (nManaCost > 0);
 		$("#ManaLabel").text = nManaCost.toFixed(0) + "";
 		
+		var nStaminaCost = 0;
+		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
 		var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
-		var tSpellData = tEntitySpellbook.Spells[nAbilityIndex];
-		var nStaminaCost = tSpellData ? tSpellData.stamina : 0;
-		nStaminaCost *= tEntityData ? tEntityData.fatigue : 1.0;
+		if (tEntityData && tEntitySpellbook)
+		{
+			var tSpellData = tEntitySpellbook.Spells[nAbilityIndex];
+			nStaminaCost = tSpellData ? tSpellData.stamina : 0;
+			nStaminaCost *= tEntityData.fatigue;
+		}
+		else
+		{
+			var tAbilityTemplate = CustomNetTables.GetTableValue("abilities", szAbilityName);
+			nStaminaCost = tAbilityTemplate.stamina;
+		}
 		$("#StaminaCost").visible = (nStaminaCost > 0);
 		$("#StaminaLabel").text = nStaminaCost.toFixed(0) + "";
 		
@@ -111,8 +121,7 @@ function OnTooltipAbilityLoad()
 		var tSpecialSections = szLocalizedText.match(/[^{}]+(?=})/g);
 		var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
 		
-		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-		var fSpellpower = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER);
+		var fSpellpower = tEntityData ? GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER) : 0;
 		var szFormattedText = "";
 		for (var i = 0; i < tTextSections.length; i++)
 		{
