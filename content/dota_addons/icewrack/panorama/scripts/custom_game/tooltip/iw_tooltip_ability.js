@@ -126,10 +126,14 @@ function OnTooltipAbilityLoad()
 		for (var i = 0; i < tTextSections.length; i++)
 		{
 			szFormattedText += tTextSections[i];
-			if (tSpecialSections[i])
+			if (tSpecialSections && tSpecialSections[i])
 			{
 				var tAbilitySpecials = tSpecialSections[i].split("|");
 				var fSpecialBaseValue = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecials[0]);
+				if (tAbilitySpecials[0] === "r")
+				{
+					fSpecialBaseValue = Abilities.GetAOERadius(nAbilityIndex)/100.0;
+				}
 				if (typeof(fSpecialBaseValue) === "number")
 				{
 					var fSpecialBonusValue = 0;
@@ -159,6 +163,27 @@ function OnTooltipAbilityLoad()
 		}
 		
 		$("#Description").text = szFormattedText;
+		$("#NotesContainer").visible = GameUI.IsAltDown();
+		if (GameUI.IsAltDown())
+		{
+			var hNotesContainer = $("#NotesContainer");
+			hNotesContainer.RemoveAndDeleteChildren();
+			for (var i = 0;; i++)
+			{
+				var szNoteName = "DOTA_Tooltip_Ability_" + szAbilityName + "_Note" + i;
+				var szLocalizedNoteText = $.Localize(szNoteName);
+				if (szLocalizedNoteText !== szNoteName)
+				{
+					var hNoteLabel = $.CreatePanel("Label", hNotesContainer, "Note" + i);
+					hNoteLabel.AddClass("TooltipAbilityNoteLabel");
+					hNoteLabel.text = "• " + szLocalizedNoteText;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
 		
 		var szAbilityTextureName = nAbilityIndex ? Abilities.GetAbilityTextureName(nAbilityIndex) : tAbilityTemplate.texture;
 		$("#Icon").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");

@@ -7,6 +7,7 @@ require("aam")
 IW_NPC_DEFAULT_THREAT_RAIUS = 1800.0	--The maximum threat falloff radius
 IW_NPC_DEFAULT_SHARE_RADIUS = 900.0		--The radius at which detection/threat is shared
 IW_NPC_VISION_DISTANCE_MIN = 128.0		--The minimum visibility distance; distances closer than this value will not increase visibility further
+IW_NPC_TOUCH_RADIUS = 8.0				--The distance at which an entity will be detected due to physical contact
 IW_NPC_NOISE_TIME_MIN = 0.5				--The minimum amount of time that a noise point will remain 
 
 local stNPCBehaviorAggressiveEnum =
@@ -45,6 +46,14 @@ local stNPCDetectionTime =
 	[IW_DIFFICULTY_UNTHAW] = 10.0
 }
 
+local stNPCThreatDecayRate =
+{
+	[IW_DIFFICULTY_EASY] = 1.0,
+	[IW_DIFFICULTY_NORMAL] = 1.0,
+	[IW_DIFFICULTY_HARD] = 0.995,
+	[IW_DIFFICULTY_UNTHAW] = 0.99,
+}
+
 local stNPCFleeThreshold =
 {
 	[IW_NPC_BEHAVIOR_SAFETY_RECKLESS] = 0,
@@ -62,6 +71,7 @@ local stNPCAvoidanceWeight =
 	[IW_NPC_BEHAVIOR_SAFETY_COWARDLY] = 5.0,
 	[IW_NPC_BEHAVIOR_SAFETY_PACIFIST] = 100.0,
 }
+
 
 local stExtEntityData = LoadKeyValues("scripts/npc/npc_units_extended.txt")
 local stWaypointData = LoadKeyValues("scripts/npc/maps/waypoints_" .. GetMapName() .. ".txt")
@@ -254,6 +264,7 @@ function CIcewrackNPCEntity:NPCThink()
 		local nVisionMask = self._nVisionMask
 		local nVisionRange = self:GetCurrentVisionRange()
 		local fVisionDetect = self._fVisionDetect
+		local nDifficulty = GameRules:GetCustomGameDifficulty()
 		
 		local hNearbyEntities = Entities:FindAllInSphere(self:GetAbsOrigin(), nVisionRange * 2.0)
 		for k,v in pairs(hNearbyEntities) do
@@ -266,19 +277,18 @@ function CIcewrackNPCEntity:NPCThink()
 					fVisionMultiplier = fVisionMultiplier * 2.0
 				end
 				fVisionValue = fVisionValue * fVisionMultiplier
-				if fVisionValue > fVisionDetect then
-					
+				if fVisionValue > fVisionDetect or CalcDistanceBetweenEntityOBB(self, hEntity) < IW_NPC_TOUCH_RADIUS then
 	DebugDrawSphere(hEntity:GetAbsOrigin(), Vector(0, 255, 0), 255, 48.0, true, 0.1)
-					self:DetectEntity(hEntity, stNPCDetectionTime[GameRules:GetCustomGameDifficulty()])
+					self:DetectEntity(hEntity, stNPCDetectionTime[nDifficulty])
 				end
 			end
 		end
 		
 		for k,v in pairs(self._tThreatTable) do
 			if v < 1 then
-				self._tThreatTable[k] = nil
+				self._tThreatTable[k] = 1
 			else
-				self._tThreatTable[k] = v * 0.99
+				self._tThreatTable[k] = v * stNPCThreatDecayRate[nDifficulty]
 			end
 		end
 	end
@@ -656,10 +666,10 @@ end
 
 local stNPCActionTable =
 {
-	--[EvaluateAttackTargetDesire] = OnAttackTarget,
-	--[EvaluateInvestigateNoiseDesire] = OnInvestigateNoise,
-	--[EvaluateFleeFromEnemiesDesire] = OnFleeFromEnemies,
-	--[EvaluateFleeAvoidanceZoneDesire] = OnFleeAvoidanceZone,
+	[EvaluateAttackTargetDesire] = OnAttackTarget,
+	[EvaluateInvestigateNoiseDesire] = OnInvestigateNoise,
+	[EvaluateFleeFromEnemiesDesire] = OnFleeFromEnemies,
+	[EvaluateFleeAvoidanceZoneDesire] = OnFleeAvoidanceZone,
 	[EvaluateNPCMovementDesire] = OnNPCMovement,
 }
 

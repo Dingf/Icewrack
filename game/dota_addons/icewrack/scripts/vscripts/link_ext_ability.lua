@@ -133,11 +133,7 @@ function CExtAbilityLinker:GetAOERadius()
 			return hBaseFunction(self)
 		end
 	end
-	if IsServer() then
-		return self._nAbilityAOERadius
-	else
-		return self.BaseClass.GetAOERadius(self)
-	end
+	return self._nAbilityAOERadius
 end
 
 function CExtAbilityLinker:GetCastRange(vLocation, hTarget)

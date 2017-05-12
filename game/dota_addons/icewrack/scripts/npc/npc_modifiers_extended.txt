@@ -579,24 +579,6 @@
 
 
 
-
-	"iw_bounty_hunter_trapjaw"
-	{
-		"modifier_lolz"
-		{
-			"Properties" { }
-
-			"IsHidden"			"1"
-			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE"
-			"DatadrivenStates" { }
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_HEALTH_BONUS"		"100"
-			}
-			"DatadrivenEvents" { }
-		}
-	}
-
 	"item_test"
 	{
 		"modifier_item_test"

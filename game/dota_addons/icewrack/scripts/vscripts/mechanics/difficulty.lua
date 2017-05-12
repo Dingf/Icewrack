@@ -23,6 +23,7 @@
 	  *Improved NPC tactics (TODO)
 	  *Additional spawns which exist only in Hard/Unthaw difficulty (TODO)
 	  *Experience gain reduced by 25% (TODO)	--Note that this is to accomodate for the additional spawns, so there will be 4/3 times as many mobs
+	  *Threat decays at a rate of .5% every 0.1s
 	
 	UNTHAW
 	  *100 Starting Gold
@@ -33,6 +34,7 @@
 	  *Experience gain reduced by 50% (TODO)	--Note that this is to accomodate for the additional spawns, so there will be 2 times as many mobs
 	  *Party members can be shattered
 	  *You may only save at an expedition base camp; quicksave/load is disabled (TODO)
+	  *Threat decays at a rate of 1% every 0.1s
 ]]
 
 IW_DIFFICULTY_EASY = 0

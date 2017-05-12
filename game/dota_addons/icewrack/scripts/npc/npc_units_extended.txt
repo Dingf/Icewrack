@@ -14,7 +14,7 @@
 		"MaxResistLightning"		"75"
 		"MaxResistDeath"		"75"
 		"LifestealRate"			"0.1"
-		"VisibilityBase"		"1.0"
+		"VisibilityFlat"		"1.0"
 	}
 
 	"npc_dota_hero_axe"
@@ -50,6 +50,7 @@
 		"SkillSurvival"			"4"
 
 		"MovementNoiseFlat"		"5"
+		"VisibilityFlat"		"2.0"
 	}
 
 	"npc_dota_hero_dragon_knight"
@@ -89,6 +90,7 @@
 		"TalentSmithing"		"2"
 
 		"MovementNoiseFlat"		"5"
+		"VisibilityFlat"		"1.5"
 	}
 
 	"npc_dota_hero_drow_ranger"
@@ -243,6 +245,7 @@
 		"TalentHeavyArmor"		"2"
 
 		"MovementNoiseFlat"		"5"
+		"VisibilityFlat"		"1.5"
 	}
 
 	"npc_dota_hero_legion_commander"

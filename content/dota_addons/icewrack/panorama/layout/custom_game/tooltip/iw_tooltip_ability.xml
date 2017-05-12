@@ -21,6 +21,7 @@
 		</Panel>
 		<Panel hittest="false" class="TooltipAbilityDivider" />
 		<Label hittest="false" html="true" class="TooltipAbilityDescriptionLabel" id="Description" />
+		<Panel hittest="false" html="true" class="TooltipAbilityNotesContainer" id="NotesContainer" />
 		
 		<Panel hittest="false" class="TooltipAbilityCostContainer">
 			<Panel hittest="false" class="TooltipAbilityCost" id="ManaCost">

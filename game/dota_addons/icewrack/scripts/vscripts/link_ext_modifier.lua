@@ -280,7 +280,7 @@ local function OnModifierCreatedDefault(self, keys)
 		
 		local tModifierStringBuilder = {}
 		for k,v in pairs(keys) do
-			if k ~= "texture" then
+			if k ~= "texture" and type(v) ~= "table" then
 				table.insert(tModifierStringBuilder, k)
 				table.insert(tModifierStringBuilder, "=")
 				table.insert(tModifierStringBuilder, v)
@@ -320,22 +320,26 @@ local function OnModifierCreatedDefault(self, keys)
 		CullModifierStacks(self)
 		RefreshModifier(self)
 		
-		if self:IsDebuff() then
-			local hCaster = self:GetCaster()
-			hCaster:SetAttacking(hTarget)
-		end
-		
-		local tTargetModifierTable = hTarget._tExtModifierTable
-		local fDuration = self:GetDuration()
-		if fDuration > 0 then
-			for k,v in pairs(tTargetModifierTable) do
-				if v:GetRemainingTime() > fDuration then
-					table.insert(tTargetModifierTable, k, self)
-					return
+		if IsValidExtendedEntity(hTarget) then
+			if self:IsDebuff() then
+				local hCaster = self:GetCaster()
+				hCaster:SetAttacking(hTarget)
+			end
+			
+			local tTargetModifierTable = hTarget._tExtModifierTable
+			local fDuration = self:GetDuration()
+			if fDuration > 0 then
+				for k,v in pairs(tTargetModifierTable) do
+					if v:GetRemainingTime() > fDuration then
+						table.insert(tTargetModifierTable, k, self)
+						hTarget:RefreshEntity()
+						return
+					end
 				end
 			end
+			table.insert(tTargetModifierTable, self)
+			hTarget:RefreshEntity()
 		end
-		table.insert(tTargetModifierTable, self)
 	end
 end
 
@@ -343,12 +347,15 @@ local function OnModifierDestroyDefault(self)
 	local hTarget = self:GetParent()
 	if IsServer() and IsValidInstance(hTarget) then
 		RemovePropertyValues(self)
-		local tTargetModifierTable = hTarget._tExtModifierTable
-		for k,v in pairs(tTargetModifierTable) do
-			if v == self then
-				table.remove(tTargetModifierTable, k)
-				break
+		if IsValidExtendedEntity(hTarget) then
+			local tTargetModifierTable = hTarget._tExtModifierTable
+			for k,v in pairs(tTargetModifierTable) do
+				if v == self then
+					table.remove(tTargetModifierTable, k)
+					break
+				end
 			end
+			hTarget:RefreshEntity()
 		end
 		
 		if self._hBuffDummy then self._hBuffDummy:RemoveSelf() end

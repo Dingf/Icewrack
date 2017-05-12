@@ -12,8 +12,8 @@ function modifier_internal_stamina:GetModifierAttackSpeedBonus_Constant(args)
 	local hEntity = self:GetParent()
 	local fStaminaPercent = hEntity:GetStamina()/hEntity:GetMaxStamina()
 	if fStaminaPercent < 0.1 then
-		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -100)
-		return -100
+		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -150)
+		return -150
 	elseif fStaminaPercent < 0.25 then
 		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -50)
 		return -50
@@ -73,7 +73,6 @@ function modifier_internal_stamina:OnIntervalThink()
 				if hEntity:IsMoving() then
 					fStaminaRegenPerSec = fStaminaRegenPerSec * 0.5
 				end
-				fStaminaRegenPerSec = 9999999.0
 				hEntity:SetStamina(fStamina + fStaminaRegenPerSec/30.0)
 				hEntity._fLastStaminaPercent = fStamina/fMaxStamina
 			end

@@ -26,11 +26,12 @@ function OnCharacterActivate()
 		var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
 		if (tEntitySpellbook)
 		{
-			var tEntitySpellList = tEntitySpellbook.Spells
+			//var tEntitySpellList = tEntitySpellbook.Spells
+			var tEntitySpellBinds = tEntitySpellbook.Binds
 			//var tEntitySpellUnits = tEntitySpellbook.Units
 			
 			var nSpellbookSize = 0;
-			for (var k in tEntitySpellList)
+			for (var k in tEntitySpellBinds)
 				nSpellbookSize++;
 			
 			if (nSpellbookSize > tSkillIcons.length)
@@ -44,10 +45,10 @@ function OnCharacterActivate()
 				}
 			}
 		
-			for (var k in tEntitySpellList)	
+			for (var k in tEntitySpellBinds)	
 			{
 				var hIcon = $("#SkillIcon" + (++nNumSkillIcons));
-				var nAbilityIndex = parseInt(k);
+				var nAbilityIndex = tEntitySpellBinds[k];
 				/*for (var k2 in tEntitySpellUnits)
 				{
 					nAbilityIndex = Entities.GetAbilityByName(tEntitySpellUnits[k2], k);

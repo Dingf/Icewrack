@@ -171,6 +171,7 @@ CExtEntity = setmetatable({}, { __call =
 			hEntity:SetNightTimeVisionRange(hEntity:GetNightTimeVisionRange() * fVisionMultiplier)
 		end
 		
+		hEntity._tRefreshList = {}
 		hEntity:AddNewModifier(hEntity, shItemAttackModifier, "modifier_internal_attack", {})
 		hEntity:AddNewModifier(hEntity, shItemStaminaModifier, "modifier_internal_stamina", {})
 		hEntity:AddNewModifier(hEntity, shItemAttributeModifier, "modifier_internal_attribute_bonus", {})
@@ -196,7 +197,6 @@ CExtEntity = setmetatable({}, { __call =
 			hEntity:SetThink("CurrentActionThink", hEntity, "CurrentAction", 0.03)
 		end
 		
-		hEntity._tRefreshList = {}
 		FireGameEventLocal("iw_ext_entity_load", { entindex = hEntity:entindex() })
 		
 		if hEntity.OnSpawn then hEntity:OnSpawn() end

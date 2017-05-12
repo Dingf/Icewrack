@@ -6,16 +6,7 @@
 
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_AOE"
 		
-		"StaminaCost"		"30"
-		
-		"AbilityCastAnimation"
-		{
-			"npc_dota_hero_axe"
-			{
-				"Animation"		"ACT_DOTA_OVERRIDE_ABILITY_1"
-				"Rate"			"1.0"
-			}
-		}
+		"StaminaCost"		"0"
 	}
 	
 	"iw_axe_battle_hunger"

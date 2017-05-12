@@ -259,14 +259,25 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
 		"AbilityTextureName"			"axe_berserkers_call"
 
-
 		"MaxLevel"				"1"
-		"AbilityCastPoint"			"0.4"
+		"AbilityAOERadius"			"300"
 
-		"AbilityCooldown"			"24.0"
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"threat"			"400"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"threat_bonus"			"2.0"
+			}
+		}
 	}
 
 	"iw_axe_battle_hunger"
@@ -366,11 +377,6 @@
 	
 		"AbilityCooldown"			"10.0"
 		"AbilityManaCost"               	"15"
-
-		"Modifiers"
-		{
-			"modifier_lolz"			"LUA_MODIFIER_ON_UPGRADE"
-		}
 
 	}
 

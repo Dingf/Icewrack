@@ -2,6 +2,7 @@ if IsServer() and not modifier_internal_attack then
 
 require("ext_entity")
 require("ext_item")
+require("npc")
 require("mechanics/accuracy")
 
 local shMissModifier = CreateItem("internal_miss_debuff", nil, nil)
