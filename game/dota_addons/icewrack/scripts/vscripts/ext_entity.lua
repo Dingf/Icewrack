@@ -176,10 +176,7 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity:AddNewModifier(hEntity, shItemStaminaModifier, "modifier_internal_stamina", {})
 		hEntity:AddNewModifier(hEntity, shItemAttributeModifier, "modifier_internal_attribute_bonus", {})
 		hEntity:AddNewModifier(hEntity, shItemMovementNoise, "modifier_internal_movement_noise", {})
-		
-		if hEntity:IsRealHero() then
-			hEntity:SetThink(function() hEntity:AddNewModifier(hEntity, shItemSkillModifier, "modifier_internal_skill_bonus", {}) end, "EntitySkillBonusThink", 0.03)
-		end
+		hEntity:AddNewModifier(hEntity, shItemSkillModifier, "modifier_internal_skill_bonus", {})
 		
 		if tExtEntityTemplate.IsPlayableHero == 1 then
 			hEntity._tNetTable =

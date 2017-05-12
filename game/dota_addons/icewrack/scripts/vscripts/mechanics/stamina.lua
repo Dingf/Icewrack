@@ -5,7 +5,6 @@ modifier_internal_stamina = class({})
 modifier_internal_stamina._tDeclareFunctionList =
 {
 	MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
-	MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
 }
 
 function modifier_internal_stamina:GetModifierAttackSpeedBonus_Constant(args)
@@ -13,31 +12,34 @@ function modifier_internal_stamina:GetModifierAttackSpeedBonus_Constant(args)
 	local fStaminaPercent = hEntity:GetStamina()/hEntity:GetMaxStamina()
 	if fStaminaPercent < 0.1 then
 		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -150)
+		self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT, -50)
+		if IsServer() and self._nLastStaminaLevel ~= 3 then
+			CTimer(0.03, CExtEntity.RefreshEntity, hEntity)
+			self._nLastStaminaLevel = 3
+		end
 		return -150
 	elseif fStaminaPercent < 0.25 then
 		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -50)
+		self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT, -25)
+		if IsServer() and self._nLastStaminaLevel ~= 2 then
+			CTimer(0.03, CExtEntity.RefreshEntity, hEntity)
+			self._nLastStaminaLevel = 2
+		end
 		return -50
 	else
-		return 0
-	end
-end
-
-function modifier_internal_stamina:GetModifierMoveSpeedBonus_Percentage(args)
-	local hEntity = self:GetParent()
-	if hEntity:GetRunMode() then
-		local fStaminaPercent = hEntity:GetStamina()/hEntity:GetMaxStamina()
-		if fStaminaPercent < 0.1 then
-			return -50
-		elseif fStaminaPercent < 0.25 then
-			return -25
-		else
-			return 0
+		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, 0)
+		self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT, 0)
+		if IsServer() and self._nLastStaminaLevel ~= 1 then
+			CTimer(0.03, CExtEntity.RefreshEntity, hEntity)
+			self._nLastStaminaLevel = 1
 		end
+		return 0
 	end
 end
 
 function modifier_internal_stamina:OnCreated(keys)
 	if IsServer() and IsValidExtendedEntity(self:GetParent()) then
+		self._nLastStaminaLevel = 1
 		self:StartIntervalThink(0.03)
 		self:OnIntervalThink()
 	else

@@ -308,6 +308,10 @@ function CInstance:GetCastSpeed()
 	return self:GetPropertyValue(IW_PROPERTY_CAST_SPEED)
 end
 
+function CInstance:GetSpellpower()
+	return self:GetPropertyValue(IW_PROPERTY_SPELLPOWER)
+end
+
 function CInstance:GetCriticalStrikeChance()
 	return self:GetBasePropertyValue(IW_PROPERTY_CRIT_CHANCE_FLAT) * (1.00 + (self:GetAttributeValue(IW_ATTRIBUTE_CUNNING) * 0.05) + self:GetPropertyValue(IW_PROPERTY_CRIT_CHANCE_PCT)/100.0)
 end

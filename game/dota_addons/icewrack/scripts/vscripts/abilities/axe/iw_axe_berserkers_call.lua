@@ -19,10 +19,10 @@ function iw_axe_berserkers_call:OnSpellStart()
 	end
 	
 	local fRadius = self:GetAOERadius()
-	local fThreatAmount = self:GetSpecialValueFor("threat")
+	local fThreatAmount = self:GetSpecialValueFor("threat") + self:GetSpecialValueFor("threat_bonus") * hEntity:GetSpellpower()
 	local hNearbyEntities = Entities:FindAllInSphere(hEntity:GetAbsOrigin(), self:GetAOERadius())
 	for k,v in pairs(hNearbyEntities) do
-		if v ~= hEntity and IsValidNPCEntity(v) then
+		if v ~= hEntity and IsValidNPCEntity(v) and v:GetTeamNumber() ~= hEntity:GetTeamNumber() then
 			v:AddThreat(hEntity, fThreatAmount, false)
 		end
 	end

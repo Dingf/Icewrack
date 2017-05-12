@@ -263,6 +263,7 @@
 		"AbilityTextureName"			"axe_berserkers_call"
 
 		"MaxLevel"				"1"
+		"AbilityCooldown"			"24.0"
 		"AbilityAOERadius"			"300"
 
 		"AbilitySpecial"

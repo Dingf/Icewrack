@@ -40,7 +40,7 @@ function GetOverviewAccuracy(tSourceData, nEntityIndex)
 {
 	var fBaseAccuracy = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ACCURACY_FLAT) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_AGI_FLAT) * 2.0);
 	var fIncAccuracy = 1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ACCURACY_PCT)/100.0;
-	return Math.floor(fBaseAccuracy * fIncAccuracy);
+	return Math.max(0, Math.floor(fBaseAccuracy * fIncAccuracy));
 }
 
 function GetOverviewCritChance(tSourceData, nEntityIndex)
@@ -97,6 +97,16 @@ function GetOverviewArmorIgnore(tSourceData, nEntityIndex)
 	}
 }
 
+function GetOverviewAttackStaminaCost(tSourceData, nEntityIndex)
+{
+	var fBaseAttackCost = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_SP_FLAT);
+	var fPercentAttackCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_SP_PCT)/100.0;
+	if (fBaseAttackCost > 0.0)
+	{
+		return Math.round(fBaseAttackCost * (1.0 + fPercentAttackCost) * 100)/100.0;
+	}
+}
+
 function GetOverviewArmor(nArmorType, tSourceData, nEntityIndex)
 {
 	var fBaseArmor = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ARMOR_CRUSH_FLAT + nArmorType);
@@ -122,7 +132,7 @@ function GetOverviewDodge(tSourceData, nEntityIndex)
 {
 	var fBaseDodge = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DODGE_FLAT) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_AGI_FLAT) * 1.0);
 	var fIncDodge = 1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DODGE_PCT);
-	return Math.floor(fBaseDodge * fIncDodge);
+	return Math.max(0, Math.floor(fBaseDodge * fIncDodge));
 }
 
 function GetOverviewFatigueMultiplier(tSourceData, nEntityIndex)
@@ -139,6 +149,16 @@ function GetOverviewMovementSpeed(tSourceData, nEntityIndex)
 	fBaseMoveSpeed *= (1.0 - Math.max(0, fFatigueMultiplier))
 	fBaseMoveSpeed *= (1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MOVE_SPEED_PCT)/100)
 	return fBaseMoveSpeed + " (" + (Math.max(fBaseMoveSpeed, 100)/100.0).toFixed(2) + "m/s)";
+}
+
+function GetOverviewRunStaminaCost(tSourceData, nEntityIndex)
+{
+	var fBaseRunCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_RUN_SP_FLAT);
+	var fPercentRunCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_RUN_SP_PCT)/100.0;
+	if (fBaseRunCost > 0.0)
+	{
+		return Math.round(fBaseRunCost * (1.0 + fPercentRunCost) * 100)/100.0 + "/s";
+	}
 }
 
 function GetOverviewPhysicalDefense(tSourceData, nEntityIndex)
@@ -265,7 +285,8 @@ var stOverviewAttackSourceLabelFunctions =
 	"iw_ui_character_overview_chance_chill"  : GetOverviewStatusChance.bind(this, 4),
 	"iw_ui_character_overview_chance_shock"  : GetOverviewStatusChance.bind(this, 5),
 	"iw_ui_character_overview_chance_weaken" : GetOverviewStatusChance.bind(this, 6),
-	"iw_ui_character_overview_armor_ignore"  : GetOverviewArmorIgnore
+	"iw_ui_character_overview_armor_ignore"  : GetOverviewArmorIgnore,
+	"iw_ui_character_overview_attack_cost"   : GetOverviewAttackStaminaCost
 };
 
 var stOverviewDefenseLabelFunctions =
@@ -321,10 +342,10 @@ var stOverviewMiscLabelFunctions =
 	"iw_ui_character_overview_mp_regen"      : GetOverviewManaRegeneration,
 	"iw_ui_character_overview_sp"            : GetOverviewStamina,
 	"iw_ui_character_overview_sp_regen"      : GetOverviewStaminaRegeneration,
-	"iw_ui_character_overview_spellpower"    : GetOverviewRawValue.bind(this, Instance.IW_PROPERTY_SPELLPOWER),
 	"iw_ui_character_overview_fatigue_multi" : GetOverviewFatigueMultiplier,
 	"iw_ui_character_overview_move_speed"    : GetOverviewMovementSpeed,
-	//"iw_ui_character_overview_run_cost"      : GetOverviewRunStaminaCost,
+	"iw_ui_character_overview_run_cost"      : GetOverviewRunStaminaCost,
+	"iw_ui_character_overview_spellpower"    : GetOverviewRawValue.bind(this, Instance.IW_PROPERTY_SPELLPOWER),
 	"iw_ui_character_overview_cast_speed"    : GetOverviewZeroPercent.bind(this, false, Instance.IW_PROPERTY_CAST_SPEED),
 	"iw_ui_character_overview_buff_self"     : GetOverviewBuffDuration.bind(this, Instance.IW_PROPERTY_BUFF_SELF),
 	"iw_ui_character_overview_debuff_self"   : GetOverviewBuffDuration.bind(this, Instance.IW_PROPERTY_DEBUFF_SELF),
