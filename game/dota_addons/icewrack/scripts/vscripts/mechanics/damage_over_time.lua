@@ -48,14 +48,14 @@ function OnIntervalThink(self, keys)
 		local bDamageResult = DealSecondaryDamage(nil, self._tDamageTable)
 		if bDamageResult then
 			self._fDamageRemainder = fDamage - math.floor(fDamage)
+			local fResistance = math.min(1.0, keys.target:GetResistance(self._nDamageType), keys.target:GetMaxResistance(self._nDamageType))
+			if fResistance < 1.0 then
+				self._fDamageRemainder = self._fDamageRemainder / (1.0 - fResistance)
+			end
+			self._fDamageRemainder = self._fDamageRemainder / keys.target:GetDamageEffectiveness()
+			self._fDamageRemainder = self._fDamageRemainder / self:GetCaster():GetDamageModifier(self._nDamageType)
 		else
 			self._fDamageRemainder = fDamage
 		end
 	end
-	local fResistance = math.min(1.0, keys.target:GetResistance(self._nDamageType), keys.target:GetMaxResistance(self._nDamageType))
-	if fResistance < 1.0 then
-		self._fDamageRemainder = self._fDamageRemainder / (1.0 - fResistance)
-	end
-	self._fDamageRemainder = self._fDamageRemainder / keys.target:GetDamageEffectiveness()
-	self._fDamageRemainder = self._fDamageRemainder / self:GetCaster():GetDamageModifier(self._nDamageType)
 end

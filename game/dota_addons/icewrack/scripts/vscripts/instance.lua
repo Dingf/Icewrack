@@ -76,9 +76,9 @@ for k,v in pairs(stIcewrackPropertyEnum) do _G[k] = v end
 
 stIcewrackPropertiesName = 
 {
-	StrengthFlat = 1,                  EnduranceFlat = 2,                 AgilityFlat = 3,                   PerceptionFlat = 4,
+	StrengthFlat = 1,                  EnduranceFlat = 2,                 AgilityFlat = 3,                   CunningFlat = 4,
 	IntelligenceFlat = 5,              WisdomFlat = 6,                    StrengthPercent = 7,               EndurancePercent = 8,
-	AgilityPercent = 9,                PerceptionPercent = 10,            IntelligencePercent = 11,          WisdomPercent = 12,
+	AgilityPercent = 9,                CunningPercent = 10,               IntelligencePercent = 11,          WisdomPercent = 12,
 	MaxHealthPercent = 13,             MaxManaPercent = 14,               MaxStaminaFlat = 15,               MaxStaminaPercent = 16,
 	StaminaRegenFlat = 17,             StaminaRegenPercent = 18,          MaxStaminaPercentRegen = 19,       HealthRegenFlat = 20,
 	HealthRegenPercent = 21,           MaxHealthPercentRegen = 22,        ManaRegenFlat = 23,                ManaRegenPercent = 24,

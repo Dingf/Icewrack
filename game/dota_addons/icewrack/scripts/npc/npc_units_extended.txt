@@ -4,7 +4,6 @@
 	"default"
 	{
 		"ManaRegenFlat"			"0.25"
-		"StaminaUsageRunFlat"		"3"
 		"BaseAttackTime"		"1.7"
 		"BaseCritChance"		"0.05"
 		"BaseCritMultiplier"		"0.5"
@@ -28,8 +27,9 @@
 
 		"EquipFlags"			"58719294"
 
-		"MaxStaminaFlat"		"50"
+		"MaxStaminaFlat"		"90"
 		"StaminaUsageAttackFlat"	"5"
+		"StaminaUsageRunFlat"		"3"
 
 		"BaseAttackTime"		"1.7"
 		"AttackRange"			"100"
@@ -41,13 +41,13 @@
 		"StrengthFlat"			"29"
 		"EnduranceFlat"			"28"
 		"AgilityFlat"			"10"
-		"PerceptionFlat"			"12"
+		"CunningFlat"			"12"
 		"IntelligenceFlat"		"12"
 		"WisdomFlat"			"9"
 
 		"SkillTwoHanded"		"4"
-		"SkillUnarmed"			"4"
-		"SkillSurvival"			"4"
+		"SkillCombat"			"3"
+		"SkillAthletics"		"1"
 
 		"MovementNoiseFlat"		"5"
 		"VisibilityFlat"		"2.0"
@@ -65,7 +65,10 @@
 
 		"EquipFlags"			"58719261"
 
-		"MaxStaminaFlat"		"50"
+		"MaxStaminaFlat"		"110"
+		"StaminaUsageAttackFlat"	"5"
+		"StaminaUsageRunFlat"		"3"
+		"HealthRegenFlat"		"3"
 
 		"BaseAttackTime"		"1.7"
 		"AttackRange"			"100"
@@ -77,17 +80,17 @@
 		"StrengthFlat"			"22"
 		"EnduranceFlat"			"25"
 		"AgilityFlat"			"12"
-		"PerceptionFlat"			"10"
+		"CunningFlat"			"10"
 		"IntelligenceFlat"		"13"
 		"WisdomFlat"			"18"
 
+		"ResistPhysical"		"25"
 		"ResistFire"			"50"
-		"MaxResistFire"			"90"
 
-		"TalentFire"			"2"
-		"TalentOneHanded"		"2"
-		"TalentHeavyArmor"		"3"
-		"TalentSmithing"		"2"
+		"SkillFire"			"2"
+		"SkillOneHanded"		"3"
+		"SkillCombat"			"3"
+		"SkillArmor"			"2"
 
 		"MovementNoiseFlat"		"5"
 		"VisibilityFlat"		"1.5"
@@ -109,7 +112,9 @@
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"300"
 
-		"MaxStaminaFlat"		"50"
+		"MaxStaminaFlat"		"90"
+		"StaminaUsageAttackFlat"	"4"
+		"StaminaUsageRunFlat"		"2"
 
 		"AccuracyFlat"			"80"
 		"DodgeFlat"			"30"
@@ -117,17 +122,18 @@
 		"StrengthFlat"			"15"
 		"EnduranceFlat"			"16"
 		"AgilityFlat"			"25"
-		"PerceptionFlat"			"19"
+		"CunningFlat"			"19"
 		"IntelligenceFlat"		"12"
 		"WisdomFlat"			"13"
 
 		"ResistCold"			"50"
-		"MaxResistCold"			"15"
 
-		"TalentMarksmanship"		"3"
-		"TalentHerbalism"		"2"
-		"TalentWoodworking"		"2"
-		"TalentLeatherworking"		"2"
+		"SkillMarksmanship"		"3"
+		"SkillCombat"			"2"
+		"SkillSurvival"			"2"
+		"SkillPerception"		"2"
+		"SkillAthletics"		"1"
+		"SkillStealth"			"1"
 
 		"MovementNoiseFlat"		"3"
 	}
@@ -144,7 +150,9 @@
 
 		"EquipFlags"			"66582613"
 
-		"MaxStaminaFlat"		"50"
+		"MaxStaminaFlat"		"100"
+		"StaminaUsageAttackFlat"	"3"
+		"StaminaUsageRunFlat"		"2"
 
 		"BaseAttackTime"		"1.7"
 		"AttackRange"			"100"
@@ -156,13 +164,15 @@
 		"StrengthFlat"			"13"
 		"EnduranceFlat"			"15"
 		"AgilityFlat"			"18"
-		"PerceptionFlat"			"24"
+		"CunningFlat"			"24"
 		"IntelligenceFlat"		"21"
 		"WisdomFlat"			"900"
 
-		"TalentOneHanded"		"3"
-		"TalentLightArmor"		"2"
-		"TalentStealth"			"3"
+		"SkillOneHanded"		"2"
+		"SkillCombat"			"1"
+		"SkillPerception"		"3"
+		"SkillStealth"			"3"
+		"SkillThievery"			"2"
 
 		"MovementNoiseFlat"		"2"
 	}
@@ -175,12 +185,13 @@
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
-		"CorpseTime"			"59"
+		"CorpseTime"			"58"
 		"IsPlayableHero"		"1"
 
 		"EquipFlags"			"58191872"
 
 		"MaxStaminaFlat"		"50"
+		"StaminaUsageAttackFlat"	"5"
 		"StaminaUsageRunFlat"		"0"
 
 		"BaseAttackTime"		"1.7"
@@ -195,19 +206,20 @@
 		"StrengthFlat"			"8"
 		"EnduranceFlat"			"10"
 		"AgilityFlat"			"11"
-		"PerceptionFlat"			"23"
+		"CunningFlat"			"23"
 		"IntelligenceFlat"		"33"
 		"WisdomFlat"			"15"
 
-		"ResistFire"			"1000"
-		"MaxResistFire"			"25"
+		"ResistFire"			"90"
+		"MaxResistFire"			"15"
 
 		"DamageFireBase"		"9"
 		"DamageFireVar"			"6"
 
-		"TalentFire"			"4"
-		"TalentAir"			"2"
-		"TalentLife"			"1"
+		"SkillFire"			"4"
+		"SkillAir"			"2"
+		"SkillMetamagic"		"1"
+		"SkillLore"			"2"
 	}
 
 	"npc_dota_hero_omniknight"
@@ -222,12 +234,13 @@
 
 		"EquipFlags"			"58194958"
 
+		"MaxStaminaFlat"		"80"
+		"StaminaUsageAttackFlat"	"5"
+		"StaminaUsageRunFlat"		"3"
+
 		"BaseAttackTime"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"275"
-
-		"MaxStaminaFlat"		"50"
-		"HealthRegenFlat"		"10000.0"
 
 		"AccuracyFlat"			"65"
 		"DodgeFlat"			"0"
@@ -235,14 +248,16 @@
 		"StrengthFlat"			"21"
 		"EnduranceFlat"			"23"
 		"AgilityFlat"			"10"
-		"PerceptionFlat"			"8"
+		"CunningFlat"			"8"
 		"IntelligenceFlat"		"15"
 		"WisdomFlat"			"23"
 
-		"TalentLife"			"2"
-		"TalentSpirit"			"3"
-		"TalentMetamagic"		"2"
-		"TalentHeavyArmor"		"2"
+		"SkillDivine"			"3"
+		"SkillLight"			"2"
+		"SkillTwoHanded"		"2"
+		"SkillCombat"			"2"
+		"SkillArmor"			"1"
+		"SkillSpeech"			"1"
 
 		"MovementNoiseFlat"		"5"
 		"VisibilityFlat"		"1.5"
@@ -260,10 +275,13 @@
 
 		"EquipFlags"			"58719294"
 
+		"MaxStaminaFlat"		"100"
+		"StaminaUsageAttackFlat"	"5"
+		"StaminaUsageRunFlat"		"3"
+
 		"BaseAttackTime"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"275"
-		"MaxStaminaFlat"		"50"
 
 		"AccuracyFlat"			"0"
 		"DodgeFlat"			"-70"
@@ -271,7 +289,7 @@
 		"StrengthFlat"			"49"
 		"EnduranceFlat"			"30"
 		"AgilityFlat"			"20"
-		"PerceptionFlat"			"44"
+		"CunningFlat"			"44"
 		"IntelligenceFlat"		"18"
 		"WisdomFlat"			"14"
 
@@ -330,7 +348,7 @@
 		"StrengthFlat"			"17"
 		"EnduranceFlat"			"33"
 		"AgilityFlat"			"16"
-		"PerceptionFlat"			"12"
+		"CunningFlat"			"12"
 		"IntelligenceFlat"		"62"
 		"WisdomFlat"			"35"
 
@@ -358,7 +376,7 @@
 		"StrengthFlat"			"52"
 		"EnduranceFlat"			"48"
 		"AgilityFlat"			"19"
-		"PerceptionFlat"			"20"
+		"CunningFlat"			"20"
 		"IntelligenceFlat"		"12"
 		"WisdomFlat"			"16"
 	}
@@ -383,7 +401,7 @@
 		"StrengthFlat"			"52"
 		"EnduranceFlat"			"48"
 		"AgilityFlat"			"19"
-		"PerceptionFlat"			"20"
+		"CunningFlat"			"20"
 		"IntelligenceFlat"		"12"
 		"WisdomFlat"			"16"
 	}
@@ -501,7 +519,7 @@
 		"StrengthFlat"			"13"
 		"EnduranceFlat"			"18"
 		"AgilityFlat"			"22"
-		"PerceptionFlat"			"46"
+		"CunningFlat"			"46"
 		"IntelligenceFlat"		"49"
 		"WisdomFlat"			"33"
 
