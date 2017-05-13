@@ -330,9 +330,14 @@
 		"AbilityTextureName"			"axe_counter_helix"
 
 		"MaxLevel"				"1"
-		"AbilityCastPoint"			"0.2"
+		"AbilityCastPoint"			"0.1"
 
 		"AbilityCooldown"			"1.0"
+
+		"Modifiers"
+		{
+			"modifier_iw_axe_counter_helix"		"LUA_MODIFIER_NO_TRIGGER"
+		}
 
 		"AbilitySpecial"
 		{
@@ -358,7 +363,21 @@
 		"AbilityCastRange"			"150"
 		"AbilityCastPoint"			"0.3"
 
-		"AbilityCooldown"			"12.0"
+		"AbilityCooldown"			"16.0"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"damage"			"125"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"threshold"			"35.0"
+			}
+		}
 	}
 
 

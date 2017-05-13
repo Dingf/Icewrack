@@ -38,22 +38,6 @@ for k,v in pairs(stNPCBehaviorAggressiveEnum) do _G[k] = v end
 for k,v in pairs(stNPCBehaviorCooperativeEnum) do _G[k] = v end
 for k,v in pairs(stNPCBehaviorSafetyEnum) do _G[k] = v end
 
-local stNPCDetectionTime =
-{
-	[IW_DIFFICULTY_EASY] = 1.0,
-	[IW_DIFFICULTY_NORMAL] = 3.0,
-	[IW_DIFFICULTY_HARD] = 5.0,
-	[IW_DIFFICULTY_UNTHAW] = 10.0
-}
-
-local stNPCThreatDecayRate =
-{
-	[IW_DIFFICULTY_EASY] = 1.0,
-	[IW_DIFFICULTY_NORMAL] = 1.0,
-	[IW_DIFFICULTY_HARD] = 0.995,
-	[IW_DIFFICULTY_UNTHAW] = 0.99,
-}
-
 local stNPCFleeThreshold =
 {
 	[IW_NPC_BEHAVIOR_SAFETY_RECKLESS] = 0,

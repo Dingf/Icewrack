@@ -13,6 +13,7 @@
 require("mechanics/accuracy")
 require("mechanics/combat")
 require("mechanics/damage_types")
+require("mechanics/difficulty")
 require("mechanics/effect_bash")
 require("mechanics/effect_maim")
 require("mechanics/effect_bleed")
@@ -29,7 +30,6 @@ require("ext_entity")
 require("npc")
 
 local stDamageInfoTable = {}
-local stFriendlyFireMultipliers = { 0.0, 0.5, 1.0, 1.0 }
 
 local function ApplyDamageEffect(hVictim, hAttacker, nDamageType, fDamage, fEffectBonus)
 	local fEffectiveDamage = fDamage * (1.0 + fEffectBonus)

@@ -213,7 +213,8 @@ function CIcewrack_Map0_00:OnGameRulesStateChange(keys)
 		GameRules:GetPlayerHero():SetDayTimeVisionRange(200.0)
 		GameRules:GetPlayerHero():SetNightTimeVisionRange(200.0)
 		
-		ParticleManager:CreateParticle("particles/rain_fx/econ_snow_light.vpcf", PATTACH_EYES_FOLLOW, hCharacterSelectDummy)
+		local nParticleID = ParticleManager:CreateParticle("particles/rain_fx/econ_snow_light.vpcf", PATTACH_EYES_FOLLOW, hCharacterSelectDummy)
+		ParticleManager:ReleaseParticleIndex(nParticleID)
 		PlayerResource:SetCameraTarget(0, hCharacterSelectDummy)
 		
 		CIcewrack_Map0_00._tLookTargets = { hCharacterSelectDummy, hDifficultyDummy }

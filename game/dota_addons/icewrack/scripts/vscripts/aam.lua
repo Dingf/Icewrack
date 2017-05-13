@@ -9,15 +9,6 @@ require("ext_entity")
 require("aam_special")
 require("aam_condition")
 
---These only apply to NPCs; player-controlled units will always have a think rate of 0.03
-local stAAMThinkRates =
-{
-	[IW_DIFFICULTY_EASY] = 1.0,
-	[IW_DIFFICULTY_NORMAL] = 0.25,
-	[IW_DIFFICULTY_HARD] = 0.1,
-	[IW_DIFFICULTY_UNTHAW] = 0.03,
-}
-
 local stAAMStateEnum =
 {
 	AAM_STATE_DISABLED = 0,
@@ -269,7 +260,7 @@ function CAbilityAutomatorModule:OnAAMThink()
 			end
 		end
 	end
-	return hEntity:IsControllableByAnyPlayer() and 0.03 or stAAMThinkRates[GameRules:GetCustomGameDifficulty()]
+	return hEntity:IsControllableByAnyPlayer() and 0.03 or stAAMNPCThinkRates[GameRules:GetCustomGameDifficulty()]
 end
 
 function CAbilityAutomatorModule:OnChangeState(args)

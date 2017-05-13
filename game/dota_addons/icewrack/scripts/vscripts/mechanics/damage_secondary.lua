@@ -11,6 +11,7 @@
 ]]
 
 require("mechanics/damage_types")
+require("mechanics/difficulty")
 require("ext_entity")
 
 function DealSecondaryDamage(self, keys)
@@ -34,6 +35,9 @@ function DealSecondaryDamage(self, keys)
 					local fDamageResist = hVictim:GetResistance(nDamageType)
 					fDamageResist = math.min(1.0, fDamageResist, fDamageResistMax)
 					fDamageAmount =  math.max(0, fDamageAmount * (1.0 - fDamageResist))
+				end
+				if hAttacker:GetTeamNumber() == hVictim:GetTeamNumber() then
+					fDamageAmount = fDamageAmount * stFriendlyFireMultipliers[GameRules:GetCustomGameDifficulty()]
 				end
 				fDamageAmount = math.max(0, math.floor(fDamageAmount))
 				if fDamageAmount > 0 then

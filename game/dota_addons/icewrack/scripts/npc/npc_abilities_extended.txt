@@ -19,9 +19,9 @@
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_counter_helix.lua"
 
-		"StaminaCost"		"10"
+		"StaminaCost"		"12"
 
-		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA IW_ABILITY_FLAG_KEYWORD_ATTACK IW_ABILITY_FLAG_KEYWORD_AOE"
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK IW_ABILITY_FLAG_KEYWORD_AOE"
 		
 		"EquipTypeFlags"	"IW_ITEM_TYPE_WEAPON_2H"
 
@@ -37,9 +37,11 @@
 
 	"iw_axe_culling_blade"
 	{
-		"StaminaCost"		"15"
+		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_culling_blade.lua"
 
-		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA IW_ABILITY_FLAG_KEYWORD_ATTACK"
+		"StaminaCost"		"20"
+
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK"
 		
 		"EquipTypeFlags"	"IW_ITEM_TYPE_WEAPON_2H"
 

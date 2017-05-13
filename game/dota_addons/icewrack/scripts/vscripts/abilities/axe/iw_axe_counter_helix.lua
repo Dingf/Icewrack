@@ -50,7 +50,7 @@ function iw_axe_counter_helix:OnSpellStart()
 		if v ~= hEntity and IsValidExtendedEntity(v) then
 			tDamageTable.target = v
 			if DealAttackDamage(hEntity, tDamageTable) then
-				v:Interrupt()
+				v:AddNewModifier(hEntity, self, "modifier_iw_axe_counter_helix", {})
 			end
 		end
 	end

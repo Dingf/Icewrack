@@ -503,7 +503,6 @@
 
 		"BaseCritChance"		"1.0"
 		"LifestealPercent"		"100"
-		"MaxHealthPercentRegen"		"100"
 
 		"AccuracyFlat"			"0"
 		"DodgeFlat"			"0"

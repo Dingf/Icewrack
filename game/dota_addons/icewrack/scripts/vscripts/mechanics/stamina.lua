@@ -59,7 +59,8 @@ function modifier_internal_stamina:OnIntervalThink()
 		end
 		if not GameRules:IsGamePaused() then
 			if hEntity:IsMoving() and hEntity._bRunMode then
-				local fStaminaDrain = hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_PCT)/100)/30.0
+				local fStaminaDrain = hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_PCT)/100)
+				fStaminaDrain = fStaminaDrain/30.0
 				hEntity:SpendStamina(fStaminaDrain)
 				fStamina = hEntity:GetStamina()
 			elseif hEntity:IsAttacking() then

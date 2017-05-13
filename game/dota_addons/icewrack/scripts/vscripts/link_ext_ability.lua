@@ -216,7 +216,7 @@ function CExtAbilityLinker:GetStaminaCost(nLevel)
 		if not hAttackSource then
 			hAttackSource = hEntity
 		end
-		fStaminaCost = fStaminaCost + hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hAttackSource:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
+		fStaminaCost = (fStaminaCost + hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT)) * (hEntity:GetFatigueMultiplier() + hAttackSource:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
 	end
 	fStaminaCost = fStaminaCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
 	return floor(fStaminaCost)

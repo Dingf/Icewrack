@@ -29,7 +29,9 @@ function CIcewrackMap1_01:OnGameRulesStateChange(keys)
 		hCampDummy:SetDayTimeVisionRange(4000)
 		hCampDummy:SetNightTimeVisionRange(4000)
 		if hCampDummy and IsValidEntity(hCampDummy) then
-			ParticleManager:CreateParticle("particles/rain_fx/econ_snow_heavy.vpcf", PATTACH_EYES_FOLLOW, hCampDummy)
+			local nParticleID = ParticleManager:CreateParticle("particles/rain_fx/econ_snow_heavy.vpcf", PATTACH_EYES_FOLLOW, hCampDummy)
+			ParticleManager:SetParticleAlwaysSimulate(nParticleID)
+			ParticleManager:ReleaseParticleIndex(nParticleID)
 		end
 		
 		local hTrigger = Entities:FindByName(nil, "herotent" .. CGameState:GetGameStateValue("game.hero_selection") .. "_trigger3")

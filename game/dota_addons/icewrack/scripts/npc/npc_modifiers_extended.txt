@@ -564,6 +564,12 @@
 			}
 
 			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_STUNNED"	"MODIFIER_STATE_VALUE_ENABLED"
+			}
+			"DatadrivenProperties" {}
+			"DatadrivenEvents" {}
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"
 			{
@@ -573,7 +579,28 @@
 		}
 	}
 
+	"iw_axe_counter_helix"
+	{
+		"modifier_iw_axe_counter_helix"
+		{
+			"IsHidden"			"1"
+			"IsDebuff"			"1"
+			"Duration"			"0.2"
 
+			"Properties"			{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_STUNNED"	"MODIFIER_STATE_VALUE_ENABLED"
+			}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_OVERRIDE_ANIMATION"	"ACT_DOTA_DISABLED"
+			}
+			"DatadrivenEvents" {}
+		}
+	}
 
 
 
