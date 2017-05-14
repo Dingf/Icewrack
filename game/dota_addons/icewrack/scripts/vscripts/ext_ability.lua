@@ -121,6 +121,7 @@ function CExtAbility:RemoveModifiers(nTrigger)
 	for k,v in pairs(self._tActiveModifierList) do
 		if not nTrigger or v == nTrigger then
 			k:Destroy()
+			self._tActiveModifierList[k] = nil
 		end
 	end
 end

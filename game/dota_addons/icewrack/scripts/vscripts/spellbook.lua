@@ -93,19 +93,13 @@ function CSpellbook:OnEntityRefresh()
 	local hEntity = self._hEntity
 	for k,v in pairs(self._tSpellList) do
 		local hAbility = v:FindAbilityByName(k)
-		local nAbilitySkill = hAbility:GetSkillRequirements()
-		local bIsAbilityActivated = true
-		for i=1,4 do
-			local nLevel = bit32.extract(nAbilitySkill, (i-1)*8, 3)
-			local nSkill = bit32.extract(nAbilitySkill, ((i-1)*8)+3, 5)
-			if nSkill ~= 0 then
-				if hEntity:GetPropertyValue(IW_PROPERTY_SKILL_FIRE + nSkill - 1) < nLevel then
-					bIsAbilityActivated = false
-					break
-				end
-			end
+		if hAbility:CheckSkillRequirements(hEntity) then
+			hAbility:SetActivated(true)
+			hAbility:ApplyModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
+		else
+			hAbility:SetActivated(false)
+			hAbility:RemoveModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
 		end
-		hAbility:SetActivated(bIsAbilityActivated)
 	end
 	self:UpdateNetTable()
 end
@@ -211,7 +205,9 @@ function CSpellbook:OnAbilityBind(args)
 			end
 			hSpellbook._tBindTable[args.slot] = args.ability
 			if hAbility then
-				hAbility:ApplyModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
+				if hAbility:CheckSkillRequirements(hEntity) then
+					hAbility:ApplyModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
+				end
 				tBindNetTable[args.slot] = args.ability
 			else
 				tBindNetTable[args.slot] = nil

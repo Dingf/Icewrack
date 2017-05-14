@@ -57,7 +57,7 @@ function modifier_internal_stamina:OnIntervalThink()
 			fStamina = math.max(0, math.min(fMaxStamina, hEntity._fLastStaminaPercent * fMaxStamina))
 			hEntity._fLastMaxStamina = fMaxStamina
 		end
-		if not GameRules:IsGamePaused() then
+		if not GameRules:IsGamePaused() and hEntity:IsAlive() then
 			if hEntity:IsMoving() and hEntity._bRunMode then
 				local fStaminaDrain = hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hEntity:GetPropertyValue(IW_PROPERTY_RUN_SP_PCT)/100)
 				fStaminaDrain = fStaminaDrain/30.0

@@ -433,3 +433,85 @@
 		}
 	}
 }
+
+"General.LevelUp"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/ui/abilitylevel.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"0.000000"
+					}
+					"pitch"
+					{
+						"value"		"1.000000"
+					}
+					"soundlevel"
+					{
+						"value"		"0.000000"
+					}
+					"event_type"
+					{
+						"value"		"3.000000"
+					}
+				}
+			}
+		}
+	}
+}
+
+"Icewrack.LevelUp"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/ui/power_up_06.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"5.000000"
+					}
+					"pitch"
+					{
+						"value"		"1.000000"
+					}
+					"soundlevel"
+					{
+						"value"		"75.000000"
+					}
+					"event_type"
+					{
+						"value"		"3.000000"
+					}
+				}
+			}
+		}
+	}
+}

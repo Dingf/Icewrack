@@ -476,7 +476,7 @@
 		"ScriptFile"				"ext_ability"
 
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"iw_dragon_knight_razorscales"
+		"AbilityTextureName"			"dragon_knight_dragon_blood"
 
 		"MaxLevel"				"1"
 

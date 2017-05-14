@@ -51,7 +51,7 @@ function modifier_iw_dragon_knight_razorscales:OnAttacked(args)
 			}
 		}
 		
-		local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_centaur/centaur_return.vpcf", PATTACH_CUSTOMORIGIN, hEntity)
+		local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_dragon_knight/iw_dragon_knight_razorscales.vpcf", PATTACH_CUSTOMORIGIN, hEntity)
 		ParticleManager:SetParticleControlEnt(nParticleID, 0, hEntity, PATTACH_POINT_FOLLOW, "attach_hitloc", hEntity:GetAbsOrigin(), true)
 		ParticleManager:SetParticleControlEnt(nParticleID, 1, hTarget, PATTACH_POINT_FOLLOW, "attach_hitloc", hTarget:GetAbsOrigin(), true)
 		ParticleManager:ReleaseParticleIndex(nParticleID)

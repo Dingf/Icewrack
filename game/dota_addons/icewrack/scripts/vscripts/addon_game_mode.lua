@@ -57,7 +57,8 @@ function CIcewrackGameMode:InitGameMode()
 		end
 	end
     hGameModeEntity:SetCustomXPRequiredToReachNextLevel(tXPValuesTable)
-	tXPValuesTable.max_level = nMaxLevel;
+	tXPValuesTable.max_level = nMaxLevel
+	GameRules.XPTable = tXPValuesTable
 	CustomNetTables:SetTableValue("game", "xp", tXPValuesTable)
 	
 	if not GameRules:GetMapInfo():IsRevealed() then

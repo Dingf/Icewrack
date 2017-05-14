@@ -288,9 +288,11 @@ local function SaveEntityData(hInstance)
 	tEntityTable.UnitName = hInstance:GetUnitName()
 	tEntityTable.Position = hInstance:GetAbsOrigin()
 	tEntityTable.Forward = hInstance:GetForwardVector()
+	tEntityTable.Experience = hInstance:GetTotalExperience()
 	tEntityTable.Health = hInstance:IsAlive() and hInstance:GetHealth() or 0
 	tEntityTable.Mana = hInstance:IsAlive() and hInstance:GetMana() or 0
 	tEntityTable.Stamina = hInstance:IsAlive() and hInstance:GetStamina() or 0
+	tEntityTable.StaminaTime = hInstance:GetStaminaRegenTime() - GameRules:GetGameTime()
 	tEntityTable.Team = hInstance:GetTeamNumber()
 	tEntityTable.State = (hInstance:GetMainControllingPlayer() == 0) and IW_SAVE_STATE_PERSISTENT or IW_SAVE_STATE_ENABLED
 	tEntityTable.LastMap = GetMapName()
@@ -849,7 +851,6 @@ local function LoadEntityValues()
 			local nInstanceID = hEntity:GetInstanceID()
 			local tEntityData = tEntitySaveList[tostring(nInstanceID)]
 			if tEntityData then
-				hEntity._vInitialPos = StringToVector(tEntityData.InitialPos)
 				if tEntityData.Health == 0 then
 					hEntity:ForceKill(false)
 				else
@@ -860,8 +861,16 @@ local function LoadEntityValues()
 				if tEntityData.RunMode == 1 then
 					hEntity:SetRunMode(true)
 				end
+				hEntity._fStaminaRegenTime = GameRules:GetGameTime() + tEntityData.StaminaTime
+				
+				if hEntity:IsRealHero() then
+					CDOTA_BaseNPC_Hero.AddExperience(hEntity, tEntityData.Experience, DOTA_ModifyXP_Unspecified, false, true)
+					hEntity._fTotalXP = tEntityData.Experience
+					hEntity._fLevelXP = hEntity._fTotalXP - GameRules.XPTable[hEntity:GetLevel()]
+				end
 				
 				if IsValidNPCEntity(hEntity) then
+					hEntity._vInitialPos = StringToVector(tEntityData.InitialPos)
 					local fCurrentTime = GameRules:GetGameTime()
 					for k,v in pairs(tEntityData.ThreatTable or {}) do
 						local hThreatEntity = GetInstanceByID(k)

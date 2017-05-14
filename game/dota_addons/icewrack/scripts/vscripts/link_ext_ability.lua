@@ -249,6 +249,20 @@ end
 	return self._szIntrinsicModifierName
 end]]
 
+function CExtAbilityLinker:CheckSkillRequirements(hEntity)
+	local nAbilitySkill = self:GetSkillRequirements()
+	for i=1,4 do
+		local nLevel = bit32.extract(nAbilitySkill, (i-1)*8, 3)
+		local nSkill = bit32.extract(nAbilitySkill, ((i-1)*8)+3, 5)
+		if nSkill ~= 0 then
+			if hEntity:GetPropertyValue(IW_PROPERTY_SKILL_FIRE + nSkill - 1) < nLevel then
+				return false
+			end
+		end
+	end
+	return true
+end
+
 function CExtAbilityLinker:IsWeatherAbility()
 	return (self._bIsWeatherAbility == true)
 end
@@ -372,7 +386,6 @@ function CExtAbilityLinker:CastFilterResult(vLocation, hTarget)
 			return UF_FAIL_CUSTOM
 		end
 	
-		self._bSkillFailed = false
 		self._bCastFilterLock = true
 		CTimer(0.03, function() self._bCastFilterLock = nil end)
 		
@@ -417,7 +430,6 @@ function CExtAbilityLinker:GetCustomCastError(vLocation, hTarget)
 	end
 	
 	if IsServer() then
-		--if self._bSkillFailed  then return "#iw_error_prereq_not_met" end --TODO: Investigate whether we can create a more dynamic message that shows what skill you're missing
 		if self._bFlagsFailed then return self:GetCustomCastErrorFlags(vLocation, hTarget) end
 		if self._bPrereqFailed then return "#iw_error_prereq_not_met" end
 	else

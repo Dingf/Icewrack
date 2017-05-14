@@ -69,6 +69,7 @@ stIcewrackPropertyEnum =
 	IW_PROPERTY_MOVE_NOISE_FLAT = 165,   IW_PROPERTY_MOVE_NOISE_PCT = 166,    IW_PROPERTY_CAST_NOISE_FLAT = 167,   IW_PROPERTY_CAST_NOISE_PCT = 168,
 	IW_PROPERTY_NIGHT_VISION = 169,      IW_PROPERTY_VISIBILITY_FLAT = 170,   IW_PROPERTY_VISIBILITY_PCT = 171,    IW_PROPERTY_BEHAVIOR_AGGRO = 172,
 	IW_PROPERTY_BEHAVIOR_COOP = 173,     IW_PROPERTY_BEHAVIOR_SAFETY = 174,   IW_PROPERTY_CORPSE_TIME = 175,       IW_PROPERTY_ATK_SPEED_DUMMY = 176,
+	IW_PROPERTY_SP_REGEN_TIME_PCT = 174, 
 }
 
 for k,v in pairs(stInstanceTypeEnum) do _G[k] = v end
@@ -120,6 +121,7 @@ stIcewrackPropertiesName =
 	MovementNoiseFlat = 165,           MovementNoisePercent = 166,        CastNoiseFlat = 167,               CastNoisePercent = 168,
 	NightVision = 169,                 VisibilityFlat = 170,              VisibilityPercent = 171,           BehaviorAggressiveness = 172,
 	BehaviorCooperativeness = 173,     BehaviorSafety = 174,              CorpseTime = 175,                  AttackSpeedDummy = 176,
+	StaminaRegenTimePercent = 174,
 }
 
 stIcewrackPropertyValues = {}

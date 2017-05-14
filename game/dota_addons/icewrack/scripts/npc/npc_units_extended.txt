@@ -68,7 +68,7 @@
 		"MaxStaminaFlat"		"110"
 		"StaminaUsageAttackFlat"	"5"
 		"StaminaUsageRunFlat"		"3"
-		"HealthRegenFlat"		"3"
+		"HealthRegenFlat"		"100003"
 
 		"BaseAttackTime"		"1.7"
 		"AttackRange"			"100"

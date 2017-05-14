@@ -57,7 +57,7 @@ local stExtEntityUnitSubtypeEnum =
 --  at 3: -22 = -20 * (1 - (-1 * -0.1))
 --  at 4: -24 = -20 * (1 - (-2 * -0.1))
 --
-
+--TODO: Actually implement alignment
 local stExtEntityAlignment =
 {
 	IW_ALIGNMENT_LAWFUL_GOOD = 1,
@@ -84,17 +84,12 @@ for k,v in pairs(stExtEntityUnitClassEnum) do _G[k] = v end
 for k,v in pairs(stExtEntityUnitTypeEnum) do _G[k] = v end
 for k,v in pairs(stExtEntityUnitSubtypeEnum) do _G[k] = v end
 for k,v in pairs(stExtEntityFlagEnum) do _G[k] = v end
-	
---local shItemHealthModifier = CreateItem("mod_health", nil, nil)
---local shItemManaModifier = CreateItem("mod_mana", nil, nil)
---local shItemIASModifier = CreateItem("mod_ias", nil, nil)
 
 local shItemAttackModifier = CreateItem("internal_attack", nil, nil)
 local shItemStaminaModifier = CreateItem("internal_stamina", nil, nil)
 local shItemMovementNoise = CreateItem("internal_movement_noise", nil, nil)
 local shItemAttributeModifier = CreateItem("internal_attribute_bonus", nil, nil)
 local shItemSkillModifier = CreateItem("internal_skill_bonus", nil, nil)
---local shItemVisibilityModifier = CreateItem("internal_visibility", nil, nil)
 
 local stExtEntityData = LoadKeyValues("scripts/npc/npc_units_extended.txt")
 local shDefaultProperties = CInstance({}, 0)
@@ -124,10 +119,6 @@ CExtEntity = setmetatable({}, { __call =
 			tIndexTableList[tBaseIndexTable] = tExtIndexTable
 		end
 		setmetatable(hEntity, tExtIndexTable)
-		
-		--local tBaseMetatable = setmetatable({}, { __index = getmetatable(hEntity).__index } )
-		--for k,v in pairs(CExtEntity) do tBaseMetatable[k] = v end
-		--setmetatable(hEntity, { __index = tBaseMetatable })
 		
 		hEntity._bIsExtendedEntity = true
 		hEntity._nUnitClass   = stExtEntityUnitClassEnum[tExtEntityTemplate.UnitClass] or IW_UNIT_CLASS_NORMAL
@@ -160,6 +151,9 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._fLastMaxStamina = hEntity:GetMaxStamina()
 		
 		hEntity._fLifestealRegen = 0
+		
+		hEntity._fTotalXP = 0
+		hEntity._fLevelXP = 0
 
 		if GameRules:GetMapInfo():IsInside() then
 			local fVisionMultiplier = 1.0 - (1.0 - GameRules:GetMapInfo():GetMapVisionMultiplier()) * (1.0 - hEntity:GetPropertyValueClamped(IW_PROPERTY_NIGHT_VISION, 0.0, 1.0))
@@ -248,6 +242,14 @@ end
 
 function CExtEntity:GetStaminaRegenTime()
     return self._fStaminaRegenTime
+end
+
+function CExtEntity:GetTotalExperience()
+	return self._fTotalXP
+end
+
+function CExtEntity:GetCurrentLevelExperience()
+	return self._fLevelXP
 end
 
 function CExtEntity:IsMassive()
@@ -345,8 +347,14 @@ function CExtEntity:AddExperience(fAmount)
 		local nOldLevel = self:GetLevel()
 		fAmount = math.max(0, fAmount * (1.0 + self:GetPropertyValue(IW_PROPERTY_EXPERIENCE_MULTI)/100.0))
 		CDOTA_BaseNPC_Hero.AddExperience(self, fAmount, DOTA_ModifyXP_Unspecified, false, true)
+		self._fTotalXP = self._fTotalXP + fAmount
+		self._fLevelXP = self._fTotalXP - GameRules.XPTable[self:GetLevel()]
 		local nLevelDiff = self:GetLevel() - nOldLevel
 		if nLevelDiff > 0 then
+			local nParticleID = ParticleManager:CreateParticle("particles/generic_hero_status/iw_hero_levelup.vpcf", PATTACH_WORLDORIGIN, self)
+			ParticleManager:SetParticleControl(nParticleID, 0, self:GetAbsOrigin())
+			ParticleManager:ReleaseParticleIndex(nParticleID)
+			EmitSoundOn("Icewrack.LevelUp", self)
 			for k,v in pairs(stIcewrackAttributeEnum) do
 				self:SetPropertyValue(v + 1, self:GetBasePropertyValue(v + 1) + nLevelDiff)
 			end
@@ -454,7 +462,7 @@ end
 function CExtEntity:SpendStamina(fStamina)
 	if fStamina >= 0 then
 		self._fStamina = math.max(0, self:GetStamina() - fStamina)
-		self._fStaminaRegenTime = math.max(self._fStaminaRegenTime, GameRules:GetGameTime() + 5.0)
+		self._fStaminaRegenTime = math.max(self._fStaminaRegenTime, GameRules:GetGameTime() + (5.0 * (1.0 + IW_PROPERTY_SP_REGEN_TIME_PCT/100)))
 	end
 end
 

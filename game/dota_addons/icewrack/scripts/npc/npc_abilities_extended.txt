@@ -102,6 +102,7 @@
 	"iw_dragon_knight_razorscales"
 	{
 		"AbilityFlags"		""
+		"AbilitySkill"		"156"
 	}
 
 
