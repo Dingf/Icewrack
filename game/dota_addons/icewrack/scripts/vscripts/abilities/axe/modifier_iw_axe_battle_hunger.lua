@@ -2,7 +2,7 @@ local TICK_RATE = 0.1
 
 modifier_iw_axe_battle_hunger = class({})
 	
-function modifier_iw_axe_battle_hunger:OnCreated(keys)
+function modifier_iw_axe_battle_hunger:OnCreated(args)
 	if IsServer() then
 		self:StartIntervalThink(TICK_RATE)
 		self:OnIntervalThink()

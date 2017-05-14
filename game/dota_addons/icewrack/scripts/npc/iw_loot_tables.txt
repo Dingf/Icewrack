@@ -43,4 +43,13 @@
 			"Max"		"1"
 		}
 	}
+	"drop_list_test_shield"
+	{
+		"item_test_shield"
+		{
+			"Weight"	"5"
+			"Min"		"1"
+			"Max"		"1"
+		}
+	}
 }

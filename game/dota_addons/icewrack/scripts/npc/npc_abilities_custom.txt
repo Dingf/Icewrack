@@ -87,7 +87,7 @@
 
 		"Modifiers"
 		{
-			"modifier_status_bash"				"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_bash"				"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -100,9 +100,9 @@
 
 		"Modifiers"
 		{
-			"modifier_status_maim"				"LUA_MODIFIER_NO_TRIGGER"
-			"modifier_status_maim_elite"			"LUA_MODIFIER_NO_TRIGGER"
-			"modifier_status_maim_boss"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_maim"				"IW_MODIFIER_NO_TRIGGER"
+			"modifier_status_maim_elite"			"IW_MODIFIER_NO_TRIGGER"
+			"modifier_status_maim_boss"			"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -115,7 +115,7 @@
 
 		"Modifiers"
 		{
-			"modifier_status_bleed"				"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_bleed"				"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -128,7 +128,7 @@
 
 		"Modifiers"
 		{
-			"modifier_status_burning"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_burning"			"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -141,9 +141,9 @@
 
 		"Modifiers"
 		{
-			"modifier_status_chill"				"LUA_MODIFIER_NO_TRIGGER"
-			"modifier_status_chill_elite"			"LUA_MODIFIER_NO_TRIGGER"
-			"modifier_status_chill_boss"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_chill"				"IW_MODIFIER_NO_TRIGGER"
+			"modifier_status_chill_elite"			"IW_MODIFIER_NO_TRIGGER"
+			"modifier_status_chill_boss"			"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -156,7 +156,7 @@
 
 		"Modifiers"
 		{
-			"modifier_status_frozen"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_frozen"			"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -169,9 +169,9 @@
 
 		"Modifiers"
 		{
-			"modifier_status_weaken"			"LUA_MODIFIER_NO_TRIGGER"
-			"modifier_status_weaken_elite"			"LUA_MODIFIER_NO_TRIGGER"
-			"modifier_status_weaken_boss"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_weaken"			"IW_MODIFIER_NO_TRIGGER"
+			"modifier_status_weaken_elite"			"IW_MODIFIER_NO_TRIGGER"
+			"modifier_status_weaken_boss"			"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -184,7 +184,7 @@
 
 		"Modifiers"
 		{
-			"modifier_status_wet"				"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_status_wet"				"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -219,7 +219,7 @@
 
 		"Modifiers"
 		{
-			"modifier_aam_hold_position"		"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_aam_hold_position"		"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -263,7 +263,7 @@
 		"AbilityTextureName"			"axe_berserkers_call"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"24.0"
+		"AbilityCooldown"			"10.0"
 		"AbilityAOERadius"			"300"
 
 		"AbilitySpecial"
@@ -293,7 +293,7 @@
 
 		"Modifiers"
 		{
-			"modifier_iw_axe_battle_hunger"		"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_iw_axe_battle_hunger"		"IW_MODIFIER_NO_TRIGGER"
 		}
 
 		"AbilitySpecial"
@@ -336,7 +336,7 @@
 
 		"Modifiers"
 		{
-			"modifier_iw_axe_counter_helix"		"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_iw_axe_counter_helix"		"IW_MODIFIER_NO_TRIGGER"
 		}
 
 		"AbilitySpecial"
@@ -376,6 +376,126 @@
 			{
 				"var_type"			"FIELD_FLOAT"
 				"threshold"			"35.0"
+			}
+		}
+	}
+
+	"iw_dragon_knight_breathe_fire"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"	
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityTextureName"			"dragon_knight_breathe_fire"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.1"
+		"AbilityCastRange"			"900"
+		"AbilityCooldown"			"6.0"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"start_radius"			"150"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"end_radius"			"250"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"range"				"650"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"speed"				"1050"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"damage_min"			"75"
+			}
+			"06"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"damage_max"			"90"
+			}
+			"07"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_min_bonus"		"0.6"
+			}
+			"08"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_max_bonus"		"0.75"
+			}
+		}
+	}
+
+	"iw_dragon_knight_shield_slam"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"	
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityTextureName"			"dragon_knight_dragon_tail"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.05"
+		"AbilityCastRange"			"150"
+		"AbilityCooldown"			"8.0"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"damage"			"150"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"bash_chance"			"100"
+			}
+		}
+	}
+
+	"iw_dragon_knight_razorscales"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"iw_dragon_knight_razorscales"
+
+		"MaxLevel"				"1"
+
+		"Modifiers"
+		{
+			"modifier_iw_dragon_knight_razorscales"		"IW_MODIFIER_ON_ACQUIRE"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"damage"			"5"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"percent"			"25"
 			}
 		}
 	}

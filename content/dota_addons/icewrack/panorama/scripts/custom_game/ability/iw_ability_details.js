@@ -140,9 +140,7 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 	
 	if (tAbilityTemplate)
 	{
-		var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
-		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-		var nStaminaCost = tAbilityTemplate.stamina * (tEntityData ? tEntityData.fatigue : 1.0);
+		var nStaminaCost = tAbilityTemplate.stamina;
 		hStaminaLabel.FindChild("Value").text = nStaminaCost.toFixed(0) + "";
 		hStaminaLabel.visible = (nStaminaCost > 0);
 		
@@ -165,6 +163,46 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 	
 	var hDescriptionLabel = hContextPanel.FindChildTraverse("DescriptionLabel");
 	hDescriptionLabel.text = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName + "_Description");
+	
+	var szLocalizedText = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName + "_Description");
+	var tSpecialSections = szLocalizedText.match(/[^{}]+(?=})/g);
+	var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
+	
+	var szFormattedText = "";
+	for (var i = 0; i < tTextSections.length; i++)
+	{
+		szFormattedText += tTextSections[i];
+		if (tSpecialSections && tSpecialSections[i])
+		{
+			var tAbilitySpecials = tSpecialSections[i].split("|");
+			var fSpecialBaseValue = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecials[0]);
+			var fSpecialBonusValue = 0;
+			if (tAbilitySpecials[0] === "r")
+			{
+				fSpecialBaseValue = (Abilities.GetAOERadius(nAbilityIndex)/100.0).toFixed(2);
+			}
+			if ((typeof(fSpecialBaseValue) === "number") && (tAbilitySpecials.length > 1))
+			{
+				var fSpecialBonus = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecials[1]);
+				if (typeof(fSpecialBonus) === "number")
+				{
+					fSpecialBonusValue = Math.round(fSpecialBonus * 100)/100;
+				}
+			}
+			
+			if (fSpecialBonusValue > 0)
+			{
+				szFormattedText = szFormattedText + "(" + fSpecialBaseValue + " + " + fSpecialBonusValue + "x)";
+			}
+			else
+			{
+				szFormattedText += fSpecialBaseValue;
+			}
+		}
+	}
+	
+	hDescriptionLabel.text = szFormattedText;
+	
 	var hLoreLabel = hContextPanel.FindChildTraverse("LoreLabel");
 	hLoreLabel.text = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName + "_Lore");
 	

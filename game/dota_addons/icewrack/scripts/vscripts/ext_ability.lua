@@ -66,12 +66,16 @@ CExtAbility = setmetatable({ _tIndexTableList = {} }, { __call =
 		hAbility._tModifierSeeds = {}
 		local tModifierTemplate = tBaseAbilityTemplate.Modifiers or {}
 		for k,v in pairs(tModifierTemplate) do
-			hAbility._tModifierList[k] = _G[v]
+			hAbility._tModifierList[k] = stIcewrackModifierTriggers[v] or IW_MODIFIER_NO_TRIGGER
 			hAbility._tModifierSeeds[k] = {}
 		end
 		
-		hAbility:AddChild(hAbility:GetCaster())
-		hAbility:ApplyModifiers(hAbility:GetCaster(), IW_MODIFIER_ON_ACQUIRE)
+		for k,v in pairs(hAbility._tPropertyList or {}) do
+			local nPropertyID = stIcewrackPropertyEnum[k] or stIcewrackPropertiesName[k]
+			if nPropertyID then
+				hAbility:SetPropertyValue(nPropertyID, v)
+			end
+		end
 		return hAbility
 	end})
 
@@ -92,11 +96,9 @@ function CExtAbility:GetModifierSeed(szModifierName, nPropertyID)
 end
 
 function CExtAbility:SetCaster(hEntity)
-	self:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE)
 	self:RemoveChild(self:GetCaster())
 	self._hOverrideCaster = hEntity
 	self:AddChild(hEntity)
-	self:ApplyModifiers(self:GetCaster(), IW_MODIFIER_ON_ACQUIRE)
 end
 
 function CExtAbility:ApplyModifiers(hEntity, nTrigger)
@@ -109,7 +111,7 @@ function CExtAbility:ApplyModifiers(hEntity, nTrigger)
 				hModifier = self:ApplyDataDrivenModifier(hEntity, hEntity, k, {})
 			end
 			if hModifier then
-				self._tActiveModifierList[hModifier] = v2
+				self._tActiveModifierList[hModifier] = v
 			end
 		end
 	end

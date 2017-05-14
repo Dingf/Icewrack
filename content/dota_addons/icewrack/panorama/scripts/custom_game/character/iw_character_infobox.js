@@ -146,9 +146,9 @@ function OnInfoboxUpdate(hContextPanel, tArgs)
 		var hSpellpowerLabel = hContextPanel.FindChildTraverse("Stat51").FindChild("Label");
 		hSpellpowerLabel.text = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER);
 		
-		var szArmorString = Math.floor(GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_CRUSH_FLAT) * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_CRUSH_PCT))) + " / " + 
-							Math.floor(GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_SLASH_FLAT) * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_SLASH_PCT))) + " / " + 
-							Math.floor(GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_PIERCE_FLAT) * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_PIERCE_PCT))); 
+		var szArmorString = Math.floor(GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_CRUSH_FLAT) * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_CRUSH_PCT)/100)) + " / " + 
+							Math.floor(GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_SLASH_FLAT) * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_SLASH_PCT)/100)) + " / " + 
+							Math.floor(GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_PIERCE_FLAT) * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_PIERCE_PCT)/100)); 
 									
 		var hArmorLabel = hContextPanel.FindChildTraverse("Stat12").FindChild("Label");
 		hArmorLabel.text = szArmorString;

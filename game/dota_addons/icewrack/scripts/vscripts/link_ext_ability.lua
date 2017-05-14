@@ -173,7 +173,7 @@ function CExtAbilityLinker:GetHealthCost(nLevel)
 	if IsServer() then
 		fHealthCost = fHealthCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
 	else
-		fHealthCost = fHealthCost * (hEntity and hEntity:GetMagicalArmorValue() or 1.0)
+		fHealthCost = fHealthCost * (hEntity and hEntity:GetBaseMagicalResistanceValue() or 1.0)
 	end
 	return floor(fHealthCost)
 end
@@ -193,7 +193,7 @@ function CExtAbilityLinker:GetManaCost(nLevel)
 	if IsServer() then
 		fManaCost = fManaCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
 	else
-		fManaCost = fManaCost * (hEntity and hEntity:GetMagicalArmorValue() or 1.0)
+		fManaCost = fManaCost * (hEntity and hEntity:GetBaseMagicalResistanceValue() or 1.0)
 	end
 	return floor(fManaCost)
 end
@@ -216,7 +216,10 @@ function CExtAbilityLinker:GetStaminaCost(nLevel)
 		if not hAttackSource then
 			hAttackSource = hEntity
 		end
-		fStaminaCost = (fStaminaCost + hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT)) * (hEntity:GetFatigueMultiplier() + hAttackSource:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
+		fStaminaCost = fStaminaCost + hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT)
+	end
+	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_KEYWORD_ATTACK) then
+		fStaminaCost = fStaminaCost * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
 	end
 	fStaminaCost = fStaminaCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
 	return floor(fStaminaCost)
@@ -234,6 +237,17 @@ function CExtAbilityLinker:GetGoldCost(nLevel)
 	end
 	return 0
 end
+
+--[[function CExtAbilityLinker:GetIntrinsicModifierName()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.GetIntrinsicModifierName
+		if hBaseFunction then
+			return hBaseFunction(self)
+		end
+	end
+	return self._szIntrinsicModifierName
+end]]
 
 function CExtAbilityLinker:IsWeatherAbility()
 	return (self._bIsWeatherAbility == true)
@@ -319,9 +333,10 @@ function CExtAbilityLinker:EvaluatePrereqs(vLocation, hTarget)
 		
 		local nAbilityBehavior = self:GetBehavior()
 		if bit32.btest(nAbilityBehavior, DOTA_ABILITY_BEHAVIOR_UNIT_TARGET) then
-			if not hTarget then return false end
-			for k,v in pairs(self._tPrereqTargetModifiers) do
-				if not hTarget:HasModifier(v) then return false end
+			if hTarget then
+				for k,v in pairs(self._tPrereqTargetModifiers) do
+					if not hTarget:HasModifier(v) then return false end
+				end
 			end
 		end
 		
@@ -477,14 +492,6 @@ function CExtAbilityLinker:OnSpellStart()
 		end
 	end
 	
-	local fManaCost = self:GetManaCost()
-	if fManaCost > 0 then
-		local fCurrentMana = hEntity:GetMana()
-		if fCurrentMana > fManaCost then
-			hEntity:SetMana(fCurrentMana - fManaCost) 
-		end
-	end
-	
 	local fStaminaCost = self:GetStaminaCost()
 	if fStaminaCost > 0 and IsValidExtendedEntity(hEntity) then
 		local fCurrentStamina = hEntity:GetStamina()
@@ -546,19 +553,17 @@ function CExtAbilityLinker:RemoveModifiers(nTrigger)
 end
 
 function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemplate)
-	if IsServer() then
-		local szScriptFilename = tExtTemplate.ScriptFile
-		if szScriptFilename then
-			szScriptFilename = string.gsub(szScriptFilename, "\\", "/")
-			szScriptFilename = string.gsub(szScriptFilename, "scripts/vscripts/", "")
-			szScriptFilename = string.gsub(szScriptFilename, ".lua", "")
-			local tSandbox = setmetatable({}, { __index = _G })
-			local tContext = getfenv()
-			setfenv(1, tSandbox)
-			dofile(szScriptFilename)
-			_G[szAbilityName] = tSandbox[szAbilityName]
-			setfenv(1, tContext)
-		end
+	local szScriptFilename = tExtTemplate.ScriptFile
+	if szScriptFilename then
+		szScriptFilename = string.gsub(szScriptFilename, "\\", "/")
+		szScriptFilename = string.gsub(szScriptFilename, "scripts/vscripts/", "")
+		szScriptFilename = string.gsub(szScriptFilename, ".lua", "")
+		local tSandbox = setmetatable({}, { __index = _G })
+		local tContext = getfenv()
+		setfenv(1, tSandbox)
+		dofile(szScriptFilename)
+		_G[szAbilityName] = tSandbox[szAbilityName]
+		setfenv(1, tContext)
 	end
 	
 	if not _G[szAbilityName] then _G[szAbilityName] = class({}) end
@@ -575,6 +580,21 @@ function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemp
 		end
 		hExtAbility[k] = v
 	end
+	
+	hExtAbility._tPropertyList = {}
+	for k,v in pairs(tExtTemplate.Properties or {}) do
+		if stIcewrackPropertyEnum[k] then
+			if type(v) == "number" then
+				hExtAbility._tPropertyList[k] = v
+			else
+				LogMessage("Unsupported type \"" .. type(v) .. "\" for property \"" .. k .. "\" in ability \"" .. szAbilityName .. "\"", LOG_SEVERITY_WARNING)
+			end
+		else
+			LogMessage("Unknown property \"" .. k .. "\" in ability \"" .. szAbilityName .. "\"", LOG_SEVERITY_WARNING)
+		end
+	end
+	
+	--hExtAbility._szIntrinsicModifierName = tExtTemplate.IntrinsicModifier
 	
 	hExtAbility._nAbilitySkill = tExtTemplate.AbilitySkill or 0
 	--hExtAbility._nAbilityBehavior = GetFlagValue(tBaseTemplate.AbilityBehavior, DOTA_ABILITY_BEHAVIOR)

@@ -13,9 +13,9 @@
 
 	"item_test"
 	{
-		"ItemType"		"IW_ITEM_TYPE_WEAPON_2H IW_ITEM_TYPE_WEAPON_BOW"
+		"ItemType"		"IW_ITEM_TYPE_WEAPON_2H | IW_ITEM_TYPE_WEAPON_BOW"
 		"ItemSlots"		"IW_INVENTORY_SLOT_MAIN_HAND"
-		"ItemFlags"		"IW_ITEM_FLAG_ATTACK_SOURCE IW_ITEM_FLAG_REQUIRES_AMMO"
+		"ItemFlags"		"IW_ITEM_FLAG_ATTACK_SOURCE | IW_ITEM_FLAG_REQUIRES_AMMO"
 		"ItemWeight"		"10.0"
 		"ItemValue"		"3000"
 
@@ -45,8 +45,8 @@
 
 	"item_test2"
 	{
-		"ItemType"		"IW_ITEM_TYPE_ARMOR_LEATHER IW_ITEM_TYPE_ARMOR_HEAD"
-		"ItemSlots"		"IW_INVENTORY_SLOT_HEAD IW_INVENTORY_SLOT_FEET"
+		"ItemType"		"IW_ITEM_TYPE_ARMOR_LEATHER | IW_ITEM_TYPE_ARMOR_HEAD"
+		"ItemSlots"		"IW_INVENTORY_SLOT_HEAD | IW_INVENTORY_SLOT_FEET"
 		"ItemWeight"		"12.3"
 		"ItemValue"		"12000"
 
@@ -59,7 +59,7 @@
 
 	"item_test3"
 	{
-		"ItemType"		"IW_ITEM_TYPE_ARMOR_LEATHER IW_ITEM_TYPE_ARMOR_HEAD"
+		"ItemType"		"IW_ITEM_TYPE_ARMOR_LEATHER | IW_ITEM_TYPE_ARMOR_HEAD"
 		"ItemSlots"		"IW_INVENTORY_SLOT_HEAD IW_INVENTORY_SLOT_FEET"
 		"ItemWeight"		"3.1"
 		"ItemValue"		"22000"
@@ -73,7 +73,7 @@
 
 	"item_test_axe"
 	{
-		"ItemType"		"IW_ITEM_TYPE_WEAPON_2H IW_ITEM_TYPE_WEAPON_AXE"
+		"ItemType"		"IW_ITEM_TYPE_WEAPON_2H | IW_ITEM_TYPE_WEAPON_AXE"
 		"ItemSlots"		"IW_INVENTORY_SLOT_MAIN_HAND"
 		"ItemFlags"		"IW_ITEM_FLAG_ATTACK_SOURCE"
 		"ItemWeight"		"15.0"
@@ -96,6 +96,30 @@
 			"IW_PROPERTY_BASE_ATTACK_TIME"			"3.1"
 			"IW_PROPERTY_CRIT_CHANCE_FLAT"			"0.05"
 			"IW_PROPERTY_CRIT_MULTI_FLAT"			"0.5"
+		}
+	}
+
+	"item_test_shield"
+	{
+		"ItemType"		"IW_ITEM_TYPE_ARMOR_MAIL | IW_ITEM_TYPE_ARMOR_SHIELD"
+		"ItemSlots"		"IW_INVENTORY_SLOT_OFF_HAND"
+		"ItemFlags"		""
+		"ItemWeight"		"10.0"
+		"ItemValue"		"17"
+
+		"MaxStacks"		"1"
+
+		"ItemComponents"
+		{
+			"item_test_component#0"		"75"
+			"item_test_component#1"		"50"
+		}
+
+		"Properties"
+		{
+				"IW_PROPERTY_ARMOR_CRUSH_FLAT"			"20"
+				"IW_PROPERTY_ARMOR_SLASH_FLAT"			"20"
+				"IW_PROPERTY_ARMOR_PIERCE_FLAT"			"20"
 		}
 	}
 

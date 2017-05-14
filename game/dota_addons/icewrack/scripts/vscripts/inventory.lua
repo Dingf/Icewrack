@@ -171,8 +171,12 @@ function CInventory:EquipItem(hItem, nSlot)
 					if bit32.band(hItem:GetItemFlags(), IW_ITEM_FLAG_IS_ATTACK_SOURCE) ~= 0 then
 						hEntity:AddAttackSource(hItem)
 					end
+					if hItem:IsAttackSource() then
+						hItem:AddChild(hEntity)
+					else
+						hEntity:AddChild(hItem)
+					end
 					hItem:ApplyModifiers(hEntity, IW_MODIFIER_ON_EQUIP)
-					hItem:AddChild(hEntity)
 				end
 				self._tEquippedItems[i] = hItem
 				self._tNetTableItemList[hItem:entindex()] = hItem:UpdateNetTable()
@@ -195,8 +199,12 @@ function CInventory:UnequipItem(nSlot)
 		if nSlot == IW_INVENTORY_SLOT_MAIN_HAND or nSlot == IW_INVENTORY_SLOT_OFF_HAND then
 			hEntity:RemoveAttackSource(hItem)
 		end
+		if hItem:IsAttackSource() then
+			hItem:RemoveChild(hEntity)
+		else
+			hEntity:RemoveChild(hItem)
+		end
 		hItem:RemoveModifiers(IW_MODIFIER_ON_EQUIP)
-		hItem:RemoveChild(hEntity)
 		self._tEquippedItems[nSlot] = nil
 		self._tNetTableItemList[hItem:entindex()] = hItem:UpdateNetTable()
 		self._tNetTableEquippedItems[nSlot] = nil

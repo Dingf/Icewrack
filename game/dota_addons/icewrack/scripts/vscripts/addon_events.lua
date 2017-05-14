@@ -33,6 +33,7 @@ function CIcewrackGameMode:OnEntitySpawned(keys)
 	--TODO: Testing code; Delete me
 	if hEntity:GetUnitName() == "npc_dota_hero_windrunner" then
 		hEntity:SetControllableByPlayer(0, true)
+		FireGameEvent("iw_ability_combo", { name="iw_combo_shatter" })
 	end
 end
 
@@ -143,10 +144,14 @@ local function OnDelayedVisionCast(self, hEntity, hTarget, vLocation)
 		local fCastRange = self:GetCastRange()
 		local fDistance = (hEntity:GetAbsOrigin() - vTargetPos):Length2D()
 		if hEntity:IsTargetInLOS(hTarget or vLocation) and fDistance <= fCastRange then
-			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, self, vLocation, false)
+			if hTarget then
+				hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, self, nil, false)
+			else
+				hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_POSITION, nil, self, vLocation, false)
+			end
 		else
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vTargetPos, false)
-			CTimer(0.03, OnDelayedVisionCast, self, hEntity, hTarget, nil)
+			CTimer(0.03, OnDelayedVisionCast, self, hEntity, hTarget, vTargetPos)
 		end
 	end
 end
@@ -186,6 +191,7 @@ function CIcewrackGameMode:ExecuteOrderFilter(keys)
 	local hTarget = EntIndexToHScript(keys.entindex_target)
 	local hAbility = keys.entindex_ability ~= -1 and EntIndexToHScript(keys.entindex_ability) or nil
 	local vPosition = Vector(keys.position_x, keys.position_y, keys.position_z)
+	
 	
     local nUnitListSize = 0
 	local tUnitList = keys.units

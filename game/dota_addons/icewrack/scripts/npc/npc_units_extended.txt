@@ -63,7 +63,7 @@
 		"CorpseTime"			"35"
 		"IsPlayableHero"		"1"
 
-		"EquipFlags"			"58719261"
+		"EquipFlags"			"1048125"
 
 		"MaxStaminaFlat"		"110"
 		"StaminaUsageAttackFlat"	"5"
@@ -185,7 +185,7 @@
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
-		"CorpseTime"			"58"
+		"CorpseTime"			"59"
 		"IsPlayableHero"		"1"
 
 		"EquipFlags"			"58191872"
@@ -500,6 +500,7 @@
 
 		"AttackRange"			"650"
 		"ManaRegenFlat"			"0.35"
+		"HealthRegenFlat"		"100000"
 
 		"BaseCritChance"		"1.0"
 		"LifestealPercent"		"100"
@@ -516,7 +517,7 @@
 		"EffectDurationBleed"		"100"
 
 		"StrengthFlat"			"13"
-		"EnduranceFlat"			"18"
+		"EnduranceFlat"			"180"
 		"AgilityFlat"			"22"
 		"CunningFlat"			"46"
 		"IntelligenceFlat"		"49"

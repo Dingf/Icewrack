@@ -3,27 +3,25 @@
 	"iw_axe_berserkers_call"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_berserkers_call.lua"
-
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_AOE"
-		
-		"StaminaCost"		"0"
+		"AbilitySkill"		"155"
+
+		"StaminaCost"		"15"
 	}
 	
 	"iw_axe_battle_hunger"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_battle_hunger.lua"
-		
+		"AbilitySkill"		"156"
 	}
 
 	"iw_axe_counter_helix"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_counter_helix.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_KEYWORD_AOE"
+		"AbilitySkill"		"115"
 
 		"StaminaCost"		"12"
-
-		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK IW_ABILITY_FLAG_KEYWORD_AOE"
-		
-		"EquipTypeFlags"	"IW_ITEM_TYPE_WEAPON_2H"
 
 		"AbilityCastAnimation"
 		{
@@ -38,12 +36,10 @@
 	"iw_axe_culling_blade"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_culling_blade.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK"
+		"AbilitySkill"		"116"
 
 		"StaminaCost"		"20"
-
-		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK"
-		
-		"EquipTypeFlags"	"IW_ITEM_TYPE_WEAPON_2H"
 
 		"AbilityCastAnimation"
 		{
@@ -53,6 +49,59 @@
 				"Rate"			"1.0"
 			}
 		}
+	}
+
+	"iw_dragon_knight_breathe_fire"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_breathe_fire.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_KEYWORD_AOE"
+		"AbilitySkill"		"10"
+
+		"ManaCost"		"25"
+
+		"Properties"
+		{
+			"IW_PROPERTY_CRIT_CHANCE_FLAT"		"0.05"
+			"IW_PROPERTY_CRIT_MULTI_FLAT"		"0.5"
+		}
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_dragon_knight"
+			{
+				"Animation"		"ACT_DOTA_CAST_ABILITY_1"
+				"Rate"			"1.0"
+			}
+		}
+	}
+
+	"iw_dragon_knight_shield_slam"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_shield_slam.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK"
+		"AbilitySkill"		"39570"
+
+		"StaminaCost"		"25"
+
+		"Properties"
+		{
+			"IW_PROPERTY_CRIT_CHANCE_FLAT"		"0.05"
+			"IW_PROPERTY_CRIT_MULTI_FLAT"		"0.5"
+		}
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_dragon_knight"
+			{
+				"Animation"		"ACT_DOTA_CAST_ABILITY_2"
+				"Rate"			"1.0"
+			}
+		}
+	}
+
+	"iw_dragon_knight_razorscales"
+	{
+		"AbilityFlags"		""
 	}
 
 

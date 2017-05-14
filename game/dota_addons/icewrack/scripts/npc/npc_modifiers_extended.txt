@@ -587,6 +587,9 @@
 			"IsDebuff"			"1"
 			"Duration"			"0.2"
 
+			"StatusEffect"			"IW_STATUS_EFFECT_STUN"
+			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+
 			"Properties"			{}
 
 			"DatadrivenAttributes"		""
@@ -602,7 +605,22 @@
 		}
 	}
 
+	"iw_dragon_knight_razorscales"
+	{
+		"modifier_iw_dragon_knight_razorscales"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/dragon_knight/modifier_iw_dragon_knight_razorscales.lua"
 
+			"IsHidden"			"1"
+
+			"Properties"			{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" {}
+		}
+	}
 
 
 
@@ -689,6 +707,23 @@
 			"Properties"
 			{
 				"IW_PROPERTY_ATTR_STR_FLAT"			{"50" "100"}
+			}
+
+			"IsHidden"			"1"
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates" { }
+			"DatadrivenProperties" { }
+			"DatadrivenEvents" { }
+		}
+	}
+
+	"item_test_shield"
+	{
+		"modifier_item_test_shield"
+		{
+			"Properties"
+			{
+				"IW_PROPERTY_ATTR_END_FLAT"			{"50" "100"}
 			}
 
 			"IsHidden"			"1"

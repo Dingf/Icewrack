@@ -146,9 +146,8 @@ function GetOverviewMovementSpeed(tSourceData, nEntityIndex)
 {
 	var fBaseMoveSpeed = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MOVE_SPEED_FLAT) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_AGI_FLAT) * 1.0);
 	var fFatigueMultiplier = (GetPropertyValue(tSourceData, Instance.IW_PROPERTY_FATIGUE_MULTI) - GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_STR_FLAT) * 1.0)/100.0;
-	fBaseMoveSpeed *= (1.0 - Math.max(0, fFatigueMultiplier))
-	fBaseMoveSpeed *= (1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MOVE_SPEED_PCT)/100)
-	return fBaseMoveSpeed + " (" + (Math.max(fBaseMoveSpeed, 100)/100.0).toFixed(2) + "m/s)";
+	fBaseMoveSpeed *= (1.0 - Math.max(0, fFatigueMultiplier) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MOVE_SPEED_PCT)/100)
+	return Math.floor(fBaseMoveSpeed) + " (" + (Math.max(fBaseMoveSpeed, 100)/100.0).toFixed(2) + "m/s)";
 }
 
 function GetOverviewRunStaminaCost(tSourceData, nEntityIndex)

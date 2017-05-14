@@ -39,13 +39,11 @@ local stExtItemFlagEnum =
 	IW_ITEM_FLAG_UNIQUE = 2,				--TODO: A character cannot carry more than one of this item at a time
 	IW_ITEM_FLAG_QUEST = 4,					--TODO: Quest-related item, cannot be dropped
 	IW_ITEM_FLAG_ATTACK_SOURCE = 8,			--Use the stats of this item when performing an attack
-	IW_ITEM_FLAG_MAIN_HAND_ONLY = 16,		--TODO: This item can only be equipped in the main hand
-	IW_ITEM_FLAG_OFF_HAND_ONLY = 32,		--TODO: This item can only be equipped in the off hand
+	IW_ITEM_FLAG_CAN_ACTIVATE = 16,			--This item has the "Activate" context menu option
+	IW_ITEM_FLAG_CAN_READ = 32,				--This item has the "Read" context menu option
 	IW_ITEM_FLAG_CANNOT_UNEQUIP = 64,		--This item cannot be unequipped (TODO: Make it so that these items don't autoequip)
 	IW_ITEM_FLAG_REQUIRES_AMMO = 128,		--TODO: If this item is an attack source, it needs ammo in the other hand to attack with
 	IW_ITEM_FLAG_THROWN = 256,				--TODO: When attacking with this item, remove a stack
-	IW_ITEM_FLAG_CAN_ACTIVATE = 512,		--This item has the "Activate" context menu option
-	IW_ITEM_FLAG_CAN_READ = 1024,			--This item has the "Read" context menu option
 }
 
 for k,v in pairs(stExtItemTypeEnum) do _G[k] = v end
@@ -190,6 +188,10 @@ end
 
 function CExtItem:IsIdentified()
 	return (self._bIsIdentified == true)
+end
+
+function CExtItem:IsAttackSource()
+	return bit32.btest(self._nItemFlags, IW_ITEM_FLAG_ATTACK_SOURCE)
 end
 
 function CExtItem:Identify()

@@ -1,23 +1,29 @@
 iw_axe_culling_blade = class({})
 
-function iw_axe_culling_blade:CastFilterResult()
-	self._bEquipFailed = false
-	local hEntity = self:GetCaster()
-	if hEntity.GetInventory then
-		local hInventory = hEntity:GetInventory()
-		for i = 1,IW_INVENTORY_SLOT_QUICK1-1 do
-			local hItem = hInventory:GetEquippedItem(i)
-			if hItem and bit32.btest(hItem:GetItemType(), IW_ITEM_TYPE_WEAPON_2H) then
-				return UF_SUCCESS
+function iw_axe_culling_blade:CastFilterResultTarget()
+	if IsServer() then
+		self._bEquipFailed = false
+		local hEntity = self:GetCaster()
+		if hEntity.GetInventory then
+			local hInventory = hEntity:GetInventory()
+			for i = 1,IW_INVENTORY_SLOT_QUICK1-1 do
+				local hItem = hInventory:GetEquippedItem(i)
+				if hItem then
+					local nItemType = hItem:GetItemType()
+					--Check if two-handed and if melee weapon type
+					if bit32.btest(nItemType, 2) and bit32.btest(nItemType, 124) then
+						return UF_SUCCESS
+					end
+				end
 			end
 		end
+		self._bEquipFailed = true
+		return UF_FAIL_CUSTOM
 	end
-	self._bEquipFailed = true
-	return UF_FAIL_CUSTOM
 end
 
-function iw_axe_culling_blade:GetCustomCastError()
-	if self._bEquipFailed then return "#iw_error_cast_equip" end
+function iw_axe_culling_blade:GetCustomCastErrorTarget()
+	if self._bEquipFailed then return "#iw_error_cast_2h_melee" end
 end
 
 function iw_axe_culling_blade:OnSpellStart()
@@ -44,6 +50,7 @@ function iw_axe_culling_blade:OnSpellStart()
 		
 		local nHitParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_axe/axe_culling_blade.vpcf", PATTACH_CUSTOMORIGIN, hEntity)
 		ParticleManager:SetParticleControlEnt(nHitParticleID, 0, hTarget, PATTACH_POINT_FOLLOW, "attach_hitloc", vTargetPosition, true)
+		ParticleManager:ReleaseParticleIndex(nHitParticleID)
 		
 		if DealAttackDamage(hEntity, tDamageTable) then
 			if hTarget:GetHealth() == 0 then

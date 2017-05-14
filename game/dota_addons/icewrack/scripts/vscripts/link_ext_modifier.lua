@@ -272,19 +272,20 @@ local function OnModifierCreatedDefault(self, keys)
 	
 	local hTarget = self:GetParent()
 	if not IsServer() then
+		local tModifierStringBuilder = {}
 		local tModifierArgsTable = CustomNetTables:GetTableValue("modifier_args", self:GetName())
 		if tModifierArgsTable then
 			keys = tModifierArgsTable[tostring(self:RetrieveModifierID())]
-			if keys then RecordModifierArgs(self, keys) end
-		end
-		
-		local tModifierStringBuilder = {}
-		for k,v in pairs(keys) do
-			if k ~= "texture" and type(v) ~= "table" then
-				table.insert(tModifierStringBuilder, k)
-				table.insert(tModifierStringBuilder, "=")
-				table.insert(tModifierStringBuilder, v)
-				table.insert(tModifierStringBuilder, " ")
+			if keys then
+				RecordModifierArgs(self, keys)
+				for k,v in pairs(keys) do
+					if k ~= "texture" and type(v) ~= "table" then
+						table.insert(tModifierStringBuilder, k)
+						table.insert(tModifierStringBuilder, "=")
+						table.insert(tModifierStringBuilder, v)
+						table.insert(tModifierStringBuilder, " ")
+					end
+				end
 			end
 		end
 		table.insert(tModifierStringBuilder, "texture=")

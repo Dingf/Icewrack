@@ -130,35 +130,36 @@ function OnTooltipAbilityLoad()
 			{
 				var tAbilitySpecials = tSpecialSections[i].split("|");
 				var fSpecialBaseValue = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecials[0]);
+				var fSpecialBonusValue = 0;
 				if (tAbilitySpecials[0] === "r")
 				{
-					fSpecialBaseValue = Abilities.GetAOERadius(nAbilityIndex)/100.0;
+					fSpecialBaseValue = (Abilities.GetAOERadius(nAbilityIndex)/100.0).toFixed(2);
 				}
-				if (typeof(fSpecialBaseValue) === "number")
+				var fSpecialTotal = fSpecialBaseValue;
+				if (typeof(fSpecialTotal) === "number")
 				{
-					var fSpecialBonusValue = 0;
-					var fSpecialTotal = fSpecialBaseValue
 					if (tAbilitySpecials.length > 1)
 					{
 						var fSpecialBonus = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecials[1]);
 						if (typeof(fSpecialBonus) === "number")
 						{
-							fSpecialBonusValue = fSpecialBonus;
+							fSpecialBonusValue = Math.round(fSpecialBonus * 100)/100;
 						}
 					}
-					
-					fSpecialTotal += fSpecialBonusValue * fSpellpower
-					szFormattedText += "<font color=\"#ffffff\">";
-					if (GameUI.IsAltDown() && (fSpecialBonusValue > 0))
-					{
-						szFormattedText = szFormattedText + "</font><font color=\"#ffffff\">(" + fSpecialBaseValue + " + " + fSpecialBonusValue + "x)";
-					}
-					else
-					{
-						szFormattedText += Math.round(fSpecialTotal * 100)/100;
-					}
-					szFormattedText += "</font>";
+					fSpecialTotal += fSpecialBonusValue * fSpellpower;
+					fSpecialTotal = Math.round(fSpecialTotal * 100)/100;
 				}
+				
+				szFormattedText += "<font color=\"#ffffff\">";
+				if (GameUI.IsAltDown() && (fSpecialBonusValue > 0))
+				{
+					szFormattedText = szFormattedText + "(" + fSpecialBaseValue + " + " + fSpecialBonusValue + "x)";
+				}
+				else
+				{
+					szFormattedText += fSpecialTotal;
+				}
+				szFormattedText += "</font>";
 			}
 		}
 		

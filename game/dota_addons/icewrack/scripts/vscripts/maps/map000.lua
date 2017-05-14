@@ -5,6 +5,8 @@
 require("ext_entity")
 require("game_states")
 
+--TODO: Add a modifier that prevents characters from using stamina while running back and forth in the pick screen
+
 local stHeroAxeResponseLines =
 {
 	"axe_axe_firstblood_02",
