@@ -1,5 +1,18 @@
 "IcewrackExtendedItemDefinitions"
 {
+	"iw_dragon_knight_dragon_form_source"
+	{
+		"ItemFlags"		"IW_ITEM_FLAG_ATTACK_SOURCE"
+
+		"Properties"
+		{
+			"IW_PROPERTY_ATTACK_RANGE"			"800"
+			"IW_PROPERTY_ATTACK_SP_FLAT"			"5"
+			"IW_PROPERTY_CRIT_CHANCE_FLAT"			"0.05"
+			"IW_PROPERTY_CRIT_MULTI_FLAT"			"0.5"
+		}
+	}
+
 	"item_test_component"
 	{
 		"ItemType"		""

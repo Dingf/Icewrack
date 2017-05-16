@@ -121,6 +121,15 @@
 		}
 	}
 
+	"iw_dragon_knight_dragon_form_source"
+	{
+		"BaseClass"				"item_lua"
+		"ScriptFile"				"ext_item"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+	}
+
+
 	"item_test"
 	{
 		"BaseClass"				"item_lua"

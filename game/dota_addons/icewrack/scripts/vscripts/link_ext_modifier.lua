@@ -476,7 +476,7 @@ local function ParseDatadrivenProperties(hLuaModifier, tLinkLuaModifierTemplate)
 		hLuaModifier.OldDeclareFunctions = hLuaModifier.DeclareFunctions
 		hLuaModifier.DeclareFunctions = function()
 			local tBaseResults = hLuaModifier:OldDeclareFunctions()
-			for k,v in pairs(tBaseResults) do hLuaModifier._tDeclareFunctionList[k] = v end
+			for k,v in pairs(tBaseResults) do table.insert(hLuaModifier._tDeclareFunctionList, v) end
 			return hLuaModifier._tDeclareFunctionList
 		end
 	else

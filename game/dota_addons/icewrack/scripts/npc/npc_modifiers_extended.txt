@@ -622,6 +622,37 @@
 		}
 	}
 
+	"iw_dragon_knight_dragon_form"
+	{
+		"modifier_iw_dragon_knight_dragon_form"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/dragon_knight/modifier_iw_dragon_knight_dragon_form.lua"
+
+			"Duration"			"%duration"
+			"Texture"			"dragon_knight_elder_dragon_form"
+
+			"Properties"
+			{
+				"IW_PROPERTY_MAX_SP_FLAT"			"%stamina_bonus"
+				"IW_PROPERTY_MOVE_SPEED_PCT"			"%speed_bonus"
+				"IW_PROPERTY_RUN_SP_PCT"			"-100"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_CANNOT_MISS"			"MODIFIER_STATE_VALUE_ENABLED"
+			}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_HEALTH_BONUS"		"%health_bonus"
+				"MODIFIER_PROPERTY_PROJECTILE_SPEED_BONUS"	"1800"
+				"MODIFIER_PROPERTY_MODEL_CHANGE"		"models/heroes/dragon_knight/dragon_knight_dragon.vmdl"
+			}
+			"DatadrivenEvents" 		{}
+		}
+	}
+
 
 
 	"item_test"

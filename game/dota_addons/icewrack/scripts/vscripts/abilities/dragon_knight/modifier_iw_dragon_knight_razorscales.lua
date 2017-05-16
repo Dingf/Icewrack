@@ -35,7 +35,7 @@ end
 function modifier_iw_dragon_knight_razorscales:OnAttacked(args)
 	local hEntity = self:GetParent()
 	local hTarget = args.attacker
-	if IsServer() and args.target == hEntity and not args.ranged_attack then
+	if args.target == hEntity and not args.ranged_attack then
 		local tDamageTable =
 		{
 			attacker = hEntity,

@@ -102,7 +102,21 @@
 	"iw_dragon_knight_razorscales"
 	{
 		"AbilityFlags"		""
-		"AbilitySkill"		"156"
+	}
+
+	"iw_dragon_knight_dragon_form"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_dragon_form.lua"
+		"AbilityFlags"		""
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_dragon_knight"
+			{
+				"Animation"		"ACT_DOTA_TELEPORT"
+				"Rate"			"1.0"
+			}
+		}
 	}
 
 

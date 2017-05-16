@@ -27,7 +27,7 @@ function CIcewrackGameMode:OnEntitySpawned(keys)
 		hEntity:SetDayTimeVisionRange(0.0)
 		hEntity:SetNightTimeVisionRange(0.0)
 		hEntity:SetBaseMoveSpeed(0)
-		hEntity:AddNoDraw()
+		hEntity:AddEffects(EF_NODRAW)
 	end
 	
 	--TODO: Testing code; Delete me

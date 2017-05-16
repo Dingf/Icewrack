@@ -77,6 +77,13 @@ function CSpellbook:FindAbilityByName(szAbilityName)
 	return CDOTA_BaseNPC.FindAbilityByName(hEntity, szAbilityName)
 end
 
+function CSpellbook:GetAbility(szAbilityName)
+	local hSpellUnit = self._tSpellList[szAbilityName]
+	if hSpellUnit then
+		return hSpellUnit:FindAbilityByName(szAbilityName)
+	end
+end
+
 function CSpellbook:UpdateNetTable()
 	if self._bIsSpellbook then
 		local tNetTable = self._tNetTable

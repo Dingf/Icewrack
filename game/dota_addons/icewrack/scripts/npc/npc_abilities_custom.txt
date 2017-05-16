@@ -500,6 +500,47 @@
 		}
 	}
 
+	"iw_dragon_knight_dragon_form"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"dragon_knight_elder_dragon_form"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"2.0"
+		"AbilityCooldown"			"8.0"
+
+		"Modifiers"
+		{
+			"modifier_iw_dragon_knight_dragon_form"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"120.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"health_bonus"			"1000"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"stamina_bonus"			"250"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"speed_bonus"			"25.0"
+			}
+		}
+	}
 
 	"iw_bounty_hunter_trapjaw"
 	{

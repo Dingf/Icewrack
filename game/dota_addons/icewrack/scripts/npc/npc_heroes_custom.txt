@@ -64,6 +64,7 @@
 		"Ability1"			"iw_dragon_knight_breathe_fire"
 		"Ability2"			"iw_dragon_knight_shield_slam"
 		"Ability3"			"iw_dragon_knight_razorscales"
+		"Ability4"			"iw_dragon_knight_dragon_form"
 		"Ability5"			""
 		"Ability6"			""
 		"Ability7"			""
