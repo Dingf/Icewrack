@@ -42,9 +42,10 @@ function iw_dragon_knight_breathe_fire:OnSpellStart()
 end
 
 function iw_dragon_knight_breathe_fire:OnProjectileThink(vLocation)
-	local vGroundPosition = GetGroundPosition(vLocation, self:GetCaster())
+	local hEntity = self:GetCaster()
+	local vGroundPosition = GetGroundPosition(vLocation, hEntity)
 	local vPositionDiff = vGroundPosition - self._vLastPosition
-	if not self:IsFlying() and not GridNav:IsTraversable(vLocation) and vPositionDiff.z > -64.0 then
+	if not hEntity:IsFlying() and not GridNav:IsTraversable(vLocation) and vPositionDiff.z > -64.0 then
 		ProjectileManager:DestroyLinearProjectile(self._nProjectileID)
 	end
 	self._vLastPosition = vLocation

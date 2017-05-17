@@ -19,13 +19,13 @@ end
 require("mechanics/attributes")
 require("instance")
 
-local stExtEntityUnitClassEnum =
+stExtEntityUnitClassEnum =
 {  
     IW_UNIT_CLASS_CRITTER = 1,  IW_UNIT_CLASS_NORMAL = 2, IW_UNIT_CLASS_VETERAN = 3, IW_UNIT_CLASS_ELITE = 4, IW_UNIT_CLASS_BOSS = 5,
 	IW_UNIT_CLASS_ACT_BOSS = 6, IW_UNIT_CLASS_HERO = 7,
 }
 
-local stExtEntityUnitTypeEnum =
+stExtEntityUnitTypeEnum =
 {
 	IW_UNIT_TYPE_NONE = 0,
     IW_UNIT_TYPE_MELEE = 1,
@@ -33,7 +33,7 @@ local stExtEntityUnitTypeEnum =
 	IW_UNIT_TYPE_MAGIC = 3,
 }
 
-local stExtEntityUnitSubtypeEnum =
+stExtEntityUnitSubtypeEnum =
 {
     IW_UNIT_SUBTYPE_NONE = 0,       IW_UNIT_SUBTYPE_BIOLOGICAL = 1, IW_UNIT_SUBTYPE_MECHANICAL = 2, IW_UNIT_SUBTYPE_ETHEREAL = 3,
 	IW_UNIT_SUBTYPE_ELEMENTAL = 4,  IW_UNIT_SUBTYPE_UNDEAD = 5,     IW_UNIT_SUBTYPE_DEMON = 6,
@@ -58,20 +58,20 @@ local stExtEntityUnitSubtypeEnum =
 --  at 4: -24 = -20 * (1 - (-2 * -0.1))
 --
 --TODO: Actually implement alignment
-local stExtEntityAlignment =
+stExtEntityAlignment =
 {
-	IW_ALIGNMENT_LAWFUL_GOOD = 1,
-	IW_ALIGNMENT_NEUTRAL_GOOD = 2,
-	IW_ALIGNMENT_CHAOTIC_GOOD = 3,
-	IW_ALIGNMENT_LAWFUL_NEUTRAL = 4,
-	IW_ALIGNMENT_TRUE_NEUTRAL = 5,
-	IW_ALIGNMENT_CHAOTIC_NEUTRAL = 6,
-	IW_ALIGNMENT_LAWFUL_EVIL = 7,
-	IW_ALIGNMENT_NEUTRAL_EVIL = 8,
-	IW_ALIGNMENT_CHAOTIC_EVIL = 9,
+	IW_UNIT_ALIGNMENT_LAWFUL_GOOD = 1,
+	IW_UNIT_ALIGNMENT_NEUTRAL_GOOD = 2,
+	IW_UNIT_ALIGNMENT_CHAOTIC_GOOD = 3,
+	IW_UNIT_ALIGNMENT_LAWFUL_NEUTRAL = 4,
+	IW_UNIT_ALIGNMENT_TRUE_NEUTRAL = 5,
+	IW_UNIT_ALIGNMENT_CHAOTIC_NEUTRAL = 6,
+	IW_UNIT_ALIGNMENT_LAWFUL_EVIL = 7,
+	IW_UNIT_ALIGNMENT_NEUTRAL_EVIL = 8,
+	IW_UNIT_ALIGNMENT_CHAOTIC_EVIL = 9,
 }
 
-local stExtEntityFlagEnum =
+stExtEntityFlagEnum =
 {
     IW_UNIT_FLAG_NONE = 0,
 	IW_UNIT_FLAG_MASSIVE = 1,
@@ -124,7 +124,7 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._nUnitClass   = stExtEntityUnitClassEnum[tExtEntityTemplate.UnitClass] or IW_UNIT_CLASS_NORMAL
 		hEntity._nUnitType 	  = stExtEntityUnitTypeEnum[tExtEntityTemplate.UnitType] or 0
 		hEntity._nUnitSubtype = stExtEntityUnitSubtypeEnum[tExtEntityTemplate.UnitSubtype] or IW_UNIT_SUBTYPE_NONE
-		hEntity._nUnitFlags   = GetFlagValue(tExtEntityTemplate.UnitFlags or "", stExtEntityFlagEnum)
+		hEntity._nUnitFlags   = GetFlagValue(tExtEntityTemplate.UnitFlags, stExtEntityFlagEnum)
 		hEntity._nAlignment   = stExtEntityAlignment[tExtEntityTemplate.Alignment] or IW_ALIGNMENT_TRUE_NEUTRAL
 		hEntity._fUnitHeight  = tExtEntityTemplate.UnitHeight or 0
 		hEntity._nEquipFlags  = tExtEntityTemplate.EquipFlags or 0
@@ -217,7 +217,11 @@ function CExtEntity:GetAlignment()
 end
 
 function CExtEntity:GetUnitFlags()
-	return self._nUnitFlags
+	local nFlags = self._nUnitFlags
+	for k,v in pairs(self._tExtModifierTable) do
+		nFlags = bit32.bor(nFlags, v:GetModifierEntityFlags())
+	end
+	return nFlags
 end
 
 function CExtEntity:GetUnitHeight()
@@ -253,11 +257,11 @@ function CExtEntity:GetCurrentLevelExperience()
 end
 
 function CExtEntity:IsMassive()
-	return bit32.btest(self._nUnitFlags, IW_UNIT_FLAG_MASSIVE)
+	return bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_MASSIVE)
 end
 
 function CExtEntity:IsFlying()
-	return bit32.btest(self._nUnitFlags, IW_UNIT_FLAG_FLYING)
+	return bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_FLYING)
 end
 
 
@@ -462,7 +466,7 @@ end
 function CExtEntity:SpendStamina(fStamina)
 	if fStamina >= 0 then
 		self._fStamina = math.max(0, self:GetStamina() - fStamina)
-		self._fStaminaRegenTime = math.max(self._fStaminaRegenTime, GameRules:GetGameTime() + (5.0 * (1.0 + IW_PROPERTY_SP_REGEN_TIME_PCT/100)))
+		self._fStaminaRegenTime = math.max(self._fStaminaRegenTime, GameRules:GetGameTime() + (5.0 * (1.0 + self:GetPropertyValue(IW_PROPERTY_SP_REGEN_TIME_PCT)/100)))
 	end
 end
 

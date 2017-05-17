@@ -631,10 +631,12 @@
 			"Duration"			"%duration"
 			"Texture"			"dragon_knight_elder_dragon_form"
 
+			"ModifierEntityFlags"		"IW_UNIT_FLAG_FLYING | IW_UNIT_FLAG_MASSIVE"
+
 			"Properties"
 			{
 				"IW_PROPERTY_MAX_SP_FLAT"			"%stamina_bonus"
-				"IW_PROPERTY_MOVE_SPEED_PCT"			"%speed_bonus"
+				"IW_PROPERTY_MOVE_SPEED_FLAT"			"%speed_bonus"
 				"IW_PROPERTY_RUN_SP_PCT"			"-100"
 			}
 
@@ -648,6 +650,8 @@
 				"MODIFIER_PROPERTY_HEALTH_BONUS"		"%health_bonus"
 				"MODIFIER_PROPERTY_PROJECTILE_SPEED_BONUS"	"1800"
 				"MODIFIER_PROPERTY_MODEL_CHANGE"		"models/heroes/dragon_knight/dragon_knight_dragon.vmdl"
+				"MODIFIER_PROPERTY_MODEL_SCALE"			"140"
+				"MODIFIER_PROPERTY_TRANSLATE_ATTACK_SOUND"	"sounds/weapons/hero/dragon_knight/dragonknight_elderdragon_shoot1.vsnd"
 			}
 			"DatadrivenEvents" 		{}
 		}

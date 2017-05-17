@@ -1,0 +1,40 @@
+"Hero_DragonKnight.DragonForm.PreCast"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/weapons/hero/bloodseeker/rage.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"1.500000"
+					}
+					"pitch"
+					{
+						"value"		"0.4800000"
+					}
+					"soundlevel"
+					{
+						"value"		"75.000000"
+					}
+					"event_type"
+					{
+						"value"		"3.000000"
+					}
+				}
+			}
+		}
+	}
+}

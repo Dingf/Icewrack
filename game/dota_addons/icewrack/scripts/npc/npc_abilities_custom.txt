@@ -509,7 +509,7 @@
 		"AbilityTextureName"			"dragon_knight_elder_dragon_form"
 
 		"MaxLevel"				"1"
-		"AbilityCastPoint"			"2.0"
+		"AbilityCastPoint"			"3.0"
 		"AbilityCooldown"			"8.0"
 
 		"Modifiers"

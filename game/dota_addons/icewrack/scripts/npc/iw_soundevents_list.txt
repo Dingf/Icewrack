@@ -1,0 +1,4 @@
+"IcewrackSoundEventsTable"
+{
+	"npc_dota_hero_dragon_knight"		"soundevents/game_sounds_heroes/game_sounds_iw_dragon_knight.vsndevts"
+}

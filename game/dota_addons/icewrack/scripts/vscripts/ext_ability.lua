@@ -8,29 +8,6 @@ end
 require("instance")
 require("link_ext_ability")
 
-local stLuaAbilityEventAliases = 
-{
-	ABILITY_EVENT_ON_ABILITYPHASE_INTERRUPTED = "OnAbilityPhaseInterrupted",
-	ABILITY_EVENT_ON_ABILITYPHASE_START = "OnAbilityPhaseStart",
-	ABILITY_EVENT_ON_CHANNEL_FINISH = "OnChannelFinish",
-	ABILITY_EVENT_ON_HERO_CALCULATE_STAT_BONUS = "OnHeroCalculateStatBonus",
-	ABILITY_EVENT_ON_HERO_DIED_NEARBY = "OnHeroDiedNearby",
-	ABILITY_EVENT_ON_HERO_LEVEL_UP = "OnHeroLevelUp",
-	ABILITY_EVENT_ON_INVENTORY_CONTENTS_CHANGED = "OnInventoryContentsChanged",
-	ABILITY_EVENT_ON_ITEM_EQUIPPED = "OnItemEquipped",
-	ABILITY_EVENT_ON_OWNER_DIED = "OnOwnerDied",
-	ABILITY_EVENT_ON_OWNER_SPAWNED = "OnOwnerSpawned",
-	ABILITY_EVENT_ON_PROJECTILE_HIT = "OnProjectileHit",
-	ABILITY_EVENT_ON_PROJECTILE_HIT_E = "OnProjectileHit_ExtraData",
-	ABILITY_EVENT_ON_PROJECTILE_THINK = "OnProjectileThink",
-	ABILITY_EVENT_ON_PROJECTILE_THINK_E = "OnProjectileThink_ExtraData",
-	ABILITY_EVENT_ON_SPELL_START = "OnSpellStart",
-	ABILITY_EVENT_ON_STOLEN = "OnStolen",
-	ABILITY_EVENT_ON_TOGGLE = "OnToggle",
-	ABILITY_EVENT_ON_UNSTOLEN = "OnUnStolen",
-	ABILITY_EVENT_ON_UPGRADE = "OnUpgrade",
-}
-
 local stBaseAbilityData = LoadKeyValues("scripts/npc/npc_abilities_custom.txt")
 local stExtAbilityData = LoadKeyValues("scripts/npc/npc_abilities_extended.txt")
 

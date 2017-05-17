@@ -13,7 +13,6 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 	if IsServer() and IsValidExtendedEntity(hEntity) then
 		self._szBaseAttackCap = hEntity:GetAttackCapability()
 		self._szBaseProjectile = hEntity:GetRangedProjectileName()
-		--self._szBaseModelName = args.modelname
 		self._tWearables = {}
 		local hChild = hEntity:FirstMoveChild()
 		while hChild do
@@ -33,9 +32,14 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 		
 		hEntity:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK)
 		hEntity:SetRangedProjectileName("particles/units/heroes/hero_dragon_knight/iw_dragon_knight_dragon_form_attack.vpcf")
-		--hEntity:SetOriginalModel("models/heroes/dragon_knight/dragon_knight_dragon.vmdl")
-		hEntity:SetModelScale(2.0)
+		
+		hEntity:StartGesture(ACT_DOTA_CAST_ABILITY_4)
+		self:StartIntervalThink(0.75)
 	end
+end
+
+function modifier_iw_dragon_knight_dragon_form:OnIntervalThink()
+	EmitSoundOn("Hero_DragonKnight.Wings", self:GetCaster())
 end
 
 function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
@@ -53,8 +57,11 @@ function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
 		
 		hEntity:SetAttackCapability(self._szBaseAttackCap)
 		hEntity:SetRangedProjectileName(self._szBaseProjectile)
-		--hEntity:SetOriginalModel(self._szBaseModelName)
-		hEntity:SetModelScale(1.0)
+		EmitSoundOn("Hero_DragonKnight.ElderDragonForm.Revert", hEntity)
+		
+		local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_dragon_knight/dragon_knight_transform_green.vpcf", PATTACH_WORLDORIGIN, self)
+		ParticleManager:SetParticleControl(nParticleID, 0, hEntity:GetAbsOrigin())
+		ParticleManager:ReleaseParticleIndex(nParticleID)
 	end
 end
 

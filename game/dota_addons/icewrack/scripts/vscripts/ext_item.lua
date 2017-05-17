@@ -12,7 +12,7 @@ end
 require("instance")
 require("link_ext_ability")
 
-local stExtItemTypeEnum =
+stExtItemTypeEnum =
 {
 	IW_ITEM_TYPE_WEAPON_1H = 1,        IW_ITEM_TYPE_WEAPON_2H = 2,        IW_ITEM_TYPE_WEAPON_SWORD = 3,     IW_ITEM_TYPE_WEAPON_MACE = 4,
 	IW_ITEM_TYPE_WEAPON_AXE = 5,       IW_ITEM_TYPE_WEAPON_DAGGER = 6,    IW_ITEM_TYPE_WEAPON_STAFF = 7,     IW_ITEM_TYPE_WEAPON_BOW = 8,
@@ -24,7 +24,7 @@ local stExtItemTypeEnum =
 	IW_ITEM_TYPE_REAGENT_LEATHER = 29, IW_ITEM_TYPE_REAGENT_CLOTH = 30,   IW_ITEM_TYPE_REAGENT_WOOD = 31,    IW_ITEM_TYPE_REAGENT_GEM = 32,     
 }
 
-local stExtItemSlotEnum = 
+stExtItemSlotEnum = 
 {
 	IW_INVENTORY_SLOT_NONE = 0,    IW_INVENTORY_SLOT_MAIN_HAND = 1, IW_INVENTORY_SLOT_OFF_HAND = 2, IW_INVENTORY_SLOT_HEAD = 3,
 	IW_INVENTORY_SLOT_BODY = 4,    IW_INVENTORY_SLOT_HANDS = 5,     IW_INVENTORY_SLOT_FEET = 6,     IW_INVENTORY_SLOT_WAIST = 7,
@@ -32,7 +32,7 @@ local stExtItemSlotEnum =
 	IW_INVENTORY_SLOT_QUICK2 = 12, IW_INVENTORY_SLOT_QUICK3 = 13,   IW_INVENTORY_SLOT_QUICK4 = 14,  IW_MAX_INVENTORY_SLOT = 15
 }
 
-local stExtItemFlagEnum =
+stExtItemFlagEnum =
 {
 	IW_ITEM_FLAG_NONE = 0,
 	IW_ITEM_FLAG_HIDDEN = 1,				--TODO: Do not display this item in the Inventory list

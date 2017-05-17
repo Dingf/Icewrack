@@ -8,9 +8,13 @@ require("bind_manager")
 require("save_manager")
 
 function Precache(context)
+	local tSoundEventList = LoadKeyValues("scripts/npc/iw_soundevents_list.txt")
 	local tPrecacheList = CSaveManager:GetPrecacheList()
 	for k,_ in pairs(tPrecacheList) do
 		PrecacheUnitByNameSync(k, context)
+		if tSoundEventList[k] then
+			PrecacheResource("soundfile", tSoundEventList[k], context)
+		end
 	end
 	PrecacheResource("soundfile", "soundevents/game_sounds_main.vsndevts", context)
 	PrecacheResource("soundfile", "soundevents/game_sounds_ambient.vsndevts", context)
