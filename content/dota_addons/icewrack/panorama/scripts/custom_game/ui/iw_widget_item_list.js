@@ -104,6 +104,12 @@ function OnItemListUpdate(hContextPanel, tArgs)
 	var hBodyPanel = hContextPanel.FindChildTraverse("ListBody");
 	for (var k in tItemList)
 	{
+		var nItemFlags = tItemList[k].flags;
+		if (nItemFlags & IW_ITEM_FLAG_HIDDEN)
+		{
+			continue;
+		}
+		
 		if (!hContextPanel._tItemPanels[k])
 		{
 			hContextPanel._tItemPanels[k] = CreateItemEntry(hBodyPanel, "Item" + k, nEntityIndex, Number(k), tItemList[k], nContextFilter);

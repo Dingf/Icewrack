@@ -368,7 +368,7 @@ local function OnAttackTarget(self, hTarget)
 		hTarget:MakeVisibleToTeam(self:GetTeamNumber(), 0.1)
 		self:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
 	else
-		self:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
+		self:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, hTarget:GetAbsOrigin(), false)
 	end
 end
 

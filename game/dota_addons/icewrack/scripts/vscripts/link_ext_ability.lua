@@ -212,7 +212,7 @@ function CExtAbilityLinker:GetStaminaCost(nLevel)
 	
 	local nAbilityFlags = self:GetAbilityFlags()
 	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_USES_ATTACK_STAMINA) then
-		local _, hAttackSource = next(hEntity._tAttackSourceTable)
+		local hAttackSource = hEntity:GetCurrentAttackSource()
 		if not hAttackSource then
 			hAttackSource = hEntity
 		end

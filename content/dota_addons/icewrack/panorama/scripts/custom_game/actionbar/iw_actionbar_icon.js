@@ -50,6 +50,7 @@ function OnActionBarIconContextMenu()
 	if (tPartyCombatTable.State === 1)
 	{
 		Game.EmitSound("UI.Invalid");
+        GameEvents.SendEventClientSide("dota_hud_error_message", { reason:65, message:"" });
 	}
 	else if (!Entities.IsEnemy(nEntityIndex))
 	{

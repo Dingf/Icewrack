@@ -23,12 +23,10 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 			hChild = hChild:NextMovePeer()
 		end
 		
-		self._tAttackSourceTable = {}
-		self._hAttackSource = self:GetAbility()._hAttackSource
-		for k,v in pairs(hEntity._tAttackSourceTable) do
-			self._tAttackSourceTable[k] = v
-		end
-		table.insert(hEntity._tAttackSourceTable, self._hAttackSource)
+		local hAttackSource = self:GetAbility()._hAttackSource
+		hAttackSource:AddChild(hEntity)
+		hEntity:AddAttackSource(hAttackSource, 2)
+		hEntity:GetInventory():AddItemToInventory(hAttackSource)
 		
 		hEntity:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK)
 		hEntity:SetRangedProjectileName("particles/units/heroes/hero_dragon_knight/iw_dragon_knight_dragon_form_attack.vpcf")
@@ -50,10 +48,10 @@ function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
 			v:RemoveEffects(EF_NODRAW)
 		end
 		
-		hEntity._tAttackSourceTable = {}
-		for k,v in pairs(self._tAttackSourceTable) do
-			hEntity._tAttackSourceTable[k] = v
-		end
+		local hAttackSource = self:GetAbility()._hAttackSource
+		hAttackSource:RemoveChild(hEntity)
+		hEntity:RemoveAttackSource(hAttackSource, 2)
+		hEntity:GetInventory():RemoveItem(hAttackSource)
 		
 		hEntity:SetAttackCapability(self._szBaseAttackCap)
 		hEntity:SetRangedProjectileName(self._szBaseProjectile)

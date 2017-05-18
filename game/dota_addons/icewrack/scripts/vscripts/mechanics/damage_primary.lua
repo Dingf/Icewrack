@@ -155,19 +155,21 @@ function DealAttackDamage(self, keys)
 	local hAttacker = keys.attacker
 	if IsValidExtendedEntity(hVictim) and IsValidExtendedEntity(hAttacker) and hVictim:IsAlive() then
 		local bIsUnarmed = false
-		local _,hSource = next(hAttacker._tAttackSourceTable)
-		if not hSource then
-			hSource = hAttacker
+		local hAttackSource = hAttacker:GetCurrentAttackSource()
+		if not hAttackSource then
+			hAttackSource = hAttacker
 			bIsUnarmed = true
+		elseif IsValidExtendedItem(hAttackSource) and bit32.btest(hAttackSource:GetItemFlags(), IW_ITEM_FLAG_DONT_CALCULATE_DAMAGE) then
+			return true
 		end
-		keys.source = hSource
+		keys.source = hAttackSource
 		
 		local fTotalDamage = 0
 		local fDamagePercent = (keys.Percent or 100)/100.0
 		keys.damage = {}
 		for k,v in pairs(stIcewrackDamageTypeEnum) do
-			local fMinDamage = hSource:GetDamageMin(v) * fDamagePercent
-			local fMaxDamage = hSource:GetDamageMax(v) * fDamagePercent
+			local fMinDamage = hAttackSource:GetDamageMin(v) * fDamagePercent
+			local fMaxDamage = hAttackSource:GetDamageMax(v) * fDamagePercent
 			--Strength bonus physical attack damage
 			if v >= IW_DAMAGE_TYPE_CRUSH and v <= IW_DAMAGE_TYPE_PIERCE then
 				fMinDamage = fMinDamage * (1.0 + hAttacker:GetAttributeValue(IW_ATTRIBUTE_STRENGTH)/100.0)

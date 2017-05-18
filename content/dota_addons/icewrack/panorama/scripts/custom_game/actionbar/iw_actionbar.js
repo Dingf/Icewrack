@@ -1,6 +1,5 @@
 "use strict";
 
-
 var NUM_ACTIONBAR_ICONS = 10;
 
 var bUpdateFlag = false;

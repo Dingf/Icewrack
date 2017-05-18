@@ -169,7 +169,7 @@ function CInventory:EquipItem(hItem, nSlot)
 				
 				if i < IW_INVENTORY_SLOT_QUICK1 then
 					if bit32.band(hItem:GetItemFlags(), IW_ITEM_FLAG_IS_ATTACK_SOURCE) ~= 0 then
-						hEntity:AddAttackSource(hItem)
+						hEntity:AddAttackSource(hItem, 1)
 					end
 					if hItem:IsAttackSource() then
 						hItem:AddChild(hEntity)
@@ -197,7 +197,7 @@ function CInventory:UnequipItem(nSlot)
 	if IsValidExtendedEntity(hEntity) and IsValidExtendedItem(hItem) then
 		if bit32.band(hItem:GetItemFlags(), IW_ITEM_FLAG_CANNOT_UNEQUIP) ~= 0 then return false end
 		if nSlot == IW_INVENTORY_SLOT_MAIN_HAND or nSlot == IW_INVENTORY_SLOT_OFF_HAND then
-			hEntity:RemoveAttackSource(hItem)
+			hEntity:RemoveAttackSource(hItem, 1)
 		end
 		if hItem:IsAttackSource() then
 			hItem:RemoveChild(hEntity)
@@ -259,7 +259,6 @@ function CInventory:RemoveItem(hItem)
 		hItem:RemoveModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
 		self._tItemList[hItem] = nil
 		self._tNetTableItemList[hItem:entindex()] = nil
-		hItem:RemoveSelf()
 		self:RefreshInventory()
     end
 end
@@ -320,6 +319,14 @@ function CInventory:AddItemToInventory(hItem)
 		local nAmount = self:GetCanCarryAmount(hItem)
 		if nAmount < 1 then
 			return false
+		end
+		
+		if bit32.btest(hItem:GetItemFlags(), IW_ITEM_FLAG_UNIQUE) then
+			for k,v in pairs(self._tItemList) do
+				if v:GetName() == hItem:GetName() then
+					return false
+				end
+			end
 		end
 		
 		if hItem:GetMaxStacks() > 1 then
@@ -433,6 +440,9 @@ function CInventory:OnUseFinish(args)
 			if hEntity:GetCurrentAction() == hItem:GetAbilityName() then
 				hEntity:SetThink(function()
 					if not hItem or hItem:IsNull() then return nil
+					elseif bit32.btest(hItem:GetItemFlags(), IW_ITEM_FLAG_QUEST) then
+						--TODO: Throw an error to the client about the item being an undroppable quest item
+						return nil
 					elseif hEntity:GetCurrentAction() ~= hItem:GetAbilityName() then
 						hEntity:DropItemAtPositionImmediate(hItem, hEntity:GetAbsOrigin())
 						local hContainer = hItem:GetContainer()

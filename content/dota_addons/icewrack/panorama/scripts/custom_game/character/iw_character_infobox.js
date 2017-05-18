@@ -103,24 +103,27 @@ function OnInfoboxUpdate(hContextPanel, tArgs)
 		var fStrength = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ATTR_STR_FLAT) * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ATTR_STR_PCT)/100.0);
 		
 		var nAttackSources = 0;
-		var tEntityAttackSources = tEntityData.attack_source;
-		for (var k in tEntityAttackSources)
+		var tEntityAttackSourceData = tEntityData.attack_source[String(tEntityData.attack_source.Level)];
+		if (tEntityAttackSourceData)
 		{
-			//TODO: Implement non-item attack sources (like from abilities)
-			var nSourceIndex = tEntityAttackSources[k];
-			var tSourceData = tInventoryData.item_list[nSourceIndex];
-			for (var i = 0; i < stDamageTypeNames.length; i++)
+			for (var k in tEntityAttackSourceData)
 			{
-				var fDamagePercent = 1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DMG_PURE_PCT + ((i > 0) ? Math.max(1, i - 2) : i))/100.0;
+				//TODO: Implement non-item attack sources (like from abilities)
+				var nSourceIndex = tEntityAttackSourceData[k];
+				var tSourceData = tInventoryData.item_list[nSourceIndex];
+				for (var i = 0; i < stDamageTypeNames.length; i++)
+				{
+					var fDamagePercent = 1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DMG_PURE_PCT + ((i > 0) ? Math.max(1, i - 2) : i))/100.0;
+					
+					//Apply physical damage increase from STR to physical damage
+					if ((i >= DamageType.IW_DAMAGE_TYPE_CRUSH) && (i <= DamageType.IW_DAMAGE_TYPE_PIERCE))
+						fDamagePercent += (fStrength * 0.01);
 				
-				//Apply physical damage increase from STR to physical damage
-				if ((i >= DamageType.IW_DAMAGE_TYPE_CRUSH) && (i <= DamageType.IW_DAMAGE_TYPE_PIERCE))
-					fDamagePercent += (fStrength * 0.01);
-			
-				fDamageBase += GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DMG_PURE_BASE + i) * fDamagePercent;
-				fDamageVar += GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DMG_PURE_VAR + i) * fDamagePercent;
+					fDamageBase += GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DMG_PURE_BASE + i) * fDamagePercent;
+					fDamageVar += GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DMG_PURE_VAR + i) * fDamagePercent;
+				}
+				nAttackSources++;
 			}
-			nAttackSources++;
 		}
 		if (nAttackSources > 0)
 		{

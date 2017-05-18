@@ -36,6 +36,15 @@ function iw_dragon_knight_dragon_form:OnSpellStart()
 		self._hAttackSource = CExtItem(CreateItem("iw_dragon_knight_dragon_form_source", nil, nil))
 	end
 	
+	local hSpellbook = hEntity:GetSpellbook()
+	local hBreatheFireAbility = hSpellbook:GetAbility("iw_dragon_knight_breathe_fire")
+	if hBreatheFireAbility then
+		local fDamageMin = hBreatheFireAbility:GetSpecialValueFor("damage_min") + (hEntity:GetSpellpower() * hBreatheFireAbility:GetSpecialValueFor("damage_min_bonus"))
+		local fDamageMax = hBreatheFireAbility:GetSpecialValueFor("damage_max") + (hEntity:GetSpellpower() * hBreatheFireAbility:GetSpecialValueFor("damage_max_bonus"))
+		self._hAttackSource:SetPropertyValue(IW_PROPERTY_DMG_FIRE_BASE, fDamageMin)
+		self._hAttackSource:SetPropertyValue(IW_PROPERTY_DMG_FIRE_VAR, fDamageMax - fDamageMin)
+	end
+	
 	local tModifierArgs =
 	{
 		health_bonus = self:GetSpecialValueFor("health_bonus"),

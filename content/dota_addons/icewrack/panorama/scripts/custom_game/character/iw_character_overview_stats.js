@@ -33,7 +33,7 @@ function GetOverviewAttackSpeed(tSourceData, nEntityIndex)
 
 function GetOverviewAttackRange(tSourceData, nEntityIndex)
 {
-	return ((GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_RANGE) + Entities.GetAttackRange(nEntityIndex))/100.0).toFixed(2) + "m";
+	return (GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_RANGE)/100.0).toFixed(2) + "m";
 }
 
 function GetOverviewAccuracy(tSourceData, nEntityIndex)

@@ -175,7 +175,7 @@ CExtEntity = setmetatable({}, { __call =
 		if tExtEntityTemplate.IsPlayableHero == 1 then
 			hEntity._tNetTable =
 			{
-				attack_source = {},
+				attack_source = { Level = 0 },
 				current_action = "",
 				run_mode = hEntity._bRunMode,
 				stamina = hEntity._fStamina,
@@ -264,6 +264,20 @@ function CExtEntity:IsFlying()
 	return bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_FLYING)
 end
 
+function CExtEntity:IsDualWielding()
+	local bResult = false
+	local nHighestLevel = 0
+	for k,v in pairs(self._tAttackSourceTable) do
+		if k > nHighestLevel then
+			local nAttackSourceCount = #v
+			if nAttackSourceCount > 0 then
+				nHighestLevel = k
+				bResult = (nAttackSourceCount >= 2)
+			end
+		end
+	end
+	return bResult
+end
 
 function CExtEntity:UpdateNetTable(bSkipProperties)
 	if self._tNetTable then
@@ -389,34 +403,72 @@ function CExtEntity:SetAttacking(hEntity)
 	end
 end
 
-function CExtEntity:AddAttackSource(hSource)
-	if IsValidInstance(hSource) then
-		table.insert(self._tAttackSourceTable, hSource)
+function CExtEntity:AddAttackSource(hSource, nLevel)
+	if IsValidInstance(hSource) and type(nLevel) == "number" and nLevel > 0 then
+		if not self._tAttackSourceTable[nLevel] then
+			self._tAttackSourceTable[nLevel] = {}
+			self._tNetTable.attack_source[nLevel] = {}
+		end
+		table.insert(self._tAttackSourceTable[nLevel], hSource)
+		self:RefreshBaseAttackTime()
 		if self._tNetTable then
-			table.insert(self._tNetTable.attack_source, hSource:entindex())
+			local tAttackSourceNetTable = self._tNetTable.attack_source
+			local nHighestSourceLevel = tAttackSourceNetTable.Level
+			if nLevel > nHighestSourceLevel then
+				tAttackSourceNetTable.Level = nLevel
+			end
+			table.insert(self._tNetTable.attack_source[nLevel], hSource:entindex())
 			self:UpdateNetTable(true)
 		end
 	end
 end
 
-function CExtEntity:RemoveAttackSource(hSource)
-	if type(hSource) == "number" and self._tAttackSource[hSource] then
-		table.remove(self._tAttackSourceTable, hSource)
-		if self._tNetTable then
-			table.remove(self._tNetTable.attack_source, hSource)
-			self:UpdateNetTable(true)
-		end
-	elseif IsValidInstance(hSource) then
-		for k,v in pairs(self._tAttackSourceTable) do
-			if v == hSource then
-				table.remove(self._tAttackSourceTable, k)
-				if self._tNetTable then
-					table.remove(self._tNetTable.attack_source, k)
-					self:UpdateNetTable(true)
-				end
+function CExtEntity:GetCurrentAttackSource(bSwapSource)
+	local nHighestLevel = 0
+	local hHighestSource = nil
+	for k,v in pairs(self._tAttackSourceTable) do
+		if k > nHighestLevel then
+			local _,hSource = next(v)
+			if hSource then
+				nHighestLevel = k
+				hHighestSource = hSource
 			end
 		end
 	end
+	if bSwapSource and hHighestSource and #self._tAttackSourceTable[nHighestLevel] > 1 then
+		table.remove(self._tAttackSourceTable[nHighestLevel], 1)
+		table.insert(self._tAttackSourceTable[nHighestLevel], hHighestSource)
+		self:RefreshBaseAttackTime()
+	end
+	return hHighestSource, nHighestLevel
+end
+
+function CExtEntity:RemoveAttackSource(hSource, nLevel)
+	if type(nLevel) == "number" and self._tAttackSourceTable[nLevel] then
+		for k,v in pairs(self._tAttackSourceTable[nLevel]) do
+			if v == hSource then
+				table.remove(self._tAttackSourceTable[nLevel], k)
+				self:RefreshBaseAttackTime()
+				if self._tNetTable then
+					local tAttackSourceNetTable = self._tNetTable.attack_source
+					if nLevel == tAttackSourceNetTable.Level and not next(tAttackSourceNetTable[nLevel]) then
+						tAttackSourceTable[nLevel] = nil
+						local nHighestLevel = 0
+						for k2,v2 in pairs(self._tAttackSourceTable) do
+							if next(v2) and k2 > nHighestLevel then
+								nHighestLevel = k2
+							end
+						end
+						tAttackSourceNetTable.Level = nHighestLevel
+					end
+					table.remove(tAttackSourceNetTable[nLevel], k)
+					self:UpdateNetTable(true)
+				end
+				return true
+			end
+		end
+	end
+	return false
 end
 
 function CExtEntity:RefreshHealthRegen()
@@ -442,6 +494,20 @@ function CExtEntity:RefreshMovementSpeed()
 	end
 	fMovementSpeed = fMovementSpeed * (self:GetFatigueMultiplier() + self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT)/100)
 	self:SetBaseMoveSpeed(math.max(100, fMovementSpeed))
+end
+
+function CExtEntity:RefreshBaseAttackTime()
+	local hAttackSource = self:GetCurrentAttackSource()
+	if hAttackSource then
+		local fBaseAttackTime = hAttackSource:GetBasePropertyValue(IW_PROPERTY_BASE_ATTACK_TIME)
+		if self:IsDualWielding() then
+			fBaseAttackTime = fBaseAttackTime * 0.75
+		end
+		self:SetBaseAttackTime(fBaseAttackTime)
+	else
+		local fBaseAttackTime = self:GetBasePropertyValue(IW_PROPERTY_BASE_ATTACK_TIME)
+		self:SetBaseAttackTime(fBaseAttackTime)
+	end
 end
 
 function CExtEntity:SetRunMode(bRunMode)

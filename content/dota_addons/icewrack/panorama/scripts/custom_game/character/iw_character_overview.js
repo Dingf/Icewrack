@@ -58,19 +58,15 @@ function OnOverviewUpdate(hContextPanel, tArgs)
 	{
 		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
 		var tInventoryData = CustomNetTables.GetTableValue("inventory", nEntityIndex);
+		var tEntityAttackSourceData = tEntityData.attack_source[String(tEntityData.attack_source.Level)];
 		
 		var nEntityAttackSourceCount = 0;
 		var tEntityAttackSources = [];
-		if (Object.keys(tEntityData.attack_source).length === 0)
+		if (tEntityAttackSourceData)
 		{
-			tEntityAttackSources.push({ name:"internal_unarmed", data:tEntityData });
-			nEntityAttackSourceCount++;
-		}
-		else
-		{
-			for (var k in tEntityData.attack_source)
+			for (var k in tEntityAttackSourceData)
 			{
-				var nSourceIndex = tEntityData.attack_source[k];
+				var nSourceIndex = tEntityAttackSourceData[k];
 				var tSourceData = tInventoryData.item_list[nSourceIndex];
 				if (tSourceData)
 				{
@@ -79,9 +75,14 @@ function OnOverviewUpdate(hContextPanel, tArgs)
 				}
 			}
 		}
+		if (nEntityAttackSourceCount === 0)
+		{
+			tEntityAttackSources.push({ name:"internal_unarmed", data:tEntityData });
+			nEntityAttackSourceCount++;
+		}
 		
-		hContextPanel.FindChildTraverse("AttackSource1").visible = (nEntityAttackSourceCount !== 1);
-		hContextPanel.FindChildTraverse("AttackSourceSpacer").visible = (nEntityAttackSourceCount !== 1);
+		hContextPanel.FindChildTraverse("AttackSource1").visible = (nEntityAttackSourceCount > 1);
+		hContextPanel.FindChildTraverse("AttackSourceSpacer").visible = (nEntityAttackSourceCount > 1);
 		
 		var fStrength = GetAttributeValue(tEntityData, Instance.IW_PROPERTY_ATTR_STR_FLAT);
 		for (var k in tEntityAttackSources)

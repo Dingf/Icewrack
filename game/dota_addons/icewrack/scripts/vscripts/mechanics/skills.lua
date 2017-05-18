@@ -63,7 +63,7 @@ modifier_internal_skill_bonus._tDeclareFunctionList =
 
 function modifier_internal_skill_bonus:GetModifierAttackSpeedBonus_Constant(args)
 	local hEntity = self:GetParent()
-	local _, hAttackSource = next(hEntity._tAttackSourceTable)
+	local hAttackSource = hEntity:GetCurrentAttackSource()
 	if hAttackSource then
 		local nItemType = hAttackSource:GetItemType()
 		if bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_BOW - 1)) then
@@ -80,7 +80,7 @@ end
 
 function modifier_internal_skill_bonus:OnRefresh()
 	local hEntity = self:GetParent()
-	local _, hAttackSource = next(hEntity._tAttackSourceTable)
+	local hAttackSource = hEntity:GetCurrentAttackSource()
 	if hAttackSource then
 		local nItemType = hAttackSource:GetItemType()
 		if bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_BOW - 1)) then
