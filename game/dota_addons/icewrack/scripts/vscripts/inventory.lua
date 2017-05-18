@@ -28,7 +28,7 @@ CInventory = setmetatable({}, { __call =
 		hEntity._hInventory = self
 		hEntity.GetInventory = GetInventory
 		if IsValidExtendedEntity(hEntity) then
-			table.insert(hEntity._tRefreshList, self)
+			hEntity:AddToRefreshList(self)
 		end
 		
 		self._bIsInventory = true

@@ -142,7 +142,6 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._tAttackSourceTable = {}
 		
 		hEntity._tOrderTable = { UnitIndex = hEntity:entindex() }
-		hEntity._tExtModifierTable = {}
 		
 		hEntity._bRunMode = true
 		hEntity._fStamina = hEntity:GetMaxStamina()
@@ -218,8 +217,10 @@ end
 
 function CExtEntity:GetUnitFlags()
 	local nFlags = self._nUnitFlags
-	for k,v in pairs(self._tExtModifierTable) do
-		nFlags = bit32.bor(nFlags, v:GetModifierEntityFlags())
+	for k,v in pairs(self:GetChildren()) do
+		if k.GetUnitFlags and v then
+			nFlags = bit32.bor(nFlags, k:GetUnitFlags())
+		end
 	end
 	return nFlags
 end
@@ -471,6 +472,14 @@ function CExtEntity:RemoveAttackSource(hSource, nLevel)
 	return false
 end
 
+function CExtEntity:AddToRefreshList(hEntity)
+	self._tRefreshList[hEntity] = true
+end
+
+function CExtEntity:RemoveFromRefreshList(hEntity)
+	self._tRefreshList[hEntity] = nil
+end
+
 function CExtEntity:RefreshHealthRegen()
 	local fHealthRegenPerSec = self:GetPropertyValue(IW_PROPERTY_HP_REGEN_FLAT)
 	fHealthRegenPerSec = fHealthRegenPerSec + (self:GetPropertyValue(IW_PROPERTY_MAX_HP_REGEN)/100.0 * self:GetMaxHealth())
@@ -548,7 +557,7 @@ function CExtEntity:CurrentActionThink()
 end
 
 function CExtEntity:RefreshEntity()
-	for k,v in pairs(self._tExtModifierTable) do v:RefreshModifier() end
+	--for k,v in pairs(self._tExtModifierTable) do v:RefreshModifier() end
 	--[[if bit32.band(self._nUnitFlags, IW_UNIT_FLAG_REQ_ATTACK_SOURCE) ~= 0 then
 		local bHasAttackSource = next(self._tAttackSourceTable)
 		if not bHasAttackSource and not self:HasModifier("modifier_internal_disarm") then
@@ -557,6 +566,9 @@ function CExtEntity:RefreshEntity()
 			self:RemoveModifierByName("modifier_internal_disarm")
 		end
 	end]]
+	for k,v in pairs(self._tRefreshList) do
+		k:OnEntityRefresh()
+	end
 	
 	self:RefreshHealthRegen()
 	self:RefreshManaRegen()
@@ -567,9 +579,6 @@ function CExtEntity:RefreshEntity()
 	self:SetBaseMagicalResistanceValue(self:GetFatigueMultiplier())		--Hack to get fatigue multiplier on client side lua without nettables
 	
 	self:UpdateNetTable()
-	for k,v in pairs(self._tRefreshList) do
-		v:OnEntityRefresh()
-	end
 end
 
 function CExtEntity:RemoveEntity()

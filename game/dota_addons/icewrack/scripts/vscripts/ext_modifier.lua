@@ -74,7 +74,7 @@ function CExtModifier:GetModifierClass()
 	return self._nModifierClass
 end
 
-function CExtModifier:GetModifierEntityFlags()
+function CExtModifier:GetUnitFlags()
 	return self._nModifierEntityFlags
 end
 
@@ -119,6 +119,10 @@ function CExtModifier:SetDuration(fDuration, bInformClient)
 	end
 	CDOTA_Buff.SetDuration(self, fDuration, bInformClient)
 	return fDuration
+end
+
+function CExtModifier:OnEntityRefresh()
+	self:RefreshModifier()
 end
 
 function IsValidExtendedModifier(hModifier)

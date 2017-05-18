@@ -2,11 +2,16 @@ require("timer")
 require("mechanics/status_effects")
 
 function ApplyWet(hVictim, hAttacker)
-	for k,v in pairs(hVictim._tExtModifierTable) do
-		if v:GetStatusEffect() == IW_STATUS_EFFECT_BURNING then
-			v:Destroy()
+	local tDispelledModifiers = {}
+	for k,v in pairs(hVictim:FindAllModifiers()) do
+		if IsValidExtendedModifier(v) and v:GetStatusEffect() == IW_STATUS_EFFECT_BURNING then
+			table.insert(tDispelledModifiers, v)
 		end
 	end
+	for k,v in pairs(tDispelledModifiers) do
+		v:Destroy()
+	end
+	
 	local hModifier = hVictim:FindModifierByName("modifier_status_wet")
 	if hModifier then
 		hModifier:ForceRefresh()

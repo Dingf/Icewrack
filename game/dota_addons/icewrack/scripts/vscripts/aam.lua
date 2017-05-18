@@ -40,9 +40,7 @@ CAbilityAutomatorModule = setmetatable({}, { __call =
 		
 		hEntity._hAutomator = self
 		hEntity.GetAbilityAutomator = GetAbilityAutomator
-		if IsValidExtendedEntity(hEntity) then
-			table.insert(hEntity._tRefreshList, self)
-		end
+		hEntity:AddToRefreshList(self)
 		
 		self._bIsAutomator = true
 		self._bIsEnabled = false

@@ -173,21 +173,17 @@ end
 local function TargetHasDebuff(hCondition, nValue, tTargetList, bInverse)
 	if nValue ~= 0 then
 		for k,v in pairs(tTargetList) do
-			local tModifierTable = v._tExtModifierTable
-			if tModifierTable then
-				local bHasDebuff = false
-				for k2,v2 in pairs(tModifierTable) do
-					if v2:IsDebuff() then
-						if nValue == IEM_MODIFIER_CLASS_ANY or (v2:GetModifierClass() == nValue) then
-							bHasDebuff = true
-							break
-						end
+			local bHasDebuff = false
+			local tModifierList = v:FindAllModifiers()
+			for k2,v2 in pairs(tModifierTable) do
+				if IsValidExtendedModifier(v2) and v2:IsDebuff() then
+					if nValue == IEM_MODIFIER_CLASS_ANY or (v2:GetModifierClass() == nValue) then
+						bHasDebuff = true
+						break
 					end
 				end
-				if bHasDebuff == bInverse then
-					tTargetList[k] = nil
-				end
-			else
+			end
+			if bHasDebuff == bInverse then
 				tTargetList[k] = nil
 			end
 		end
@@ -198,10 +194,10 @@ end
 local function TargetHasStatusEffect(hCondition, nValue, tTargetList, bInverse)
 	if nValue ~= 0 then
 		for k,v in pairs(tTargetList) do
-			local tModifierTable = v._tExtModifierTable
-			if tModifierTable then
-				local bHasStatusEffect = false
-				for k2,v2 in pairs(tModifierTable) do
+			local tModifierList = v:FindAllModifiers()
+			local bHasStatusEffect = false
+			for k2,v2 in pairs(tModifierTable) do
+				if IsValidExtendedModifier(v2) then
 					local nStatusEffect = v2:GetStatusEffect()
 					if nStatusEffect ~= IW_STATUS_EFFECT_NONE then
 						if nValue == IW_STATUS_EFFECT_ANY or nStatusEffect == nValue then
@@ -210,10 +206,8 @@ local function TargetHasStatusEffect(hCondition, nValue, tTargetList, bInverse)
 						end
 					end
 				end
-				if bHasStatusEffect == bInverse then
-					tTargetList[k] = nil
-				end
-			else
+			end
+			if bHasStatusEffect == bInverse then
 				tTargetList[k] = nil
 			end
 		end

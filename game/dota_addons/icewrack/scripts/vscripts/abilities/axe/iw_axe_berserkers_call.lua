@@ -8,15 +8,19 @@ function iw_axe_berserkers_call:OnSpellStart()
 	EmitSoundOn("Hero_Axe.Berserkers_Call", hEntity)
 	hEntity:StartGesture(ACT_DOTA_OVERRIDE_ABILITY_1)
 	
-	for k,v in pairs(hEntity._tExtModifierTable) do
-		if v:IsDebuff() then
+	local tDispelledModifiers = {}
+	for k,v in pairs(hEntity:FindAllModifiers()) do
+		if IsValidExtendedEntity(v) and v:IsDebuff() then
 			local nStatusEffect = v:GetStatusEffect()
 			local nBitshiftedEffect = bit32.lshift(1, nStatusEffect - 1)
 			--Remove Stun, Slow, Root, Disarm, Pacify, Sleep, Fear, and Charm
 			if bit32.btest(nBitshiftedEffect, 955) then
-				v:Destroy()
+				table.insert(tDispelledModifiers, v)
 			end
 		end
+	end
+	for k,v in pairs(tDispelledModifiers) do
+		v:Destroy()
 	end
 	
 	local fRadius = self:GetAOERadius()

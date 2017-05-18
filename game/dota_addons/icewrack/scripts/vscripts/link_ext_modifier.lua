@@ -221,7 +221,8 @@ local function CullModifierStacks(self)
 		local nSourceStackCount = 0
 		local hGlobalCullTarget = nil
 		local hSourceCullTarget = nil
-		for k,v in pairs(hParent._tExtModifierTable) do
+		local tModifierList = hParent:FindAllModifiers()
+		for k,v in pairs(tModifierList) do
 			if v:GetName() == self:GetName() then
 				if v:GetCaster() == self:GetCaster() then
 					if not hSourceCullTarget or v:GetRemainingTime() < hSourceCullTarget:GetRemainingTime() then hSourceCullTarget = v end
@@ -326,19 +327,7 @@ local function OnModifierCreatedDefault(self, keys)
 				local hCaster = self:GetCaster()
 				hCaster:SetAttacking(hTarget)
 			end
-			
-			local tTargetModifierTable = hTarget._tExtModifierTable
-			local fDuration = self:GetDuration()
-			if fDuration > 0 then
-				for k,v in pairs(tTargetModifierTable) do
-					if v:GetRemainingTime() > fDuration then
-						table.insert(tTargetModifierTable, k, self)
-						hTarget:RefreshEntity()
-						return
-					end
-				end
-			end
-			table.insert(tTargetModifierTable, self)
+			hTarget:AddToRefreshList(self)
 			hTarget:RefreshEntity()
 		end
 	end
@@ -349,16 +338,9 @@ local function OnModifierDestroyDefault(self)
 	if IsServer() and IsValidInstance(hTarget) then
 		RemovePropertyValues(self)
 		if IsValidExtendedEntity(hTarget) then
-			local tTargetModifierTable = hTarget._tExtModifierTable
-			for k,v in pairs(tTargetModifierTable) do
-				if v == self then
-					table.remove(tTargetModifierTable, k)
-					break
-				end
-			end
+			hTarget:RemoveFromRefreshList(self)
 			hTarget:RefreshEntity()
 		end
-		
 		if self._hBuffDummy then self._hBuffDummy:RemoveSelf() end
 	end
 end

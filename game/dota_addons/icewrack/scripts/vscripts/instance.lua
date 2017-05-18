@@ -201,6 +201,10 @@ function CInstance:RemoveChild(hNode)
 	end
 end
 
+function CInstance:GetChildren()
+	return self._tChildrenInstances
+end
+
 function CInstance:GetBasePropertyValue(nProperty)
 	return self._tPropertyValues[nProperty]
 end

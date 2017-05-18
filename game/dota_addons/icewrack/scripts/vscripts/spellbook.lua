@@ -33,9 +33,7 @@ CSpellbook = setmetatable({ _stAbilityCombos = {} }, { __call =
 		hEntity._hSpellbook = self
 		hEntity.GetSpellbook = GetSpellbook
 		hEntity.FindAbilityByName = Dynamic_Wrap(CSpellbook, "FindAbilityByName")
-		if IsValidExtendedEntity(hEntity) then
-			table.insert(hEntity._tRefreshList, self)
-		end
+		hEntity:AddToRefreshList(self)
 		
 		self._bIsSpellbook = true
 		self._hEntity = hEntity

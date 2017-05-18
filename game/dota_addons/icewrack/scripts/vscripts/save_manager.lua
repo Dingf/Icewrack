@@ -258,9 +258,10 @@ end
 
 local function SaveModifierData(hInstance)
 	if IsValidExtendedEntity(hInstance) then
-		local tModifierList = {}
-		for k,v in pairs(hInstance._tExtModifierTable) do
-			if not v:IsHidden() then
+		local tSaveModifierList = {}
+		local tEntityModifierList = hInstance:FindAllModifiers()
+		for k,v in pairs(tEntityModifierList) do
+			if IsValidExtendedModifier(v) and not v:IsHidden() then
 				local tModifierTable = {}
 				tModifierTable.Name = v:GetAbilityName() .. ":" .. v:GetName()
 				tModifierTable.Duration = v:GetRemainingTime()
@@ -276,10 +277,10 @@ local function SaveModifierData(hInstance)
 				for k2,v2 in pairs(stIcewrackPropertyEnum) do
 					tModifierTable.Properties[v2] = rawget(v._tPropertyValues, v2)
 				end
-				table.insert(tModifierList, tModifierTable)
+				table.insert(tSaveModifierList, tModifierTable)
 			end
 		end
-		return tModifierList
+		return tSaveModifierList
 	end
 end
 
