@@ -17,11 +17,11 @@ function modifier_iw_dragon_knight_dragon_form:DeclareExtEvents()
 	return funcs
 end
 
-function modifier_iw_dragon_knight_dragon_form:OnCastFilterResult(tEventArgs)
+function modifier_iw_dragon_knight_dragon_form:OnCastFilterResult(args)
 	return UF_FAIL_CUSTOM
 end
 
-function modifier_iw_dragon_knight_dragon_form:OnGetCustomCastError(tEventArgs)
+function modifier_iw_dragon_knight_dragon_form:OnGetCustomCastError(args)
 	return "#iw_error_cast_transform"
 end
 

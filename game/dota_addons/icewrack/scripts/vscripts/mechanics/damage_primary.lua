@@ -70,9 +70,6 @@ function DealPrimaryDamage(self, keys)
 		stDamageInfoTable.crit = bIsCrit
 		stDamageInfoTable.critmulti = fCritMultiplier
 		
-		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_DEAL_DAMAGE, stDamageInfoTable)
-		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_TAKE_DAMAGE, stDamageInfoTable)
-		
 		for k,v in pairs(stIcewrackDamageTypeEnum) do
 			local nDamageType = v
 			local fDamageAmount = 0
@@ -105,8 +102,8 @@ function DealPrimaryDamage(self, keys)
 			return false
 		end
 		
-		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DEAL_DAMAGE, stDamageInfoTable)
-		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_TAKE_DAMAGE, stDamageInfoTable)
+		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_DEAL_DAMAGE, stDamageInfoTable)
+		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_TAKE_DAMAGE, stDamageInfoTable)
 		
 		for k,v in pairs(stIcewrackDamageTypeEnum) do
 			local nDamageType = v
@@ -147,6 +144,7 @@ function DealPrimaryDamage(self, keys)
 		end
 		
 		if bDamageResult then
+			stDamageInfoTable.result = bDamageResult
 			hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_DEAL_DAMAGE, stDamageInfoTable)
 			hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_TAKE_DAMAGE, stDamageInfoTable)
 		end
@@ -187,6 +185,9 @@ function DealAttackDamage(self, keys)
 			keys.damage[v].max = fMaxDamage
 		end
 		
+		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_DEAL_ATTACK, keys)
+		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_TAKE_ATTACK, keys)
+		
 		if keys.CanDodge then
 			local fBonusAccuracy = keys.BonusAccuracy or 0
 			if not PerformAccuracyCheck(hVictim, hAttacker, fBonusAccuracy) then
@@ -194,11 +195,18 @@ function DealAttackDamage(self, keys)
 					hVictim:DetectEntity(hAttacker, IW_COMBAT_LINGER_TIME)
 					hVictim:AddThreat(hAttacker, fTotalDamage * 0.25, true)
 				end
+				hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DODGE_ATTACK, keys)
 				ShowMissMessage(hVictim)
 				return false
 			end
 		end
-		return DealPrimaryDamage(self, keys)
+		
+		local bDamageResult = DealPrimaryDamage(self, keys)
+		keys.result = bDamageResult
+		
+		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_DEAL_ATTACK, keys)
+		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_TAKE_ATTACK, keys)
+		return bDamageResult
 	end
 	return false
 end

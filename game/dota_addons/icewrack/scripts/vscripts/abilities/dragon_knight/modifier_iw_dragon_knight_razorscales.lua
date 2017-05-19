@@ -1,9 +1,9 @@
 modifier_iw_dragon_knight_razorscales = class({})
 
-function modifier_iw_dragon_knight_razorscales:DeclareFunctions()
+function modifier_iw_dragon_knight_razorscales:DeclareExtEvents()
 	local funcs =
 	{
-		MODIFIER_EVENT_ON_ATTACKED,
+		[IW_MODIFIER_EVENT_ON_POST_TAKE_ATTACK] = 1,
 	}
 	return funcs
 end
@@ -32,10 +32,10 @@ function modifier_iw_dragon_knight_razorscales:OnRefresh(args)
 	end
 end
 
-function modifier_iw_dragon_knight_razorscales:OnAttacked(args)
+function modifier_iw_dragon_knight_razorscales:OnPostTakeAttackDamage(args)
 	local hEntity = self:GetParent()
 	local hTarget = args.attacker
-	if args.target == hEntity and not args.ranged_attack then
+	if args.target == hEntity and not hTarget:IsRangedAttacker() then
 		local tDamageTable =
 		{
 			attacker = hEntity,

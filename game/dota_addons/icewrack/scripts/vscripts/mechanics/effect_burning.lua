@@ -8,7 +8,7 @@ function ApplyBurning(hVictim, hAttacker)
 		elseif nUnitClass == IW_UNIT_CLASS_BOSS or nUnitClass == IW_UNIT_CLASS_ACT_BOSS then
 			fBurnPercent = 1.0
 		end
-		local hModifier = hVictim:FindModifierByName(szModifierName)
+		local hModifier = hVictim:FindModifierByName("modifier_status_burning")
 		if hModifier then
 			hModifier:ForceRefresh()
 		else

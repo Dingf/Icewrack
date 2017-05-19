@@ -209,7 +209,7 @@ local function OnModifierDestroyDefault(self)
 			for k,v in pairs(tExtModifierEvents) do
 				local tExtModifierEventList = hTarget._tExtModifierEventTable[k]
 				local tExtModifierEventIndex = hTarget._tExtModifierEventIndex[k]
-				tExtModifierEventList[k][self] = nil
+				tExtModifierEventList[self] = nil
 				for k2,v2 in pairs(tExtModifierEventIndex) do
 					if v2 == self then
 						table.remove(tExtModifierEventIndex, k2)

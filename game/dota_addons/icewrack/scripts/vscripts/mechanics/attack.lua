@@ -50,6 +50,7 @@ function OnAttackStart(self, keys)
 		local fBonusAccuracy = keys.BonusAccuracy or 0
 		if not PerformAccuracyCheck(hTarget, hAttacker, fBonusAccuracy) then
 			shMissModifier:ApplyDataDrivenModifier(hAttacker, hAttacker, "modifier_internal_miss_debuff", {})
+			hTarget:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DODGE_ATTACK, keys)
 		else
 			hAttacker:RemoveModifierByName("modifier_internal_miss_debuff")
 		end
