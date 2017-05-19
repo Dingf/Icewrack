@@ -1,7 +1,7 @@
 require("mechanics/damage_primary")
 require("mechanics/heal")
 
-stExtendedFunctionTable =
+stLinkedFunctionsTable =
 {
 	Damage = DealDamage,
 	AttackDamage = DealAttackDamage,
@@ -16,7 +16,7 @@ stExtendedFunctionTable =
 	--RemoveModifier = ExtRemoveModifier,
 }
 
-function GetExtendedFunction(szFunctionName, tFunctionArgs)
+function GetLinkedFunction(szFunctionName, tFunctionArgs)
 	if szFunctionName == "RunScript" then
 		local szScriptFilename = tFunctionArgs.ScriptFile
 		local szScriptFunction = tFunctionArgs.Function
@@ -30,7 +30,7 @@ function GetExtendedFunction(szFunctionName, tFunctionArgs)
 			return tSandbox[szScriptFunction]
 		end
 	else
-		for k,v in pairs(stExtendedFunctionTable) do
+		for k,v in pairs(stLinkedFunctionsTable) do
 			if szFunctionName == k then return v end
 		end
 	end

@@ -175,7 +175,7 @@ local function TargetHasDebuff(hCondition, nValue, tTargetList, bInverse)
 		for k,v in pairs(tTargetList) do
 			local bHasDebuff = false
 			local tModifierList = v:FindAllModifiers()
-			for k2,v2 in pairs(tModifierTable) do
+			for k2,v2 in pairs(tModifierList) do
 				if IsValidExtendedModifier(v2) and v2:IsDebuff() then
 					if nValue == IEM_MODIFIER_CLASS_ANY or (v2:GetModifierClass() == nValue) then
 						bHasDebuff = true
@@ -196,7 +196,7 @@ local function TargetHasStatusEffect(hCondition, nValue, tTargetList, bInverse)
 		for k,v in pairs(tTargetList) do
 			local tModifierList = v:FindAllModifiers()
 			local bHasStatusEffect = false
-			for k2,v2 in pairs(tModifierTable) do
+			for k2,v2 in pairs(tModifierList) do
 				if IsValidExtendedModifier(v2) then
 					local nStatusEffect = v2:GetStatusEffect()
 					if nStatusEffect ~= IW_STATUS_EFFECT_NONE then

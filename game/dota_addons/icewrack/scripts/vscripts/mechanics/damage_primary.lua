@@ -56,12 +56,10 @@ function DealPrimaryDamage(self, keys)
 	local hAttacker = keys.attacker
 	local hSource = keys.source or hAttacker
 	if IsValidExtendedEntity(hVictim) and IsValidExtendedEntity(hAttacker) and hVictim:IsAlive() and not hVictim:IsInvulnerable() then
-	
-		--TODO: Add pre-damage effects here
-		
 		local bIsCrit = false
 		local bDamageResult = false
 		local fCritChance = hSource:GetCriticalStrikeChance()
+		local fCritMultiplier = 1.0 + hSource:GetCriticalStrikeMultiplier()
 		if RandomFloat(0.0, 1.0) < fCritChance and RandomFloat(0.0, 1.0) > hVictim:GetCriticalStrikeAvoidance() then
 			bIsCrit = true
 		end
@@ -70,6 +68,11 @@ function DealPrimaryDamage(self, keys)
 		stDamageInfoTable.attacker = hAttacker:entindex()
 		stDamageInfoTable.victim = hVictim:entindex()
 		stDamageInfoTable.crit = bIsCrit
+		stDamageInfoTable.critmulti = fCritMultiplier
+		
+		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_DEAL_DAMAGE, stDamageInfoTable)
+		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_TAKE_DAMAGE, stDamageInfoTable)
+		
 		for k,v in pairs(stIcewrackDamageTypeEnum) do
 			local nDamageType = v
 			local fDamageAmount = 0
@@ -102,25 +105,26 @@ function DealPrimaryDamage(self, keys)
 			return false
 		end
 		
-		--TODO: Add on damage effects here
+		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DEAL_DAMAGE, stDamageInfoTable)
+		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_TAKE_DAMAGE, stDamageInfoTable)
 		
 		for k,v in pairs(stIcewrackDamageTypeEnum) do
 			local nDamageType = v
 			local fDamageAmount = stDamageInfoTable[nDamageType]
 			
-			if bIsCrit then
-				fDamageAmount = fDamageAmount * (1.0 + hSource:GetCriticalStrikeMultiplier())
-				ShowDamageMessage(hVictim, nDamageType, fDamageAmount)
-			end
-			
-			fDamageAmount = ApplyManaShield(hAttacker, hVictim, fDamageAmount)
-			fDamageAmount = ApplySecondWind(hAttacker, hVictim, fDamageAmount)
-			fDamageAmount = ApplyLifesteal(hAttacker, hVictim, fDamageAmount)
-			
 			if fDamageAmount > 0 then
+				if stDamageInfoTable.crit then
+					fDamageAmount = fDamageAmount * stDamageInfoTable.critmulti
+					ShowDamageMessage(hVictim, nDamageType, fDamageAmount)
+				end
+				
+				fDamageAmount = ApplyManaShield(hAttacker, hVictim, fDamageAmount)
+				fDamageAmount = ApplySecondWind(hAttacker, hVictim, fDamageAmount)
+				fDamageAmount = ApplyLifesteal(hAttacker, hVictim, fDamageAmount)
+			
 				if nDamageType ~= IW_DAMAGE_TYPE_PURE then
 					local fDamageEffectChance = hSource:GetDamageEffectChance(nDamageType)
-					if bIsCrit then fDamageEffectChance = fDamageEffectChance + 1.0 end
+					if stDamageInfoTable.crit then fDamageEffectChance = fDamageEffectChance + 1.0 end
 					if RandomFloat(0.0, 1.0) <= fDamageEffectChance and RandomFloat(0.0, 1.0) > hVictim:GetDamageEffectAvoidance(nDamageType) then
 						local fEffectBonus = keys.DamageEffectBonus or 0.0
 						ApplyDamageEffect(hVictim, hAttacker, nDamageType, fDamageAmount, fEffectBonus)
@@ -143,7 +147,8 @@ function DealPrimaryDamage(self, keys)
 		end
 		
 		if bDamageResult then
-			--TODO: Add post damage effects here
+			hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_DEAL_DAMAGE, stDamageInfoTable)
+			hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_TAKE_DAMAGE, stDamageInfoTable)
 		end
 		return bDamageResult
 	end

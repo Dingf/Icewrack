@@ -5,162 +5,6 @@ require("ext_modifier")
 require("link_functions")
 end
 
-local stLuaModifierPropertyAliases =
-{
-	MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE = "GetModifierPreAttack_BonusDamage",
-	MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE_POST_CRIT = "GetModifierPreAttack_BonusDamagePostCrit",
-	MODIFIER_PROPERTY_BASEATTACK_BONUSDAMAGE = "GetModifierBaseAttack_BonusDamage",
-	MODIFIER_PROPERTY_PROCATTACK_BONUS_DAMAGE_PHYSICAL = "GetModifierProcAttack_BonusDamage_Physical",
-	MODIFIER_PROPERTY_PROCATTACK_BONUS_DAMAGE_MAGICAL = "GetModifierProcAttack_BonusDamage_Magical",
-	MODIFIER_PROPERTY_PROCATTACK_BONUS_DAMAGE_PURE = "GetModifierProcAttack_BonusDamage_Pure",
-	MODIFIER_PROPERTY_PROCATTACK_FEEDBACK = "GetModifierProcAttack_Feedback",
-	MODIFIER_PROPERTY_PRE_ATTACK = "GetModifierPreAttack",
-	MODIFIER_PROPERTY_INVISIBILITY_LEVEL = "GetModifierInvisibilityLevel",
-	MODIFIER_PROPERTY_PERSISTENT_INVISIBILITY = "GetModifierPersistentInvisibility",
-	MODIFIER_PROPERTY_MOVESPEED_BONUS_CONSTANT = "GetModifierMoveSpeedBonus_Constant",
-	MODIFIER_PROPERTY_MOVESPEED_BASE_OVERRIDE = "GetModifierMoveSpeedOverride",
-	MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE = "GetModifierMoveSpeedBonus_Percentage",
-	MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE_UNIQUE = "GetModifierMoveSpeedBonus_Percentage_Unique",
-	MODIFIER_PROPERTY_MOVESPEED_BONUS_UNIQUE = "GetModifierMoveSpeedBonus_Special_Boots",
-	MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE = "GetModifierMoveSpeed_Absolute",
-	MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE_MIN = "GetModifierMoveSpeed_AbsoluteMin",
-	MODIFIER_PROPERTY_MOVESPEED_LIMIT = "GetModifierMoveSpeed_Limit",
-	MODIFIER_PROPERTY_MOVESPEED_MAX = "GetModifierMoveSpeed_Max",
-	MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT = "GetModifierAttackSpeedBonus_Constant",
-	MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT_POWER_TREADS = "GetModifierAttackSpeedBonus_Constant_PowerTreads",
-	MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT_SECONDARY = "GetModifierAttackSpeedBonus_Constant_Secondary",
-	MODIFIER_PROPERTY_COOLDOWN_REDUCTION_CONSTANT = "GetModifierCooldownReduction_Constant",
-	MODIFIER_PROPERTY_BASE_ATTACK_TIME_CONSTANT = "GetModifierBaseAttackTimeConstant",
-	MODIFIER_PROPERTY_ATTACK_POINT_CONSTANT = "GetModifierAttackPointConstant",
-	MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE = "GetModifierDamageOutgoing_Percentage",
-	MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE_ILLUSION = "GetModifierDamageOutgoing_Percentage_Illusion",
-	MODIFIER_PROPERTY_TOTALDAMAGEOUTGOING_PERCENTAGE = "GetModifierTotalDamageOutgoing_Percentage",
-	MODIFIER_PROPERTY_BASEDAMAGEOUTGOING_PERCENTAGE = "GetModifierBaseDamageOutgoing_Percentage",
-	MODIFIER_PROPERTY_BASEDAMAGEOUTGOING_PERCENTAGE_UNIQUE = "GetModifierBaseDamageOutgoing_PercentageUnique",
-	MODIFIER_PROPERTY_INCOMING_DAMAGE_PERCENTAGE = "GetModifierIncomingDamage_Percentage",
-	MODIFIER_PROPERTY_INCOMING_PHYSICAL_DAMAGE_PERCENTAGE = "GetModifierIncomingPhysicalDamage_Percentage",
-	MODIFIER_PROPERTY_INCOMING_SPELL_DAMAGE_CONSTANT = "GetModifierIncomingSpellDamageConstant",
-	MODIFIER_PROPERTY_EVASION_CONSTANT = "GetModifierEvasion_Constant",
-	MODIFIER_PROPERTY_AVOID_DAMAGE = "GetModifierAvoidDamage",
-	MODIFIER_PROPERTY_AVOID_SPELL = "GetModifierAvoidSpell",
-	MODIFIER_PROPERTY_MISS_PERCENTAGE = "GetModifierMiss_Percentage",
-	MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS = "GetModifierPhysicalArmorBonus",
-	MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS_ILLUSIONS = "GetModifierPhysicalArmorBonusIllusions",
-	MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS_UNIQUE = "GetModifierPhysicalArmorBonusUnique",
-	MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS_UNIQUE_ACTIVE = "GetModifierPhysicalArmorBonusUniqueActive",
-	MODIFIER_PROPERTY_MAGICAL_RESISTANCE_BONUS = "GetModifierMagicalResistanceBonus",
-	MODIFIER_PROPERTY_MAGICAL_RESISTANCE_ITEM_UNIQUE = "GetModifierMagicalResistanceItemUnique",
-	MODIFIER_PROPERTY_MAGICAL_RESISTANCE_DECREPIFY_UNIQUE = "GetModifierMagicalResistanceDecrepifyUnique",
-	MODIFIER_PROPERTY_BASE_MANA_REGEN = "GetModifierBaseRegen",
-	MODIFIER_PROPERTY_MANA_REGEN_CONSTANT = "GetModifierConstantManaRegen",
-	MODIFIER_PROPERTY_MANA_REGEN_CONSTANT_UNIQUE = "GetModifierConstantManaRegenUnique",
-	MODIFIER_PROPERTY_MANA_REGEN_PERCENTAGE = "GetModifierPercentageManaRegen",
-	MODIFIER_PROPERTY_MANA_REGEN_TOTAL_PERCENTAGE = "GetModifierTotalPercentageManaRegen",
-	MODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT = "GetModifierConstantHealthRegen",
-	MODIFIER_PROPERTY_HEALTH_REGEN_PERCENTAGE = "GetModifierHealthRegenPercentage",
-	MODIFIER_PROPERTY_HEALTH_BONUS = "GetModifierHealthBonus",
-	MODIFIER_PROPERTY_MANA_BONUS = "GetModifierManaBonus",
-	MODIFIER_PROPERTY_EXTRA_STRENGTH_BONUS = "GetModifierExtraStrengthBonus",
-	MODIFIER_PROPERTY_EXTRA_HEALTH_BONUS = "GetModifierExtraHealthBonus",
-	MODIFIER_PROPERTY_EXTRA_MANA_BONUS = "GetModifierExtraManaBonus",
-	MODIFIER_PROPERTY_EXTRA_HEALTH_PERCENTAGE = "GetModifierExtraHealthPercentage",
-	MODIFIER_PROPERTY_STATS_STRENGTH_BONUS = "GetModifierBonusStats_Strength",
-	MODIFIER_PROPERTY_STATS_AGILITY_BONUS = "GetModifierBonusStats_Agility",
-	MODIFIER_PROPERTY_STATS_INTELLECT_BONUS = "GetModifierBonusStats_Intellect",
-	MODIFIER_PROPERTY_ATTACK_RANGE_BONUS = "GetModifierAttackRangeBonus",
-	MODIFIER_PROPERTY_PROJECTILE_SPEED_BONUS = "GetModifierProjectileSpeedBonus",
-	MODIFIER_PROPERTY_REINCARNATION = "ReincarnateTime",
-	MODIFIER_PROPERTY_RESPAWNTIME = "GetModifierConstantRespawnTime",
-	MODIFIER_PROPERTY_RESPAWNTIME_PERCENTAGE = "GetModifierPercentageRespawnTime",
-	MODIFIER_PROPERTY_RESPAWNTIME_STACKING = "GetModifierStackingRespawnTime",
-	MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE = "GetModifierPercentageCooldown",
-	MODIFIER_PROPERTY_CASTTIME_PERCENTAGE = "GetModifierPercentageCasttime",
-	MODIFIER_PROPERTY_MANACOST_PERCENTAGE = "GetModifierPercentageManacost",
-	MODIFIER_PROPERTY_DEATHGOLDCOST = "GetModifierConstantDeathGoldCost",
-	MODIFIER_PROPERTY_PREATTACK_CRITICALSTRIKE = "GetModifierPreAttack_CriticalStrike",
-	MODIFIER_PROPERTY_PHYSICAL_CONSTANT_BLOCK = "GetModifierPhysical_ConstantBlock",
-	MODIFIER_PROPERTY_TOTAL_CONSTANT_BLOCK_UNAVOIDABLE_PRE_ARMOR = "GetModifierPhysical_ConstantBlockUnavoidablePreArmor",
-	MODIFIER_PROPERTY_TOTAL_CONSTANT_BLOCK = "GetModifierTotal_ConstantBlock",
-	MODIFIER_PROPERTY_OVERRIDE_ANIMATION = "GetOverrideAnimation",
-	MODIFIER_PROPERTY_OVERRIDE_ANIMATION_WEIGHT = "GetOverrideAnimationWeight",
-	MODIFIER_PROPERTY_OVERRIDE_ANIMATION_RATE = "GetOverrideAnimationRate",
-	MODIFIER_PROPERTY_ABSORB_SPELL = "GetAbsorbSpell",
-	MODIFIER_PROPERTY_REFLECT_SPELL = "GetReflectSpell",
-	MODIFIER_PROPERTY_DISABLE_AUTOATTACK = "GetDisableAutoAttack",
-	MODIFIER_PROPERTY_BONUS_DAY_VISION = "GetBonusDayVision",
-	MODIFIER_PROPERTY_BONUS_NIGHT_VISION = "GetBonusNightVision",
-	MODIFIER_PROPERTY_BONUS_NIGHT_VISION_UNIQUE = "GetBonusNightVisionUnique",
-	MODIFIER_PROPERTY_BONUS_VISION_PERCENTAGE = "GetBonusVisionPercentage",
-	MODIFIER_PROPERTY_FIXED_DAY_VISION = "GetFixedDayVision",
-	MODIFIER_PROPERTY_FIXED_NIGHT_VISION = "GetFixedNightVision",
-	MODIFIER_PROPERTY_MIN_HEALTH = "GetMinHealth",
-	MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PHYSICAL = "GetAbsoluteNoDamagePhysical",
-	MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL = "GetAbsoluteNoDamageMagical",
-	MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PURE = "GetAbsoluteNoDamagePure",
-	MODIFIER_PROPERTY_IS_ILLUSION = "GetIsIllusion",
-	MODIFIER_PROPERTY_ILLUSION_LABEL = "GetModifierIllusionLabel",
-	MODIFIER_PROPERTY_SUPER_ILLUSION = "GetModifierSuperIllusion",
-	MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE = "GetModifierTurnRate_Percentage",
-	MODIFIER_PROPERTY_DISABLE_HEALING = "GetDisableHealing",
-	MODIFIER_PROPERTY_OVERRIDE_ATTACK_MAGICAL = "GetOverrideAttackMagical",
-	MODIFIER_PROPERTY_UNIT_STATS_NEEDS_REFRESH = "GetModifierUnitStatsNeedsRefresh",
-	MODIFIER_PROPERTY_BOUNTY_CREEP_MULTIPLIER = "GetModifierBountyCreepMultiplier",
-	MODIFIER_PROPERTY_BOUNTY_OTHER_MULTIPLIER = "GetModifierBountyOtherMultiplier",
-	MODIFIER_PROPERTY_TOOLTIP = "OnTooltip",
-	MODIFIER_PROPERTY_MODEL_CHANGE = "GetModifierModelChange",
-	MODIFIER_PROPERTY_MODEL_SCALE = "GetModifierModelScale",
-	MODIFIER_PROPERTY_IS_SCEPTER = "GetModifierScepter",
-	MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS = "GetActivityTranslationModifiers",
-	MODIFIER_PROPERTY_TRANSLATE_ATTACK_SOUND = "GetAttackSound",
-	MODIFIER_PROPERTY_LIFETIME_FRACTION = "GetUnitLifetimeFraction",
-	MODIFIER_PROPERTY_PROVIDES_FOW_POSITION = "GetModifierProvidesFOWVision",
-	MODIFIER_PROPERTY_SPELLS_REQUIRE_HP = "GetModifierSpellsRequireHP",
-	MODIFIER_PROPERTY_FORCE_DRAW_MINIMAP = "GetForceDrawOnMinimap",
-	MODIFIER_PROPERTY_DISABLE_TURNING = "GetModifierDisableTurning",
-	MODIFIER_PROPERTY_IGNORE_CAST_ANGLE = "GetModifierIgnoreCastAngle",
-	MODIFIER_PROPERTY_CHANGE_ABILITY_VALUE = "GetModifierChangeAbilityValue",
-	MODIFIER_PROPERTY_ABILITY_LAYOUT = "GetModifierAbilityLayout",
-}
-
-local stLuaModifierEventAliases = 
-{
-	MODIFIER_EVENT_ON_ATTACK_RECORD = "OnAttackRecord",
-	MODIFIER_EVENT_ON_ATTACK_START = "OnAttackStart",
-	MODIFIER_EVENT_ON_ATTACK = "OnAttack",
-	MODIFIER_EVENT_ON_ATTACK_LANDED = "OnAttackLanded",
-	MODIFIER_EVENT_ON_ATTACK_FAIL = "OnAttackFail",
-	MODIFIER_EVENT_ON_ATTACK_ALLIED = "OnAttackAllied",
-	MODIFIER_EVENT_ON_ATTACK_FINISHED = "OnAttackFinished",
-	MODIFIER_EVENT_ON_PROJECTILE_DODGE = "OnProjectileDodge",
-	MODIFIER_EVENT_ON_ORDER = "OnOrder",
-	MODIFIER_EVENT_ON_UNIT_MOVED = "OnUnitMoved",
-	MODIFIER_EVENT_ON_ABILITY_START = "OnAbilityStart",
-	MODIFIER_EVENT_ON_ABILITY_EXECUTED = "OnAbilityExecuted",
-	MODIFIER_EVENT_ON_ABILITY_FULLY_CAST = "OnAbilityFullyCast",
-	MODIFIER_EVENT_ON_BREAK_INVISIBILITY = "OnBreakInvisibility",
-	MODIFIER_EVENT_ON_ABILITY_END_CHANNEL = "OnAbilityEndChannel",
-	MODIFIER_EVENT_ON_TAKEDAMAGE = "OnTakeDamage",
-	MODIFIER_EVENT_ON_STATE_CHANGED = "OnStateChanged",
-	MODIFIER_EVENT_ON_ATTACKED = "OnAttacked",
-	MODIFIER_EVENT_ON_DEATH = "OnDeath",
-	MODIFIER_EVENT_ON_RESPAWN = "OnRespawn",
-	MODIFIER_EVENT_ON_SPENT_MANA = "OnSpentMana",
-	MODIFIER_EVENT_ON_TELEPORTING = "OnTeleporting",
-	MODIFIER_EVENT_ON_TELEPORTED = "OnTeleported",
-	MODIFIER_EVENT_ON_SET_LOCATION = "OnSetLocation",
-	MODIFIER_EVENT_ON_HEALTH_GAINED = "OnHealthGained",
-	MODIFIER_EVENT_ON_MANA_GAINED = "OnManaGained",
-	MODIFIER_EVENT_ON_TAKEDAMAGE_KILLCREDIT = "OnTakeDamageKillCredit",
-	MODIFIER_EVENT_ON_HERO_KILLED = "OnHeroKilled",
-	MODIFIER_EVENT_ON_HEAL_RECEIVED = "OnHealReceived",
-	MODIFIER_EVENT_ON_BUILDING_KILLED = "OnBuildingKilled",
-	MODIFIER_EVENT_ON_MODEL_CHANGED = "OnModelChanged",
-	MODIFIER_EVENT_ON_CREATED = "OnModifierCreated",
-	MODIFIER_EVENT_ON_DESTROY = "OnModifierDestroy",
-	MODIFIER_EVENT_ON_REFRESH = "OnModifierRefresh",
-	MODIFIER_EVENT_ON_INTERVAL_THINK = "OnIntervalThink",
-}
-
 local stLuaModifierIgnoredArgs =
 {
 	creationtime = true,
@@ -327,6 +171,29 @@ local function OnModifierCreatedDefault(self, keys)
 				local hCaster = self:GetCaster()
 				hCaster:SetAttacking(hTarget)
 			end
+			
+			local tExtModifierEvents = self:DeclareExtEvents()
+			for k,v in pairs(tExtModifierEvents) do
+				local tExtModifierEventList = hTarget._tExtModifierEventTable[k]
+				local tExtModifierEventIndex = hTarget._tExtModifierEventIndex[k]
+				if not tExtModifierEventList then
+					hTarget._tExtModifierEventTable[k] = { [self] = v }
+					hTarget._tExtModifierEventIndex[k] = { self }
+				else
+					local bIsAdded = false
+					for k2,v2 in pairs(tExtModifierEventIndex) do
+						if tExtModifierEventList[v2] > v then
+							bIsAdded = true
+							table.insert(tExtModifierEventIndex, k2, self)
+							break
+						end
+					end
+					if not bIsAdded then
+						table.insert(tExtModifierEventIndex, self)
+					end
+					tExtModifierEventList[self] = v
+				end
+			end
 			hTarget:AddToRefreshList(self)
 			hTarget:RefreshEntity()
 		end
@@ -338,6 +205,18 @@ local function OnModifierDestroyDefault(self)
 	if IsServer() and IsValidInstance(hTarget) then
 		RemovePropertyValues(self)
 		if IsValidExtendedEntity(hTarget) then
+			local tExtModifierEvents = self:DeclareExtEvents()
+			for k,v in pairs(tExtModifierEvents) do
+				local tExtModifierEventList = hTarget._tExtModifierEventTable[k]
+				local tExtModifierEventIndex = hTarget._tExtModifierEventIndex[k]
+				tExtModifierEventList[k][self] = nil
+				for k2,v2 in pairs(tExtModifierEventIndex) do
+					if v2 == self then
+						table.remove(tExtModifierEventIndex, k2)
+						break
+					end
+				end
+			end
 			hTarget:RemoveFromRefreshList(self)
 			hTarget:RefreshEntity()
 		end
@@ -391,16 +270,7 @@ local function ParseDatadrivenStates(hLuaModifier, tLinkLuaModifierTemplate)
 				end
 			end
 		end
-		if hLuaModifier.CheckState then
-			hLuaModifier.OldCheckState = hLuaModifier.CheckState
-			hLuaModifier.CheckState = function()
-				local tBaseResults = hLuaModifier:OldCheckState()
-				for k,v in pairs(tBaseResults or {}) do hLuaModifier._tDatadrivenStateTable[k] = v end
-				return hLuaModifier._tDatadrivenStateTable
-			end
-		else
-			hLuaModifier.CheckState = function() return hLuaModifier._tDatadrivenStateTable end
-		end
+		
 	end
 end
 
@@ -453,17 +323,6 @@ local function ParseDatadrivenProperties(hLuaModifier, tLinkLuaModifierTemplate)
 			end
 		end
 	end
-		
-	if hLuaModifier.DeclareFunctions then
-		hLuaModifier.OldDeclareFunctions = hLuaModifier.DeclareFunctions
-		hLuaModifier.DeclareFunctions = function()
-			local tBaseResults = hLuaModifier:OldDeclareFunctions()
-			for k,v in pairs(tBaseResults) do table.insert(hLuaModifier._tDeclareFunctionList, v) end
-			return hLuaModifier._tDeclareFunctionList
-		end
-	else
-		hLuaModifier.DeclareFunctions = function() return hLuaModifier._tDeclareFunctionList end
-	end
 end
 
 local function ParseDatadrivenEvents(hLuaModifier, tLinkLuaModifierTemplate)
@@ -473,7 +332,7 @@ local function ParseDatadrivenEvents(hLuaModifier, tLinkLuaModifierTemplate)
 			local szEventAlias = stLuaModifierEventAliases[k]
 			if szEventAlias then
 				for k2,v2 in pairs(v) do
-					local hEventFunction = GetExtendedFunction(k2,v2)
+					local hEventFunction = GetLinkedFunction(k2,v2)
 					local hBaseFunction = hLuaModifier[szEventAlias]
 					if hEventFunction then
 						local hWrappedEventFunction = 
@@ -519,6 +378,41 @@ local function ParseDatadrivenEvents(hLuaModifier, tLinkLuaModifierTemplate)
 	end
 end
 
+local function ParseExtendedEvents(hLuaModifier, tLinkLuaModifierTemplate)
+	local tExtendedEvents = tLinkLuaModifierTemplate.ExtendedEvents
+	if tExtendedEvents and IsServer() then
+		for k,v in pairs(tExtendedEvents) do
+			local nEventID = stExtModifierEventValues[k]
+			local szEventAlias = stExtModifierEventAliases[nEventID]
+			local nEventPriority = v.Priority
+			if nEventID and type(nEventPriority) == "number" then
+				for k2,v2 in pairs(v) do
+					local hEventFunction = GetLinkedFunction(k2,v2)
+					local hBaseFunction = hLuaModifier[szEventAlias]
+					if hEventFunction then
+						local hWrappedEventFunction = 
+						function(self, args)
+							if IsServer() and not self:IsNull() then
+								local params = {}
+								for k3,v3 in pairs(v2) do
+									params[k3] = (type(v3) == "string" and string.sub(v3, 1, 1) == "%") and self._tModifierArgs[string.sub(v3, 2, #v3)] or v3
+								end
+								hEventFunction(self, params)
+								if hBaseFunction and type(hBaseFunction) == "function" then
+									return hBaseFunction(self, args, params)
+								end
+							end
+						end
+						hLuaModifier._tDeclareExtEventList[nEventID] = nPriority
+						hLuaModifier[szEventAlias] = hWrappedEventFunction
+						break
+					end
+				end
+			end
+		end
+	end
+end
+
 for k,v in pairs(stExtModifierData) do
 	for k2,v2 in pairs(v) do
 		local tLinkLuaModifierTemplate = v2
@@ -539,6 +433,7 @@ for k,v in pairs(stExtModifierData) do
 		
 		local hLuaModifier = tContext[k2]
 		if not hLuaModifier._tDeclareFunctionList then hLuaModifier._tDeclareFunctionList = {} end
+		if not hLuaModifier._tDeclareExtEventList then hLuaModifier._tDeclareExtEventList = {} end
 		if not hLuaModifier._tOnCreatedList then hLuaModifier._tOnCreatedList = {} end
 		if not hLuaModifier._tOnDestroyList then hLuaModifier._tOnDestroyList = {} end
 		if not hLuaModifier._tOnRefreshList then hLuaModifier._tOnRefreshList = {} end
@@ -639,11 +534,35 @@ for k,v in pairs(stExtModifierData) do
 			end
 			
 			ParseDatadrivenEvents(hLuaModifier, tLinkLuaModifierTemplate)
+			ParseExtendedEvents(hLuaModifier, tLinkLuaModifierTemplate)
 		end
 		
 		hLuaModifier._nModifierID = 0
 		hLuaModifier.RetrieveModifierID = function(self) hLuaModifier._nModifierID = hLuaModifier._nModifierID + 1 return hLuaModifier._nModifierID end
 		hLuaModifier._tModifierNetTable = {}
+		
+		if hLuaModifier.CheckState then
+			local tBaseResults = hLuaModifier:CheckState()
+			for k,v in pairs(tBaseResults or {}) do
+				hLuaModifier._tDatadrivenStateTable[k] = v
+			end
+		end
+		if hLuaModifier.DeclareFunctions then
+			local tBaseResults = hLuaModifier:DeclareFunctions()
+			for k,v in pairs(tBaseResults or {}) do
+				table.insert(hLuaModifier._tDeclareFunctionList, v)
+			end
+		end
+		if hLuaModifier.DeclareExtEvents then
+			local tBaseResults = hLuaModifier:DeclareExtEvents()
+			for k,v in pairs(tBaseResults or {}) do
+				hLuaModifier._tDeclareExtEventList[k] = v
+			end
+		end
+		
+		hLuaModifier.CheckState = function() return hLuaModifier._tDatadrivenStateTable end
+		hLuaModifier.DeclareFunctions = function() return hLuaModifier._tDeclareFunctionList end
+		hLuaModifier.DeclareExtEvents = function() return hLuaModifier._tDeclareExtEventList end
 		
 		if hLuaModifier.OnCreated then table.insert(hLuaModifier._tOnCreatedList, hLuaModifier.OnCreated) end
 		table.insert(hLuaModifier._tOnCreatedList, 1, OnModifierCreatedDefault)

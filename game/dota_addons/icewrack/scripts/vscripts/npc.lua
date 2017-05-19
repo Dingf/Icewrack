@@ -468,7 +468,7 @@ local function OnFleeFromEnemies(self)
 			for k,v in pairs(self._tAttackedByTable) do
 				local hEntity = EntIndexToHScript(k)
 				if hEntity and self._tDetectTable[k] and self._tDetectTable[k] >= fCurrentTime then
-					local fDistance = hEntity:GetAbsOrigin() - self:GetAbsOrigin()
+					local fDistance = (hEntity:GetAbsOrigin() - self:GetAbsOrigin()):Length2D()
 					if not fNearestDistance or fDistance < fNearestDistance then
 						fNearestDistance = fDistance
 						hNearestAttackingEntity = hEntity

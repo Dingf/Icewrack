@@ -8,6 +8,23 @@ function modifier_iw_dragon_knight_dragon_form:DeclareFunctions()
 	return funcs
 end
 
+function modifier_iw_dragon_knight_dragon_form:DeclareExtEvents()
+	local funcs =
+	{
+		[IW_MODIFIER_EVENT_ON_CAST_FILTER] = 1,
+		[IW_MODIFIER_EVENT_ON_CAST_ERROR] = 1,
+	}
+	return funcs
+end
+
+function modifier_iw_dragon_knight_dragon_form:OnCastFilterResult(tEventArgs)
+	return UF_FAIL_CUSTOM
+end
+
+function modifier_iw_dragon_knight_dragon_form:OnGetCustomCastError(tEventArgs)
+	return "#iw_error_cast_transform"
+end
+
 function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 	local hEntity = self:GetParent()
 	if IsServer() and IsValidExtendedEntity(hEntity) then

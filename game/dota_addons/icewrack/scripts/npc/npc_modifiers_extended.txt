@@ -637,7 +637,6 @@
 			{
 				"IW_PROPERTY_MAX_SP_FLAT"			"%stamina_bonus"
 				"IW_PROPERTY_MOVE_SPEED_FLAT"			"%speed_bonus"
-				"IW_PROPERTY_RUN_SP_PCT"			"-100"
 			}
 
 			"DatadrivenAttributes"		""

@@ -141,6 +141,9 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._tAttackedByTable = setmetatable({}, stZeroDefaultMetatable)
 		hEntity._tAttackSourceTable = {}
 		
+		hEntity._tExtModifierEventTable = {}
+		hEntity._tExtModifierEventIndex = {}
+		
 		hEntity._tOrderTable = { UnitIndex = hEntity:entindex() }
 		
 		hEntity._bRunMode = true
@@ -472,6 +475,21 @@ function CExtEntity:RemoveAttackSource(hSource, nLevel)
 	return false
 end
 
+function CExtEntity:TriggerExtendedEvent(nEventID, args)
+	local szEventAlias = stExtModifierEventAliases[nEventID]
+	if szEventAlias and self._tExtModifierEventIndex[nEventID] then
+		for k,v in ipairs(self._tExtModifierEventIndex[nEventID]) do
+			local hEventFunction = v[szEventAlias]
+			if type(hEventFunction) == "function" then
+				local result = hEventFunction(v, args)
+				if result then
+					return result
+				end
+			end
+		end
+	end
+end
+
 function CExtEntity:AddToRefreshList(hEntity)
 	self._tRefreshList[hEntity] = true
 end
@@ -557,15 +575,6 @@ function CExtEntity:CurrentActionThink()
 end
 
 function CExtEntity:RefreshEntity()
-	--for k,v in pairs(self._tExtModifierTable) do v:RefreshModifier() end
-	--[[if bit32.band(self._nUnitFlags, IW_UNIT_FLAG_REQ_ATTACK_SOURCE) ~= 0 then
-		local bHasAttackSource = next(self._tAttackSourceTable)
-		if not bHasAttackSource and not self:HasModifier("modifier_internal_disarm") then
-			shItemDisarmModifier:ApplyDataDrivenModifier(self, self, "modifier_internal_disarm", {})
-		elseif bHasAttackSource and self:HasModifier("modifier_internal_disarm") then
-			self:RemoveModifierByName("modifier_internal_disarm")
-		end
-	end]]
 	for k,v in pairs(self._tRefreshList) do
 		k:OnEntityRefresh()
 	end
@@ -582,9 +591,6 @@ function CExtEntity:RefreshEntity()
 end
 
 function CExtEntity:RemoveEntity()
-	for k,v in pairs(self._tExtModifierTable) do
-		v:Destroy()
-	end
 	self:RemoveSelf()
 end
 

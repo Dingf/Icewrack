@@ -400,6 +400,12 @@ function CExtAbilityLinker:CastFilterResult(vLocation, hTarget)
 			self._bPrereqFailed = true
 			return UF_FAIL_CUSTOM
 		end
+		
+		self._bEventFailed = false
+		if self:GetCaster():TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_CAST_FILTER) == UF_FAIL_CUSTOM then
+			self._bEventFailed = true
+			return UF_FAIL_CUSTOM
+		end
 	end
 	
 	local tBaseFunctions = self._tBaseFunctions
@@ -432,6 +438,7 @@ function CExtAbilityLinker:GetCustomCastError(vLocation, hTarget)
 	if IsServer() then
 		if self._bFlagsFailed then return self:GetCustomCastErrorFlags(vLocation, hTarget) end
 		if self._bPrereqFailed then return "#iw_error_prereq_not_met" end
+		if self._bEventFailed then return self:GetCaster():TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_CAST_ERROR) end
 	else
 		if self._bStaminaFailed then return "#iw_error_cast_sp" end
 	end
