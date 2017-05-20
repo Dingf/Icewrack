@@ -587,21 +587,21 @@ function CExtAbilityLinker:RemoveModifiers(nTrigger)
 end
 
 function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemplate)
+	local tContext = getfenv()
 	local szScriptFilename = tExtTemplate.ScriptFile
 	if szScriptFilename then
 		szScriptFilename = string.gsub(szScriptFilename, "\\", "/")
 		szScriptFilename = string.gsub(szScriptFilename, "scripts/vscripts/", "")
 		szScriptFilename = string.gsub(szScriptFilename, ".lua", "")
-		local tSandbox = setmetatable({}, { __index = _G })
-		local tContext = getfenv()
+		local tSandbox = setmetatable({}, { __index = tContext })
 		setfenv(1, tSandbox)
 		dofile(szScriptFilename)
-		_G[szAbilityName] = tSandbox[szAbilityName]
+		tContext[szAbilityName] = tSandbox[szAbilityName]
 		setfenv(1, tContext)
 	end
 	
-	if not _G[szAbilityName] then _G[szAbilityName] = class({}) end
-	local hExtAbility = _G[szAbilityName]
+	if not tContext[szAbilityName] then tContext[szAbilityName] = class({}) end
+	local hExtAbility = tContext[szAbilityName]
 	
 	for k,v in pairs(tBaseTemplate.Modifiers or {}) do
 		LinkLuaModifier(k, "link_ext_modifier", LUA_MODIFIER_MOTION_NONE)

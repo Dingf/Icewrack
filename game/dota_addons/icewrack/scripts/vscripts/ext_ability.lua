@@ -45,10 +45,17 @@ CExtAbility = setmetatable({ _tIndexTableList = {} }, { __call =
 		for k,v in pairs(tModifierTemplate) do
 			hAbility._tModifierList[k] = stIcewrackModifierTriggers[v] or IW_MODIFIER_NO_TRIGGER
 			hAbility._tModifierSeeds[k] = {}
+			local hModifierTemplate = stExtModifierTemplates[k]
+			if hModifierTemplate and hModifierTemplate.GetModifierSeedList then
+				local tModifierSeedList = hModifierTemplate:GetModifierSeedList()
+				for k2,v2 in pairs(tModifierSeedList) do
+					hItem._tModifierSeeds[k][v2] = hItem:GetModifierSeed(k, v2)
+				end
+			end
 		end
 		
 		for k,v in pairs(hAbility._tPropertyList or {}) do
-			local nPropertyID = stIcewrackPropertyEnum[k] or stIcewrackPropertiesName[k]
+			local nPropertyID = stIcewrackPropertyEnum[k]
 			if nPropertyID then
 				hAbility:SetPropertyValue(nPropertyID, v)
 			end

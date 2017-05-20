@@ -95,8 +95,15 @@ CExtItem = setmetatable({}, { __call =
 		hItem._tActiveModifierList = {}
 		hItem._tModifierSeeds = {}
 		for k,v in pairs(tBaseItemTemplate.Modifiers or {}) do
-			hItem._tModifierList[k] = _G[v]
+			hItem._tModifierList[k] = stIcewrackModifierTriggers[v] or IW_MODIFIER_NO_TRIGGER
 			hItem._tModifierSeeds[k] = {}
+			local hModifierTemplate = stExtModifierTemplates[k]
+			if hModifierTemplate and hModifierTemplate.GetModifierSeedList then
+				local tModifierSeedList = hModifierTemplate:GetModifierSeedList()
+				for k2,v2 in pairs(tModifierSeedList) do
+					hItem._tModifierSeeds[k][v2] = hItem:GetModifierSeed(k, v2)
+				end
+			end
 		end
 		
 		hItem._tComponentList = {}

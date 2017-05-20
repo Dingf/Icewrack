@@ -308,7 +308,7 @@ UnitFilterResult =
 	UF_FAIL_NIGHTMARED = 27,
 }
 
-modifierfunction =
+modifierevent =
 {
 	MODIFIER_EVENT_ON_ABILITY_END_CHANNEL = 131, -- OnAbilityEndChannel
 	MODIFIER_EVENT_ON_ABILITY_EXECUTED = 128, -- OnAbilityExecuted
@@ -349,6 +349,10 @@ modifierfunction =
 	MODIFIER_EVENT_ON_UNIT_MOVED = 126, -- OnUnitMoved
 	MODIFIER_FUNCTION_INVALID = 255,
 	MODIFIER_FUNCTION_LAST = 174,
+}
+
+modifierproperty =
+{	
 	MODIFIER_PROPERTY_ABILITY_LAYOUT = 165, -- GetModifierAbilityLayout
 	MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL = 104, -- GetAbsoluteNoDamageMagical
 	MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PHYSICAL = 103, -- GetAbsoluteNoDamagePhysical

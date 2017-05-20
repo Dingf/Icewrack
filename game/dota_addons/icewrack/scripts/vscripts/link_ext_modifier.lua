@@ -16,6 +16,9 @@ local stLuaModifierIgnoredArgs =
 
 local tContext = getfenv()
 local stExtModifierData = LoadKeyValues("scripts/npc/npc_modifiers_extended.txt")
+if not _G.stExtModifierTemplates then
+	_G.stExtModifierTemplates = {}
+end
 
 local function ApplyPropertyValues(self)
 	local hTarget = self:GetParent()
@@ -34,22 +37,19 @@ end
 function RefreshModifier(self, bRerollRandom)
 	RemovePropertyValues(self)
 	for k,v in pairs(self._tPropertyList or {}) do
-		local nPropertyID = stIcewrackPropertyEnum[k] or stIcewrackPropertiesName[k]
-		if nPropertyID then
-			local szPropertyType = type(v)
-			if szPropertyType == "table" and (bRerollRandom or not rawget(self._tPropertyValues, nPropertyID)) then
-				local k2,v2 = next(v)
-				k2 = (type(k2) == "string" and string.sub(k2, 1, 1) == "%") and self._tModifierArgs[string.sub(k2, 2, #k2)] or tonumber(k2)
-				v2 = (type(v2) == "string" and string.sub(v2, 1, 1) == "%") and self._tModifierArgs[string.sub(v2, 2, #v2)] or v2
-				if k2 and type(k2) == "number" and v2 and type(v2) == "number" then
-					local nModifierSeed = self:GetAbility():GetModifierSeed(self:GetName(), nPropertyID)
-					self:SetPropertyValue(nPropertyID, k2 + (nModifierSeed % v2))
-				end
-			elseif szPropertyType == "number" then
-				self:SetPropertyValue(nPropertyID, v)
-			elseif szPropertyType == "string" and string.sub(v, 1, 1) == "%" then
-				self:SetPropertyValue(nPropertyID, self._tModifierArgs[string.sub(v, 2, #v)])
+		local szPropertyType = type(v)
+		if szPropertyType == "table" and (bRerollRandom or not rawget(self._tPropertyValues, k)) then
+			local k2,v2 = next(v)
+			k2 = (type(k2) == "string" and string.sub(k2, 1, 1) == "%") and self._tModifierArgs[string.sub(k2, 2, #k2)] or tonumber(k2)
+			v2 = (type(v2) == "string" and string.sub(v2, 1, 1) == "%") and self._tModifierArgs[string.sub(v2, 2, #v2)] or v2
+			if k2 and type(k2) == "number" and v2 and type(v2) == "number" then
+				local nModifierSeed = self:GetAbility():GetModifierSeed(self:GetName(), k)
+				self:SetPropertyValue(k, k2 + (nModifierSeed % v2))
 			end
+		elseif szPropertyType == "number" then
+			self:SetPropertyValue(k, v)
+		elseif szPropertyType == "string" and string.sub(v, 1, 1) == "%" then
+			self:SetPropertyValue(k, self._tModifierArgs[string.sub(v, 2, #v)])
 		end
 	end
 	self:OnRefresh()
@@ -258,6 +258,10 @@ function GetTexture(self)
 	return self._szTextureArgsString
 end
 
+function GetModifierSeedList(self)
+	return self._tModifierSeedList
+end
+
 local function ParseDatadrivenStates(hLuaModifier, tLinkLuaModifierTemplate)
 	local tDatadrivenStates = tLinkLuaModifierTemplate.DatadrivenStates
 	if tDatadrivenStates then
@@ -281,10 +285,11 @@ local function ParseDatadrivenProperties(hLuaModifier, tLinkLuaModifierTemplate)
 	if tDatadrivenProperties then
 		hLuaModifier._tDatadrivenPropertyTable = {}
 		for k,v in pairs(tDatadrivenProperties) do
-			local nPropertyID = _G[k]
+			local nPropertyID = modifierproperty[k]
 			local szPropertyAlias = stLuaModifierPropertyAliases[k]
 			if szPropertyAlias then
 				if type(v) == "table" then
+					table.insert(hLuaModifier._tModifierSeedList, nPropertyID + 1000)
 					table.insert(hLuaModifier._tDeclareFunctionList, nPropertyID)
 					hLuaModifier._tDatadrivenPropertyTable[k] = {next(v)}
 					hLuaModifier[szPropertyAlias] = function(self, params)
@@ -301,7 +306,7 @@ local function ParseDatadrivenProperties(hLuaModifier, tLinkLuaModifierTemplate)
 						end
 						
 						if fValue and type(fValue) == "number" and fRange and type(fRange) == "number" then
-							local nModifierSeed = self:GetAbility():GetModifierSeed(self:GetName(), nPropertyID)
+							local nModifierSeed = self:GetAbility():GetModifierSeed(self:GetName(), nPropertyID + 1000)
 							return fValue + (nModifierSeed % fRange)
 						end
 						return 0
@@ -432,13 +437,15 @@ for k,v in pairs(stExtModifierData) do
 		end
 	
 		if not tContext[k2] then tContext[k2] = class({}) end
-		
 		local hLuaModifier = tContext[k2]
+		_G.stExtModifierTemplates[k2] = hLuaModifier
+		
 		if not hLuaModifier._tDeclareFunctionList then hLuaModifier._tDeclareFunctionList = {} end
 		if not hLuaModifier._tDeclareExtEventList then hLuaModifier._tDeclareExtEventList = {} end
 		if not hLuaModifier._tOnCreatedList then hLuaModifier._tOnCreatedList = {} end
 		if not hLuaModifier._tOnDestroyList then hLuaModifier._tOnDestroyList = {} end
 		if not hLuaModifier._tOnRefreshList then hLuaModifier._tOnRefreshList = {} end
+		if not hLuaModifier._tModifierSeedList then hLuaModifier._tModifierSeedList = {} end
 		
 		ParseDatadrivenStates(hLuaModifier, tLinkLuaModifierTemplate)
 		ParseDatadrivenProperties(hLuaModifier, tLinkLuaModifierTemplate)
@@ -487,6 +494,7 @@ for k,v in pairs(stExtModifierData) do
 			hLuaModifier.ApplyPropertyValues = ApplyPropertyValues
 			hLuaModifier.RemovePropertyValues = RemovePropertyValues
 			hLuaModifier.RefreshModifier = RefreshModifier
+			hLuaModifier.GetModifierSeedList = GetModifierSeedList
 			
 			hLuaModifier._fDuration = tLinkLuaModifierTemplate.Duration or -1
 			hLuaModifier._nMaxStacks = tLinkLuaModifierTemplate.MaxStacks or 0
@@ -494,8 +502,12 @@ for k,v in pairs(stExtModifierData) do
 			
 			hLuaModifier._tPropertyList = {}
 			for k3,v3 in pairs(tLinkLuaModifierTemplate.Properties or {}) do
-				if stIcewrackPropertyEnum[k3] then
-					hLuaModifier._tPropertyList[k3] = v3
+				local nPropertyID = stIcewrackPropertyEnum[k3]
+				if nPropertyID then
+					hLuaModifier._tPropertyList[nPropertyID] = v3
+					if type(v3) == "table" then
+						table.insert(hLuaModifier._tModifierSeedList, nPropertyID)
+					end
 				else
 					LogMessage("Unknown property \"" .. k3 .. "\" in modifier \"" .. k2 .. "\"", LOG_SEVERITY_WARNING)
 				end
@@ -534,6 +546,8 @@ for k,v in pairs(stExtModifierData) do
 						end
 					end)
 			end
+			
+			tLinkLuaModifierTemplate.GetModifierSeedList = GetModifierSeedList
 			
 			ParseDatadrivenEvents(hLuaModifier, tLinkLuaModifierTemplate)
 			ParseExtendedEvents(hLuaModifier, tLinkLuaModifierTemplate)
