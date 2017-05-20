@@ -34,6 +34,8 @@ function CIcewrackGameMode:OnEntitySpawned(keys)
 	if hEntity:GetUnitName() == "npc_dota_hero_windrunner" then
 		hEntity:SetControllableByPlayer(0, true)
 		FireGameEvent("iw_ability_combo", { name="iw_combo_shatter" })
+		CTimer(3.0, function() 
+		CParty:AddToParty(hEntity) end)
 	end
 end
 
@@ -119,10 +121,34 @@ local function OnMoveToTarget(hEntity, hTarget)
 	return true
 end
 
+local function OnDelayedVisionAttack(hEntity, hTarget)
+	local tOrderTable = hEntity._tOrderTable
+	if tOrderTable then
+		local vTargetPos = hTarget:GetAbsOrigin()
+		if tOrderTable.OrderType ~= DOTA_UNIT_ORDER_MOVE_TO_POSITION then
+			return
+		elseif tOrderTable.TargetIndex ~= 0 then
+			return
+		elseif tOrderTable.AbilityIndex ~= 0 then
+			return
+		elseif not tOrderTable.Position or (tOrderTable.Position - vTargetPos):Length2D() > 64.0 then
+			return
+		end
+		local fAttackRange = hEntity:GetAttackRange()
+		local fDistance = (hEntity:GetAbsOrigin() - vTargetPos):Length2D()
+		if hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) and fDistance <= fAttackRange then
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
+		else
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vTargetPos, false)
+			CTimer(0.03, OnDelayedVisionAttack, hEntity, hTarget)
+		end
+	end
+end
+
 local function OnAttackTarget(hEntity, hTarget)
-	if IsValidInteractable(hTarget) then
-		return OnInteractableActivate(hEntity, hTarget)
-	elseif hEntity:IsDisarmed() then
+	if IsValidExtendedEntity(hEntity) and not hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) then
+		hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, hTarget:GetAbsOrigin(), false)
+		CTimer(0.03, OnDelayedVisionAttack, hEntity, hTarget)
 		return false
 	end
 	return true
