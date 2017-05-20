@@ -564,10 +564,7 @@
 			}
 
 			"DatadrivenAttributes"		""
-			"DatadrivenStates"
-			{
-				"MODIFIER_STATE_STUNNED"	"MODIFIER_STATE_VALUE_ENABLED"
-			}
+			"DatadrivenStates"		{}
 			"DatadrivenProperties" {}
 			"DatadrivenEvents" {}
 			"DatadrivenStates"		{}
@@ -653,6 +650,31 @@
 				"MODIFIER_PROPERTY_TRANSLATE_ATTACK_SOUND"	"sounds/weapons/hero/dragon_knight/dragonknight_elderdragon_shoot1.vsnd"
 			}
 			"DatadrivenEvents" 		{}
+		}
+	}
+
+	"iw_drow_ranger_frost_arrows"
+	{
+		"modifier_iw_drow_ranger_frost_arrows"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/drow_ranger/modifier_iw_drow_ranger_frost_arrows.lua"
+
+			"IsHidden"				"1"
+
+			"Properties"		{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+			}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS"		"manias_mask"
+			}
+			"DatadrivenEvents" {}
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" {}
 		}
 	}
 

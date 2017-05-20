@@ -11,6 +11,7 @@ function OnTooltipAbilityLoad()
 		
 		var szBehaviorText = "";
 		var nAbilityBehavior = nAbilityIndex ? Abilities.GetBehavior(nAbilityIndex) : tAbilityTemplate.behavior;
+		var nAbilityExtFlags = tAbilityTemplate ? tAbilityTemplate.extflags : 0;
 		if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_PASSIVE)
 			szBehaviorText = $.Localize("iw_ui_ability_passive");
 		else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_CHANNELED)
@@ -57,13 +58,21 @@ function OnTooltipAbilityLoad()
 					szBehaviorText += ", " + (nCastRange/100.0).toFixed(2) + "m";
 				}
 			}
-			else if (tAbilityTemplate && (tAbilityTemplate.weather === 1))
+			else if (nAbilityExtFlags & IW_ABILITY_FLAG_KEYWORD_WEATHER)
 			{
 				szBehaviorText += $.Localize("iw_ui_ability_target_weather");
 			}
 			else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_NO_TARGET)
 			{
 				szBehaviorText += $.Localize("iw_ui_ability_target_self");
+			}
+		}
+		else
+		{
+			if (nAbilityExtFlags & IW_ABILITY_FLAG_KEYWORD_ATTACK)
+			{
+				szBehaviorText += " - ";
+				szBehaviorText += $.Localize("iw_ui_ability_target_attack");
 			}
 		}
 		$("#Behavior").text = szBehaviorText;

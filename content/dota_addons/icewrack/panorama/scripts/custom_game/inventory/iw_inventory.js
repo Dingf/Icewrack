@@ -1,20 +1,5 @@
 "use strict";
 
-var INVENTORY_SLOT_MAIN_HAND = 1;
-var INVENTORY_SLOT_OFF_HAND = 2;
-var INVENTORY_SLOT_HEAD = 3;
-var INVENTORY_SLOT_BODY = 4;
-var INVENTORY_SLOT_GLOVES = 5;
-var INVENTORY_SLOT_BOOTS = 6;
-var INVENTORY_SLOT_BELT = 7;
-var INVENTORY_SLOT_LRING = 8;
-var INVENTORY_SLOT_RRING = 9;
-var INVENTORY_SLOT_AMULET = 10;
-var INVENTORY_SLOT_QUICK1 = 11;
-var INVENTORY_SLOT_QUICK2 = 12;
-var INVENTORY_SLOT_QUICK3 = 13;
-var INVENTORY_SLOT_QUICK4 = 14;
-
 var nPartySlot = 1;
 
 var tItemPanels = {};
@@ -121,21 +106,21 @@ function LoadInventorySlots()
 	var hLeftContent = $("#Inventory").FindChildTraverse("WindowLeftContent");
 	$.GetContextPanel()._tInventorySlots =
 	[
-		CreateInventorySlotPanel(hLeftContent, "MainHandSlot", INVENTORY_SLOT_MAIN_HAND, 110, 270, 72, 208),
-		CreateInventorySlotPanel(hLeftContent, "OffHandSlot", INVENTORY_SLOT_OFF_HAND, 110, 270, 360, 208),
-		CreateInventorySlotPanel(hLeftContent, "HeadSlot", INVENTORY_SLOT_HEAD, 110, 110, 216, 128),
-		CreateInventorySlotPanel(hLeftContent, "BodySlot", INVENTORY_SLOT_BODY, 142, 206, 200, 304),
-		CreateInventorySlotPanel(hLeftContent, "GlovesSlot", INVENTORY_SLOT_GLOVES, 110, 110, 72, 488),
-		CreateInventorySlotPanel(hLeftContent, "BootsSlot", INVENTORY_SLOT_BOOTS, 110, 110, 360, 488),
-		CreateInventorySlotPanel(hLeftContent, "BeltSlot", INVENTORY_SLOT_BELT, 142, 78, 200, 520),
-		CreateInventorySlotPanel(hLeftContent, "LRingSlot", INVENTORY_SLOT_LRING, 46, 46, 200, 248),
-		CreateInventorySlotPanel(hLeftContent, "RRingSlot", INVENTORY_SLOT_RRING, 46, 46, 296, 248),
-		CreateInventorySlotPanel(hLeftContent, "AmuletSlot", INVENTORY_SLOT_AMULET, 46, 46, 248, 248),
+		CreateInventorySlotPanel(hLeftContent, "MainHandSlot", IW_INVENTORY_SLOT_MAIN_HAND, 110, 270, 72, 208),
+		CreateInventorySlotPanel(hLeftContent, "OffHandSlot", IW_INVENTORY_SLOT_OFF_HAND, 110, 270, 360, 208),
+		CreateInventorySlotPanel(hLeftContent, "HeadSlot", IW_INVENTORY_SLOT_HEAD, 110, 110, 216, 128),
+		CreateInventorySlotPanel(hLeftContent, "BodySlot", IW_INVENTORY_SLOT_BODY, 142, 206, 200, 304),
+		CreateInventorySlotPanel(hLeftContent, "GlovesSlot", IW_INVENTORY_SLOT_GLOVES, 110, 110, 72, 488),
+		CreateInventorySlotPanel(hLeftContent, "BootsSlot", IW_INVENTORY_SLOT_BOOTS, 110, 110, 360, 488),
+		CreateInventorySlotPanel(hLeftContent, "BeltSlot", IW_INVENTORY_SLOT_BELT, 142, 78, 200, 520),
+		CreateInventorySlotPanel(hLeftContent, "LRingSlot", IW_INVENTORY_SLOT_LRING, 46, 46, 200, 248),
+		CreateInventorySlotPanel(hLeftContent, "RRingSlot", IW_INVENTORY_SLOT_RRING, 46, 46, 296, 248),
+		CreateInventorySlotPanel(hLeftContent, "AmuletSlot", IW_INVENTORY_SLOT_AMULET, 46, 46, 248, 248),
 		
-		CreateInventorySlotPanel(hLeftContent, "QuickSlot1", INVENTORY_SLOT_QUICK1, 78, 78, 112, 616),
-		CreateInventorySlotPanel(hLeftContent, "QuickSlot2", INVENTORY_SLOT_QUICK2, 78, 78, 192, 616),
-		CreateInventorySlotPanel(hLeftContent, "QuickSlot3", INVENTORY_SLOT_QUICK3, 78, 78, 272, 616),
-		CreateInventorySlotPanel(hLeftContent, "QuickSlot4", INVENTORY_SLOT_QUICK4, 78, 78, 352, 616),
+		CreateInventorySlotPanel(hLeftContent, "QuickSlot1", IW_INVENTORY_SLOT_QUICK1, 78, 78, 112, 616),
+		CreateInventorySlotPanel(hLeftContent, "QuickSlot2", IW_INVENTORY_SLOT_QUICK2, 78, 78, 192, 616),
+		CreateInventorySlotPanel(hLeftContent, "QuickSlot3", IW_INVENTORY_SLOT_QUICK3, 78, 78, 272, 616),
+		CreateInventorySlotPanel(hLeftContent, "QuickSlot4", IW_INVENTORY_SLOT_QUICK4, 78, 78, 352, 616),
 	];
 }
 

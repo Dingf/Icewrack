@@ -5,6 +5,7 @@
 	</styles>
 	
 	<scripts>
+		<include src="file://{resources}/scripts/custom_game/constants/iw_ext_item.js" />
 		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
 		<include src="file://{resources}/scripts/custom_game/ui/iw_context_item.js" />
 		<include src="file://{resources}/scripts/custom_game/ui/iw_context_menu.js" />

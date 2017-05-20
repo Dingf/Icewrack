@@ -69,7 +69,7 @@ function DealPrimaryDamage(self, keys)
 		stDamageInfoTable.victim = hVictim:entindex()
 		stDamageInfoTable.crit = bIsCrit
 		stDamageInfoTable.critmulti = fCritMultiplier
-		
+		stDamageInfoTable.effect_chance = {}
 		for k,v in pairs(stIcewrackDamageTypeEnum) do
 			local nDamageType = v
 			local fDamageAmount = 0
@@ -95,6 +95,7 @@ function DealPrimaryDamage(self, keys)
 			end
 			
 			stDamageInfoTable[nDamageType] = fDamageAmount
+			stDamageInfoTable.effect_chance[nDamageType] = hSource:GetDamageEffectChance(nDamageType)
 			fTotalDamage = fTotalDamage + fDamageAmount
 		end
 		
@@ -120,7 +121,7 @@ function DealPrimaryDamage(self, keys)
 				fDamageAmount = ApplyLifesteal(hAttacker, hVictim, fDamageAmount)
 			
 				if nDamageType ~= IW_DAMAGE_TYPE_PURE then
-					local fDamageEffectChance = hSource:GetDamageEffectChance(nDamageType)
+					local fDamageEffectChance = stDamageInfoTable.effect_chance[nDamageType]
 					if stDamageInfoTable.crit then fDamageEffectChance = fDamageEffectChance + 1.0 end
 					if RandomFloat(0.0, 1.0) <= fDamageEffectChance and RandomFloat(0.0, 1.0) > hVictim:GetDamageEffectAvoidance(nDamageType) then
 						local fEffectBonus = keys.DamageEffectBonus or 0.0
@@ -162,7 +163,7 @@ function DealAttackDamage(self, keys)
 		if not hAttackSource then
 			hAttackSource = hAttacker
 			bIsUnarmed = true
-		elseif IsValidExtendedItem(hAttackSource) and bit32.btest(hAttackSource:GetItemFlags(), IW_ITEM_FLAG_DONT_CALCULATE_DAMAGE) then
+		elseif IsValidExtendedItem(hAttackSource) and bit32.btest(hAttackSource:GetItemFlags(), IW_ITEM_FLAG_NO_DAMAGE) then
 			return true
 		end
 		keys.source = hAttackSource

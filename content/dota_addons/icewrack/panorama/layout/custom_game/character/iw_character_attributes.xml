@@ -4,7 +4,7 @@
 	</styles>
 	
 	<scripts>
-		<include src="file://{resources}/scripts/custom_game/iw_instance.js" />
+		<include src="file://{resources}/scripts/custom_game/constants/iw_instance.js" />
 		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
 		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_button.js" />
 		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_icon_label.js" />

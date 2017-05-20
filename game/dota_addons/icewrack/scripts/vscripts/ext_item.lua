@@ -35,17 +35,17 @@ stExtItemSlotEnum =
 stExtItemFlagEnum =
 {
 	IW_ITEM_FLAG_NONE = 0,
-	IW_ITEM_FLAG_HIDDEN = 1,					--Do not display this item in the Inventory list
-	IW_ITEM_FLAG_UNIQUE = 2,					--A character cannot carry more than one of this item at a time
-	IW_ITEM_FLAG_QUEST = 4,						--Quest-related item, cannot be dropped
-	IW_ITEM_FLAG_ATTACK_SOURCE = 8,				--Use the stats of this item when performing an attack
-	IW_ITEM_FLAG_CAN_ACTIVATE = 16,				--This item has the "Activate" context menu option
-	IW_ITEM_FLAG_CAN_READ = 32,					--This item has the "Read" context menu option
-	IW_ITEM_FLAG_CANNOT_UNEQUIP = 64,			--This item cannot be unequipped (TODO: Make it so that these items don't autoequip)
-	IW_ITEM_FLAG_REQUIRES_AMMO = 128,			--TODO: If this item is an attack source, it needs ammo in the other hand to attack with
-	IW_ITEM_FLAG_THROWN = 256,					--TODO: When attacking with this item, remove a stack
-	IW_ITEM_FLAG_DONT_SAVE = 512,				--Do not save this item, it is probably applied by an ability and will be regenerated on reload
-	IW_ITEM_FLAG_DONT_CALCULATE_DAMAGE = 1024,	--This attack source item won't trigger damage calculations, but the entity still uses its BAT/crit, etc.
+	IW_ITEM_FLAG_HIDDEN = 1,			--Do not display this item in the Inventory list
+	IW_ITEM_FLAG_UNIQUE = 2,			--A character cannot carry more than one of this item at a time
+	IW_ITEM_FLAG_QUEST = 4,				--Quest-related item, cannot be dropped
+	IW_ITEM_FLAG_ATTACK_SOURCE = 8,		--Use the stats of this item when performing an attack
+	IW_ITEM_FLAG_CAN_ACTIVATE = 16,		--This item has the "Activate" context menu option
+	IW_ITEM_FLAG_CAN_READ = 32,			--This item has the "Read" context menu option
+	IW_ITEM_FLAG_CANNOT_UNEQUIP = 64,	--This item cannot be unequipped (TODO: Make it so that these items don't autoequip)
+	IW_ITEM_FLAG_REQUIRES_AMMO = 128,	--TODO: If this item is an attack source, it needs ammo in the other hand to attack with
+	IW_ITEM_FLAG_THROWN = 256,			--TODO: When attacking with this item, remove a stack
+	IW_ITEM_FLAG_DONT_SAVE = 512,		--Do not save this item, it is probably applied by an ability and will be regenerated on reload
+	IW_ITEM_FLAG_NO_DAMAGE = 1024,		--This attack source item won't trigger damage calculations, but the entity still uses its BAT/crit, etc.
 }
 
 for k,v in pairs(stExtItemTypeEnum) do _G[k] = v end

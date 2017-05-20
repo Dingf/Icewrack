@@ -542,120 +542,34 @@
 		}
 	}
 
-	"iw_bounty_hunter_trapjaw"
+	"iw_drow_ranger_frost_arrows"
 	{
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
-		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_MECHANICAL"
-		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
-		"AbilityTextureName"			"bounty_hunter_shuriken_toss"
-
-		"MaxLevel"				"1"
-		"AbilityCastRange"			"650"
-		"AbilityCastPoint"			"0.3"
-	
-		"AbilityCooldown"			"10.0"
-		"AbilityManaCost"               	"15"
-
-	}
-
-	"iw_bounty_hunter_jinada"
-	{
-		"BaseClass"				"ability_lua"
-		"ScriptFile"				"ext_ability"
-
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"bounty_hunter_jinada"
-
-		"MaxLevel"				"1"
-	
-		"AbilityCooldown"			"10.0"
-	}
-
-	"iw_bounty_hunter_wind_walk"
-	{
-		"BaseClass"				"ability_lua"
-		"ScriptFile"				"ext_ability"
-
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL"
-		"AbilityTextureName"			"bounty_hunter_wind_walk"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_TOGGLED"	
+		"AbilityTextureName"			"drow_ranger_frost_arrows"
 
 		"MaxLevel"				"1"
 
-		"AbilityCastPoint"			"0.0"
-	
-		"AbilityCooldown"			"15.0"
-		"AbilityManaCost"               	"20"
-	}
+		"Modifiers"
+		{
+			"modifier_iw_drow_ranger_frost_arrows"		"IW_MODIFIER_NO_TRIGGER"
+		}
 
-	"iw_bounty_hunter_track"
-	{
-		"BaseClass"				"ability_lua"
-		"ScriptFile"				"ext_ability"
-
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"bounty_hunter_track"
-
-		"MaxLevel"				"1"
-	}
-
-
-
-	"iw_test_marksmanship"
-	{
-		"BaseClass"				"ability_lua"
-		"ScriptFile"				"ext_ability"
-
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"drow_ranger_marksmanship"
-
-		"MaxLevel"				"1"
-	}
-
-	"iw_test_shackleshot"
-	{
-		"BaseClass"				"ability_lua"
-		"ScriptFile"				"ext_ability"
-
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"windrunner_shackleshot"
-
-		"MaxLevel"				"1"
-	}
-
-	"iw_test_powershot"
-	{
-		"BaseClass"				"ability_lua"
-		"ScriptFile"				"ext_ability"
-
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"windrunner_powershot"
-
-		"MaxLevel"				"1"
-	}
-
-	"iw_test_windrun"
-	{
-		"BaseClass"				"ability_lua"
-		"ScriptFile"				"ext_ability"
-
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"windrunner_windrun"
-
-		"MaxLevel"				"1"
-	}
-
-	"iw_test_focus_fire"
-	{
-		"BaseClass"				"ability_lua"
-		"ScriptFile"				"ext_ability"
-
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"windrunner_focus_fire"
-
-		"MaxLevel"				"1"
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage"			"50.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"chill_chance"			"100"
+			}
+		}
 	}
 
 	"iw_combo_shatter"

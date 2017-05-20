@@ -14,7 +14,7 @@ local stExtAbilityData = LoadKeyValues("scripts/npc/npc_abilities_extended.txt")
 local tIndexTableList = {}
 CExtAbility = setmetatable({ _tIndexTableList = {} }, { __call = 
 	function(self, hAbility, nInstanceID)
-		LogAssert(IsInstanceOf(hAbility, CDOTA_Ability_Lua), "Type mismatch (expected \"%s\", got %s)", "CDOTA_Ability_Lua", type(hAbility))
+		LogAssert(IsInstanceOf(hAbility, CDOTABaseAbility), "Type mismatch (expected \"%s\", got %s)", "CDOTABaseAbility", type(hAbility))
 		if hAbility._bIsExtendedAbility then
 			return hAbility
 		end
@@ -103,31 +103,35 @@ function CExtAbility:RemoveModifiers(nTrigger)
 	end
 end
 
+function IsLuaAbility(hAbility)
+	return IsInstanceOf(hAbility, CDOTA_Ability_Lua)
+end
+
 function IsValidExtendedAbility(hAbility)
     return (IsValidInstance(hAbility) and IsValidEntity(hAbility) and hAbility._bIsExtendedAbility)
 end
 
 local stAbilityNetTable = {}
-for k,v in pairs(stBaseAbilityData) do
-	local tExtAbilityTemplate = stExtAbilityData[k]
-	if v.BaseClass == "ability_lua" then
-		CExtAbilityLinker:LinkExtAbility(k, v, tExtAbilityTemplate or {})
-	end
-	if IsServer() then
-		stAbilityNetTable[k] =
-		{
-			skill = tExtAbilityTemplate and tExtAbilityTemplate.AbilitySkill or 0,
-			mana = tExtAbilityTemplate and tExtAbilityTemplate.ManaCost or 0,
-			stamina = tExtAbilityTemplate and tExtAbilityTemplate.StaminaCost or 0,
-			weather = tExtAbilityTemplate and tExtAbilityTemplate.IsWeather or 0,
-			castrange = v.AbilityCastRange or 0,
-			texture = v.AbilityTextureName or k,
-			behavior = GetFlagValue(v.AbilityBehavior or "", DOTA_ABILITY_BEHAVIOR),
-			targetflag = GetFlagValue(v.AbilityUnitTargetFlags or "", DOTA_UNIT_TARGET_FLAGS),
-			targettype = GetFlagValue(v.AbilityUnitTargetType or "", DOTA_UNIT_TARGET_TYPE),
-			targetteam = DOTA_UNIT_TARGET_TEAM[v.AbilityUnitTargetTeam] or DOTA_UNIT_TARGET_TEAM_NONE,
-		}
-		CustomNetTables:SetTableValue("abilities", k, stAbilityNetTable[k])
+for k,v in pairs(stExtAbilityData) do
+	local tBaseAbilityTemplate = stBaseAbilityData[k]
+	if tBaseAbilityTemplate then
+		CExtAbilityLinker:LinkExtAbility(k, tBaseAbilityTemplate, v)
+		if IsServer() then
+			stAbilityNetTable[k] =
+			{
+				skill = v.AbilitySkill or 0,
+				mana = v.ManaCost or 0,
+				stamina = v.StaminaCost or 0,
+				extflags = GetFlagValue(v.AbilityFlags, stExtAbilityFlagEnum),
+				castrange = tBaseAbilityTemplate.AbilityCastRange or 0,
+				texture = tBaseAbilityTemplate.AbilityTextureName or k,
+				behavior = GetFlagValue(tBaseAbilityTemplate.AbilityBehavior, DOTA_ABILITY_BEHAVIOR),
+				targetflag = GetFlagValue(tBaseAbilityTemplate.AbilityUnitTargetFlags, DOTA_UNIT_TARGET_FLAGS),
+				targettype = GetFlagValue(tBaseAbilityTemplate.AbilityUnitTargetType, DOTA_UNIT_TARGET_TYPE),
+				targetteam = DOTA_UNIT_TARGET_TEAM[tBaseAbilityTemplate.AbilityUnitTargetTeam] or DOTA_UNIT_TARGET_TEAM_NONE,
+			}
+			CustomNetTables:SetTableValue("abilities", k, stAbilityNetTable[k])
+		end
 	end
 end
 

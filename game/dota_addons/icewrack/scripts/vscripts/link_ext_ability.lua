@@ -36,6 +36,7 @@ stExtAbilityFlagEnum =
 	IW_ABILITY_FLAG_KEYWORD_ATTACK      = 16384,
 	IW_ABILITY_FLAG_KEYWORD_SINGLE      = 32768,
 	IW_ABILITY_FLAG_KEYWORD_AOE         = 65536,
+	IW_ABILITY_FLAG_KEYWORD_WEATHER     = 131072,
 }
 
 for k,v in pairs(stExtAbilityFlagEnum) do _G[k] = v end
@@ -102,6 +103,13 @@ function CExtAbilityLinker:GetCastAnimation()
 		local tAnimationTable = self._tAbilityCastAnimations[self:GetCaster():GetUnitName()]
 		return GameActivity_t[tAnimationTable.Animation] or 0
 	end
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.GetCastAnimation
+		if hBaseFunction then
+			return hBaseFunction(self)
+		end
+	end
 	return 0
 end
 
@@ -109,6 +117,13 @@ function CExtAbilityLinker:GetPlaybackRateOverride()
 	if self._tAbilityCastAnimations then
 		local tAnimationTable = self._tAbilityCastAnimations[self:GetCaster():GetUnitName()]
 		return tAnimationTable.Rate or 1.0
+	end
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.GetPlaybackRateOverride
+		if hBaseFunction then
+			return hBaseFunction(self)
+		end
 	end
 	return 1.0
 end
@@ -264,7 +279,7 @@ function CExtAbilityLinker:CheckSkillRequirements(hEntity)
 end
 
 function CExtAbilityLinker:IsWeatherAbility()
-	return (self._bIsWeatherAbility == true)
+	return bit32.btest(self._nAbilityFlags, IW_ABILITY_FLAG_KEYWORD_WEATHER)
 end
 
 function CExtAbilityLinker:IsFullyCastable()
@@ -550,7 +565,7 @@ function CExtAbilityLinker:OnToggle()
 	if self:GetToggleState() then
 		self:RemoveModifiers(self:GetCaster(), IW_MODIFIER_ON_TOGGLE)
 	else
-		self:ApplyModifiers(IW_MODIFIER_ON_TOGGLE)
+		self:ApplyModifiers(self:GetCaster(), IW_MODIFIER_ON_TOGGLE)
 	end
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then
@@ -622,8 +637,6 @@ function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemp
 	hExtAbility._nAbilityTargetFlags = GetFlagValue(tBaseTemplate.AbilityUnitTargetFlags, DOTA_UNIT_TARGET_FLAGS)
 	hExtAbility._nAbilityFlags = GetFlagValue(tExtTemplate.AbilityFlags, stExtAbilityFlagEnum)
 	hExtAbility._nAbilityAOERadius = tonumber(tBaseTemplate.AbilityAOERadius) or 0
-	
-	hExtAbility._bIsWeatherAbility = (tExtTemplate.IsWeather == 1)
 	
 	hExtAbility._tAbilityCosts =
 	{

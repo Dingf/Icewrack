@@ -53,6 +53,7 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 	var szBehaviorText = "";
 	var hBehaviorLabel = hContextPanel.FindChildTraverse("Stat0");
 	var nAbilityBehavior = Abilities.GetBehavior(nAbilityIndex);
+	var nAbilityExtFlags = tAbilityTemplate ? tAbilityTemplate.extflags : 0;
 	if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_PASSIVE)
 		szBehaviorText = $.Localize("iw_ui_ability_passive");
 	else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_CHANNELED)
@@ -88,13 +89,21 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 		{
 			szBehaviorText += $.Localize("iw_ui_ability_target_ground");
 		}
-		else if ((tAbilityTemplate) && (tAbilityTemplate.weather === 1))
+		else if (nAbilityExtFlags & IW_ABILITY_FLAG_KEYWORD_WEATHER)
 		{
 			szBehaviorText += $.Localize("iw_ui_ability_target_weather");
 		}
 		else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_NO_TARGET)
 		{
 			szBehaviorText += $.Localize("iw_ui_ability_target_self");
+		}
+	}
+	else
+	{
+		if (nAbilityExtFlags & IW_ABILITY_FLAG_KEYWORD_ATTACK)
+		{
+			szBehaviorText += " - ";
+			szBehaviorText += $.Localize("iw_ui_ability_target_attack");
 		}
 	}
 	hBehaviorLabel.FindChild("Title").text = szBehaviorText;

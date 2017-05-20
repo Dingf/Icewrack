@@ -163,24 +163,18 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel)
 			table.insert(self._tSpellUnits, hSpellUnit)
 		end
 		hSpellUnit:AddAbility(szAbilityName)
-		local hAbility = hSpellUnit:FindAbilityByName(szAbilityName)
-		if IsInstanceOf(hAbility, CDOTA_Ability_Lua) then
-			local hAbility = CExtAbility(hAbility)
-			hAbility:SetCaster(hEntity)
-			hAbility:SetLevel(nLevel)
-			hAbility:SetOwner(hEntity)
-			self._tSpellList[szAbilityName] = hSpellUnit
-			self._tNetTable.Spells[hAbility:entindex()] =
-			{
-				skills = hAbility:GetSkillRequirements(),
-				stamina = hAbility:GetStaminaCost(),
-			}
-			self:UpdateNetTable()
-			return hAbility
-		else
-			hSpellUnit:RemoveAbility(szAbilityName)
-			LogMessage("Tried to add non-lua ability \"" .. szAbilityName .. "\" to spellbook of entity " .. hEntity:entindex() .. "(" .. hEntity:GetUnitName() .. ")", LOG_SEVERITY_WARNING)
-		end
+		local hAbility = CExtAbility(hSpellUnit:FindAbilityByName(szAbilityName))
+		hAbility:SetCaster(hEntity)
+		hAbility:SetLevel(nLevel)
+		hAbility:SetOwner(hEntity)
+		self._tSpellList[szAbilityName] = hSpellUnit
+		self._tNetTable.Spells[hAbility:entindex()] =
+		{
+			skills = hAbility:GetSkillRequirements(),
+			stamina = hAbility:GetStaminaCost(),
+		}
+		self:UpdateNetTable()
+		return hAbility
 	elseif self._tSpellList[szAbilityName] then
 		hSpellUnit = self._tSpellList[szAbilityName]
 		local hAbility = hSpellUnit:FindAbilityByName(szAbilityName)

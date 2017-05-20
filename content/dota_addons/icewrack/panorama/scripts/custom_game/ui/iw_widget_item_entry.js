@@ -39,20 +39,6 @@ var stItemEntryIcons =
 	"iw_icon_jewel",
 ];
 
-var IW_ITEM_FLAG_NONE = 0;
-var IW_ITEM_FLAG_HIDDEN = 1;
-var IW_ITEM_FLAG_UNIQUE = 2;
-var IW_ITEM_FLAG_QUEST = 4;
-var IW_ITEM_FLAG_ATTACK_SOURCE = 8;
-var IW_ITEM_FLAG_CAN_ACTIVATE = 16;
-var IW_ITEM_FLAG_CAN_READ = 32;
-var IW_ITEM_FLAG_CANNOT_UNEQUIP = 64;
-var IW_ITEM_FLAG_REQUIRES_AMMO = 128;
-var IW_ITEM_FLAG_CAN_ACTIVATE = 256;
-var IW_ITEM_FLAG_THROWN = 256;
-var IW_ITEM_FLAG_DONT_SAVE = 512;
-var IW_ITEM_FLAG_DONT_CALCULATE_DAMAGE = 1024;
-
 function OnItemEntryUpdate(hContextPanel, tArgs)
 {
 	var tItemData = tArgs.item;
@@ -139,22 +125,22 @@ function OnItemEntryActivate()
 	var nContextFilter = $.GetContextPanel().GetAttributeInt("filter", 0);
 	var nItemType = $.GetContextPanel()._tPanelData.type;
 	
-	if (((nContextFilter & ((1 << (ITEM_ACTION_EQUIP)) | (1 << ITEM_ACTION_UNEQUIP))) !== 0) && ((nItemType & 1044984) !== 0))
+	if (((nContextFilter & ((1 << (IW_ITEM_ACTION_EQUIP)) | (1 << IW_ITEM_ACTION_UNEQUIP))) !== 0) && ((nItemType & 1044984) !== 0))
 	{
 		if ($.GetContextPanel().GetAttributeInt("equipped", 0) == 1)
 			DispatchCustomEvent($.GetContextPanel(), "ItemActionUnequip", { entindex:nEntityIndex, itemindex:nItemIndex });
 		else
 			DispatchCustomEvent($.GetContextPanel(), "ItemActionEquip", { entindex:nEntityIndex, itemindex:nItemIndex, slots:$.GetContextPanel()._tPanelData.slots });
 	}
-	else if (((nContextFilter & (1 << ITEM_ACTION_USE)) !== 0) && ((nItemType & 32505856) !== 0))
+	else if (((nContextFilter & (1 << IW_ITEM_ACTION_USE)) !== 0) && ((nItemType & 32505856) !== 0))
 	{
 		DispatchCustomEvent($.GetContextPanel(), "ItemActionUse", { entindex:nEntityIndex, itemindex:nItemIndex });
 	}
-	else if ((nContextFilter & (1 << ITEM_ACTION_TAKE)) !== 0)
+	else if ((nContextFilter & (1 << IW_ITEM_ACTION_TAKE)) !== 0)
 	{
 		DispatchCustomEvent($.GetContextPanel(), "ItemActionTake", { entindex:nEntityIndex, itemindex:nItemIndex });
 	}
-	else if ((nContextFilter & (1 << ITEM_ACTION_STORE)) !== 0)
+	else if ((nContextFilter & (1 << IW_ITEM_ACTION_STORE)) !== 0)
 	{
 		DispatchCustomEvent($.GetContextPanel(), "ItemActionStore", { entindex:nEntityIndex, itemindex:nItemIndex });
 	}
@@ -170,25 +156,25 @@ function OnItemEntryContextItemActivate(hContextPanel, tArgs)
 	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
 	switch (tArgs.value)
 	{
-		case ITEM_ACTION_EQUIP:
+		case IW_ITEM_ACTION_EQUIP:
 			DispatchCustomEvent(hContextPanel, "ItemActionEquip", { itemindex:nItemIndex, entindex:nEntityIndex, slots:hContextPanel._tPanelData.slots });
 			break;
-		case ITEM_ACTION_UNEQUIP:
+		case IW_ITEM_ACTION_UNEQUIP:
 			DispatchCustomEvent(hContextPanel, "ItemActionUnequip", { itemindex:nItemIndex, entindex:nEntityIndex });
 			break;
-		case ITEM_ACTION_USE:
+		case IW_ITEM_ACTION_USE:
 			DispatchCustomEvent(hContextPanel, "ItemActionUse", { itemindex:nItemIndex, entindex:nEntityIndex });
 			break;
-		case ITEM_ACTION_DROP:
+		case IW_ITEM_ACTION_DROP:
 			DispatchCustomEvent(hContextPanel, "ItemActionDrop", { itemindex:nItemIndex, entindex:nEntityIndex });
 			break;
-		case ITEM_ACTION_INSPECT:
+		case IW_ITEM_ACTION_INSPECT:
 			DispatchCustomEvent(hContextPanel, "ItemActionInspect", { itemindex:nItemIndex, entindex:nEntityIndex });
 			break;
-		case ITEM_ACTION_TAKE:
+		case IW_ITEM_ACTION_TAKE:
 			DispatchCustomEvent(hContextPanel, "ItemActionTake", { itemindex:nItemIndex, entindex:nEntityIndex });
 			break;
-		case ITEM_ACTION_STORE:
+		case IW_ITEM_ACTION_STORE:
 			DispatchCustomEvent(hContextPanel, "ItemActionStore", { itemindex:nItemIndex, entindex:nEntityIndex });
 			break;
 		default:
@@ -206,13 +192,13 @@ function OnItemEntryContextMenu()
 	var bEquipped = ($.GetContextPanel().GetAttributeInt("equipped", 0) === 1);
 	var hContextMenu = $.GetContextPanel()._hContextMenu;
 	
-	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_EQUIP, state:((nItemSlots !== 0) && (!bEquipped)) });
-	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_UNEQUIP, state:(((nItemFlags & IW_ITEM_FLAG_CANNOT_UNEQUIP) === 0) && (bEquipped)) });
-	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_USE, state:((nItemFlags & IW_ITEM_FLAG_CAN_ACTIVATE) !== 0) });
-	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:ITEM_ACTION_READ, state:((nItemFlags & IW_ITEM_FLAG_CAN_READ) !== 0) });
+	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:IW_ITEM_ACTION_EQUIP, state:((nItemSlots !== 0) && (!bEquipped)) });
+	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:IW_ITEM_ACTION_UNEQUIP, state:(((nItemFlags & IW_ITEM_FLAG_CANNOT_UNEQUIP) === 0) && (bEquipped)) });
+	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:IW_ITEM_ACTION_USE, state:((nItemFlags & IW_ITEM_FLAG_CAN_ACTIVATE) !== 0) });
+	DispatchCustomEvent(hContextMenu, "ContextItemVisible", { value:IW_ITEM_ACTION_READ, state:((nItemFlags & IW_ITEM_FLAG_CAN_READ) !== 0) });
 	
 	var nContextFilter = $.GetContextPanel().GetAttributeInt("filter", 0);
-	for (var i = 1; i < ITEM_ACTION_MAX; i++)
+	for (var i = 1; i < IW_ITEM_ACTION_MAX; i++)
 	{
 		if ((nContextFilter & (1 << i)) === 0)
 		{
@@ -221,20 +207,20 @@ function OnItemEntryContextMenu()
 	}
 
 	/*
-	hContextMenu._tMenuEntries[ITEM_ACTION_EQUIP].visible = false;
-	hContextMenu._tMenuEntries[ITEM_ACTION_UNEQUIP].visible = false;
-	hContextMenu._tMenuEntries[ITEM_ACTION_USE].visible = false;
+	hContextMenu._tMenuEntries[IW_ITEM_ACTION_EQUIP].visible = false;
+	hContextMenu._tMenuEntries[IW_ITEM_ACTION_UNEQUIP].visible = false;
+	hContextMenu._tMenuEntries[IW_ITEM_ACTION_USE].visible = false;
 	
 	if ((nItemType & 1044984) !== 0)
 	{
 		if ($.GetContextPanel().GetAttributeInt("equipped", 0) == 1)
-			hContextMenu._tMenuEntries[ITEM_ACTION_UNEQUIP].visible = true;
+			hContextMenu._tMenuEntries[IW_ITEM_ACTION_UNEQUIP].visible = true;
 		else
-			hContextMenu._tMenuEntries[ITEM_ACTION_EQUIP].visible = true;
+			hContextMenu._tMenuEntries[IW_ITEM_ACTION_EQUIP].visible = true;
 	}
 	else if ((nItemType & 32505856) !== 0)
 	{
-		hContextMenu._tMenuEntries[ITEM_ACTION_USE].visible = true;
+		hContextMenu._tMenuEntries[IW_ITEM_ACTION_USE].visible = true;
 	}*/
 	
 	DispatchCustomEvent(hContextMenu, "ContextMenuActivate");
@@ -245,14 +231,14 @@ function LoadItemEntryContextMenu(hPanel)
 	var hContextMenu = CreateContextMenu(hPanel, "ContextMenu");
 	hPanel._hContextMenu = hContextMenu;
 	
-	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_equip"), ITEM_ACTION_EQUIP);
-	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_unequip"), ITEM_ACTION_UNEQUIP);
-	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_use"), ITEM_ACTION_USE);
-	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_drop"), ITEM_ACTION_DROP);
-	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_read"), ITEM_ACTION_READ);
-	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_inspect"), ITEM_ACTION_INSPECT);
-	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_take"), ITEM_ACTION_TAKE);
-	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_store"), ITEM_ACTION_STORE);
+	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_equip"), IW_ITEM_ACTION_EQUIP);
+	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_unequip"), IW_ITEM_ACTION_UNEQUIP);
+	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_use"), IW_ITEM_ACTION_USE);
+	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_drop"), IW_ITEM_ACTION_DROP);
+	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_read"), IW_ITEM_ACTION_READ);
+	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_inspect"), IW_ITEM_ACTION_INSPECT);
+	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_take"), IW_ITEM_ACTION_TAKE);
+	AddContextMenuItem(hContextMenu, $.Localize("iw_ui_item_entry_store"), IW_ITEM_ACTION_STORE);
 }
 
 function OnItemEntryLoad()

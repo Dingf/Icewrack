@@ -20,7 +20,6 @@ local stExtModifierData = LoadKeyValues("scripts/npc/npc_modifiers_extended.txt"
 local function ApplyPropertyValues(self)
 	local hTarget = self:GetParent()
 	if IsValidInstance(hTarget) then
-		hTarget:AddChild(self)
 		hTarget:UpdateNetTable()
 	end
 end
@@ -28,7 +27,6 @@ end
 local function RemovePropertyValues(self)
 	local hTarget = self:GetParent()
 	if IsValidInstance(hTarget) then
-		hTarget:RemoveChild(self)
 		hTarget:UpdateNetTable()
 	end
 end
@@ -138,6 +136,7 @@ local function OnModifierCreatedDefault(self, keys)
 		self._szTextureArgsString = table.concat(tModifierStringBuilder, "")
 	elseif IsServer() and IsValidInstance(hTarget) then
 		self = CExtModifier(CInstance(self))
+		hTarget:AddChild(self)
 		RecordModifierArgs(self, keys)
 		local nModifierID = self:RetrieveModifierID()
 		local szModifierName = self:GetName()
@@ -164,7 +163,6 @@ local function OnModifierCreatedDefault(self, keys)
 		end
 		
 		CullModifierStacks(self)
-		RefreshModifier(self)
 		
 		if IsValidExtendedEntity(hTarget) then
 			if self:IsDebuff() then
@@ -195,7 +193,6 @@ local function OnModifierCreatedDefault(self, keys)
 				end
 			end
 			hTarget:AddToRefreshList(self)
-			hTarget:RefreshEntity()
 		end
 	end
 end
@@ -204,6 +201,7 @@ local function OnModifierDestroyDefault(self)
 	local hTarget = self:GetParent()
 	if IsServer() and IsValidInstance(hTarget) then
 		RemovePropertyValues(self)
+		hTarget:RemoveChild(self)
 		if IsValidExtendedEntity(hTarget) then
 			local tExtModifierEvents = self:DeclareExtEvents()
 			for k,v in pairs(tExtModifierEvents) do
@@ -237,6 +235,10 @@ function OnCreated(self, params)
 	end
 	for k,v in ipairs(self._tOnCreatedList) do
 		v(self, params)
+	end
+	local hTarget = self:GetParent()
+	if IsServer() and IsValidExtendedEntity(hTarget) then
+		hTarget:RefreshEntity()
 	end
 end
 

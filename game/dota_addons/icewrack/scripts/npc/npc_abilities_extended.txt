@@ -1,5 +1,16 @@
 "IcewrackExtendedAbilityDefinitions"
 {
+	"internal_animation"	{}
+	"status_bash"		{}
+	"status_maim"		{}
+	"status_bleed"		{}
+	"status_burning"	{}
+	"status_chill"		{}
+	"status_frozen"		{}
+	"status_weaken"		{}
+	"status_wet"		{}
+
+
 	"iw_axe_berserkers_call"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_berserkers_call.lua"
@@ -119,42 +130,11 @@
 		}
 	}
 
-
-	"iw_bounty_hunter_trapjaw"
+	"iw_drow_ranger_frost_arrows"
 	{
-		"AbilitySkill"		"122"
-		"ManaCost"		"50"
-		"StaminaCost"		"20"
-	}
+		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_frost_arrows.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK"
 
-	"iw_bounty_hunter_jinada"
-	{
-		"AbilitySkill"		"7951"
-	}
-
-	"iw_test_marksmanship"
-	{
-		"AbilitySkill"		"22"
-		"StaminaCost"		"70"
-	}
-
-	"iw_test_shackleshot"
-	{
-		"AbilitySkill"		"18"
-	}
-
-	"iw_test_windrun"
-	{
-		"AbilitySkill"		"38"
-	}
-
-	"iw_test_powershot"
-	{
-		"AbilitySkill"		"47"
-	}
-
-	"iw_test_focus_fire"
-	{
-		"AbilitySkill"		"82"
+		"ManaCost"		"8"
 	}
 }

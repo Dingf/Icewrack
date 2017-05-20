@@ -4,8 +4,8 @@
 	</styles>
 	
 	<scripts>
-		<include src="file://{resources}/scripts/custom_game/iw_instance.js" />
-		<include src="file://{resources}/scripts/custom_game/iw_damage_types.js" />
+		<include src="file://{resources}/scripts/custom_game/constants/iw_instance.js" />
+		<include src="file://{resources}/scripts/custom_game/constants/iw_damage_types.js" />
 		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
 		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_scrollbar.js" />
 		<include src="file://{resources}/scripts/custom_game/character/iw_character_overview_stats.js" />

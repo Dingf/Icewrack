@@ -1,16 +1,5 @@
 "use strict";
 
-var ITEM_ACTION_NONE = 0;
-var ITEM_ACTION_EQUIP = 1;
-var ITEM_ACTION_UNEQUIP = 2;
-var ITEM_ACTION_USE = 3;
-var ITEM_ACTION_DROP = 4;
-var ITEM_ACTION_READ = 5;
-var ITEM_ACTION_INSPECT = 6;
-var ITEM_ACTION_TAKE = 7;
-var ITEM_ACTION_STORE = 8;
-var ITEM_ACTION_MAX = 9;
-
 function OnItemActionEquip(hContextPanel, tArgs)
 {
 	if (!DispatchCustomEvent(hContextPanel.GetParent(), "ItemActionEquip", tArgs))

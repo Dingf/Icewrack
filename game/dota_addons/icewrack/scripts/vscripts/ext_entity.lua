@@ -491,11 +491,16 @@ function CExtEntity:TriggerExtendedEvent(nEventID, args)
 end
 
 function CExtEntity:AddToRefreshList(hEntity)
-	self._tRefreshList[hEntity] = true
+	table.insert(self._tRefreshList, 1, hEntity)
 end
 
 function CExtEntity:RemoveFromRefreshList(hEntity)
-	self._tRefreshList[hEntity] = nil
+	for k,v in ipairs(self._tRefreshList) do
+		if v == hEntity then
+			table.remove(self._tRefreshList, k)
+			break
+		end
+	end
 end
 
 function CExtEntity:RefreshHealthRegen()
@@ -575,8 +580,8 @@ function CExtEntity:CurrentActionThink()
 end
 
 function CExtEntity:RefreshEntity()
-	for k,v in pairs(self._tRefreshList) do
-		k:OnEntityRefresh()
+	for k,v in ipairs(self._tRefreshList) do
+		v:OnEntityRefresh()
 	end
 	
 	self:RefreshHealthRegen()
