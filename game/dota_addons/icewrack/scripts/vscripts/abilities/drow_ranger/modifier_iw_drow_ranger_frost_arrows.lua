@@ -9,34 +9,36 @@ function modifier_iw_drow_ranger_frost_arrows:DeclareFunctions()
 	return funcs
 end
 
-function modifier_iw_drow_ranger_frost_arrows:OnAttackStart()
+function modifier_iw_drow_ranger_frost_arrows:OnAttackStart(args)
 	local hEntity = self:GetCaster()
 	local hAbility = self:GetAbility()
 	local hAttackSource = hEntity:GetCurrentAttackSource()
-	if self._bIsBowEquipped and hEntity:GetMana() >= hAbility:GetManaCost() then
-		self._bIsFrostArrowAttack = true
-		hEntity:SetRangedProjectileName("particles/units/heroes/hero_drow/drow_frost_arrow.vpcf")
-		if self._hLastAttackSource ~= hAttackSource then
+	if args.attacker == hEntity then
+		if self._bIsBowEquipped and hEntity:GetMana() >= hAbility:GetManaCost() then
+			self._bIsFrostArrowAttack = true
+			hEntity:SetRangedProjectileName("particles/units/heroes/hero_drow/drow_frost_arrow.vpcf")
+			if self._hLastAttackSource ~= hAttackSource then
+				if self._hLastAttackSource then
+					self._hLastAttackSource:RemoveChild(self)
+				end
+				hAttackSource:AddChild(self)
+				self._hLastAttackSource = hAttackSource
+			end
+		else
+			self._bIsFrostArrowAttack = false
+			hEntity:SetRangedProjectileName(self._szBaseProjectile)
 			if self._hLastAttackSource then
 				self._hLastAttackSource:RemoveChild(self)
+				self._hLastAttackSource = nil
 			end
-			hAttackSource:AddChild(self)
-			self._hLastAttackSource = hAttackSource
-		end
-	else
-		self._bIsFrostArrowAttack = false
-		hEntity:SetRangedProjectileName(self._szBaseProjectile)
-		if self._hLastAttackSource then
-			self._hLastAttackSource:RemoveChild(self)
-			self._hLastAttackSource = nil
 		end
 	end
 end
 
-function modifier_iw_drow_ranger_frost_arrows:OnAttack()
+function modifier_iw_drow_ranger_frost_arrows:OnAttack(args)
 	local hEntity = self:GetCaster()
 	local hAbility = self:GetAbility()
-	if self._bIsFrostArrowAttack then
+	if args.attacker == hEntity and self._bIsFrostArrowAttack then
 		hEntity:SpendMana(hAbility:GetManaCost(), hAbility)
 	end
 end
@@ -49,7 +51,7 @@ function modifier_iw_drow_ranger_frost_arrows:OnRefresh()
 	
 	self._bIsBowEquipped = bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_BOW - 1))
 	if self._bIsBowEquipped then
-		local fDamagePercent = self:GetAbility():GetSpecialValueFor("damage")/5.0
+		local fDamagePercent = self:GetAbility():GetSpecialValueFor("damage")/100.0
 		local fChillChance = self:GetAbility():GetSpecialValueFor("chill_chance")
 		self._fDamageSumMin = 0
 		self._fDamageSumMax = 0
