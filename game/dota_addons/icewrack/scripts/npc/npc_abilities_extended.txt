@@ -137,7 +137,14 @@
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_frost_arrows.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK"
+		"AbilitySkill"		"33561"
 
 		"ManaCost"		"8"
+	}
+
+	"iw_drow_ranger_precision_aura"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_precision_aura.lua"
+		"AbilityFlags"		""
 	}
 }

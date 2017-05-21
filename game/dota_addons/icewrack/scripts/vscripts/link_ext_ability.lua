@@ -213,6 +213,17 @@ function CExtAbilityLinker:GetManaCost(nLevel)
 	return floor(fManaCost)
 end
 
+function CExtAbilityLinker:GetManaUpkeep()
+	local hEntity = self:GetCaster()
+	local fManaUpkeep = self._fManaUpkeep or 0
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions and tBaseFunctions.GetManaUpkeep then
+		fManaUpkeep = tBaseFunctions.GetManaUpkeep(self)
+	end
+	fManaUpkeep = fManaUpkeep * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
+	return fManaUpkeep
+end
+
 function CExtAbilityLinker:GetStaminaCost(nLevel)
 	local hEntity = self:GetCaster()
 	local fStaminaCost = 0
@@ -238,6 +249,17 @@ function CExtAbilityLinker:GetStaminaCost(nLevel)
 	end
 	fStaminaCost = fStaminaCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
 	return floor(fStaminaCost)
+end
+
+function CExtAbilityLinker:GetStaminaUpkeep()
+	local hEntity = self:GetCaster()
+	local fStaminaUpkeep = self._fStaminaUpkeep or 0
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions and tBaseFunctions.GetStaminaUpkeep then
+		fStaminaUpkeep = tBaseFunctions.GetStaminaUpkeep(self)
+	end
+	fStaminaUpkeep = fStaminaUpkeep * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
+	return fStaminaUpkeep
 end
 
 function CExtAbilityLinker:GetGoldCost(nLevel)
@@ -561,9 +583,37 @@ function CExtAbilityLinker:OnChannelFinish(bInterrupted)
 	end
 end
 
+local function OnExtAbilityUpkeepThink(self)
+	local hEntity = self:GetCaster()
+	if self:GetToggleState() then
+		local fManaUpkeep = self:GetManaUpkeep()/10.0
+		if fManaUpkeep > 0 then
+			local fEntityMana = hEntity:GetMana()
+			if fManaUpkeep >= fEntityMana then
+				hEntity:SetMana(0)
+				self:ToggleAbility()
+				return
+			else
+				hEntity:SetMana(fEntityMana - fManaUpkeep)
+			end
+		end
+		local fStaminaUpkeep = self:GetStaminaUpkeep()/10.0
+		if fStaminaUpkeep > 0 then
+			local fEntityStamina = hEntity:GetStamina()
+			hEntity:SpendStamina(fStaminaUpkeep)
+			if fStaminaUpkeep >= fEntityStamina then
+				self:ToggleAbility()
+				return
+			end
+		end
+		return 0.1
+	end
+end
+
 function CExtAbilityLinker:OnToggle()
 	if self:GetToggleState() then
 		self:RemoveModifiers(self:GetCaster(), IW_MODIFIER_ON_TOGGLE)
+		CTimer(0.03, OnExtAbilityUpkeepThink, self)
 	else
 		self:ApplyModifiers(self:GetCaster(), IW_MODIFIER_ON_TOGGLE)
 	end
@@ -637,6 +687,9 @@ function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemp
 	hExtAbility._nAbilityTargetFlags = GetFlagValue(tBaseTemplate.AbilityUnitTargetFlags, DOTA_UNIT_TARGET_FLAGS)
 	hExtAbility._nAbilityFlags = GetFlagValue(tExtTemplate.AbilityFlags, stExtAbilityFlagEnum)
 	hExtAbility._nAbilityAOERadius = tonumber(tBaseTemplate.AbilityAOERadius) or 0
+	
+	hExtAbility._fManaUpkeep = tExtTemplate.ManaUpkeep or 0
+	hExtAbility._fStaminaUpkeep = tExtTemplate.StaminaUpkeep or 0
 	
 	hExtAbility._tAbilityCosts =
 	{

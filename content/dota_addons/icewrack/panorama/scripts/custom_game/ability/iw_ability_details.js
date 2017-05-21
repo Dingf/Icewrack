@@ -4,7 +4,9 @@ var stAbilityDetailsStatNames =
 [
 	"iw_ui_ability_passive",
 	"iw_ui_ability_stat_mana",
+	"iw_ui_ability_stat_mana_upkeep",
 	"iw_ui_ability_stat_stamina",
+	"iw_ui_ability_stat_stamina_upkeep",
 	"iw_ui_ability_stat_cooldown",
 	"iw_ui_ability_stat_range",
 	"iw_ui_ability_stat_time"
@@ -40,6 +42,7 @@ function OnAbilityDetailsSetVisible(hContextPanel, tArgs)
 function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 {
 	var nAbilityIndex = tArgs.abilityindex;
+	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
 	var szAbilityName = Abilities.GetAbilityName(nAbilityIndex);
 	var szAbilityTextureName = Abilities.GetAbilityTextureName(nAbilityIndex);
 	var tAbilityTemplate = CustomNetTables.GetTableValue("abilities", szAbilityName);
@@ -108,21 +111,34 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 	}
 	hBehaviorLabel.FindChild("Title").text = szBehaviorText;
 	
+	var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
+	var tSpellData = tEntitySpellbook.Spells[nAbilityIndex];
+	
 	var nManaCost = Abilities.GetManaCost(nAbilityIndex);
 	var hManaLabel = hContextPanel.FindChildTraverse("Stat1");
 	hManaLabel.FindChild("Value").text = nManaCost.toFixed(0) + "";
 	hManaLabel.visible = (nManaCost > 0);
 	
-	var hStaminaLabel = hContextPanel.FindChildTraverse("Stat2");
+	var fManaUpkeep = tSpellData ? tSpellData.mana_upkeep : (tAbilityData ? tAbilityData.mana_upkeep : 0);
+	var hManaUpkeepLabel = hContextPanel.FindChildTraverse("Stat2");
+	hManaUpkeepLabel.FindChild("Value").text = Math.floor(fManaUpkeep * 100)/100 + "/s";
+	hManaUpkeepLabel.visible = (fManaUpkeep > 0);
+	
+	var hStaminaLabel = hContextPanel.FindChildTraverse("Stat3");
 	hStaminaLabel.visible = false;
 	
+	var fStaminaUpkeep = tSpellData ? tSpellData.stamina_upkeep : (tAbilityData ? tAbilityData.stamina_upkeep : 0);
+	var hStaminaUpkeepLabel = hContextPanel.FindChildTraverse("Stat4");
+	hStaminaUpkeepLabel.FindChild("Value").text = Math.floor(fStaminaUpkeep * 100)/100 + "/s";
+	hStaminaUpkeepLabel.visible = (fStaminaUpkeep > 0);
+	
 	var nCooldown = Abilities.GetCooldown(nAbilityIndex);
-	var hCooldownLabel = hContextPanel.FindChildTraverse("Stat3");
+	var hCooldownLabel = hContextPanel.FindChildTraverse("Stat5");
 	hCooldownLabel.FindChild("Value").text = Math.round(nCooldown * 100)/100 + "";
 	hCooldownLabel.visible = (nCooldown > 0);
 	
-	var hRangeLabel = hContextPanel.FindChildTraverse("Stat4");
-	var hCastTimeLabel = hContextPanel.FindChildTraverse("Stat5");
+	var hRangeLabel = hContextPanel.FindChildTraverse("Stat6");
+	var hCastTimeLabel = hContextPanel.FindChildTraverse("Stat7");
 	
 	//Non-toggled, non-passive abilities
 	if ((nAbilityBehavior & 514) === 0)
@@ -154,7 +170,7 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 		hStaminaLabel.visible = (nStaminaCost > 0);
 		
 		var nSkillMask = tAbilityTemplate.skill;
-		for (var i = 0; i < 4; i++)
+		for (var i = 3; i >= 0; i--)
 		{
 			var nLevel = (nSkillMask >>> (i * 8)) & 0x07;
 			var nSkill = ((nSkillMask >>> (i * 8)) & 0xF8) >> 3;

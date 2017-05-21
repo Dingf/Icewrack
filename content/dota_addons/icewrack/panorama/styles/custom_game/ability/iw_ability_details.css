@@ -39,7 +39,6 @@
 	flow-children: left;
 	vertical-align: bottom;
 	horizontal-align: right;
-	margin-right: 8px;
 }
 
 .AbilityDetailsSkillIcon
@@ -124,7 +123,7 @@
 
 .AbilityDetailsDescriptionLabel
 {
-	color: #ffffff40;
+	color: #ffffff60;
 	font-size: 20px;
 	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
 }

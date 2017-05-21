@@ -528,17 +528,17 @@
 			"02"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"health_bonus"			"1000"
+				"health"			"1000"
 			}
 			"03"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"stamina_bonus"			"250"
+				"stamina"			"250"
 			}
 			"04"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"speed_bonus"			"25.0"
+				"speed"			"25.0"
 			}
 		}
 	}
@@ -569,6 +569,36 @@
 			{
 				"var_type"			"FIELD_INTEGER"
 				"chill_chance"			"100"
+			}
+		}
+	}
+
+	"iw_drow_ranger_precision_aura"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_TOGGLED"	
+		"AbilityTextureName"			"drow_ranger_trueshot"
+
+		"MaxLevel"				"1"
+
+		"Modifiers"
+		{
+			"modifier_iw_drow_ranger_precision_aura"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"accuracy"		"50.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"crit_chance"			"50.0"
 			}
 		}
 	}

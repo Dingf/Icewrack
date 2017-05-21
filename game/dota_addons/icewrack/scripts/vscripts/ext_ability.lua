@@ -129,6 +129,8 @@ for k,v in pairs(stExtAbilityData) do
 				skill = v.AbilitySkill or 0,
 				mana = v.ManaCost or 0,
 				stamina = v.StaminaCost or 0,
+				mana_upkeep = v.ManaUpkeep or 0,
+				stamina_upkeep = v.StaminaUpkeep or 0,
 				extflags = GetFlagValue(v.AbilityFlags, stExtAbilityFlagEnum),
 				castrange = tBaseAbilityTemplate.AbilityCastRange or 0,
 				texture = tBaseAbilityTemplate.AbilityTextureName or k,

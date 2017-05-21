@@ -88,6 +88,8 @@ function CSpellbook:UpdateNetTable()
 		for k,v in pairs(tNetTable.Spells) do
 			local hAbility = EntIndexToHScript(k)
 			v.stamina = hAbility:GetStaminaCost()
+			v.mana_upkeep = hAbility:GetManaUpkeep()
+			v.stamina_upkeep = hAbility:GetStaminaUpkeep()
 		end
 		CustomNetTables:SetTableValue("spellbook", tostring(self._hEntity:entindex()), tNetTable);
 	end
@@ -175,6 +177,8 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel)
 		{
 			skills = hAbility:GetSkillRequirements(),
 			stamina = hAbility:GetStaminaCost(),
+			mana_upkeep = hAbility:GetManaUpkeep(),
+			stamina_upkeep = hAbility:GetStaminaUpkeep(),
 		}
 		self:UpdateNetTable()
 		return hAbility

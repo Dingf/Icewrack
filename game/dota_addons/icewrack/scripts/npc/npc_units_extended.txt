@@ -131,10 +131,11 @@
 
 		"SkillMarksmanship"		"4"
 		"SkillCombat"			"2"
-		"SkillSurvival"			"3"
+		"SkillSurvival"			"2"
 		"SkillPerception"		"2"
 		"SkillAthletics"		"2"
-		"SkillStealth"			"1"
+		"SkillWater"			"1"
+		"SkillNature"			"2"
 
 		"MovementNoiseFlat"		"3"
 	}

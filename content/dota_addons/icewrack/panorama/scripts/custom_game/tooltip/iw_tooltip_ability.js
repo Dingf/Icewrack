@@ -99,26 +99,44 @@ function OnTooltipAbilityLoad()
 			}
 		}
 		
-		var nManaCost = nAbilityIndex ? Abilities.GetManaCost(nAbilityIndex) : tAbilityTemplate.mana;
-		$("#ManaCost").visible = (nManaCost > 0);
-		$("#ManaLabel").text = nManaCost.toFixed(0) + "";
+		var fStaminaCost = tAbilityTemplate.stamina;
+		var fStaminaUpkeep = tAbilityTemplate.stamina_upkeep;
+		var fManaCost = nAbilityIndex ? Abilities.GetManaCost(nAbilityIndex) : tAbilityTemplate.mana;
+		var fManaUpkeep = tAbilityTemplate.mana_upkeep;
 		
-		var nStaminaCost = 0;
-		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
 		var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
-		if (tEntityData && tEntitySpellbook)
+		if (tEntitySpellbook)
 		{
 			var tSpellData = tEntitySpellbook.Spells[nAbilityIndex];
-			nStaminaCost = tSpellData ? tSpellData.stamina : 0;
-			nStaminaCost *= tEntityData.fatigue;
+			if (tSpellData)
+			{
+				fStaminaCost = tSpellData.stamina;
+				fStaminaUpkeep = tSpellData.stamina_upkeep;
+				fManaUpkeep = tSpellData.mana_upkeep;
+			}
 		}
-		else
+		
+		$("#ManaCost").visible = (fManaCost > 0) || (fManaUpkeep > 0);
+		$("#ManaLabel").text = "";
+		if (fManaCost > 0)
 		{
-			var tAbilityTemplate = CustomNetTables.GetTableValue("abilities", szAbilityName);
-			nStaminaCost = tAbilityTemplate.stamina;
+			$("#ManaLabel").text += fManaCost.toFixed(0) + ((fManaUpkeep > 0) ? " + " : "");
 		}
-		$("#StaminaCost").visible = (nStaminaCost > 0);
-		$("#StaminaLabel").text = nStaminaCost.toFixed(0) + "";
+		if (fManaUpkeep > 0)
+		{
+			$("#ManaLabel").text += Math.floor(fManaUpkeep * 100)/100 + "/s";
+		}
+		
+		$("#StaminaCost").visible = (fStaminaCost > 0) || (fStaminaUpkeep > 0);
+		$("#StaminaLabel").text = "";
+		if (fStaminaCost > 0)
+		{
+			$("#StaminaLabel").text += fStaminaCost.toFixed(0) + ((fStaminaUpkeep > 0) ? " + " : "");
+		}
+		if (fStaminaUpkeep > 0)
+		{
+			$("#StaminaLabel").text += Math.floor(fStaminaUpkeep * 100)/100 + "/s";
+		}
 		
 		var nCooldown = nAbilityIndex ? Abilities.GetCooldown(nAbilityIndex) : tAbilityTemplate.cooldown;
 		$("#CooldownCost").visible = (nCooldown > 0);
@@ -130,6 +148,7 @@ function OnTooltipAbilityLoad()
 		var tSpecialSections = szLocalizedText.match(/[^{}]+(?=})/g);
 		var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
 		
+		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
 		var fSpellpower = tEntityData ? GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER) : 0;
 		var szFormattedText = "";
 		for (var i = 0; i < tTextSections.length; i++)

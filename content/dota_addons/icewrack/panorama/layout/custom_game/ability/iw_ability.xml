@@ -4,6 +4,7 @@
 	</styles>
 	
 	<scripts>
+		<include src="file://{resources}/scripts/custom_game/constants/iw_ext_ability.js" />
 		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
 		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_button.js" />
 		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_scrollbar.js" />
