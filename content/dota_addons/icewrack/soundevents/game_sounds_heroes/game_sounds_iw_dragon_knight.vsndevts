@@ -38,3 +38,75 @@
 		}
 	}
 }
+
+"Hero_DragonKnight.DragonForm.Wings"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/physics/movement/hero/dragon_knight/flap1.vsnd"
+							"wave1"		"sounds/physics/movement/hero/dragon_knight/flap2.vsnd"
+							"wave2"		"sounds/physics/movement/hero/dragon_knight/flap3.vsnd"
+							"wave3"		"sounds/physics/movement/hero/dragon_knight/flap4.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"4.000000"
+					}
+					"pitch_rand_min"
+					{
+						"value"		"-0.50000"
+					}
+					"pitch_rand_max"
+					{
+						"value"		"0.50000"
+					}
+					"soundlevel"
+					{
+						"value"		"72.000000"
+					}
+					"event_type"
+					{
+						"value"		"3.000000"
+					}
+					"volume_fade_out"
+					{
+						"value"		"1.500000"
+					}
+					"volume_falloff_min"
+					{
+						"value"		"600.000000"
+					}
+					"volume_falloff_max"
+					{
+						"value"		"2000.000000"
+					}
+					"volume_move_vol"
+					{
+						"value"		"0.300000"
+					}
+					"volume_move_vel"
+					{
+						"value"		"300.000000"
+					}
+					"volume_move_filter_vel"
+					{
+						"value"		"1.000000"
+					}
+				}
+			}
+		}
+	}
+}

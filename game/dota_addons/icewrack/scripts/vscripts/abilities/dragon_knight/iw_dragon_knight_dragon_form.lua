@@ -47,9 +47,9 @@ function iw_dragon_knight_dragon_form:OnSpellStart()
 	
 	local tModifierArgs =
 	{
-		health_bonus = self:GetSpecialValueFor("health_bonus"),
-		stamina_bonus = self:GetSpecialValueFor("stamina_bonus"),
-		speed_bonus = self:GetSpecialValueFor("speed_bonus"),
+		health = self:GetSpecialValueFor("health"),
+		stamina = self:GetSpecialValueFor("stamina"),
+		speed = self:GetSpecialValueFor("speed"),
 		duration = self:GetSpecialValueFor("duration"),
 		modelname = hEntity:GetModelName(),
 	}

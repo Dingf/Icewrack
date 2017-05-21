@@ -632,8 +632,11 @@
 
 			"Properties"
 			{
-				"IW_PROPERTY_MAX_SP_FLAT"			"%stamina_bonus"
-				"IW_PROPERTY_MOVE_SPEED_FLAT"			"%speed_bonus"
+				"IW_PROPERTY_MAX_SP_FLAT"			"%stamina"
+				"IW_PROPERTY_MOVE_SPEED_FLAT"			"%speed"
+				"IW_PROPERTY_VISIBILITY_PCT"			"400"
+				"IW_PROPERTY_MOVE_NOISE_FLAT"			"10"
+				"IW_PROPERTY_MOVE_NOISE_PCT"			"200"
 			}
 
 			"DatadrivenAttributes"		""
@@ -643,7 +646,7 @@
 			}
 			"DatadrivenProperties"
 			{
-				"MODIFIER_PROPERTY_HEALTH_BONUS"		"%health_bonus"
+				"MODIFIER_PROPERTY_HEALTH_BONUS"		"%health"
 				"MODIFIER_PROPERTY_PROJECTILE_SPEED_BONUS"	"1800"
 				"MODIFIER_PROPERTY_MODEL_CHANGE"		"models/heroes/dragon_knight/dragon_knight_dragon.vmdl"
 				"MODIFIER_PROPERTY_MODEL_SCALE"			"140"

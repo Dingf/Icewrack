@@ -49,12 +49,12 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 		hEntity:SetRangedProjectileName("particles/units/heroes/hero_dragon_knight/iw_dragon_knight_dragon_form_attack.vpcf")
 		
 		hEntity:StartGesture(ACT_DOTA_CAST_ABILITY_4)
-		self:StartIntervalThink(0.75)
+		self:StartIntervalThink(0.8)
 	end
 end
 
 function modifier_iw_dragon_knight_dragon_form:OnIntervalThink()
-	EmitSoundOn("Hero_DragonKnight.Wings", self:GetCaster())
+	EmitSoundOn("Hero_DragonKnight.DragonForm.Wings", self:GetCaster())
 end
 
 function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
