@@ -17,7 +17,7 @@
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_AOE"
 		"AbilitySkill"		"155"
 
-		"StaminaCost"		"15"
+		"StaminaCost"		"20"
 	}
 	
 	"iw_axe_battle_hunger"
@@ -32,7 +32,7 @@
 		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_KEYWORD_AOE"
 		"AbilitySkill"		"115"
 
-		"StaminaCost"		"12"
+		"StaminaCost"		"15"
 
 		"AbilityCastAnimation"
 		{
@@ -112,13 +112,16 @@
 
 	"iw_dragon_knight_razorscales"
 	{
-		"AbilityFlags"		""
+		"AbilitySkill"		"37434"
 	}
 
 	"iw_dragon_knight_dragon_form"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_dragon_form.lua"
-		"AbilityFlags"		""
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL"
+		"AbilitySkill"		"9648906"
+
+		"ManaCost"		"80"
 
 		"AbilityCastAnimation"
 		{
@@ -135,6 +138,6 @@
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_frost_arrows.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK"
 
-		"ManaCost"		"5"
+		"ManaCost"		"8"
 	}
 }

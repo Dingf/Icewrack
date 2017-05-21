@@ -17,6 +17,7 @@ if _VERSION < "Lua 5.2" then
 end
 
 require("mechanics/attributes")
+require("mechanics/skills")
 require("instance")
 
 stExtEntityUnitClassEnum =
@@ -645,7 +646,7 @@ function CExtEntity:OnSkillsConfirm(args)
 			local m = hEntity._tPropertyValues[nIndex] + 1
 			local n = hEntity._tPropertyValues[nIndex] + tonumber(szSkillsString:sub(i,i))
 			local nSpentPoints = ((n + 1 - m) * (n + m))/2
-			if nSpentPoints <= nSkillPoints then
+			if nSpentPoints <= nSkillPoints and n <= IW_MAX_ASSIGNABLE_SKILL then
 				hEntity._tPropertyValues[nIndex] = n
 				hEntity._tPropertyValues[IW_PROPERTY_SKILL_POINTS] = nSkillPoints - nSpentPoints
 			end

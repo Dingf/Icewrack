@@ -4,19 +4,19 @@
     Values listed are per point of that skill; magical skills do not provide any inherent benefits
 	
 	TWO-HANDED:
-	    *25% increased accuracy with two-handed weapons
-		*25% increased attack speed with two-handed weapons
+	    *20% increased accuracy with two-handed weapons
+		*20% increased attack speed with two-handed weapons
 	
 	ONE-HANDED:
-	    *25% increased accuracy with one-handed weapons
-		*25% increased attack speed with one-handed weapons
+	    *20% increased accuracy with one-handed weapons
+		*20% increased attack speed with one-handed weapons
 	
 	MARKSMANSHIP:
-	    *25% increased accuracy with ranged weapons
-		*25% increased attack speed with ranged weapons
+	    *20% increased accuracy with ranged weapons
+		*20% increased attack speed with ranged weapons
 	
 	MARTIAL ARTS
-	    *+20 Unarmed Crush Damage
+	    *+15-20 Unarmed Crush Damage
 	
 	ARMOR:
 	    *10% increased armor
@@ -24,11 +24,11 @@
 	
 	COMBAT:
 	    *+1 Stamina/s regeneration
-		*15% reduced attack stamina cost
+		*10% reduced attack stamina cost
 		
 	ATHLETICS:
-	    *+25 Dodge Rating
-		*+15% reduced movement stamina cost
+	    *+30 Dodge Rating
+		*+10% reduced movement stamina cost
 		
 	SURVIVAL:
 	    *+10% all resistances
@@ -46,12 +46,14 @@
 		*Persuasion dialogue options check against speech
 		
 	STEALTH:
-		*20% reduced movement noise
-		*10% reduced visibility
+		*15% reduced movement noise
+		*15% reduced visibility
 		
 	THIEVERY:
 		*Required to pick locks, disarm traps, and steal from enemies
 ]]
+
+IW_MAX_ASSIGNABLE_SKILL = 5
 
 if IsServer() and not modifier_internal_skill_bonus then
 
@@ -67,11 +69,11 @@ function modifier_internal_skill_bonus:GetModifierAttackSpeedBonus_Constant(args
 	if hAttackSource then
 		local nItemType = hAttackSource:GetItemType()
 		if bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_BOW - 1)) then
-			return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_MARKSMAN) * 25
+			return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_MARKSMAN) * 20
 		elseif bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_2H - 1)) then
-			return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_TWOHAND) * 25
+			return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_TWOHAND) * 20
 		elseif bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_1H - 1)) then
-			return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ONEHAND) * 25
+			return hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ONEHAND) * 20
 		end
 	end
 	return 0
@@ -84,11 +86,11 @@ function modifier_internal_skill_bonus:OnRefresh()
 	if hAttackSource then
 		local nItemType = hAttackSource:GetItemType()
 		if bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_BOW - 1)) then
-			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_MARKSMAN) * 25)
+			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_MARKSMAN) * 20)
 		elseif bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_2H - 1)) then
-			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_TWOHAND) * 25)
+			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_TWOHAND) * 20)
 		elseif bit32.btest(nItemType, bit32.lshift(1, IW_ITEM_TYPE_WEAPON_1H - 1)) then
-			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ONEHAND) * 25)
+			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ONEHAND) * 20)
 		else
 			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, 0)
 		end
@@ -97,20 +99,20 @@ function modifier_internal_skill_bonus:OnRefresh()
 	else
 		--TODO: Add base unarmed damage
 		self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, 0)
-		self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_BASE, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_UNARMED) * 10)
-		self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_VAR, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_UNARMED) * 10)
+		self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_BASE, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_UNARMED) * 15)
+		self:SetPropertyValue(IW_PROPERTY_DMG_CRUSH_VAR, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_UNARMED) * 5)
 	end
 	
-	self:SetPropertyValue(IW_PROPERTY_ARMOR_CRUSH_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ARMOR) * 20)
-	self:SetPropertyValue(IW_PROPERTY_ARMOR_SLASH_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ARMOR) * 20)
-	self:SetPropertyValue(IW_PROPERTY_ARMOR_PIERCE_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ARMOR) * 20)
+	self:SetPropertyValue(IW_PROPERTY_ARMOR_CRUSH_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ARMOR) * 10)
+	self:SetPropertyValue(IW_PROPERTY_ARMOR_SLASH_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ARMOR) * 10)
+	self:SetPropertyValue(IW_PROPERTY_ARMOR_PIERCE_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ARMOR) * 10)
 	self:SetPropertyValue(IW_PROPERTY_FATIGUE_MULTI, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ARMOR) * -10)
 	
 	self:SetPropertyValue(IW_PROPERTY_SP_REGEN_FLAT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_COMBAT) * 1.0)
-	self:SetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_COMBAT) * -15.0)
+	self:SetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_COMBAT) * -10.0)
 	
-	self:SetPropertyValue(IW_PROPERTY_DODGE_FLAT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ATHLETICS) * 25)
-	self:SetPropertyValue(IW_PROPERTY_RUN_SP_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ATHLETICS) * -15)
+	self:SetPropertyValue(IW_PROPERTY_DODGE_FLAT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ATHLETICS) * 30)
+	self:SetPropertyValue(IW_PROPERTY_RUN_SP_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ATHLETICS) * -10)
 	
 	self:SetPropertyValue(IW_PROPERTY_RESIST_FIRE, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_SURVIVAL) * 10)
 	self:SetPropertyValue(IW_PROPERTY_RESIST_COLD, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_SURVIVAL) * 10)
@@ -121,8 +123,8 @@ function modifier_internal_skill_bonus:OnRefresh()
 	
 	self:SetPropertyValue(IW_PROPERTY_SHOP_PRICE_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_SPEECH) * -10)
 	
-	self:SetPropertyValue(IW_PROPERTY_MOVE_NOISE_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_STEALTH) * -20)
-	self:SetPropertyValue(IW_PROPERTY_VISIBILITY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_STEALTH) * -10)
+	self:SetPropertyValue(IW_PROPERTY_MOVE_NOISE_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_STEALTH) * -15)
+	self:SetPropertyValue(IW_PROPERTY_VISIBILITY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_STEALTH) * -15)
 end
 
 end
