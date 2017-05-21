@@ -223,4 +223,17 @@
 			"modifier_item_test_component"			"IW_MODIFIER_ON_EQUIP"
 		}
 	}
+
+	"map000_stamina_buff"
+	{
+		"BaseClass"				"item_lua"
+		"ScriptFile"				"ext_item"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+		"Modifiers"
+		{
+			"modifier_map000_stamina_buff"		"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
 }

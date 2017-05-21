@@ -20,10 +20,16 @@
 				<Panel hittest="false" class="Spacer64px" />
 				<Label hittest="false" class="CharacterSelectTitle" id="HeroTitle" text=""/>
 				<Panel hittest="false" class="CharacterSelectFlowGroup" id="HeroDetails">
-					<Panel hittest="false" class="CharacterSelectIconContainer" id="HeroIconContainer" />
-					<Image hittest="false" class="CharacterSelectDivider" src="file://{images}/custom_game/character_select/iw_character_select_divider.tga"/>
-					<Panel hittest="false" class="CharacterSelectIntroContainer">
-						<Label hittest="false" class="CharacterSelectIntro" id="HeroText" text="" />
+					<Panel hittest="false" class="CharacterSelectIconGroup">
+						<Panel hittest="false" class="CharacterSelectDivider" />
+						<Panel hittest="false" class="CharacterSelectIconContainer" id="HeroIconContainer" />
+					</Panel>
+					<Panel hittest="false" class="CharacterSelectIntroGroup">
+						<Panel hittest="false" class="CharacterSelectIntroBackground">
+							<Panel class="CharacterSelectIntroFill" />
+						</Panel>
+						<Panel hittest="false" class="CharacterSelectDivider" />
+						<Label hittest="false" class="CharacterSelectIntroText" id="HeroText" text="" />
 					</Panel>
 				</Panel>
 			</Panel>

@@ -5,8 +5,6 @@
 require("ext_entity")
 require("game_states")
 
---TODO: Add a modifier that prevents characters from using stamina while running back and forth in the pick screen
-
 local stHeroAxeResponseLines =
 {
 	"axe_axe_firstblood_02",
@@ -73,6 +71,9 @@ local stHeroResponseTable =
 	npc_dota_hero_lina          = stHeroLinaResponseLines,
 	npc_dota_hero_omniknight    = stHeroOmniResponseLines,
 }
+
+--Prevents characters from spending stamina while running back and forth in the pick screen
+local shItemStaminaBuffModifier = CreateItem("map000_stamina_buff", nil, nil)
 
 if CIcewrack_Map0_00 == nil then
 	CIcewrack_Map0_00 = class({})
@@ -184,6 +185,7 @@ function CIcewrack_Map0_00:OnGameRulesStateChange(keys)
 			if IsValidExtendedEntity(hEntity) and hEntity:IsHero() then
 				hEntity._vOriginalPosition = hEntity:GetAbsOrigin()
 				hEntity._vReturnPosition = hEntity:GetAbsOrigin() - (hEntity:GetForwardVector() * 32.0)
+				hEntity:AddNewModifier(hEntity, shItemStaminaBuffModifier, "modifier_map000_stamina_buff", {})
 				
 				local hSpellbook = hEntity:GetSpellbook()
 				if hSpellbook then

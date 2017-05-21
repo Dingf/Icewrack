@@ -26,10 +26,7 @@ function OnCharacterActivate()
 		var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
 		if (tEntitySpellbook)
 		{
-			//var tEntitySpellList = tEntitySpellbook.Spells
 			var tEntitySpellBinds = tEntitySpellbook.Binds
-			//var tEntitySpellUnits = tEntitySpellbook.Units
-			
 			var nSpellbookSize = 0;
 			for (var k in tEntitySpellBinds)
 				nSpellbookSize++;
@@ -49,12 +46,6 @@ function OnCharacterActivate()
 			{
 				var hIcon = $("#SkillIcon" + (++nNumSkillIcons));
 				var nAbilityIndex = tEntitySpellBinds[k];
-				/*for (var k2 in tEntitySpellUnits)
-				{
-					nAbilityIndex = Entities.GetAbilityByName(tEntitySpellUnits[k2], k);
-					if (nAbilityIndex !== -1)
-						break;
-				}*/
 				
 				var szAbilityTextureName = Abilities.GetAbilityTextureName(nAbilityIndex);
 				
@@ -62,27 +53,10 @@ function OnCharacterActivate()
 				hIcon.FindChildTraverse("AbilityTexture").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
 				hIcon.SetAttributeInt("caster", nEntityIndex);
 				hIcon.SetAttributeString("abilityindex", nAbilityIndex);
+				hIcon.SetHasClass("CharacterSelectIconDisabled", !Abilities.IsActivated(nAbilityIndex));
 			}
 		}
 		
-		
-		/*for (var i = 0; i < Entities.GetAbilityCount(nEntityIndex); i++)
-		{
-			nAbilityIndex = Entities.GetAbility(nEntityIndex, i);
-			if (nAbilityIndex == -1)
-				break;
-			
-			if (i >= tSkillIcons.length)
-			{
-				
-			}
-			var szAbilityTextureName = Abilities.GetAbilityTextureName(nAbilityIndex)
-			$("#SkillIcon" + (i + 1)).visible = true;
-			$("#SkillIcon" + (i + 1)).FindChildTraverse("AbilityTexture").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
-			$("#SkillIcon" + (i + 1)).SetAttributeInt("caster", nEntityIndex);
-			$("#SkillIcon" + (i + 1)).SetAttributeString("ability_name", szAbilityName);
-		}*/
-			
 		$("#HeroTitle").text = $.Localize("#" + Entities.GetUnitName(nEntityIndex));
 		$("#HeroText").text = "\n" + $.Localize("#intro_" + Entities.GetUnitName(nEntityIndex)) + "\n";
 		DispatchCustomEvent($("#NextButton"), "ButtonSetEnabled", { state:true });

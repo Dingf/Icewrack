@@ -511,13 +511,14 @@
 		"ArmorPierceFlat"		"20"
 
 		"CarryCapacity"			"50"
-		"ResistLightning"		"75"
 
 		"EffectAvoidShock"		"50"
 		"EffectDurationBleed"		"100"
+		"EffectDurationChill"		"100"
+		"EffectDurationFreeze"		"100"
 
 		"StrengthFlat"			"13"
-		"EnduranceFlat"			"180"
+		"EnduranceFlat"			"18"
 		"AgilityFlat"			"22"
 		"CunningFlat"			"46"
 		"IntelligenceFlat"		"49"

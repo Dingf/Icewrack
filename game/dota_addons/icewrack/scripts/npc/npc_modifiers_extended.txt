@@ -678,6 +678,26 @@
 		}
 	}
 
+	"map000_stamina_buff"
+	{
+		"modifier_map000_stamina_buff"
+		{
+			"IsHidden"			"1"
+
+			"Properties"
+			{
+				"IW_PROPERTY_ATTACK_SP_PCT"	"-1000"
+				"IW_PROPERTY_RUN_SP_PCT"	"-1000"
+			}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+
+
 
 
 	"item_test"

@@ -98,10 +98,10 @@ function CSpellbook:OnEntityRefresh()
 	local hEntity = self._hEntity
 	for k,v in pairs(self._tSpellList) do
 		local hAbility = v:FindAbilityByName(k)
-		if hAbility:CheckSkillRequirements(hEntity) then
+		if hAbility:CheckSkillRequirements(hEntity) and not hAbility:IsActivated() then
 			hAbility:SetActivated(true)
 			hAbility:ApplyModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
-		else
+		elseif not hAbility:CheckSkillRequirements(hEntity) and hAbility:IsActivated() then
 			hAbility:SetActivated(false)
 			hAbility:RemoveModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
 		end
@@ -167,6 +167,9 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel)
 		hAbility:SetCaster(hEntity)
 		hAbility:SetLevel(nLevel)
 		hAbility:SetOwner(hEntity)
+		if not hAbility:CheckSkillRequirements(hEntity) then
+			hAbility:SetActivated(false)
+		end
 		self._tSpellList[szAbilityName] = hSpellUnit
 		self._tNetTable.Spells[hAbility:entindex()] =
 		{
@@ -178,6 +181,9 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel)
 	elseif self._tSpellList[szAbilityName] then
 		hSpellUnit = self._tSpellList[szAbilityName]
 		local hAbility = hSpellUnit:FindAbilityByName(szAbilityName)
+		if not hAbility:CheckSkillRequirements(hEntity) then
+			hAbility:SetActivated(false)
+		end
 		if hAbility then
 			hAbility:SetLevel(nLevel)
 			self:UpdateNetTable()

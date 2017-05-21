@@ -8,11 +8,11 @@ function TriggerShatter(hVictim)
 				local nStatusEffect = v:GetStatusEffect()
 				if nStatusEffect == IW_STATUS_EFFECT_FREEZE then
 					hVictim:ModifyHealth(0, hVictim, true, 0)
-					local hDummy = CreateDummyUnit(hVictim:GetAbsOrigin(), nil, hVictim:GetTeamNumber())
-					ParticleManager:CreateParticle("particles/econ/items/effigies/status_fx_effigies/frosty_base_statue_destruction_radiant.vpcf", PATTACH_ABSORIGIN_FOLLOW, hDummy)
+					local nParticleID = ParticleManager:CreateParticle("particles/generic_gameplay/effect_shatter_frozen.vpcf", PATTACH_WORLDORIGIN, hVictim)
+					ParticleManager:SetParticleControl(nParticleID, 0, hVictim:GetAbsOrigin())
+					ParticleManager:ReleaseParticleIndex(nParticleID)
 					StartSoundEvent("Icewrack.ShatterFrozen", hVictim)
 					hVictim:AddEffects(EF_NODRAW)
-					hDummy:SetThink(function() hDummy:RemoveSelf() end, "ShatterDummyThink", 0.1)
 					return true
 				elseif nStatusEffect == IW_STATUS_EFFECT_PETRIFY then
 					

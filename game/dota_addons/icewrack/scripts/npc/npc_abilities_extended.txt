@@ -135,6 +135,6 @@
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_frost_arrows.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK"
 
-		"ManaCost"		"8"
+		"ManaCost"		"5"
 	}
 }
