@@ -556,7 +556,7 @@ function CExtAbilityLinker:OnSpellStart()
 		end
 	end
 	
-	self:ApplyModifiers(self:GetCaster(), IW_MODIFIER_ON_USE)
+	self:ApplyModifiers(IW_MODIFIER_ON_USE)
 	local hCursorTarget = hEntity:GetCursorCastTarget()
 	if hCursorTarget and hCursorTarget:GetTeamNumber() ~= hEntity:GetTeamNumber() then
 		hEntity:SetAttacking(hCursorTarget)
@@ -572,8 +572,8 @@ function CExtAbilityLinker:OnSpellStart()
 end
 
 function CExtAbilityLinker:OnChannelFinish(bInterrupted)
-	self:ApplyModifiers(self:GetCaster(), IW_MODIFIER_ON_CHANNEL_END)
-	if not bInterrupted then self:ApplyModifiers(self:GetCaster(), IW_MODIFIER_ON_CHANNEL_SUCCESS) end
+	self:ApplyModifiers(IW_MODIFIER_ON_CHANNEL_END)
+	if not bInterrupted then self:ApplyModifiers(IW_MODIFIER_ON_CHANNEL_SUCCESS) end
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then
 		local hBaseFunction = tBaseFunctions.OnChannelFinish
@@ -612,10 +612,10 @@ end
 
 function CExtAbilityLinker:OnToggle()
 	if self:GetToggleState() then
-		self:RemoveModifiers(self:GetCaster(), IW_MODIFIER_ON_TOGGLE)
+		self:ApplyModifiers(IW_MODIFIER_ON_TOGGLE)
 		CTimer(0.03, OnExtAbilityUpkeepThink, self)
 	else
-		self:ApplyModifiers(self:GetCaster(), IW_MODIFIER_ON_TOGGLE)
+		self:RemoveModifiers(IW_MODIFIER_ON_TOGGLE)
 	end
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then

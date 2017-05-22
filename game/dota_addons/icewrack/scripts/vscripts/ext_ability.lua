@@ -85,7 +85,8 @@ function CExtAbility:SetCaster(hEntity)
 	self:AddChild(hEntity)
 end
 
-function CExtAbility:ApplyModifiers(hEntity, nTrigger)
+function CExtAbility:ApplyModifiers(nTrigger, hEntity)
+	if not hEntity then hEntity = self:GetCaster() end
 	for k,v in pairs(self._tModifierList) do
 		if not nTrigger or v == nTrigger then
 			local hModifier = nil
@@ -101,11 +102,13 @@ function CExtAbility:ApplyModifiers(hEntity, nTrigger)
 	end
 end
 
-function CExtAbility:RemoveModifiers(nTrigger)
+function CExtAbility:RemoveModifiers(nTrigger, hEntity)
 	for k,v in pairs(self._tActiveModifierList) do
 		if not nTrigger or v == nTrigger then
-			k:Destroy()
-			self._tActiveModifierList[k] = nil
+			if not hEntity or k:GetParent() == hEntity then
+				k:Destroy()
+				self._tActiveModifierList[k] = nil
+			end
 		end
 	end
 end

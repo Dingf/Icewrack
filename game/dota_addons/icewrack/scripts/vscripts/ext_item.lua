@@ -259,32 +259,33 @@ function CExtItem:UpdateNetTable()
 	return tNetTable
 end
 
-function CExtItem:ApplyModifiers(hEntity, nTrigger)
-	if hEntity then
-		for k,v in pairs(self._tModifierList) do
-			if not nTrigger or v == nTrigger then
-				local hModifier = nil
-				if IsInstanceOf(self, CDOTA_Item_Lua) then
-					hModifier = hEntity:AddNewModifier(hEntity, self, k, {})
-				else
-					hModifier = self:ApplyDataDrivenModifier(hEntity, hEntity, k, {})
-				end
-				if hModifier then
-					self._tActiveModifierList[hModifier] = v
-				end
+function CExtItem:ApplyModifiers(nTrigger, hEntity)
+	if not hEntity then hEntity = self:GetCaster() end
+	for k,v in pairs(self._tModifierList) do
+		if not nTrigger or v == nTrigger then
+			local hModifier = nil
+			if IsInstanceOf(self, CDOTA_Item_Lua) then
+				hModifier = hEntity:AddNewModifier(hEntity, self, k, {})
+			else
+				hModifier = self:ApplyDataDrivenModifier(hEntity, hEntity, k, {})
+			end
+			if hModifier then
+				self._tActiveModifierList[hModifier] = v
 			end
 		end
-		for k,v in pairs(self._tComponentList) do
-			k:ApplyModifiers(hEntity, nTrigger)
-		end
+	end
+	for k,v in pairs(self._tComponentList) do
+		k:ApplyModifiers(nTrigger, hEntity)
 	end
 end
 
-function CExtItem:RemoveModifiers(nTrigger)
+function CExtItem:RemoveModifiers(nTrigger, hEntity)
 	for k,v in pairs(self._tActiveModifierList) do
 		if not nTrigger or v == nTrigger then
-			k:Destroy()
-			self._tActiveModifierList[k] = nil
+			if not hEntity or k:GetParent() == hEntity then
+				k:Destroy()
+				self._tActiveModifierList[k] = nil
+			end
 		end
 	end
 	for k,v in pairs(self._tComponentList) do

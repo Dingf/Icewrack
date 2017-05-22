@@ -108,7 +108,7 @@
 		"AbilityLayout"			"6"
 		"Ability1"			"iw_drow_ranger_frost_arrows"
 		"Ability2"			""
-		"Ability3"			""
+		"Ability3"			"iw_drow_ranger_precision_aura"
 		"Ability4"			""
 		"Ability5"			""
 		"Ability6"			""

@@ -545,6 +545,24 @@
 		}
 	}
 
+	"map000_stamina_buff"
+	{
+		"modifier_map000_stamina_buff"
+		{
+			"IsHidden"			"1"
+
+			"Properties"
+			{
+				"IW_PROPERTY_ATTACK_SP_PCT"	"-1000"
+				"IW_PROPERTY_RUN_SP_PCT"	"-1000"
+			}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
+		}
+	}
+
 	"iw_axe_battle_hunger"
 	{
 		"modifier_iw_axe_battle_hunger"
@@ -667,13 +685,8 @@
 			"Properties"		{}
 
 			"DatadrivenAttributes"		""
-			"DatadrivenStates"
-			{
-			}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS"		"manias_mask"
-			}
+			"DatadrivenStates"	{}
+			"DatadrivenProperties"		{}
 			"DatadrivenEvents" {}
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"		{}
@@ -681,23 +694,27 @@
 		}
 	}
 
-	"map000_stamina_buff"
+	"iw_drow_ranger_precision_aura"
 	{
-		"modifier_map000_stamina_buff"
+		"modifier_iw_drow_ranger_precision_aura"
 		{
-			"IsHidden"			"1"
+			"ScriptFile"			"scripts/vscripts/abilities/drow_ranger/modifier_iw_drow_ranger_precision_aura.lua"
 
-			"Properties"
-			{
-				"IW_PROPERTY_ATTACK_SP_PCT"	"-1000"
-				"IW_PROPERTY_RUN_SP_PCT"	"-1000"
-			}
-			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"Texture"			"drow_ranger_trueshot"
+
+			"Properties"		{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"	{}
+			"DatadrivenProperties"	{}
+			"DatadrivenEvents" {}
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"		{}
-			"DatadrivenEvents"		{}
+			"DatadrivenEvents" {}
 		}
 	}
+
+
 
 
 

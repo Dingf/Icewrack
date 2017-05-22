@@ -102,16 +102,17 @@ function CSpellbook:OnEntityRefresh()
 		local hAbility = v:FindAbilityByName(k)
 		if hAbility:CheckSkillRequirements(hEntity) and not hAbility:IsActivated() then
 			hAbility:SetActivated(true)
-			hAbility:ApplyModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
+			hAbility:ApplyModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
 		elseif not hAbility:CheckSkillRequirements(hEntity) and hAbility:IsActivated() then
 			hAbility:SetActivated(false)
-			hAbility:RemoveModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
+			hAbility:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
 		end
 	end
 	self:UpdateNetTable()
 end
 
 function CSpellbook:UnlearnAbility(szAbilityName)
+	local hEntity = self._hEntity
 	if self._tSpellList[szAbilityName] then
 		local hAbility = self._tSpellList[szAbilityName]:FindAbilityByName(szAbilityName)
 		if hAbility then
@@ -125,7 +126,7 @@ function CSpellbook:UnlearnAbility(szAbilityName)
 			if hAbility:GetToggleState() then
 				hAbility:ToggleAbility()
 			end
-			hAbility:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE)
+			hAbility:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
 			self:UpdateNetTable()
 		end
 		self._tSpellList[szAbilityName]:RemoveAbility(szAbilityName)
@@ -210,12 +211,12 @@ function CSpellbook:OnAbilityBind(args)
 				if hOldAbility:GetToggleState() then
 					hOldAbility:ToggleAbility()
 				end
-				hOldAbility:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE)
+				hOldAbility:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
 			end
 			hSpellbook._tBindTable[args.slot] = args.ability
 			if hAbility then
 				if hAbility:CheckSkillRequirements(hEntity) then
-					hAbility:ApplyModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
+					hAbility:ApplyModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
 				end
 				tBindNetTable[args.slot] = args.ability
 			else

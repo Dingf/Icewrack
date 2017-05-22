@@ -582,6 +582,7 @@
 		"AbilityTextureName"			"drow_ranger_trueshot"
 
 		"MaxLevel"				"1"
+		"AbilityAOERadius"			"1800"
 
 		"Modifiers"
 		{
@@ -598,7 +599,7 @@
 			"02"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"crit_chance"			"50.0"
+				"crit_chance"			"200.0"
 			}
 		}
 	}

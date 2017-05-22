@@ -176,7 +176,7 @@ function CInventory:EquipItem(hItem, nSlot)
 					else
 						hEntity:AddChild(hItem)
 					end
-					hItem:ApplyModifiers(hEntity, IW_MODIFIER_ON_EQUIP)
+					hItem:ApplyModifiers(IW_MODIFIER_ON_EQUIP, hEntity)
 				end
 				self._tEquippedItems[i] = hItem
 				self._tNetTableItemList[hItem:entindex()] = hItem:UpdateNetTable()
@@ -229,7 +229,7 @@ function CInventory:DropItem(hItem)
 			end
 		end
 		
-		hItem:RemoveModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
+		hItem:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
 		local vDropPosition = self._hEntity:GetAbsOrigin() + RandomVector(32.0)
 		hInventoryUnit:DropItemAtPositionImmediate(hItem, GetGroundPosition(vDropPosition, self._hEntity))
 		local hItemContainer = hItem:GetContainer()
@@ -256,7 +256,7 @@ function CInventory:RemoveItem(hItem)
 		end
 		
 		local hEntity = self._hEntity
-		hItem:RemoveModifiers(hEntity, IW_MODIFIER_ON_ACQUIRE)
+		hItem:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
 		self._tItemList[hItem] = nil
 		self._tNetTableItemList[hItem:entindex()] = nil
 		self:RefreshInventory()
@@ -363,7 +363,7 @@ function CInventory:AddItemToInventory(hItem)
 		if hEntity:GetPropertyValue(IW_PROPERTY_SKILL_LORE) >= hItem:GetIdentifyLevel() then
 			hItem:Identify()
 		end
-		hItem:ApplyModifiers(self._hEntity, IW_MODIFIER_ON_ACQUIRE)
+		hItem:ApplyModifiers(IW_MODIFIER_ON_ACQUIRE, self._hEntity)
 		hItem:SetPurchaser(self._hEntity)
 		hItem:SetStackCount(nAmount)
 		self._tItemList[hItem] = hInventoryUnit
