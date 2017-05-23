@@ -7,6 +7,7 @@ function OnTooltipAbilityLoad()
 	var szAbilityName = nAbilityIndex ? Abilities.GetAbilityName(nAbilityIndex) : $.GetContextPanel().GetAttributeString("abilityname", "");
 	if (nAbilityIndex || szAbilityName)
 	{
+		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
 		var tAbilityTemplate = CustomNetTables.GetTableValue("abilities", szAbilityName);
 		
 		var szBehaviorText = "";
@@ -34,9 +35,9 @@ function OnTooltipAbilityLoad()
 				var nCastRange = nAbilityIndex ? Abilities.GetCastRange(nAbilityIndex) : tAbilityTemplate.castrange;
 				if (nAbilityExtFlags & IW_ABILITY_FLAG_USES_ATTACK_RANGE)
 				{
-					nCastRange += Entities.GetAttackRange(nEntityIndex);
+					szBehaviorText += ", " + $.Localize("iw_ui_ability_target_attack_range");
 				}
-				if (nCastRange > 0)
+				else if (nCastRange > 0)
 				{
 					szBehaviorText += ", " + (nCastRange/100.0).toFixed(2) + "m";
 				}
@@ -59,9 +60,9 @@ function OnTooltipAbilityLoad()
 				var nCastRange = nAbilityIndex ? Abilities.GetCastRange(nAbilityIndex) : tAbilityTemplate.castrange;
 				if (nAbilityExtFlags & IW_ABILITY_FLAG_USES_ATTACK_RANGE)
 				{
-					nCastRange += Entities.GetAttackRange(nEntityIndex);
+					szBehaviorText += ", " + $.Localize("iw_ui_ability_target_attack_range");
 				}
-				if (nCastRange > 0)
+				else if (nCastRange > 0)
 				{
 					szBehaviorText += ", " + (nCastRange/100.0).toFixed(2) + "m";
 				}
@@ -156,7 +157,6 @@ function OnTooltipAbilityLoad()
 		var tSpecialSections = szLocalizedText.match(/[^{}]+(?=})/g);
 		var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
 		
-		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
 		var fSpellpower = tEntityData ? GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER) : 0;
 		var szFormattedText = "";
 		for (var i = 0; i < tTextSections.length; i++)
