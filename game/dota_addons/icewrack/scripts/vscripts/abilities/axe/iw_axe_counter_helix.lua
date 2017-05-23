@@ -3,6 +3,7 @@ iw_axe_counter_helix = class({})
 function iw_axe_counter_helix:OnAbilityPhaseStart()
 	local hEntity = self:GetCaster()
 	EmitSoundOn("Hero_Axe.CounterHelix", hEntity)
+	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK)
 	return true
 end
 
@@ -18,20 +19,13 @@ end
 
 function iw_axe_counter_helix:CastFilterResult()
 	if IsServer() then
-		self._bEquipFailed = false
 		local hEntity = self:GetCaster()
-		if hEntity.GetInventory then
-			local hInventory = hEntity:GetInventory()
-			for i = 1,IW_INVENTORY_SLOT_QUICK1-1 do
-				local hItem = hInventory:GetEquippedItem(i)
-				if hItem then
-					local nItemType = hItem:GetItemType()
-					--Check if two-handed and if melee weapon type
-					if bit32.btest(nItemType, 2) and bit32.btest(nItemType, 124) then
-						return UF_SUCCESS
-					end
-				end
-			end
+		local hAttackSource = hEntity:GetCurrentAttackSource()
+		local nItemType = hAttackSource and hAttackSource:GetItemType() or 0
+		
+		self._bEquipFailed = false
+		if bit32.btest(nItemType, 2) and bit32.btest(nItemType, 124) then
+			return UF_SUCCESS
 		end
 		self._bEquipFailed = true
 		return UF_FAIL_CUSTOM
@@ -51,6 +45,7 @@ function iw_axe_counter_helix:OnSpellStart()
 		CanDodge = true,
 	}
 	
+	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_START)
 	local hNearbyEntities = Entities:FindAllInSphere(hEntity:GetAbsOrigin(), self:GetAOERadius())
 	for k,v in pairs(hNearbyEntities) do
 		if v ~= hEntity and IsValidExtendedEntity(v) then

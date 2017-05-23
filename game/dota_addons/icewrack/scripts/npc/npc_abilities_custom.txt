@@ -361,7 +361,6 @@
 		"AbilityTextureName"			"axe_culling_blade"
 
 		"MaxLevel"				"1"
-		"AbilityCastRange"			"150"
 		"AbilityCastPoint"			"0.3"
 
 		"AbilityCooldown"			"10.0"
@@ -600,6 +599,40 @@
 			{
 				"var_type"			"FIELD_INTEGER"
 				"crit_chance"			"200.0"
+			}
+		}
+	}
+
+	"iw_drow_ranger_bullseye"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"	
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityTextureName"			"drow_ranger_marksmanship"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.3"
+		"AbilityCooldown"			"7.0"
+
+		"Modifiers"
+		{
+			"modifier_iw_drow_ranger_bullseye"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage"			"150.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"armor_penetration"		"100"
 			}
 		}
 	}

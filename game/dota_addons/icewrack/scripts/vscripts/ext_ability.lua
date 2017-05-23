@@ -80,9 +80,12 @@ function CExtAbility:GetModifierSeed(szModifierName, nPropertyID)
 end
 
 function CExtAbility:SetCaster(hEntity)
-	self:RemoveChild(self:GetCaster())
+	if bit32.btest(self:GetAbilityFlags(), IW_ABILITY_FLAG_KEYWORD_SPELL) then
+		self:RemoveChild(self:GetCaster())
+		self:AddChild(hEntity)
+	end
 	self._hOverrideCaster = hEntity
-	self:AddChild(hEntity)
+	self:SetOwner(hEntity)
 end
 
 function CExtAbility:ApplyModifiers(nTrigger, hEntity)

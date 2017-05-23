@@ -3,43 +3,57 @@ modifier_iw_drow_ranger_frost_arrows = class({})
 function modifier_iw_drow_ranger_frost_arrows:DeclareFunctions()
 	local funcs =
 	{
-		MODIFIER_EVENT_ON_ATTACK_START,
-		MODIFIER_EVENT_ON_ATTACK,
+		MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS,
 	}
 	return funcs
 end
 
-function modifier_iw_drow_ranger_frost_arrows:OnAttackStart(args)
+function modifier_iw_drow_ranger_frost_arrows:DeclareExtEvents()
+	local funcs =
+	{
+		[IW_MODIFIER_EVENT_ON_ATTACK_START] = 1,
+		[IW_MODIFIER_EVENT_ON_PRE_ATTACK] = 1,
+	}
+	return funcs
+end
+
+function modifier_iw_drow_ranger_frost_arrows:OnPreAttackEvent()
 	local hEntity = self:GetCaster()
 	local hAbility = self:GetAbility()
 	local hAttackSource = hEntity:GetCurrentAttackSource()
-	if args.attacker == hEntity then
-		if self._bIsBowEquipped and hEntity:GetMana() >= hAbility:GetManaCost() then
-			self._bIsFrostArrowAttack = true
-			hEntity:SetRangedProjectileName("particles/units/heroes/hero_drow/drow_frost_arrow.vpcf")
-			if self._hLastAttackSource ~= hAttackSource then
-				if self._hLastAttackSource then
-					self._hLastAttackSource:RemoveChild(self)
-				end
-				hAttackSource:AddChild(self)
-				self._hLastAttackSource = hAttackSource
-			end
-		else
-			self._bIsFrostArrowAttack = false
-			hEntity:SetRangedProjectileName(self._szBaseProjectile)
+	if self._bIsBowEquipped and hEntity:GetMana() >= hAbility:GetManaCost() then
+		self._bIsFrostArrowAttack = true
+		hEntity:SetRangedProjectileName("particles/units/heroes/hero_drow/drow_frost_arrow.vpcf")
+		if self._hLastAttackSource ~= hAttackSource then
 			if self._hLastAttackSource then
 				self._hLastAttackSource:RemoveChild(self)
-				self._hLastAttackSource = nil
 			end
+			hAttackSource:AddChild(self)
+			self._hLastAttackSource = hAttackSource
+		end
+	else
+		self._bIsFrostArrowAttack = false
+		hEntity:SetRangedProjectileName(self._szBaseProjectile)
+		if self._hLastAttackSource then
+			self._hLastAttackSource:RemoveChild(self)
+			self._hLastAttackSource = nil
 		end
 	end
 end
 
-function modifier_iw_drow_ranger_frost_arrows:OnAttack(args)
+function modifier_iw_drow_ranger_frost_arrows:OnAttackEventStart(args)
 	local hEntity = self:GetCaster()
 	local hAbility = self:GetAbility()
-	if args.attacker == hEntity and self._bIsFrostArrowAttack then
+	if self._bIsFrostArrowAttack then
 		hEntity:SpendMana(hAbility:GetManaCost(), hAbility)
+	end
+end
+
+function modifier_iw_drow_ranger_frost_arrows:GetActivityTranslationModifiers()
+	local hEntity = self:GetCaster()
+	local hAbility = self:GetAbility()
+	if hEntity:GetMana() >= hAbility:GetManaCost() then
+		return "frost_arrow"
 	end
 end
 

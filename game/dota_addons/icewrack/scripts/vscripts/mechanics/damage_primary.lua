@@ -59,6 +59,9 @@ function DealPrimaryDamage(self, keys)
 		local bIsCrit = false
 		local bDamageResult = false
 		local fCritChance = hSource:GetCriticalStrikeChance()
+		if keys.ForceCrit then
+			fCritChance = 1.0
+		end
 		local fCritMultiplier = 1.0 + hSource:GetCriticalStrikeMultiplier()
 		if RandomFloat(0.0, 1.0) < fCritChance and RandomFloat(0.0, 1.0) > hVictim:GetCriticalStrikeAvoidance() then
 			bIsCrit = true

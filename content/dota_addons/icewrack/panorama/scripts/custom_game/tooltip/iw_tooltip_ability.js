@@ -32,6 +32,10 @@ function OnTooltipAbilityLoad()
 				szBehaviorText += $.Localize("iw_ui_ability_target_ground");
 				
 				var nCastRange = nAbilityIndex ? Abilities.GetCastRange(nAbilityIndex) : tAbilityTemplate.castrange;
+				if (nAbilityExtFlags & IW_ABILITY_FLAG_USES_ATTACK_RANGE)
+				{
+					nCastRange += Entities.GetAttackRange(nEntityIndex);
+				}
 				if (nCastRange > 0)
 				{
 					szBehaviorText += ", " + (nCastRange/100.0).toFixed(2) + "m";
@@ -53,6 +57,10 @@ function OnTooltipAbilityLoad()
 						break;
 				}
 				var nCastRange = nAbilityIndex ? Abilities.GetCastRange(nAbilityIndex) : tAbilityTemplate.castrange;
+				if (nAbilityExtFlags & IW_ABILITY_FLAG_USES_ATTACK_RANGE)
+				{
+					nCastRange += Entities.GetAttackRange(nEntityIndex);
+				}
 				if (nCastRange > 0)
 				{
 					szBehaviorText += ", " + (nCastRange/100.0).toFixed(2) + "m";

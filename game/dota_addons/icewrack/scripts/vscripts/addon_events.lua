@@ -37,11 +37,11 @@ function CIcewrackGameMode:OnEntitySpawned(keys)
 		CTimer(3.0, function() 
 		CParty:AddToParty(hEntity) end)
 	end
-	if hEntity:GetUnitName() == "npc_dota_hero_dragon_knight" then
+	--[[if hEntity:GetUnitName() == "npc_dota_hero_dragon_knight" then
 		hEntity:SetControllableByPlayer(0, true)
 		CTimer(3.0, function() 
 		CParty:AddToParty(hEntity) end)
-	end
+	end]]
 end
 
 function CIcewrackGameMode:OnEntityKilled(keys)

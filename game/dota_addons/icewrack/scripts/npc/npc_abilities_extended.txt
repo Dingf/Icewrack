@@ -47,7 +47,7 @@
 	"iw_axe_culling_blade"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_culling_blade.lua"
-		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK"
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_USES_ATTACK_RANGE"
 		"AbilitySkill"		"116"
 
 		"StaminaCost"		"20"
@@ -89,7 +89,7 @@
 	"iw_dragon_knight_shield_slam"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_shield_slam.lua"
-		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_SINGLE"
 		"AbilitySkill"		"39570"
 
 		"StaminaCost"		"25"
@@ -148,5 +148,22 @@
 		"AbilityFlags"		""
 
 		"ManaUpkeep"		"3"
+	}
+
+	"iw_drow_ranger_bullseye"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_bullseye.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_USES_ATTACK_RANGE"
+
+		"StaminaCost"		"12"
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_drow_ranger"
+			{
+				"Animation"		"ACT_DOTA_CAST_ABILITY_2"
+				"Rate"			"1.0"
+			}
+		}
 	}
 }

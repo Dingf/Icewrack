@@ -10,6 +10,11 @@
 
 if not CExtAbilityLinker then CExtAbilityLinker = {}
 
+if _VERSION < "Lua 5.2" then
+    bit = require("lib/numberlua")
+    bit32 = bit.bit32
+end
+
 if IsServer() then
 require("timer")
 require("mechanics/modifier_triggers")
@@ -32,11 +37,12 @@ stExtAbilityFlagEnum =
 	IW_ABILITY_FLAG_DOES_NOT_REQ_VISION = 1024,
 	IW_ABILITY_FLAG_CAN_CAST_IN_TOWN    = 2048,		--TODO: Implement me
 	IW_ABILITY_FLAG_USES_ATTACK_STAMINA = 4096,
-	IW_ABILITY_FLAG_KEYWORD_SPELL       = 8192,
-	IW_ABILITY_FLAG_KEYWORD_ATTACK      = 16384,
-	IW_ABILITY_FLAG_KEYWORD_SINGLE      = 32768,
-	IW_ABILITY_FLAG_KEYWORD_AOE         = 65536,
-	IW_ABILITY_FLAG_KEYWORD_WEATHER     = 131072,
+	IW_ABILITY_FLAG_USES_ATTACK_RANGE   = 8192,
+	IW_ABILITY_FLAG_KEYWORD_SPELL       = 16384,
+	IW_ABILITY_FLAG_KEYWORD_ATTACK      = 32768,
+	IW_ABILITY_FLAG_KEYWORD_SINGLE      = 65536,
+	IW_ABILITY_FLAG_KEYWORD_AOE         = 131072,
+	IW_ABILITY_FLAG_KEYWORD_WEATHER     = 262144,
 }
 
 for k,v in pairs(stExtAbilityFlagEnum) do _G[k] = v end
@@ -140,13 +146,19 @@ function CExtAbilityLinker:GetAOERadius()
 end
 
 function CExtAbilityLinker:GetCastRange(vLocation, hTarget)
-	if not vLocation then vLocation = self:GetCaster():GetAbsOrigin() end
+	local hEntity = self:GetCaster()
+	if not vLocation then vLocation = hEntity:GetAbsOrigin() end
+	
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then
 		local hBaseFunction = tBaseFunctions.GetCastRange
 		if hBaseFunction then
 			return hBaseFunction(self, vLocation, hTarget)
 		end
+	end
+	
+	if bit32.btest(self._nAbilityFlags, IW_ABILITY_FLAG_USES_ATTACK_RANGE) then
+		return hEntity:GetAttackRange()
 	end
 	return self.BaseClass.GetCastRange(self, vLocation, hTarget)
 end

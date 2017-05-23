@@ -63,6 +63,8 @@
 		"CorpseTime"			"35"
 		"IsPlayableHero"		"1"
 
+		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_dragon_knight.vsndevts"
+
 		"EquipFlags"			"1048125"
 
 		"MaxStaminaFlat"		"110"
@@ -106,6 +108,8 @@
 		"UnitHeight"			"128"
 		"CorpseTime"			"105"
 		"IsPlayableHero"		"1"
+
+		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_drow_ranger.vsndevts"
 
 		"EquipFlags"			"4294967295"
 
@@ -511,7 +515,7 @@
 		"AccuracyFlat"			"0"
 		"DodgeFlat"			"0"
 
-		"ArmorPierceFlat"		"20"
+		"ArmorPierceFlat"		"2000"
 
 		"CarryCapacity"			"50"
 

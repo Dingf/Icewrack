@@ -714,6 +714,29 @@
 		}
 	}
 
+	"iw_drow_ranger_bullseye"
+	{
+		"modifier_iw_drow_ranger_bullseye"
+		{
+			"IsHidden"				"1"
+			"IsStrict"			"1"
+			"Duration"			"0.3"
+
+			"Properties"		{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"	{}
+			"DatadrivenProperties"	{}
+			"DatadrivenEvents" {}
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS"	"ti6"
+			}
+			"DatadrivenEvents" {}
+		}
+	}
+
 
 
 
