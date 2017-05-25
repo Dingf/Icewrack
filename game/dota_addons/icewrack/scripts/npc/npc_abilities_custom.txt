@@ -583,11 +583,6 @@
 		"MaxLevel"				"1"
 		"AbilityAOERadius"			"1800"
 
-		"Modifiers"
-		{
-			"modifier_iw_drow_ranger_precision_aura"		"IW_MODIFIER_NO_TRIGGER"
-		}
-
 		"AbilitySpecial"
 		{
 			"01"

@@ -60,7 +60,7 @@ function iw_dragon_knight_dragon_form:OnSpellStart()
 		self._szResponse = nil
 	end
 	
-	local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_dragon_knight/dragon_knight_transform_green.vpcf", PATTACH_WORLDORIGIN, self)
+	local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_dragon_knight/dragon_knight_transform_red.vpcf", PATTACH_WORLDORIGIN, self)
 	ParticleManager:SetParticleControl(nParticleID, 0, hEntity:GetAbsOrigin())
 	ParticleManager:ReleaseParticleIndex(nParticleID)
 	

@@ -31,15 +31,8 @@ function iw_axe_culling_blade:OnSpellStart()
 	
 	if hTarget then
 		local vTargetPosition = hTarget:GetAbsOrigin()
-		local fDoubleThreshold = self:GetSpecialValueFor("threshold")
-		local fDamagePercent = self:GetSpecialValueFor("damage")
-		
-		local fHealthPercent = 100 - hTarget:GetHealthPercent()
-		while fHealthPercent > fDoubleThreshold do
-			fHealthPercent = fHealthPercent - fDoubleThreshold
-			fDamagePercent = fDamagePercent * 2
-		end
-		
+		local fDamagePerMissingHP = self:GetSpecialValueFor("damage_missing")
+		local fDamagePercent = self:GetSpecialValueFor("damage") + ((100 - hTarget:GetHealthPercent()) * fDamagePerMissingHP)
 		local tDamageTable =
 		{
 			attacker = hEntity,

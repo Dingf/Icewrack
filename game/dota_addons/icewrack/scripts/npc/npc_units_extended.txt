@@ -25,6 +25,12 @@
 		"CorpseTime"			"39"
 		"IsPlayableHero"		"1"
 
+		"Animation"
+		{
+			"Model"			"models/heroes/axe/axe.vmdl"
+			"ScriptFile"		"animation/animation_iw_axe.lua"
+		}
+
 		"EquipFlags"			"58719294"
 
 		"MaxStaminaFlat"		"90"
@@ -110,6 +116,11 @@
 		"IsPlayableHero"		"1"
 
 		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_drow_ranger.vsndevts"
+		"Animation"
+		{
+			"Model"			"models/heroes/drow/drow.vmdl"
+			"ScriptFile"		"animation/animation_iw_drow_ranger.lua"
+		}
 
 		"EquipFlags"			"4294967295"
 

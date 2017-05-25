@@ -47,6 +47,8 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 		
 		hEntity:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK)
 		hEntity:SetRangedProjectileName("particles/units/heroes/hero_dragon_knight/iw_dragon_knight_dragon_form_attack.vpcf")
+		CTimer(0.03, function() hEntity:SetMaterialGroup("1") end)
+		print("are you for real", MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS)
 		
 		hEntity:StartGesture(ACT_DOTA_CAST_ABILITY_4)
 		self:StartIntervalThink(0.8)
@@ -74,7 +76,7 @@ function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
 		hEntity:SetRangedProjectileName(self._szBaseProjectile)
 		EmitSoundOn("Hero_DragonKnight.ElderDragonForm.Revert", hEntity)
 		
-		local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_dragon_knight/dragon_knight_transform_green.vpcf", PATTACH_WORLDORIGIN, self)
+		local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_dragon_knight/dragon_knight_transform_red.vpcf", PATTACH_WORLDORIGIN, self)
 		ParticleManager:SetParticleControl(nParticleID, 0, hEntity:GetAbsOrigin())
 		ParticleManager:ReleaseParticleIndex(nParticleID)
 	end

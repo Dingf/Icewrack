@@ -2,7 +2,6 @@ iw_drow_ranger_bullseye = class({})
 
 function iw_drow_ranger_bullseye:OnAbilityPhaseStart()
 	local hEntity = self:GetCaster()
-	hEntity:AddNewModifier(hEntity, self, "modifier_iw_drow_ranger_bullseye", {})
 	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK)
 	return true
 end

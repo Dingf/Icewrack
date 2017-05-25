@@ -138,7 +138,7 @@ for k,v in pairs(stInstanceData) do
 	v.Team = _G[v.Team] or 0
 end
 
-function CSaveManager:GetPrecacheList()
+function CSaveManager:PrecacheSaveEntities(hContext)
 	local tPrecacheList = {}
 	for k,v in pairs(CSaveManager._tInstanceData) do
 		tPrecacheList[stInstanceData[k].Name] = true
@@ -156,7 +156,23 @@ function CSaveManager:GetPrecacheList()
 			tPrecacheList[v.UnitName] = true
 		end
 	end
-	return tPrecacheList
+	
+	local stExtEntityData = LoadKeyValues("scripts/npc/npc_units_extended.txt")
+	for k,_ in pairs(tPrecacheList) do
+		PrecacheUnitByNameSync(k, hContext)
+		local tExtEntityTemplate = stExtEntityData[k]
+		if tExtEntityTemplate then
+			if tExtEntityTemplate.SoundEvents then
+				PrecacheResource("soundfile", stExtEntityData[k].SoundEvents, hContext)
+			end
+			if tExtEntityTemplate.Animation then
+				local szModelName = tExtEntityTemplate.Animation.Model
+				local szScriptFile = tExtEntityTemplate.Animation.ScriptFile
+				print("hey", szModelName, szScriptFile)
+				RegisterCustomAnimationScriptForModel(szModelName, szScriptFile)
+			end
+		end
+	end
 end
 
 function CSaveManager:GetPlayerHeroName()
