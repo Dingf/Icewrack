@@ -105,9 +105,8 @@
 	{
 		"override_hero"			"npc_dota_hero_drow_ranger"
 		"vscripts"			"visuals/loadout.lua"
-		"AbilityLayout"			"6"
 		"Ability1"			"iw_drow_ranger_frost_arrows"
-		"Ability2"			""
+		"Ability2"			"iw_drow_ranger_animal_companion"
 		"Ability3"			"iw_drow_ranger_precision_aura"
 		"Ability4"			"iw_drow_ranger_bullseye"
 		"Ability5"			""

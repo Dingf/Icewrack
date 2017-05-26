@@ -476,7 +476,7 @@
 		"ScriptFile"				"ext_ability"
 
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"dragon_knight_dragon_blood"
+		"AbilityTextureName"			"default"
 
 		"MaxLevel"				"1"
 
@@ -572,6 +572,40 @@
 		}
 	}
 
+	"iw_drow_ranger_feral_bond"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"	
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityTextureName"			"default"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.25"
+		"AbilityCastRange"			"900"
+
+		"Modifiers"
+		{
+			"modifier_iw_drow_ranger_feral_bond"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"attrib_percent"		"50.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"attack_speed"			"50"
+			}
+		}
+	}
+
 	"iw_drow_ranger_precision_aura"
 	{
 		"BaseClass"				"ability_lua"
@@ -582,6 +616,12 @@
 
 		"MaxLevel"				"1"
 		"AbilityAOERadius"			"1800"
+
+		"Modifiers"
+		{
+			"modifier_iw_drow_ranger_precision_aura"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
 
 		"AbilitySpecial"
 		{
@@ -611,12 +651,6 @@
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.3"
 		"AbilityCooldown"			"7.0"
-
-		"Modifiers"
-		{
-			"modifier_iw_drow_ranger_bullseye"		"IW_MODIFIER_NO_TRIGGER"
-		}
-
 		"AbilitySpecial"
 		{
 			"01"

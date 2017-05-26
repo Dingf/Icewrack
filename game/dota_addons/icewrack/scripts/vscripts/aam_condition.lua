@@ -177,7 +177,7 @@ local function TargetHasDebuff(hCondition, nValue, tTargetList, bInverse)
 			local tModifierList = v:FindAllModifiers()
 			for k2,v2 in pairs(tModifierList) do
 				if IsValidExtendedModifier(v2) and v2:IsDebuff() then
-					if nValue == IEM_MODIFIER_CLASS_ANY or (v2:GetModifierClass() == nValue) then
+					if nValue == IW_MODIFIER_CLASS_ANY or (v2:GetModifierClass() == nValue) then
 						bHasDebuff = true
 						break
 					end

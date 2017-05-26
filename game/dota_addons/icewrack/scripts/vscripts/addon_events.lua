@@ -142,6 +142,7 @@ local function OnDelayedVisionAttack(hEntity, hTarget)
 		local fAttackRange = hEntity:GetAttackRange()
 		local fDistance = (hEntity:GetAbsOrigin() - vTargetPos):Length2D()
 		if hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) and fDistance <= fAttackRange then
+			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
 		else
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vTargetPos, false)
@@ -175,6 +176,7 @@ local function OnDelayedVisionCast(self, hEntity, hTarget, vLocation)
 		local fCastRange = self:GetCastRange()
 		local fDistance = (hEntity:GetAbsOrigin() - vTargetPos):Length2D()
 		if hEntity:IsTargetInLOS(hTarget or vLocation) and fDistance <= fCastRange then
+			hEntity:Stop()
 			if hTarget then
 				hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, self, nil, false)
 			else

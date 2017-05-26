@@ -20,7 +20,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitHeight"			"128"
 		"CorpseTime"			"39"
 		"IsPlayableHero"		"1"
@@ -63,7 +63,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 		"CorpseTime"			"35"
@@ -109,7 +109,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_RANGED"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 		"CorpseTime"			"105"
@@ -159,7 +159,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 		"CorpseTime"			"89"
@@ -198,7 +198,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
@@ -244,7 +244,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 		"CorpseTime"			"80"
@@ -285,7 +285,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 		"CorpseTime"			"39"
@@ -318,7 +318,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
@@ -347,7 +347,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
@@ -377,7 +377,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
@@ -403,7 +403,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 
@@ -428,7 +428,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 	}
@@ -454,7 +454,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			""
 		"UnitHeight"			"64"
 
@@ -479,7 +479,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
 		"UnitType"			"IW_UNIT_TYPE_RANGED"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			""
 		"UnitHeight"			"64"
 
@@ -499,11 +499,49 @@
 		"BehaviorCooperativeness"	"1"
 	}
 
+	"npc_iw_test_beast"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
+		"UnitType"			"IW_UNIT_TYPE_MELEE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BEAST"
+		"UnitFlags"			""
+		"UnitHeight"			"64"
+
+		"BaseAttackTime"		"1.75"
+		"AttackRange"			"128"
+		"MovementSpeedFlat"		"250"
+		"MaxStaminaFlat"		"100"
+
+		"AccuracyFlat"			"50"
+		"DodgeFlat"			"0"
+
+		"DamagePhysicalBase"		"30"
+		"DamagePhysicalVar"		"10"
+
+		"VisionMask"			"63"
+		"BehaviorAggressiveness"	"3"
+		"BehaviorCooperativeness"	"1"
+		"BehaviorSafety"		"3"
+
+		"StrengthFlat"			"50"
+		"EnduranceFlat"			"60"
+		"AgilityFlat"			"70"
+		"CunningFlat"			"80"
+		"IntelligenceFlat"		"90"
+		"WisdomFlat"			"100"
+	}
+
+
+
+
+
+
+
 	"npc_dota_hero_windrunner"
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"49"

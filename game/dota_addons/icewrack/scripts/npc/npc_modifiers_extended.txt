@@ -145,7 +145,7 @@
 			"IsDispellable"			"1"
 			"Duration"			"5.0"
 			"StatusEffect"			"IW_STATUS_EFFECT_STUN"
-			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
 			"VisualEffect"			"particles/generic_gameplay/generic_stunned.vpcf"
 			"VisualAttachType"		"PATTACH_OVERHEAD_FOLLOW"
@@ -173,7 +173,7 @@
 			"IsDispellable"			"1"
 			"Duration"			"10.0"
 			"StatusEffect"			"IW_STATUS_EFFECT_SLOW"
-			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
 			"VisualEffect"			"particles/generic_gameplay/effect_maim.vpcf"
 			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
@@ -196,7 +196,7 @@
 			"IsDispellable"			"1"
 			"Duration"			"10.0"
 			"StatusEffect"			"IW_STATUS_EFFECT_SLOW"
-			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
 			"VisualEffect"			"particles/generic_gameplay/effect_maim.vpcf"
 			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
@@ -219,7 +219,7 @@
 			"IsDispellable"			"1"
 			"Duration"			"10.0"
 			"StatusEffect"			"IW_STATUS_EFFECT_SLOW"
-			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
 			"VisualEffect"			"particles/generic_gameplay/effect_maim.vpcf"
 			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
@@ -246,7 +246,7 @@
 			"IsDispellable"			"1"
 			"Duration"			"4.0"
 			"StatusEffect"			"IW_STATUS_EFFECT_BLEED"
-			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
 			"VisualEffect"			"particles/generic_gameplay/effect_bleed.vpcf"
 			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
@@ -603,7 +603,7 @@
 			"Duration"			"0.2"
 
 			"StatusEffect"			"IW_STATUS_EFFECT_STUN"
-			"ModifierClass"			"IEM_MODIFIER_CLASS_PHYSICAL"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
 			"Properties"			{}
 
@@ -694,6 +694,24 @@
 		}
 	}
 
+	"iw_drow_ranger_feral_bond"
+	{
+		"modifier_iw_drow_ranger_feral_bond"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/drow_ranger/modifier_iw_drow_ranger_feral_bond.lua"
+
+			"Properties"		{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"	{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" {}
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" {}
+		}
+	}
+
 	"iw_drow_ranger_precision_aura"
 	{
 		"modifier_iw_drow_ranger_precision_aura"
@@ -729,7 +747,7 @@
 				"IW_PROPERTY_ATTR_STR_FLAT"			{"1" "100"}
 				"IW_PROPERTY_ATTR_END_FLAT"			{"1" "100"}
 				"IW_PROPERTY_ATTR_AGI_FLAT"			{"1" "100"}
-				"IW_PROPERTY_ATTR_PER_FLAT"			{"1" "100"}
+				"IW_PROPERTY_ATTR_CUN_FLAT"			{"1" "100"}
 				"IW_PROPERTY_ATTR_INT_FLAT"			{"1" "100"}
 				"IW_PROPERTY_ATTR_WIS_FLAT"			{"1" "100"}
 			}

@@ -44,7 +44,7 @@ CExtModifier = setmetatable({}, { __call =
 		hModifier._szAbilityName = szAbilityName
 		
 		hModifier._nStatusEffect = stIcewrackStatusEffectEnum[tExtModifierTemplate.StatusEffect] or IW_STATUS_EFFECT_NONE
-		hModifier._nModifierClass = stExtModifierClassEnum[tExtModifierTemplate.ModifierClass] or IEM_MODIFIER_CLASS_NONE
+		hModifier._nModifierClass = stExtModifierClassEnum[tExtModifierTemplate.ModifierClass] or IW_MODIFIER_CLASS_NONE
 		hModifier._nModifierEntityFlags = GetFlagValue(tExtModifierTemplate.ModifierEntityFlags, stExtEntityFlagEnum)
 		hModifier._bIsDispellable = tExtModifierTemplate.IsDispellable == 1
 		hModifier._bIsStrict =  tExtModifierTemplate.IsStrict == 1
@@ -95,9 +95,9 @@ function CExtModifier:SetDuration(fDuration, bInformClient)
 	if not self:IsStrict() then
 		if self:IsDebuff() then
 			fDurationModifier = hTarget:GetSelfDebuffDuration()
-			if self:GetModifierClass() == IEM_MODIFIER_CLASS_PHYSICAL then
+			if self:GetModifierClass() == IW_MODIFIER_CLASS_PHYSICAL then
 				fDurationModifier = fDurationModifier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetPhysicalDebuffDefense())
-			elseif self:GetModifierClass() == IEM_MODIFIER_CLASS_MAGICAL then
+			elseif self:GetModifierClass() == IW_MODIFIER_CLASS_MAGICAL then
 				fDurationModifier = fDurationModifier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetMagicalDebuffDefense())
 			else
 				fDurationModifier = fDurationModifier * hSource:GetOtherDebuffDuration()

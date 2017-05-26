@@ -142,6 +142,20 @@
 		"ManaCost"		"5"
 	}
 
+	"iw_drow_ranger_feral_bond"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_feral_bond.lua"
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_drow_ranger"
+			{
+				"Animation"		"ACT_DOTA_CAST_ABILITY_2"
+				"Rate"			"1.0"
+			}
+		}
+	}
+
 	"iw_drow_ranger_precision_aura"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_precision_aura.lua"

@@ -109,7 +109,7 @@
 	}
 	"10002"
 	{
-		"Name"			"npc_iw_expedition_merc_1"
+		"Name"			"npc_iw_test_beast"
 		"Team"			"DOTA_TEAM_BADGUYS"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
