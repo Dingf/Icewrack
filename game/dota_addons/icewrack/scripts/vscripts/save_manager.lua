@@ -168,7 +168,6 @@ function CSaveManager:PrecacheSaveEntities(hContext)
 			if tExtEntityTemplate.Animation then
 				local szModelName = tExtEntityTemplate.Animation.Model
 				local szScriptFile = tExtEntityTemplate.Animation.ScriptFile
-				print("hey", szModelName, szScriptFile)
 				RegisterCustomAnimationScriptForModel(szModelName, szScriptFile)
 			end
 		end

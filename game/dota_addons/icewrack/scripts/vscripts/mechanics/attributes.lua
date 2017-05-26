@@ -7,7 +7,6 @@
 	    *Increases HP by 2
         *Increases Physical damage dealt with attacks by 1%
         *Increases carry capacity by 1
-		*Reduces encumbrance by 1%
         
     ENDURANCE (END):
         *Increases HP by 5
@@ -18,7 +17,6 @@
         *Increases accuracy score by 1
         *Increases dodge score by 1
         *Increases attack speed by 1
-		*Increases movement speed by 1
         
     CUNNING (CUN):
         *Increases critical strike chance by 5%

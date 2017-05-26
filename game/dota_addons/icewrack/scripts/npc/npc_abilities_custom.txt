@@ -537,7 +537,7 @@
 			"04"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"speed"			"25.0"
+				"move_speed"			"25.0"
 			}
 		}
 	}

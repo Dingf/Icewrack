@@ -86,36 +86,43 @@ function CExtModifier:IsStrict()
 	return self._bIsStrict
 end
 
+function CExtModifier:GetRealDurationMultiplier(hTarget)
+	local hSource = self:GetCaster()
+	local fDurationMultiplier = 1.0
+	if self:IsDebuff() then
+		fDurationMultiplier = hTarget:GetSelfDebuffDuration()
+		if self:GetModifierClass() == IW_MODIFIER_CLASS_PHYSICAL then
+			fDurationMultiplier = fDurationMultiplier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetPhysicalDebuffDefense())
+		elseif self:GetModifierClass() == IW_MODIFIER_CLASS_MAGICAL then
+			fDurationMultiplier = fDurationMultiplier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetMagicalDebuffDefense())
+		else
+			fDurationMultiplier = fDurationMultiplier * hSource:GetOtherDebuffDuration()
+		end
+	else
+		fDurationMultiplier = hTarget:GetSelfBuffDuration() * hSource:GetOtherBuffDuration()
+	end
+	
+	local nStatusEffect = self:GetStatusEffect()
+	if nStatusEffect ~= IW_STATUS_EFFECT_NONE then
+		fDurationMultiplier = fDurationMultiplier * hTarget:GetStatusEffectDurationMultiplier(nStatusEffect)
+	end
+	return fDurationMultiplier
+end
+
 function CExtModifier:SetDuration(fDuration, bInformClient)
 	local hSource = self:GetCaster()
 	local hTarget = self:GetParent()
-	local nStatusEffect = self:GetStatusEffect()
 	
-	local fDurationModifier = 1.0
+	local fDurationMultiplier = 1.0
 	if not self:IsStrict() then
-		if self:IsDebuff() then
-			fDurationModifier = hTarget:GetSelfDebuffDuration()
-			if self:GetModifierClass() == IW_MODIFIER_CLASS_PHYSICAL then
-				fDurationModifier = fDurationModifier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetPhysicalDebuffDefense())
-			elseif self:GetModifierClass() == IW_MODIFIER_CLASS_MAGICAL then
-				fDurationModifier = fDurationModifier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetMagicalDebuffDefense())
-			else
-				fDurationModifier = fDurationModifier * hSource:GetOtherDebuffDuration()
-			end
-		else
-			fDurationModifier = hTarget:GetSelfBuffDuration() * hSource:GetOtherBuffDuration()
-		end
-		
-		if nStatusEffect ~= IW_STATUS_EFFECT_NONE then
-			fDurationModifier = fDurationModifier * hTarget:GetStatusEffectDurationMultiplier(nStatusEffect)
-		end
+		fDurationMultiplier = self:GetRealDurationMultiplier(hTarget)
 	end
 	if fDuration == -1 then
-		if fDurationModifier == 0 then
+		if fDurationMultiplier == 0 then
 			fDuration = 0
 		end
 	else
-		fDuration = fDuration * math.max(0.0, fDurationModifier)
+		fDuration = fDuration * math.max(0.0, fDurationMultiplier)
 	end
 	CDOTA_Buff.SetDuration(self, fDuration, bInformClient)
 	return fDuration

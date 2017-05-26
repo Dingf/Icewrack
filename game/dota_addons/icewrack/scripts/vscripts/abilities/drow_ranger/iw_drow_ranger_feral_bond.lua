@@ -22,8 +22,17 @@ end
 
 function iw_drow_ranger_feral_bond:OnSpellStart()
 	if IsServer() then
+		local hEntity = self:GetCaster()
 		local hTarget = self:GetCursorTarget()
 		
+		--[[local tModifierArgs =
+		{
+			attrib_percent = 
+			attack_speed = 
+		}
+		
+		hTarget:AddNewModifier(hEntity, self, "modifier_iw_axe_battle_hunger", tModifierArgs)
+		hTarget:AddNewModifier(hTarget, self, "modifier_iw_axe_battle_hunger", tModifierArgs)]]
 		--TODO: Make it so that this ability cannot be cast again
 		
 		hTarget:SetTeam(DOTA_TEAM_GOODGUYS)

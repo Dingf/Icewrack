@@ -69,10 +69,11 @@ function modifier_internal_stamina:OnIntervalThink()
 		
 			local fStaminaRegenTime = hEntity:GetStaminaRegenTime()
 			if fStamina ~= fMaxStamina then
-				local fStaminaRegenPerSec = hEntity:GetStaminaRegen()
+				local fStaminaRegenPerSec = hEntity:GetPropertyValue(IW_PROPERTY_SP_REGEN_FLAT) + (hEntity:GetPropertyValue(IW_PROPERTY_MAX_SP_REGEN)/100.0 * hEntity:GetMaxStamina())
 				if GameRules:GetGameTime() > fStaminaRegenTime then
-					fStaminaRegenPerSec = fStaminaRegenPerSec + (0.1 * fMaxStamina) * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_SP_REGEN_PCT)/100.0)
+					fStaminaRegenPerSec = fStaminaRegenPerSec + (0.1 * fMaxStamina)
 				end
+				fStaminaRegenPerSec = fStaminaRegenPerSec * (1.0 + self:GetPropertyValue(IW_PROPERTY_SP_REGEN_PCT)/100.0)
 				if hEntity:IsMoving() then
 					fStaminaRegenPerSec = fStaminaRegenPerSec * 0.5
 				end

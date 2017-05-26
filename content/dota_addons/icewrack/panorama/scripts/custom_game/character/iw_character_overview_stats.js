@@ -26,7 +26,7 @@ function GetOverviewZeroPercent(bOptional, nProperty, tSourceData, tEntityIndex)
 
 function GetOverviewAttackSpeed(tSourceData, nEntityIndex)
 {
-	var fBaseAttackTime = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_BASE_ATTACK_TIME);
+	var fBaseAttackTime = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_BASE_ATTACK_FLAT) * (1.0 + GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_BASE_ATTACK_PCT)/100.0);
 	var fAttackSpeed = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ATK_SPEED_DUMMY);
 	return Math.floor((100 + fAttackSpeed)/fBaseAttackTime)/100.0;
 }
@@ -138,8 +138,7 @@ function GetOverviewDodge(tSourceData, nEntityIndex)
 function GetOverviewFatigueMultiplier(tSourceData, nEntityIndex)
 {
 	var fFatigueMultiplier = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_FATIGUE_MULTI);
-	var fStrength = GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_STR_FLAT);
-	return (fFatigueMultiplier - fStrength) + " (" + Math.max(0, (fFatigueMultiplier - fStrength)) + "%)"
+	return fFatigueMultiplier + " (" + Math.max(0, fFatigueMultiplier) + "%)"
 }
 
 function GetOverviewMovementSpeed(tSourceData, nEntityIndex)

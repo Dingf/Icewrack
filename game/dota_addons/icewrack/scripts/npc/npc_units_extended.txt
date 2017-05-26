@@ -4,7 +4,7 @@
 	"default"
 	{
 		"ManaRegenFlat"			"0.25"
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"BaseCritChance"		"0.05"
 		"BaseCritMultiplier"		"0.5"
 		"MaxResistPhysical"		"75"
@@ -37,7 +37,7 @@
 		"StaminaUsageAttackFlat"	"5"
 		"StaminaUsageRunFlat"		"3"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"275"
 
@@ -78,7 +78,7 @@
 		"StaminaUsageRunFlat"		"3"
 		"HealthRegenFlat"		"100003"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"250"
 
@@ -124,7 +124,7 @@
 
 		"EquipFlags"			"4294967295"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"300"
 
@@ -171,7 +171,7 @@
 		"StaminaUsageAttackFlat"	"3"
 		"StaminaUsageRunFlat"		"2"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"300"
 
@@ -211,7 +211,7 @@
 		"StaminaUsageAttackFlat"	"5"
 		"StaminaUsageRunFlat"		"0"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"770"
 		"MovementSpeedFlat"		"250"
 
@@ -256,7 +256,7 @@
 		"StaminaUsageAttackFlat"	"5"
 		"StaminaUsageRunFlat"		"3"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"275"
 
@@ -297,7 +297,7 @@
 		"StaminaUsageAttackFlat"	"5"
 		"StaminaUsageRunFlat"		"3"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"275"
 
@@ -323,7 +323,7 @@
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"250"
 		"MaxStaminaFlat"		"50"
@@ -352,7 +352,7 @@
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"250"
 		"MaxStaminaFlat"		"50"
@@ -458,7 +458,7 @@
 		"UnitFlags"			""
 		"UnitHeight"			"64"
 
-		"BaseAttackTime"		"1.0"
+		"BaseAttackTimeFlat"		"1.0"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"250"
 		"MaxStaminaFlat"		"100"
@@ -483,7 +483,7 @@
 		"UnitFlags"			""
 		"UnitHeight"			"64"
 
-		"BaseAttackTime"		"1.0"
+		"BaseAttackTimeFlat"		"1.0"
 		"AttackRange"			"600"
 		"MovementSpeedFlat"		"200"
 		"MaxStaminaFlat"		"50"
@@ -507,7 +507,7 @@
 		"UnitFlags"			""
 		"UnitHeight"			"64"
 
-		"BaseAttackTime"		"1.75"
+		"BaseAttackTimeFlat"		"1.75"
 		"AttackRange"			"128"
 		"MovementSpeedFlat"		"250"
 		"MaxStaminaFlat"		"100"
@@ -549,7 +549,7 @@
 
 		"EquipFlags"			"58191872"
 
-		"BaseAttackTime"		"1.7"
+		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"300"
 		"MaxStaminaFlat"		"50"

@@ -4,6 +4,7 @@
 	</styles>
 	
 	<scripts>
+		<include src="file://{resources}/scripts/custom_game/constants/iw_instance.js" />
 		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
 		<include src="file://{resources}/scripts/custom_game/partybar/iw_partybar_member.js" />
 	</scripts>

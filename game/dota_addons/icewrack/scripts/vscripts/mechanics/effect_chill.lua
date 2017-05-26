@@ -1,7 +1,7 @@
 require("mechanics/effect_freeze")
 
 function ApplyChill(hVictim, hAttacker, fDamagePercentHP)
-	local fBaseDuration = 10.0 * fDamagePercentHP
+	local fBaseDuration = 20.0 * fDamagePercentHP
 	if fDamagePercentHP > 0.05 then
 		local hWetModifier = hVictim:FindModifierByName("modifier_status_wet")
 		if hWetModifier then
@@ -17,7 +17,6 @@ function ApplyChill(hVictim, hAttacker, fDamagePercentHP)
 		local hModifier = hVictim:FindModifierByName(szModifierName)
 		if hModifier then
 			local fRealDuration = fBaseDuration * hVictim:GetSelfDebuffDuration() * hAttacker:GetOtherDebuffDuration() * hVictim:GetStatusEffectDurationMultiplier(IW_STATUS_EFFECT_CHILL)
-			print(fRealDuration, hModifier:GetDuration(), hModifier:GetDuration() - hModifier:GetElapsedTime())
 			if (hModifier:GetDuration() - hModifier:GetElapsedTime()) < fRealDuration then
 				hModifier:ForceRefresh()
 				hModifier:SetDuration(fBaseDuration, true)

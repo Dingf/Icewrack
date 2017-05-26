@@ -252,8 +252,9 @@ function UpdatePartyBarMemberValues()
 		$("#SPLabel").text = Math.floor(fStamina) + " / " + Math.floor(fMaxStamina);
 		$("#SPBar").style.width = (Math.floor(fStamina * 182)/((fMaxStamina === 0) ? 1 : fMaxStamina)) + "px";
 		
-		var fCurrentRegenTime = bIsEntityAlive ? Game.GetGameTime() - tEntityData.stamina_time + 5.0 : 0;
-		var fStaminaRegenTime = 5.0;
+		
+		var fStaminaRegenTime = 5.0 * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SP_REGEN_TIME_PCT)/100);
+		var fCurrentRegenTime = bIsEntityAlive ? Game.GetGameTime() - tEntityData.stamina_time + fStaminaRegenTime : 0;
 		$("#SPRechargeBar").style.width = ((fCurrentRegenTime * 182)/fStaminaRegenTime) + "px";
 		
 		var szActionName = tEntityData.current_action;

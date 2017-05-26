@@ -32,7 +32,7 @@ stIcewrackPropertyEnum =
 	IW_PROPERTY_SP_REGEN_FLAT = 17,      IW_PROPERTY_SP_REGEN_PCT = 18,       IW_PROPERTY_MAX_SP_REGEN = 19,       IW_PROPERTY_HP_REGEN_FLAT = 20,
 	IW_PROPERTY_HP_REGEN_PCT = 21,       IW_PROPERTY_MAX_HP_REGEN = 22,       IW_PROPERTY_MP_REGEN_FLAT = 23,      IW_PROPERTY_MP_REGEN_PCT = 24,
 	IW_PROPERTY_MAX_MP_REGEN = 25,       IW_PROPERTY_ATTACK_SP_FLAT = 26,     IW_PROPERTY_ATTACK_SP_PCT = 27,      IW_PROPERTY_RUN_SP_FLAT = 28,
-	IW_PROPERTY_RUN_SP_PCT = 29,         IW_PROPERTY_THREAT_MULTI = 30,       IW_PROPERTY_ATTACK_RANGE = 31,       IW_PROPERTY_BASE_ATTACK_TIME = 32,
+	IW_PROPERTY_RUN_SP_PCT = 29,         IW_PROPERTY_ATTACK_RANGE = 30,       IW_PROPERTY_BASE_ATTACK_FLAT = 31,   IW_PROPERTY_BASE_ATTACK_PCT = 32,
 	IW_PROPERTY_MOVE_SPEED_FLAT = 33,    IW_PROPERTY_MOVE_SPEED_PCT = 34,     IW_PROPERTY_CAST_SPEED = 35,         IW_PROPERTY_SPELLPOWER = 36,
 	IW_PROPERTY_CRIT_CHANCE_FLAT = 37,   IW_PROPERTY_CRIT_MULTI_FLAT = 38,    IW_PROPERTY_CRIT_CHANCE_PCT = 39,    IW_PROPERTY_CRIT_MULTI_PCT = 40,
 	IW_PROPERTY_ARMOR_CRUSH_FLAT = 41,   IW_PROPERTY_ARMOR_SLASH_FLAT = 42,   IW_PROPERTY_ARMOR_PIERCE_FLAT = 43,  IW_PROPERTY_ARMOR_CRUSH_PCT = 44,
@@ -69,7 +69,7 @@ stIcewrackPropertyEnum =
 	IW_PROPERTY_MOVE_NOISE_FLAT = 165,   IW_PROPERTY_MOVE_NOISE_PCT = 166,    IW_PROPERTY_CAST_NOISE_FLAT = 167,   IW_PROPERTY_CAST_NOISE_PCT = 168,
 	IW_PROPERTY_NIGHT_VISION = 169,      IW_PROPERTY_VISIBILITY_FLAT = 170,   IW_PROPERTY_VISIBILITY_PCT = 171,    IW_PROPERTY_BEHAVIOR_AGGRO = 172,
 	IW_PROPERTY_BEHAVIOR_COOP = 173,     IW_PROPERTY_BEHAVIOR_SAFETY = 174,   IW_PROPERTY_CORPSE_TIME = 175,       IW_PROPERTY_ATK_SPEED_DUMMY = 176,
-	IW_PROPERTY_SP_REGEN_TIME_PCT = 174, 
+	IW_PROPERTY_SP_REGEN_TIME_PCT = 177, IW_PROPERTY_THREAT_MULTI = 178,
 }
 
 for k,v in pairs(stInstanceTypeEnum) do _G[k] = v end
@@ -84,7 +84,7 @@ stIcewrackPropertiesName =
 	StaminaRegenFlat = 17,             StaminaRegenPercent = 18,          MaxStaminaPercentRegen = 19,       HealthRegenFlat = 20,
 	HealthRegenPercent = 21,           MaxHealthPercentRegen = 22,        ManaRegenFlat = 23,                ManaRegenPercent = 24,
 	MaxManaPercentRegen = 25,          StaminaUsageAttackFlat = 26,       StaminaUsageAttackPercent = 27,    StaminaUsageRunFlat = 28,
-	StaminaUsageRunPercent = 29,       ThreatMultiplier = 30,             AttackRange = 31,                  BaseAttackTime = 32,
+	StaminaUsageRunPercent = 29,       AttackRange = 30,                  BaseAttackTimeFlat = 31,           BaseAttackTimePercent = 32,
 	MovementSpeedFlat = 33,            MovementSpeedPercent = 34,         CastSpeed = 35,                    Spellpower = 36,
 	BaseCritChance = 37,               BaseCritMultiplier = 38,           CritChance = 39,                   CritMultiplier = 40,
 	ArmorCrushFlat = 41,               ArmorSlashFlat = 42,               ArmorPierceFlat = 43,              ArmorCrushPercent = 44,
@@ -121,7 +121,7 @@ stIcewrackPropertiesName =
 	MovementNoiseFlat = 165,           MovementNoisePercent = 166,        CastNoiseFlat = 167,               CastNoisePercent = 168,
 	NightVision = 169,                 VisibilityFlat = 170,              VisibilityPercent = 171,           BehaviorAggressiveness = 172,
 	BehaviorCooperativeness = 173,     BehaviorSafety = 174,              CorpseTime = 175,                  AttackSpeedDummy = 176,
-	StaminaRegenTimePercent = 174,
+	StaminaRegenTimePercent = 177,     ThreatMultiplier = 178,
 }
 
 stIcewrackPropertyValues = {}
@@ -298,6 +298,10 @@ function CInstance:GetAttackDamage(nDamageType)
 	end
 end
 
+function CInstance:GetBaseAttackTime()
+	return self:GetBasePropertyValue(IW_PROPERTY_BASE_ATTACK_FLAT) * math.max(0.25, (1.0 + self:GetPropertyValue(IW_PROPERTY_BASE_ATTACK_PCT)/100))
+end
+
 function CInstance:GetMaxStamina()
     return (self:GetPropertyValue(IW_PROPERTY_MAX_SP_FLAT) + (self:GetAttributeValue(IW_ATTRIBUTE_ENDURANCE) * 1.0)) * (1.0 + self:GetPropertyValue(IW_PROPERTY_MAX_SP_PCT)/100.0)
 end
@@ -373,7 +377,7 @@ function CInstance:GetDamageEffectiveness()
 end
 
 function CInstance:GetFatigueMultiplier()
-	return 1.0 + math.max(0, (self:GetPropertyValue(IW_PROPERTY_FATIGUE_MULTI) - (self:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 1.00))/100.0)
+	return 1.0 + math.max(0, self:GetPropertyValue(IW_PROPERTY_FATIGUE_MULTI)/100.0)
 end
 
 function CInstance:GetDrainMultiplier()

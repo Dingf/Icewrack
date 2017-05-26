@@ -527,7 +527,7 @@ function CExtEntity:RefreshManaRegen()
 end
 
 function CExtEntity:RefreshMovementSpeed()
-	local fMovementSpeed = self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_FLAT) + (self:GetAttributeValue(IW_ATTRIBUTE_AGILITY) * 1.0)
+	local fMovementSpeed = self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_FLAT)
 	if not self._bRunMode then
 		fMovementSpeed = fMovementSpeed * 0.5
 	end
@@ -538,13 +538,13 @@ end
 function CExtEntity:RefreshBaseAttackTime()
 	local hAttackSource = self:GetCurrentAttackSource()
 	if hAttackSource then
-		local fBaseAttackTime = hAttackSource:GetBasePropertyValue(IW_PROPERTY_BASE_ATTACK_TIME)
+		local fBaseAttackTime = hAttackSource:GetBaseAttackTime()
 		if self:IsDualWielding() then
 			fBaseAttackTime = fBaseAttackTime * 0.75
 		end
 		self:SetBaseAttackTime(fBaseAttackTime)
 	else
-		local fBaseAttackTime = self:GetBasePropertyValue(IW_PROPERTY_BASE_ATTACK_TIME)
+		local fBaseAttackTime = self:GetBaseAttackTime()
 		self:SetBaseAttackTime(fBaseAttackTime)
 	end
 end
@@ -591,6 +591,7 @@ function CExtEntity:RefreshEntity()
 		v:OnEntityRefresh()
 	end
 	
+	self:RefreshBaseAttackTime()
 	self:RefreshHealthRegen()
 	self:RefreshManaRegen()
 	self:RefreshMovementSpeed()

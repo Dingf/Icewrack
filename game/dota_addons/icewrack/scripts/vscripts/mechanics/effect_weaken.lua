@@ -1,6 +1,6 @@
 function ApplyWeaken(hVictim, hAttacker, fDamagePercentHP)
 	local fRealDuration = 20.0 * fDamagePercentHP
-	if fDamagePercentHP > 0.05 then
+	if fBaseDuration > 0.05 then
 		local nUnitClass = hVictim:GetUnitClass()
 		local szModifierName = "modifier_status_weaken"
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
@@ -10,12 +10,14 @@ function ApplyWeaken(hVictim, hAttacker, fDamagePercentHP)
 		end
 		local hModifier = hVictim:FindModifierByName(szModifierName)
 		if hModifier then
+			local fRealDuration = fBaseDuration * hModifier:GetRealDurationMultiplier(hVictim)
 			if (hModifier:GetDuration() - hModifier:GetElapsedTime()) < fRealDuration then
-				hModifier:SetDuration(fRealDuration + hModifier:GetElapsedTime(), true)
+				hModifier:ForceRefresh()
+				hModifier:SetDuration(fBaseDuration, true)
 			end
 		else
 			hModifier = AddModifier("status_weaken", szModifierName, hVictim, hAttacker)
-			if hModifier then hModifier:SetDuration(fRealDuration, true) end
+			if hModifier then hModifier:SetDuration(fBaseDuration, true) end
 		end
 	end
 end

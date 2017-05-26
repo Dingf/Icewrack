@@ -48,7 +48,6 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 		hEntity:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK)
 		hEntity:SetRangedProjectileName("particles/units/heroes/hero_dragon_knight/iw_dragon_knight_dragon_form_attack.vpcf")
 		CTimer(0.03, function() hEntity:SetMaterialGroup("1") end)
-		print("are you for real", MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS)
 		
 		hEntity:StartGesture(ACT_DOTA_CAST_ABILITY_4)
 		self:StartIntervalThink(0.8)
