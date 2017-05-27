@@ -260,11 +260,13 @@ local function SaveSpellbookData(hInstance)
 			local hAbility = v:FindAbilityByName(k)
 			if hAbility then
 				local tAbilityTable = {}
+				tAbilityTable.Name = hAbility:GetAbilityName()
 				tAbilityTable.Level = hAbility:GetLevel()
 				tAbilityTable.Cooldown = math.max(0, hAbility:GetCooldownTimeRemaining())
 				tAbilityTable.IsAutoCast = hAbility:GetAutoCastState() and 1 or 0
 				tAbilityTable.IsToggled = hAbility:GetToggleState() and 1 or 0
-				tSpellbookTable[hAbility:GetAbilityName()] = tAbilityTable
+				tAbilityTable.IsActivated = hAbility:IsActivated() and 1 or 0
+				tSpellbookTable[hAbility:GetInstanceID()] = tAbilityTable
 			end
 		end
 		return tSpellbookTable
@@ -282,8 +284,9 @@ local function SaveModifierData(hInstance)
 				tModifierTable.Duration = v:GetRemainingTime()
 				tModifierTable.StackCount = v:GetStackCount()
 						
-				local hParent = v:GetCaster()
-				tModifierTable.Source = IsValidInstance(hParent) and hParent:GetInstanceID() or 0
+				local hAbility = v:GetAbility()
+				tModifierTable.Source = hAbility:GetInstanceID() or 0
+				tModifierTable.Caster = v:GetCaster():GetInstanceID() or 0
 				tModifierTable.ModifierArgs = {}
 				for k2,v2 in pairs(v._tModifierArgs) do
 					tModifierTable.ModifierArgs[k2] = (type(v2) == "table") and v2:GetInstanceID() or v2
@@ -723,8 +726,9 @@ local function LoadAbilities()
 			local hSpellbook = hEntity:GetSpellbook()
 			local tSpellbookData = v.Spellbook or {}
 			for k2,v2 in pairs(tSpellbookData) do
-				if k2 ~= "Binds" then
-					local hAbility = hSpellbook:LearnAbility(k2, v2.Level)
+				local nInstanceID = tonumber(k2)
+				if nInstanceID then
+					local hAbility = hSpellbook:LearnAbility(v2.Name, v2.Level, nInstanceID)
 					if hAbility then
 						if v2.Cooldown > 0 then
 							hAbility:StartCooldown(v2.Cooldown)
@@ -735,6 +739,7 @@ local function LoadAbilities()
 						if v2.IsToggled == 1 then
 							hAbility:ToggleAbility()
 						end
+						hAbility:SetActivated(v2.IsActivated == 1)
 					end
 				end
 			end
@@ -796,10 +801,19 @@ local function LoadParty()
 end
 
 
-local function LoadSavedModifierData(hEntity, tModifierData)
+local function LoadSavedModifierData(hEntity, tModifierData, nInstanceID)
 	local _, _, szAbilityName, szModifierName = string.find(tModifierData.Name, "([%w_]+):([%w_]+)")
+	
 	local hSource = GetInstanceByID(tonumber(tModifierData.Source))
-	local hModifier = AddModifier(szAbilityName, szModifierName, hEntity, hSource, tModifierData.ModifierArgs)
+	local hCaster = GetInstanceByID(tonumber(tModifierData.Caster)) or hEntity
+	local hModifier = nil
+	if hSource then
+		hModifier = hEntity:AddNewModifier(hCaster, hSource, szModifierName, tModifierData.ModifierArgs)
+	else
+		LogMessage("Modifier source with instance ID \"" .. tModifierData.Source .. "\" was not found.", LOG_SEVERITY_WARNING)
+		hModifier = AddModifier(szAbilityName, szModifierName, hEntity, hCaster, tModifierData.ModifierArgs)
+	end
+	
 	if hModifier then
 		local nStackCount = tModifierData.StackCount or 0
 		if nStackCount > 0 then
@@ -807,7 +821,7 @@ local function LoadSavedModifierData(hEntity, tModifierData)
 		end
 		CDOTA_Buff.SetDuration(hModifier, tModifierData.Duration, true)
 		for k,v in pairs(tModifierData.Properties or {}) do
-			hModifier:SetPropertyValues(k,v)
+			hModifier:SetPropertyValue(k,v)
 		end
 	end
 end
@@ -921,6 +935,23 @@ local function LoadEntityValues()
 	end	
 end
 
+local function LoadMapContainers()
+	local tInteractableSaveList = CSaveManager._tSaveData.Interactables or {}
+	for k,v in pairs(CSaveManager._tInstanceData) do
+		local nInstanceID = tonumber(k)
+		local hPrecondition = CExpression(v.Precondition or "")
+		if stInstanceData[k] and stInstanceData[k].Type == IW_INSTANCE_CONTAINER and hPrecondition:EvaluateExpression() then
+			local tContainerData = tInteractableSaveList[k]
+			if not tContainerData then
+				local szUnitName = stInstanceData[k].Name
+				local nUnitTeam = stInstanceData[k].Team
+				local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID, true)
+				hContainer:SetForwardVector(StringToVector(v.Forward))
+			end
+		end
+	end
+end
+
 local function LoadModifiers()
 	local tEntitySaveList = CSaveManager._tSaveData.Entities or {}
 	for k,v in pairs(CSaveManager._tInstanceData) do
@@ -941,7 +972,6 @@ local function LoadModifiers()
 							v2[k3] = _G[v3]
 						end
 					end
-					
 					AddModifier(szAbilityName, szModifierName, hInstance, hInstance, v2)
 				end
 			end
@@ -955,26 +985,17 @@ local function LoadModifiers()
 			local hInstance = GetInstanceByID(nInstanceID)
 			if IsValidExtendedEntity(hEntity) then
 				for k2,v2 in pairs(v.Modifiers or {}) do
-					LoadSavedModifierData(hInstance, v2)
+					LoadSavedModifierData(hInstance, v2, tonumber(k2))
 				end
 			end
 		end
 	end
 end
 
-local function LoadMapContainers()
-	local tInteractableSaveList = CSaveManager._tSaveData.Interactables or {}
-	for k,v in pairs(CSaveManager._tInstanceData) do
-		local nInstanceID = tonumber(k)
-		local hPrecondition = CExpression(v.Precondition or "")
-		if stInstanceData[k] and stInstanceData[k].Type == IW_INSTANCE_CONTAINER and hPrecondition:EvaluateExpression() then
-			local tContainerData = tInteractableSaveList[k]
-			if not tContainerData then
-				local szUnitName = stInstanceData[k].Name
-				local nUnitTeam = stInstanceData[k].Team
-				local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID, true)
-				hContainer:SetForwardVector(StringToVector(v.Forward))
-			end
+local function RefreshAllEntities()
+	for _,hInstance in pairs(CInstance:GetInstanceList()) do
+		if IsValidExtendedEntity(hInstance) then
+			hInstance:RefreshEntity()
 		end
 	end
 end
@@ -995,6 +1016,7 @@ function CSaveManager:LoadGame()
 	LoadEntityValues()
 	LoadMapContainers()
 	LoadModifiers()
+	RefreshAllEntities()
 	CInstance:SetAllowDynamicInstances(true)
 end
 

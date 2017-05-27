@@ -70,6 +70,10 @@ function CIcewrackGameMode:OnGameRulesStateChange(keys)
 		CSaveManager._tSaveSpecial.Loading = nil
 		CSaveManager:CreateSaveList(self, keys)
 		CSaveManager:CreateBindList(self, keys)
+		
+		if CSaveManager:GetPlayerHeroName() then
+			CTimer(0.03, function() GameRules:GetPlayerHero():AddExperience(100) return 0.03 end)
+		end
 	end
 end
 

@@ -7,6 +7,6 @@
 		<include src="file://{resources}/scripts/custom_game/ui/iw_context_item.js" />
 	</scripts>
 	<Panel class="ContextMenuItemRoot" onactivate="OnContextItemActivate()">
-		<Label id="Text" text="Lorem ipsum"/>
+		<Label id="Text" text=""/>
 	</Panel>
 </root>

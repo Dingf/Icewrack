@@ -201,7 +201,7 @@
 		// General
 		//----------------------------------------------------------------
 		"Model"					"models/creeps/lane_creeps/creep_radiant_melee/radiant_melee.vmdl"
-		"BaseClass"				"npc_dota_creature"
+		"BaseClass"				"npc_dota_creep"
 		"GameSoundsFile"			"soundevents/game_sounds_creeps.vsndevts"
 		"SoundSet"				"n_creep_Melee"
 		"Level"					"1"
@@ -267,7 +267,7 @@
 		// General
 		//----------------------------------------------------------------
 		"Model"					"models/creeps/lane_creeps/creep_radiant_ranged/radiant_ranged.vmdl"
-		"BaseClass"				"npc_dota_creature"
+		"BaseClass"				"npc_dota_creep"
 		"GameSoundsFile"			"soundevents/game_sounds_creeps.vsndevts"
 		"SoundSet"				"n_creep_Ranged"
 		"Level"					"1"
@@ -337,7 +337,7 @@
 		// General
 		//----------------------------------------------------------------
 		"Model"					"models/heroes/lone_druid/spirit_bear.vmdl"
-		"BaseClass"				"npc_dota_creature"
+		"BaseClass"				"npc_dota_creep"
 		"SoundSet"				"LoneDruid_SpiritBear"
 		"Level"					"1"
 		"ModelScale" 				"2"

@@ -589,6 +589,7 @@
 		"Modifiers"
 		{
 			"modifier_iw_drow_ranger_feral_bond"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_drow_ranger_feral_bond_refresh"		"IW_MODIFIER_NO_TRIGGER"
 		}
 
 		"AbilitySpecial"

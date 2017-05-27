@@ -33,9 +33,8 @@ function OnAttack(self, keys)
 		local hAttackSource = hEntity:GetCurrentAttackSource(true)
 		if not hAttackSource then
 			hAttackSource = hEntity
-		else
-			hEntity:RefreshEntity()	
 		end
+		hEntity:RefreshEntity()	
 		
 		local fAttackCost = hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hAttackSource:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
 		hEntity:SpendStamina(fAttackCost)

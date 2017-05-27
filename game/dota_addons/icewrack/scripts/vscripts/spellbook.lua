@@ -97,17 +97,6 @@ function CSpellbook:UpdateNetTable()
 end
 
 function CSpellbook:OnEntityRefresh()
-	local hEntity = self._hEntity
-	for k,v in pairs(self._tSpellList) do
-		local hAbility = v:FindAbilityByName(k)
-		if hAbility:CheckSkillRequirements(hEntity) and not hAbility:IsActivated() then
-			hAbility:SetActivated(true)
-			hAbility:ApplyModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
-		elseif not hAbility:CheckSkillRequirements(hEntity) and hAbility:IsActivated() then
-			hAbility:SetActivated(false)
-			hAbility:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
-		end
-	end
 	self:UpdateNetTable()
 end
 
@@ -144,7 +133,7 @@ function CSpellbook:UnlearnAbility(szAbilityName)
 	return false
 end
 
-function CSpellbook:LearnAbility(szAbilityName, nLevel)
+function CSpellbook:LearnAbility(szAbilityName, nLevel, nInstanceID)
 	local hEntity = self._hEntity
 	local hSpellUnit = nil
 	if szAbilityName and nLevel and not self._tSpellList[szAbilityName] then
@@ -166,17 +155,14 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel)
 			table.insert(self._tSpellUnits, hSpellUnit)
 		end
 		hSpellUnit:AddAbility(szAbilityName)
-		local hAbility = CExtAbility(hSpellUnit:FindAbilityByName(szAbilityName))
+		local hAbility = CExtAbility(hSpellUnit:FindAbilityByName(szAbilityName), nInstanceID)
 		hAbility:SetCaster(hEntity)
 		hAbility:SetLevel(nLevel)
 		hAbility:SetOwner(hEntity)
-		if not hAbility:CheckSkillRequirements(hEntity) then
-			hAbility:SetActivated(false)
-		end
 		self._tSpellList[szAbilityName] = hSpellUnit
 		self._tNetTable.Spells[hAbility:entindex()] =
 		{
-			skills = hAbility:GetSkillRequirements(),
+			skill = hAbility:GetSkillRequirements(),
 			stamina = hAbility:GetStaminaCost(),
 			mana_upkeep = hAbility:GetManaUpkeep(),
 			stamina_upkeep = hAbility:GetStaminaUpkeep(),
@@ -186,9 +172,6 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel)
 	elseif self._tSpellList[szAbilityName] then
 		hSpellUnit = self._tSpellList[szAbilityName]
 		local hAbility = hSpellUnit:FindAbilityByName(szAbilityName)
-		if not hAbility:CheckSkillRequirements(hEntity) then
-			hAbility:SetActivated(false)
-		end
 		if hAbility then
 			hAbility:SetLevel(nLevel)
 			self:UpdateNetTable()

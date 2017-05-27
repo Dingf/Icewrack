@@ -6,7 +6,32 @@ function OnActionBarIconActivateEvent(hContextPanel, tArgs)
 	var nAbilityIndex = hContextPanel.GetAttributeInt("abilityindex", -1);
 	if ((nEntityIndex !== -1) && (nAbilityIndex !== -1))
 	{
-		Abilities.ExecuteAbility(nAbilityIndex, nEntityIndex, false);
+		var nSkillMask = hContextPanel.GetAttributeInt("skill_mask", 0);
+		if (nSkillMask !== 0)
+		{
+			var szErrorMessage = $.Localize("#iw_error_insufficient_skill") + " - ";
+			var bIsFirstSkill = true;
+			for (var i = 0; i < 4; i++)
+			{
+				var nSkill = (nSkillMask >>> (i << 3)) & 0xFF;
+				if ((nSkill !== 0) && (nSkill <= 26))
+				{
+					if (bIsFirstSkill)
+						bIsFirstSkill = false;
+					else
+						szErrorMessage += ", ";
+					
+					var szSkillName = $.Localize("#iw_ui_character_skills_" + Math.floor((nSkill - 1)/13) + "_" + (nSkill - 1) % 13);
+					szErrorMessage += szSkillName;
+				}
+			}
+			Game.EmitSound("UI.Invalid");
+			GameUI.ShowErrorMessage(szErrorMessage, true);
+		}
+		else
+		{
+			Abilities.ExecuteAbility(nAbilityIndex, nEntityIndex, false);
+		}
 	}
 	return true;
 }
@@ -22,17 +47,42 @@ function OnActionBarIconDoubleClickEvent(hContextPanel, tArgs)
 	var nAbilityIndex = hContextPanel.GetAttributeInt("abilityindex", -1);
 	if ((nEntityIndex !== -1) && (nAbilityIndex !== -1))
 	{
-		if (Abilities.IsToggle(nAbilityIndex))
+		var nSkillMask = hContextPanel.GetAttributeInt("skill_mask", 0);
+		if (nSkillMask !== 0)
 		{
-			Abilities.ExecuteAbility(nAbilityIndex, nEntityIndex, false);
-		}
-		else if (Abilities.IsAutocast(nAbilityIndex))
-		{
-			Game.PrepareUnitOrders({ OrderType:dotaunitorder_t.DOTA_UNIT_ORDER_CAST_TOGGLE_AUTO, AbilityIndex:nAbilityIndex });
+			var szErrorMessage = $.Localize("#iw_error_insufficient_skill") + " - ";
+			var bIsFirstSkill = true;
+			for (var i = 0; i < 4; i++)
+			{
+				var nSkill = (nSkillMask >>> (i << 3)) & 0xFF;
+				if ((nSkill !== 0) && (nSkill <= 26))
+				{
+					if (bIsFirstSkill)
+						bIsFirstSkill = false;
+					else
+						szErrorMessage += ", ";
+					
+					var szSkillName = $.Localize("#iw_ui_character_skills_" + Math.floor((nSkill - 1)/13) + "_" + (nSkill - 1) % 13);
+					szErrorMessage += szSkillName;
+				}
+			}
+			Game.EmitSound("UI.Invalid");
+			GameUI.ShowErrorMessage(szErrorMessage, true);
 		}
 		else
 		{
-			Abilities.CreateDoubleTapCastOrder(nAbilityIndex, nEntityIndex);
+			if (Abilities.IsToggle(nAbilityIndex))
+			{
+				Abilities.ExecuteAbility(nAbilityIndex, nEntityIndex, false);
+			}
+			else if (Abilities.IsAutocast(nAbilityIndex))
+			{
+				Game.PrepareUnitOrders({ OrderType:dotaunitorder_t.DOTA_UNIT_ORDER_CAST_TOGGLE_AUTO, AbilityIndex:nAbilityIndex });
+			}
+			else
+			{
+				Abilities.CreateDoubleTapCastOrder(nAbilityIndex, nEntityIndex);
+			}
 		}
 	}
 	return true;
@@ -50,7 +100,7 @@ function OnActionBarIconContextMenu()
 	if (tPartyCombatTable.State === 1)
 	{
 		Game.EmitSound("UI.Invalid");
-        GameEvents.SendEventClientSide("dota_hud_error_message", { reason:65, message:"" });
+		GameUI.ShowErrorMessage("#iw_error_cant_memorize_in_combat");
 	}
 	else if (!Entities.IsEnemy(nEntityIndex))
 	{
@@ -300,7 +350,7 @@ function UpdateActionBarIconCooldown(hContextPanel)
 
 function OnActionBarIconRefresh(hContextPanel, tArgs)
 {
-	var nCasterIndex = hContextPanel.GetAttributeInt("caster", -1);
+	var nEntityIndex = hContextPanel.GetAttributeInt("caster", -1);
 	var nAbilityIndex = hContextPanel.GetAttributeInt("abilityindex", -1);
 	
 	hContextPanel.FindChildTraverse("ManaIndicator").visible = false;
@@ -308,39 +358,53 @@ function OnActionBarIconRefresh(hContextPanel, tArgs)
 	hContextPanel.FindChildTraverse("StaminaIndicator").visible = false;
 	hContextPanel.FindChildTraverse("StaminaLabel").visible = false;
 	
-	if (nAbilityIndex !== -1)
+	if ((nAbilityIndex !== -1) && (nEntityIndex !== -1))
 	{
+		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
+		var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
+		var tSpellData = tEntitySpellbook.Spells[nAbilityIndex];
+				
 		var szAbilityTextureName = Abilities.GetAbilityTextureName(nAbilityIndex);
 		hContextPanel.FindChildTraverse("AbilityTexture").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
 		
-		var nCurrentLevel = Abilities.GetLevel(nAbilityIndex);
-		if (nCurrentLevel > 0)
+		var bIsSkillRequirementMet = true;
+		var nSkillMask = tSpellData ? tSpellData.skill : 0;
+		var nMissingMask = 0;
+		for (var i = 0; i < 4; i++)
 		{
-			var bIsAbilityActivated = Abilities.IsActivated(nAbilityIndex);
-			var nAbilityManaCost = Abilities.GetManaCost(nAbilityIndex);
-			if ((nAbilityManaCost > 0) && bIsAbilityActivated)
+			var nLevel = (nSkillMask >>> (i << 3)) & 0x07;
+			var nSkill = ((nSkillMask >>> (i << 3)) & 0xF8) >>> 3;
+			if ((nSkill !== 0) && (nSkill <= 26))
+			{
+				var nEntitySkill = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SKILL_FIRE + nSkill - 1)
+				if (nEntitySkill < nLevel)
+				{
+					nMissingMask |= (nSkill << (i << 3));
+					bIsSkillRequirementMet = false;
+				}
+			}
+		}
+		hContextPanel.SetAttributeInt("skill_mask", nMissingMask);
+		
+		var nCurrentLevel = Abilities.GetLevel(nAbilityIndex);
+		var bIsAbilityActivated = Abilities.IsActivated(nAbilityIndex);
+		if ((nCurrentLevel > 0) && bIsSkillRequirementMet && bIsAbilityActivated)
+		{
+			var nManaCost = Abilities.GetManaCost(nAbilityIndex);
+			if (nManaCost > 0)
 			{
 				hContextPanel.FindChildTraverse("ManaIndicator").visible = true;
 				hContextPanel.FindChildTraverse("ManaLabel").visible = true;
-				hContextPanel.FindChildTraverse("ManaLabel").text = "" + nAbilityManaCost;
+				hContextPanel.FindChildTraverse("ManaLabel").text = "" + nManaCost;
 			}
 			
-			var szAbilityName = Abilities.GetAbilityName(nAbilityIndex);
-			var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nCasterIndex);
-			if (tEntitySpellbook && bIsAbilityActivated)
+			var nStaminaCost = tSpellData.stamina;
+			if (nStaminaCost > 0)
 			{
-				var tSpellData = tEntitySpellbook.Spells[nAbilityIndex];
-				if (tSpellData)
-				{
-					var nStaminaCost = tSpellData.stamina;
-					if (nStaminaCost > 0)
-					{
-						hContextPanel.FindChildTraverse("StaminaIndicator").visible = true;
-						hContextPanel.FindChildTraverse("StaminaLabel").visible = true;
-						hContextPanel.FindChildTraverse("StaminaLabel").text = "" + nStaminaCost.toFixed(0);
-						hContextPanel.SetAttributeInt("stamina_cost", nStaminaCost);
-					}
-				}
+				hContextPanel.FindChildTraverse("StaminaIndicator").visible = true;
+				hContextPanel.FindChildTraverse("StaminaLabel").visible = true;
+				hContextPanel.FindChildTraverse("StaminaLabel").text = "" + nStaminaCost.toFixed(0);
+				hContextPanel.SetAttributeInt("stamina_cost", nStaminaCost);
 			}
 			
 			UpdateActionBarIconCooldown(hContextPanel);
@@ -377,14 +441,16 @@ function UpdateActionBarIcon()
 		
 		var nStaminaCost = $.GetContextPanel().GetAttributeInt("stamina_cost", 0);
 		var nStamina = tEntityData ? tEntityData.stamina : 0;
-		
+
 		var bLevelFlag = ((nLevel === 0) || !Abilities.IsActivated(nAbilityIndex));
-		var bManaFlag = (!bLevelFlag && (Entities.GetMana(nCasterIndex) < Abilities.GetManaCost(nAbilityIndex)));
-		var bStaminaFlag = (!bLevelFlag && !bManaFlag && (nStamina < nStaminaCost) && (nStaminaCost > 0));
+		var bSkillFlag = (!bLevelFlag && ($.GetContextPanel().GetAttributeInt("skill_mask", 0) !== 0));
+		var bManaFlag = (!bLevelFlag && !bSkillFlag && (Entities.GetMana(nCasterIndex) < Abilities.GetManaCost(nAbilityIndex)));
+		var bStaminaFlag = (!bLevelFlag && !bSkillFlag && !bManaFlag && (nStamina < nStaminaCost) && (nStaminaCost > 0));
 		var bActiveFlag = (nAbilityIndex === Abilities.GetLocalPlayerActiveAbility());
 		var bToggleFlag = Abilities.GetToggleState(nAbilityIndex);
 		
 		$("#AbilityTexture").SetHasClass("NoLevel", bLevelFlag);
+		$("#AbilityTexture").SetHasClass("NoSkill", bSkillFlag);
 		$("#AbilityTexture").SetHasClass("NoMana", bManaFlag);
 		$("#AbilityTexture").SetHasClass("NoStamina", bStaminaFlag);
 		$("#AbilityTexture").SetHasClass("IsActive", bActiveFlag || bToggleFlag);

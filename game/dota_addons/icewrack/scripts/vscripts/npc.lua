@@ -95,7 +95,7 @@ CIcewrackNPCEntity = setmetatable({}, { __call =
 			return hEntity
 		end
 		
-		if not hEntity:IsHero() then
+		if not hEntity:IsRealHero() then
 			local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
 			LogAssert(tExtEntityTemplate, "Failed to load template \"%d\" - no data exists for this entry.", hEntity:GetUnitName())
 			

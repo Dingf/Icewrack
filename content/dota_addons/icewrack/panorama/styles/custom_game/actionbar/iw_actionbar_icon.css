@@ -254,6 +254,13 @@
 	wash-color: #ffffff;
 }
 
+.NoSkill
+{
+	saturation: 0.0;
+	brightness: 0.75;
+	wash-color: #ffffff;
+}
+
 .NoMana
 {
 	saturation: 0.0;

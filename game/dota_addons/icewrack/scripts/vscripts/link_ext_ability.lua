@@ -303,7 +303,8 @@ function CExtAbilityLinker:CheckSkillRequirements(hEntity)
 	for i=1,4 do
 		local nLevel = bit32.extract(nAbilitySkill, (i-1)*8, 3)
 		local nSkill = bit32.extract(nAbilitySkill, ((i-1)*8)+3, 5)
-		if nSkill ~= 0 then
+		--TODO: Make this not hardcoded
+		if nSkill ~= 0 and nSkill <= 26 then
 			if hEntity:GetPropertyValue(IW_PROPERTY_SKILL_FIRE + nSkill - 1) < nLevel then
 				return false
 			end
@@ -431,12 +432,20 @@ function CExtAbilityLinker:CastFilterResult(vLocation, hTarget)
 			return UF_FAIL_CUSTOM
 		end
 	elseif IsServer() and not self._bCastFilterLock then
+		local hEntity = self:GetCaster()
 		if not self:IsFullyCastable() then
 			return UF_FAIL_CUSTOM
 		end
 	
 		self._bCastFilterLock = true
 		CTimer(0.03, function() self._bCastFilterLock = nil end)
+		
+		self._bSkillsFailed = false
+		if not self:CheckSkillRequirements(hEntity) then
+			self._bSkillsFailed = true
+			return UF_FAIL_CUSTOM
+		end
+		
 		
 		self._bFlagsFailed = false
 		if not self:EvaluateFlags(vLocation, hTarget) then
@@ -451,7 +460,7 @@ function CExtAbilityLinker:CastFilterResult(vLocation, hTarget)
 		end
 		
 		self._bEventFailed = false
-		if self:GetCaster():TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_CAST_FILTER) == UF_FAIL_CUSTOM then
+		if hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_CAST_FILTER) == UF_FAIL_CUSTOM then
 			self._bEventFailed = true
 			return UF_FAIL_CUSTOM
 		end
@@ -485,6 +494,7 @@ function CExtAbilityLinker:GetCustomCastError(vLocation, hTarget)
 	end
 	
 	if IsServer() then
+		if self._bSkillsFailed then return "#iw_error_insufficient_skill" end
 		if self._bFlagsFailed then return self:GetCustomCastErrorFlags(vLocation, hTarget) end
 		if self._bPrereqFailed then return "#iw_error_prereq_not_met" end
 		if self._bEventFailed then return self:GetCaster():TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_CAST_ERROR) end

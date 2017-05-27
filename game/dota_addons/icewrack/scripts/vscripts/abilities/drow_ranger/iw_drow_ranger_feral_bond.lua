@@ -25,14 +25,16 @@ function iw_drow_ranger_feral_bond:OnSpellStart()
 		local hEntity = self:GetCaster()
 		local hTarget = self:GetCursorTarget()
 		
-		--[[local tModifierArgs =
+		local tModifierArgs =
 		{
-			attrib_percent = 
-			attack_speed = 
+			attrib_percent = self:GetSpecialValueFor("attrib_percent")/100.0,
+			attack_speed = self:GetSpecialValueFor("attack_speed"),
 		}
 		
-		hTarget:AddNewModifier(hEntity, self, "modifier_iw_axe_battle_hunger", tModifierArgs)
-		hTarget:AddNewModifier(hTarget, self, "modifier_iw_axe_battle_hunger", tModifierArgs)]]
+		local hParentModifier = hEntity:AddNewModifier(hEntity, self, "modifier_iw_drow_ranger_feral_bond", tModifierArgs)
+		local hChildModifier = hTarget:AddNewModifier(hEntity, self, "modifier_iw_drow_ranger_feral_bond", tModifierArgs)
+		
+		hParentModifier:RefreshModifier()
 		--TODO: Make it so that this ability cannot be cast again
 		
 		hTarget:SetTeam(DOTA_TEAM_GOODGUYS)

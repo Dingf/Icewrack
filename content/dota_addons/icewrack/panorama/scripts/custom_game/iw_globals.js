@@ -39,6 +39,7 @@ function RegisterMouseCallback()
 	[ 
 		hRoot.FindChildTraverse("Scrollable"),
 		hRoot.FindChildTraverse("Camera"),
+		hRoot.FindChildTraverse("ErrorMessage"),
 	];
 	GameUI.SetMouseCallback(GlobalMouseCallback);
 }

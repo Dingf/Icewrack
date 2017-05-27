@@ -627,6 +627,10 @@ function CExtEntity:IsTargetDetected(hEntity)
 	return true
 end
 
+function CExtEntity:OnEntityRefresh()
+	self:RefreshEntity()
+end
+
 function CExtEntity:OnAttributesConfirm(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	if IsValidExtendedEntity(hEntity) and hEntity:IsRealHero() then

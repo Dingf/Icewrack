@@ -10,13 +10,18 @@ function UpdateXPBar()
 		var tXPData = CustomNetTables.GetTableValue("game", "xp");
 		var nCurrentLevelXP = tXPData[Entities.GetLevel(nEntityIndex)];
 		var nCurrentXP = Entities.GetCurrentXP(nEntityIndex) - nCurrentLevelXP;
-		var nNextLvlXP = Entities.GetNeededXPToLevel(nEntityIndex) - nCurrentLevelXP;
+		var nNextLevelXP = Entities.GetNeededXPToLevel(nEntityIndex) - nCurrentLevelXP;
 		if (Entities.GetLevel(nEntityIndex) === tXPData["max_level"])
 		{
 			nCurrentXP = 1;
-			nNextLvlXP = 1;
+			nNextLevelXP = 1;
 		}
-		$("#XPBar").FindChildTraverse("XPFill").style.width = (nCurrentXP * 738)/nNextLvlXP + "px";
+		else if (nNextLevelXP == 0)
+		{
+			nCurrentXP = 0;
+			nNextLevelXP = 1;
+		}
+		$("#XPBar").FindChildTraverse("XPFill").style.width = (nCurrentXP * 738)/nNextLevelXP + "px";
 	}
 	else
 	{

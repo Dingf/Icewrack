@@ -223,10 +223,6 @@ local function OnModifierDestroyDefault(self)
 end
 
 local function OnModifierRefreshDefault(self)
-	local hTarget = self:GetParent()
-	if IsServer() and hTarget:IsHero() then
-		hTarget:CalculateStatBonus()
-	end
 end
 
 function OnCreated(self, params)

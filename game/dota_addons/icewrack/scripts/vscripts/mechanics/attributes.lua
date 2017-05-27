@@ -60,19 +60,39 @@ stIcewrackAttributeValues =
 modifier_internal_attribute_bonus = class({})
 modifier_internal_attribute_bonus._tDeclareFunctionList =
 {
+	MODIFIER_PROPERTY_EXTRA_HEALTH_BONUS,
 	MODIFIER_PROPERTY_HEALTH_BONUS,
+	MODIFIER_PROPERTY_EXTRA_MANA_BONUS,
 	MODIFIER_PROPERTY_MANA_BONUS,
 	MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT
 }
 
+function modifier_internal_attribute_bonus:GetModifierExtraHealthBonus(args)
+	local hEntity = self:GetParent()
+	if not hEntity:IsRealHero() then
+		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_ENDURANCE) * 5.0) + (hEntity:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 2.0)
+	end
+end
+
 function modifier_internal_attribute_bonus:GetModifierHealthBonus(args)
 	local hEntity = self:GetParent()
-	return (hEntity:GetAttributeValue(IW_ATTRIBUTE_ENDURANCE) * 5.0) + (hEntity:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 2.0)
+	if hEntity:IsRealHero() then
+		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_ENDURANCE) * 5.0) + (hEntity:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 2.0)
+	end
+end 
+
+function modifier_internal_attribute_bonus:GetModifierExtraManaBonus(args)
+	local hEntity = self:GetParent()
+	if not hEntity:IsRealHero() then
+		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_INTELLIGENCE) * 2)
+	end
 end
 
 function modifier_internal_attribute_bonus:GetModifierManaBonus(args)
 	local hEntity = self:GetParent()
-	return (hEntity:GetAttributeValue(IW_ATTRIBUTE_INTELLIGENCE) * 2)
+	if hEntity:IsRealHero() then
+		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_INTELLIGENCE) * 2)
+	end
 end
 
 function modifier_internal_attribute_bonus:GetModifierAttackSpeedBonus_Constant(args)

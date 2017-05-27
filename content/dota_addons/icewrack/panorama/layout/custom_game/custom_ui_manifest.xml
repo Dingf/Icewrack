@@ -16,6 +16,7 @@
 	<Panel>
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/maps/map000/iw_map000.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/maps/main_menu/iw_main_menu.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/ui/iw_error.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/camera/iw_camera.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/pause/iw_pause.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/sidebar/iw_sidebar.xml" />

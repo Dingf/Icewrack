@@ -515,8 +515,8 @@
 		"AccuracyFlat"			"50"
 		"DodgeFlat"			"0"
 
-		"DamagePhysicalBase"		"30"
-		"DamagePhysicalVar"		"10"
+		"DamageSlashBase"		"30"
+		"DamageSlashVar"		"10"
 
 		"VisionMask"			"63"
 		"BehaviorAggressiveness"	"3"
