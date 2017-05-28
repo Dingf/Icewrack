@@ -59,5 +59,6 @@ function iw_drow_ranger_bullseye:OnProjectileHit(hTarget, vLocation)
 	DealAttackDamage(hEntity, tDamageTable)
 	hEntity:RemoveChild(self)
 	EmitSoundOn("Hero_DrowRanger.Bullseye.Impact", hTarget)
+	TriggerShatter(hTarget)
 	return true
 end

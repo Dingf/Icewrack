@@ -580,11 +580,12 @@
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"	
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
-		"AbilityTextureName"			"default"
+		"AbilityTextureName"			"iw_drow_ranger_feral_bond"
 
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.25"
-		"AbilityCastRange"			"900"
+		"AbilityCastRange"			"150"
+		"AbilityCooldown"			"1"
 
 		"Modifiers"
 		{

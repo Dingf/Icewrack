@@ -146,6 +146,8 @@
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_feral_bond.lua"
 
+		"ManaCost"		"40"
+
 		"AbilityCastAnimation"
 		{
 			"npc_dota_hero_drow_ranger"

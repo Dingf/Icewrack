@@ -171,7 +171,10 @@ function CIcewrackNPCEntity:GetHighestThreatTarget()
 end
 
 function CIcewrackNPCEntity:GetThreatForTarget(hTarget)
-	return self._tThreatTable[hTarget:entindex()] * self:GetBehaviorAggressiveness()
+	if CDOTA_BaseNPC.IsAlive(hTarget) and self._tThreatTable[hTarget:entindex()] then
+		return self._tThreatTable[hTarget:entindex()] * self:GetBehaviorAggressiveness()
+	end
+	return 0
 end
 
 function CIcewrackNPCEntity:AddThreat(hEntity, fThreatAmount, bUseDistance)

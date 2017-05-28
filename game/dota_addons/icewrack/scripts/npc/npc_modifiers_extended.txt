@@ -700,9 +700,11 @@
 		{
 			"ScriptFile"			"scripts/vscripts/abilities/drow_ranger/modifier_iw_drow_ranger_feral_bond.lua"
 
+			"Texture"			"iw_drow_ranger_feral_bond"
+
 			"Properties"		{}
 
-			"DatadrivenAttributes"		""
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
 			"DatadrivenStates"	{}
 			"DatadrivenProperties"		{}
 			"DatadrivenEvents" {}

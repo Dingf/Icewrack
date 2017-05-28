@@ -6,8 +6,8 @@ function OnIntervalThink(self, keys)
 		self._fDamageRemainder = 0
 		self._tDamageTable =
 		{
-			target = keys.target,
-			attacker = keys.attacker,
+			target = self:GetParent(),
+			attacker = self:GetCaster(),
 			damage = {},
 		}
 	end

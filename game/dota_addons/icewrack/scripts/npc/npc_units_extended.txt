@@ -561,7 +561,7 @@
 		"BaseCritChance"		"1.0"
 		"LifestealPercent"		"100"
 
-		"AccuracyFlat"			"0"
+		"AccuracyFlat"			"100000"
 		"DodgeFlat"			"0"
 
 		"ArmorPierceFlat"		"2000"
