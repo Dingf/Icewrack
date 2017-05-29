@@ -11,7 +11,6 @@ require("ext_ability")
 require("ext_item")
 require("ext_entity")
 require("ext_modifier")
-require("corpse")
 require("party")
 require("interactable")
 require("inventory")
@@ -46,10 +45,15 @@ end
 
 function CIcewrackGameMode:OnEntityKilled(keys)
     local hEntity = EntIndexToHScript(keys.entindex_killed)
-	if IsValidExtendedEntity(hEntity) and not IsCorpseEntity(hEntity) then
+	if IsValidExtendedEntity(hEntity) then
 		if bit32.band(hEntity:GetUnitFlags(), IW_UNIT_FLAG_NO_CORPSE) == 0 and not TriggerShatter(hEntity) then
-			if hEntity ~= GameRules:GetPlayerHero() then
-				hEntity = CCorpseEntity(hEntity, true)
+			--TODO: Make it so that on lower difficulties, player heroes can be revived
+			--TODO: Make it so that on higher difficulties, the game ends when the player hero dies
+			if hEntity == GameRules:GetPlayerHero() and GameRules:GetCustomGameDifficulty() >= IW_DIFFICULTY_HARD then
+			else
+				local nDeathFrames = hEntity:GetPropertyValue(IW_PROPERTY_CORPSE_TIME)
+				local fDeathTime = (nDeathFrames - 1)/30.0
+				CTimer(fDeathTime, CExtEntity.CreateCorpse, hEntity);
 			end
 		end
 	end
@@ -87,7 +91,7 @@ local function OnInteractableActivate(hEntity, hTarget)
 	if next(GameRules.SharedUnitList) then
 		for k,v in pairs(GameRules.SharedUnitList) do
 			local hSelectedEntity = EntIndexToHScript(v)
-			if hTarget:InteractFilter(hSelectedEntity) then
+			if hTarget:OnInteractFilter(hSelectedEntity) then
 				local fDistance = hSelectedEntity:GetRangeToUnit(hTarget) - hTarget:GetHullRadius() - hSelectedEntity:GetHullRadius()
 					if not hBestEntity or fDistance < fBestDistance then
 					hBestEntity = hSelectedEntity
@@ -95,7 +99,7 @@ local function OnInteractableActivate(hEntity, hTarget)
 				end
 			end
 		end
-	elseif hTarget:InteractFilter(hEntity) then
+	elseif hTarget:OnInteractFilter(hEntity) then
 		hBestEntity = hEntity
 	end
 	
@@ -107,25 +111,23 @@ local function OnInteractableActivate(hEntity, hTarget)
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vPosition, false)
 			
 			if not hTarget:OnInteract(hEntity) then
-				local szErrorMessage = hTarget:GetCustomInteractError(hEntity)
+				local szErrorMessage = hTarget:OnGetCustomInteractError(hEntity)
 				if szErrorMessage then
 					--TODO: Implement the error message here
 				end
 			end
-			return false
+			return IW_INTERACTABLE_RESULT_SUCCESS
 		else
 			CTimer(0.03, CExtEntity.IssueOrder, hEntity, DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false, true)
-			return true
+			return IW_INTERACTABLE_RESULT_EN_ROUTE
 		end
-	elseif hBestEntity then
-		return false
 	end
-	return true
+	return IW_INTERACTABLE_RESULT_FAIL
 end
 
 local function OnMoveToTarget(hEntity, hTarget)
-	if IsValidInteractable(hTarget) then
-		return OnInteractableActivate(hEntity, hTarget)
+	if IsValidInteractable(hTarget) and OnInteractableActivate(hEntity, hTarget) ~= IW_INTERACTABLE_RESULT_FAIL then
+		return true
 	end
 	return true
 end
@@ -156,6 +158,15 @@ local function OnDelayedVisionAttack(hEntity, hTarget)
 end
 
 local function OnAttackTarget(hEntity, hTarget)
+	if IsValidInteractable(hTarget) then
+		local nResult = OnInteractableActivate(hEntity, hTarget)
+		if nResult == IW_INTERACTABLE_RESULT_EN_ROUTE then
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
+			return false
+		elseif nResult == IW_INTERACTABLE_RESULT_SUCCESS then
+			return false
+		end
+	end
 	if IsValidExtendedEntity(hEntity) and not hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) then
 		hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, hTarget:GetAbsOrigin(), false)
 		CTimer(0.03, OnDelayedVisionAttack, hEntity, hTarget)

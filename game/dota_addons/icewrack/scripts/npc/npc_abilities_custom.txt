@@ -375,7 +375,7 @@
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"threshold"			"40.0"
+				"damage_missing"		"2.0"
 			}
 		}
 	}

@@ -68,23 +68,43 @@
 	"internal_corpse"
 	{
 		"BaseClass"				"item_datadriven"
-		"AbilityBehavior"			"DOTA_ABILITY_PASSIVE | DOTA_ABILITY_BEHAVIOR_HIDDEN"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
 		
+		"AbilityChannelTime"			"8.0"
+
+		"OnChannelFinish"
+		{
+			"RunScript"
+	            	{
+	            		"ScriptFile"		"scripts/vscripts/ext_entity.lua"
+	            		"Function"		"OnCorpseReviveFinish"
+	            	}
+		}
+
+		"OnChannelInterrupted"
+		{
+			"RunScript"
+	            	{
+	            		"ScriptFile"		"scripts/vscripts/ext_entity.lua"
+	            		"Function"		"OnCorpseReviveInterrupted"
+	            	}
+		}
+
 		"Modifiers"
 		{
 			"modifier_internal_corpse_state"
 			{
-				"Passive"						"1"
 				"IsHidden"						"1"
 				"Attributes"						"MODIFIER_ATTRIBUTE_PERMANENT"
 
 				"States"
-				{
+				{	
 					"MODIFIER_STATE_STUNNED"			"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_BLIND"				"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_FROZEN"				"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_PROVIDES_VISION"		"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_ATTACK_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_NIGHTMARED"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_LOW_ATTACK_PRIORITY"		"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_NO_UNIT_COLLISION"		"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_COMMAND_RESTRICTED"		"MODIFIER_STATE_VALUE_ENABLED"
 				}

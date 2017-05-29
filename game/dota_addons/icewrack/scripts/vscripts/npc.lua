@@ -235,7 +235,7 @@ function CIcewrackNPCEntity:DetectEntity(hEntity, fDetectTime)
 		local hNearbyEntities = Entities:FindAllInSphere(self:GetAbsOrigin(), fShareRadius)
 		for k,v in pairs(hNearbyEntities) do
 			if v:GetTeamNumber() == self:GetTeamNumber() and IsValidNPCEntity(v) then
-				if v ~= self and v:GetBehaviorCooperativeness() >= IW_NPC_BEHAVIOR_C_SOCIAL then
+				if v ~= self and v:GetBehaviorCooperativeness() >= IW_NPC_BEHAVIOR_COOP_SOCIAL then
 					v._tDetectTable[nEntityIndex] = GameRules:GetGameTime() + fDetectTime
 					if v:GetBehaviorAggressiveness() >= IW_NPC_BEHAVIOR_AGGRO_TERRITORIAL and not v._tThreatTable[nEntityIndex] then
 						v._tThreatTable[nEntityIndex] = 10.0

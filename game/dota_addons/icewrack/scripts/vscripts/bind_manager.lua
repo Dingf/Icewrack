@@ -30,13 +30,13 @@ stDefaultBinds =
 	iw_select_all = "`",
 	iw_quicksave = "F5",
 	iw_quickload = "F9",
-	iw_menu_characters = "C",
+	--[[iw_menu_characters = "C",
 	iw_menu_party = "V",
 	iw_menu_inventory = "E",
 	iw_menu_skills = "D",
 	iw_menu_quests = "Q",
 	iw_menu_map = "W",
-	iw_menu_tactics = "T",
+	iw_menu_tactics = "T",]]
 	iw_menu_options = "ESC",
 	iw_toggle_run = "/",
 	iw_actionbar_1 = "1",
@@ -78,6 +78,12 @@ function CBindManager:RegisterBind(szKey, szCommand, hBindFunction)
 end
 
 function CBindManager:RegisterDefaultBinds(tBindData)
+	--TODO: Delete me
+	Convars:RegisterCommand("iw_override_unpause", function()
+		PauseGame(false)
+	end, "", 0)
+
+
 	Convars:RegisterCommand("iw_pause", function()
 		if not GameRules:GetMapInfo():IsOverride() then
 			GameRules.PauseState = (not GameRules.PauseState)

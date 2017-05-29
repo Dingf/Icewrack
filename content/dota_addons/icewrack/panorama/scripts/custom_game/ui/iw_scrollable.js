@@ -38,8 +38,11 @@ function OnScrollableMouseEvent(hContextPanel, tArgs)
 	if ((tScrollableStack.length > 0) && (tArgs.event === "wheeled"))
 	{
 		var hScrollablePanel = tScrollableStack[tScrollableStack.length-1];
-		DispatchCustomEvent(hScrollablePanel, "PanelScroll", { value:(tArgs.value * 32.0) });
-		return true;
+		if (hScrollablePanel.visible)
+		{
+			DispatchCustomEvent(hScrollablePanel, "PanelScroll", { value:(tArgs.value * 32.0) });
+			return true;
+		}
 	}
 	return false;
 }

@@ -9,7 +9,15 @@ local stInteractableTypeEnum =
 	IW_INTERACTABLE_TYPE_WORLD_OBJECT = 2,
 }
 
+local stInteractableResultEnum =
+{
+	IW_INTERACTABLE_RESULT_FAIL = 0,
+	IW_INTERACTABLE_RESULT_SUCCESS = 1,
+	IW_INTERACTABLE_RESULT_EN_ROUTE = 2,
+}
+
 for k,v in pairs(stInteractableTypeEnum) do _G[k] = v end
+for k,v in pairs(stInteractableResultEnum) do _G[k] = v end
 
 local stInteractableData = LoadKeyValues("scripts/npc/npc_interactables_extended.txt")
 
@@ -52,17 +60,19 @@ function CInteractable:IsInInteractRange(hEntity)
 	return true
 end
 
-function CInteractable:InteractFilter(hEntity)
-	LogMessage("Tried to access virtual function CInteractable:InteractFilter()", LOG_SEVERITY_WARNING)
-	return true
+function CInteractable:InteractFilterInclude(hEntity)
+	return false
 end
 
-function CInteractable:OnInteract(hEntity)
-	LogMessage("Tried to access virtual function CInteractable:OnInteract()", LOG_SEVERITY_WARNING)
+function CInteractable:InteractFilterExclude(hEntity)
+	return false
+end
+
+function CInteractable:Interact(hEntity)
+	return false
 end
 
 function CInteractable:GetCustomInteractError(hEntity)
-	LogMessage("Tried to access virtual function CInteractable:GetCustomInteractError()", LOG_SEVERITY_WARNING)
 	return nil
 end
 
@@ -77,6 +87,47 @@ function CInteractable:GetInteractZone()
 			return hTrigger
 		end
 	end
+end
+
+function CInteractable:OnInteractFilter(hEntity)
+	local tIndexMetatable = self
+	while tIndexMetatable do
+		local hIncludeFunction = rawget(tIndexMetatable, "InteractFilterInclude")
+		local hExcludeFunction = rawget(tIndexMetatable, "InteractFilterExclude")
+		if hIncludeFunction and hIncludeFunction(self, hEntity) then
+			return true
+		elseif hExcludeFunction and not hExcludeFunction(self, hEntity) then
+			return false
+		end
+		tIndexMetatable = getmetatable(tIndexMetatable).__index
+	end
+	return false
+end
+
+function CInteractable:OnInteract(hEntity)
+	local tIndexMetatable = self
+	while tIndexMetatable do
+		local hFunction = rawget(tIndexMetatable, "Interact")
+		if hFunction then
+			local bResult = hFunction(self, hEntity)
+			if type(bResult) == "boolean" then return bResult end
+		end
+		tIndexMetatable = getmetatable(tIndexMetatable).__index
+	end
+	return true
+end
+
+function CInteractable:OnGetCustomInteractError(hEntity)
+	local tIndexMetatable = self
+	while tIndexMetatable do
+		local hFunction = rawget(tIndexMetatable, "GetCustomInteractError")
+		if hFunction then
+			local szMessage = hFunction(self, hEntity)
+			if type(szMessage) == "boolean" then return szMessage end
+		end
+		tIndexMetatable = getmetatable(tIndexMetatable).__index
+	end
+	return true
 end
 
 function IsValidInteractable(hEntity)

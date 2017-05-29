@@ -179,6 +179,8 @@ function UpdateActionBarBuffs(nEntityIndex)
 			continue;
 		
 		var szModifierName = Buffs.GetName(nEntityIndex, nBuffIndex);
+		if (szModifierName == "modifier_elder_titan_echo_stomp")	//TODO: Remove me when we figure out a better way to do attack-move immunity
+			continue;
 		if (nBuffCount >= tBuffIcons.length)
 		{
 			var hIcon = CreateBuffIcon(hContainer, "BuffIcon" + (nBuffCount + 1), nEntityIndex, nBuffIndex);

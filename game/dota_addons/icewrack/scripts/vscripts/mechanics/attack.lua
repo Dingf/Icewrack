@@ -2,6 +2,7 @@ if IsServer() and not modifier_internal_attack then
 
 require("ext_entity")
 require("ext_item")
+require("interactable")
 require("npc")
 require("mechanics/accuracy")
 
@@ -47,7 +48,7 @@ end
 function OnAttackStart(self, keys)
 	local hTarget = keys.target
 	local hAttacker = keys.attacker
-	if IsValidExtendedEntity(hTarget) and IsValidExtendedEntity(hAttacker) then
+	if IsValidExtendedEntity(hTarget) and IsValidExtendedEntity(hAttacker) and not hTarget:IsCorpse() then
 		if not hAttacker:IsTargetInLOS(hTarget) then
 			hAttacker:Stop()
 			hAttacker:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)

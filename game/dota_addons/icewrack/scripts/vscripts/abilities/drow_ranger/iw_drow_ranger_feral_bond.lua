@@ -31,14 +31,20 @@ function iw_drow_ranger_feral_bond:OnSpellStart()
 			attack_speed = self:GetSpecialValueFor("attack_speed"),
 		}
 		
-		local hParentModifier = hEntity:AddNewModifier(hEntity, self, "modifier_iw_drow_ranger_feral_bond", tModifierArgs)
-		local hChildModifier = hTarget:AddNewModifier(hEntity, self, "modifier_iw_drow_ranger_feral_bond", tModifierArgs)
-		
-		hParentModifier:RefreshModifier()
-		
 		hTarget:SetTeam(DOTA_TEAM_GOODGUYS)
 		hTarget:SetControllableByPlayer(0, true)
 		hTarget:Stop()
+		
+		local hParentModifier = hEntity:AddNewModifier(hEntity, self, "modifier_iw_drow_ranger_feral_bond", tModifierArgs)
+		local hChildModifier = hTarget:AddNewModifier(hEntity, self, "modifier_iw_drow_ranger_feral_bond", tModifierArgs)
+		hParentModifier:RefreshModifier()
+		
+		local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_drow/drow_feral_bond_cast.vpcf", PATTACH_ABSORIGIN_FOLLOW, hTarget)
+		ParticleManager:SetParticleControl(nParticleID, 2, hTarget:GetAbsOrigin())
+		ParticleManager:SetParticleControlForward(nParticleID, 2, hTarget:GetForwardVector())
+		ParticleManager:ReleaseParticleIndex(nParticleID)
+		
+		EmitSoundOn("Hero_DrowRanger.FeralBond", hTarget)
 		
 		self:SetActivated(false)
 	end

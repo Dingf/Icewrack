@@ -89,8 +89,8 @@ local function ShowDialogueNode(nDialogueID)
 	return false
 end
 
-function CDialogueEntity:InteractFilter(hEntity)
-	return hEntity == GameRules:GetPlayerHero()
+function CDialogueEntity:InteractFilterInclude(hEntity)
+	return self:IsAlive() and hEntity == GameRules:GetPlayerHero()
 end
 
 function CDialogueEntity:OnInteract(hEntity)
@@ -100,11 +100,12 @@ function CDialogueEntity:OnInteract(hEntity)
 			self:SetAbsOrigin(vPosition + (vPosition - hEntity:GetAbsOrigin()):Normalized())
 			self:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vPosition, false)
 			PlayerResource:SetCameraTarget(0, hEntity)
+			return true
 		end
 	end
 end
 
-function CDialogueEntity:GetCustomInteractError(hEntity)
+function CDialogueEntity:OnGetCustomInteractError(hEntity)
 	return nil
 end
 

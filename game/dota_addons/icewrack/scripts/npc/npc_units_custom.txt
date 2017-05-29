@@ -340,7 +340,7 @@
 		"BaseClass"				"npc_dota_creep"
 		"SoundSet"				"LoneDruid_SpiritBear"
 		"Level"					"1"
-		"ModelScale" 				"2"
+		"ModelScale" 				"1"
 	
 		// Abilities
 		//----------------------------------------------------------------

@@ -6,7 +6,7 @@ function iw_drow_ranger_bullseye:OnAbilityPhaseStart()
 	return true
 end
 
-function iw_drow_ranger_bullseye:CastFilterResult()
+function iw_drow_ranger_bullseye:CastFilterResultTarget(hTarget)
 	if IsServer() then
 		local hEntity = self:GetCaster()
 		local hAttackSource = hEntity:GetCurrentAttackSource()
@@ -21,7 +21,7 @@ function iw_drow_ranger_bullseye:CastFilterResult()
 	end
 end
 
-function iw_drow_ranger_bullseye:GetCustomCastError()
+function iw_drow_ranger_bullseye:GetCustomCastErrorTarget(hTarget)
 	if self._bEquipFailed then return "#iw_error_cast_bow" end
 end
 
@@ -60,5 +60,8 @@ function iw_drow_ranger_bullseye:OnProjectileHit(hTarget, vLocation)
 	hEntity:RemoveChild(self)
 	EmitSoundOn("Hero_DrowRanger.Bullseye.Impact", hTarget)
 	TriggerShatter(hTarget)
+	if hTarget:GetHealth() == 0 then
+		EmitSoundOn("drowranger_dro_kill_02", hEntity)
+	end
 	return true
 end

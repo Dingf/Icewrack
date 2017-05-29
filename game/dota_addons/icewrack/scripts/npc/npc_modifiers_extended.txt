@@ -700,6 +700,8 @@
 		{
 			"ScriptFile"			"scripts/vscripts/abilities/drow_ranger/modifier_iw_drow_ranger_feral_bond.lua"
 
+			"ModifierEntityFlags"		"IW_UNIT_FLAG_CAN_REVIVE"
+
 			"Texture"			"iw_drow_ranger_feral_bond"
 
 			"Properties"		{}

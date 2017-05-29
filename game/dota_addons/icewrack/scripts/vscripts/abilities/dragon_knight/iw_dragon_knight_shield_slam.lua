@@ -1,6 +1,6 @@
 iw_dragon_knight_shield_slam = class({})
 
-function iw_dragon_knight_shield_slam:CastFilterResultTarget()
+function iw_dragon_knight_shield_slam:CastFilterResultTarget(hTarget)
 	if IsServer() then
 		self._bEquipFailed = false
 		local hEntity = self:GetCaster()
@@ -21,7 +21,7 @@ function iw_dragon_knight_shield_slam:CastFilterResultTarget()
 	end
 end
 
-function iw_dragon_knight_shield_slam:GetCustomCastErrorTarget()
+function iw_dragon_knight_shield_slam:GetCustomCastErrorTarget(hTarget)
 	if self._bEquipFailed then return "#iw_error_cast_shield" end
 end
 

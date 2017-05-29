@@ -19,6 +19,7 @@ end
 require("mechanics/attributes")
 require("mechanics/skills")
 require("instance")
+require("container")
 
 stExtEntityUnitClassEnum =
 {  
@@ -84,6 +85,8 @@ stExtEntityFlagEnum =
 	IW_UNIT_FLAG_MASSIVE = 1,
 	IW_UNIT_FLAG_FLYING = 2,
 	IW_UNIT_FLAG_NO_CORPSE = 4,
+	IW_UNIT_FLAG_CAN_REVIVE = 8,
+	IW_UNIT_FLAG_CONSIDERED_DEAD = 16,
 	--IW_UNIT_FLAG_REQ_ATTACK_SOURCE = 8
 }
 
@@ -94,7 +97,7 @@ for k,v in pairs(stExtEntityFlagEnum) do _G[k] = v end
 
 local shItemAttackModifier = CreateItem("internal_attack", nil, nil)
 local shItemStaminaModifier = CreateItem("internal_stamina", nil, nil)
-local shItemMovementNoise = CreateItem("internal_movement_noise", nil, nil)
+local shItemMoveNoiseModifier = CreateItem("internal_movement_noise", nil, nil)
 local shItemAttributeModifier = CreateItem("internal_attribute_bonus", nil, nil)
 local shItemSkillModifier = CreateItem("internal_skill_bonus", nil, nil)
 
@@ -118,16 +121,16 @@ CExtEntity = setmetatable({}, { __call =
 		local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
 		LogAssert(tExtEntityTemplate, "Failed to load template \"%d\" - no data exists for this entry.", hEntity:GetUnitName())
 		
-		hEntity = CInstance(hEntity, nInstanceID)
+		hEntity = CContainer(hEntity, nInstanceID)
 		local tBaseIndexTable = getmetatable(hEntity).__index
 		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
 		if not tExtIndexTable then
 			tExtIndexTable = ExtendIndexTable(hEntity, CExtEntity)
+			tExtIndexTable.__index._bIsExtendedEntity = true
 			tIndexTableList[tBaseIndexTable] = tExtIndexTable
 		end
 		setmetatable(hEntity, tExtIndexTable)
 		
-		hEntity._bIsExtendedEntity = true
 		hEntity._nUnitClass   = stExtEntityUnitClassEnum[tExtEntityTemplate.UnitClass] or IW_UNIT_CLASS_NORMAL
 		hEntity._nUnitType 	  = stExtEntityUnitTypeEnum[tExtEntityTemplate.UnitType] or 0
 		hEntity._nUnitSubtype = stExtEntityUnitSubtypeEnum[tExtEntityTemplate.UnitSubtype] or IW_UNIT_SUBTYPE_NONE
@@ -178,7 +181,7 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity:AddNewModifier(hEntity, shItemAttackModifier, "modifier_internal_attack", {})
 		hEntity:AddNewModifier(hEntity, shItemStaminaModifier, "modifier_internal_stamina", {})
 		hEntity:AddNewModifier(hEntity, shItemAttributeModifier, "modifier_internal_attribute_bonus", {})
-		hEntity:AddNewModifier(hEntity, shItemMovementNoise, "modifier_internal_movement_noise", {})
+		hEntity:AddNewModifier(hEntity, shItemMoveNoiseModifier, "modifier_internal_movement_noise", {})
 		hEntity:AddNewModifier(hEntity, shItemSkillModifier, "modifier_internal_skill_bonus", {})
 		
 		if tExtEntityTemplate.IsPlayableHero == 1 then
@@ -273,6 +276,22 @@ end
 
 function CExtEntity:IsFlying()
 	return bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_FLYING)
+end
+
+function CExtEntity:IsRevivable()
+	return GameRules:GetCustomGameDifficulty() <= IW_DIFFICULTY_NORMAL and bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_CAN_REVIVE)
+end
+
+function CExtEntity:IsCorpse()
+	return self:HasModifier("modifier_internal_corpse_state") or bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_CONSIDERED_DEAD)
+end
+
+function CExtEntity:IsAlive()
+	if self:IsCorpse() then
+		return false
+	else
+		return CBaseEntity.IsAlive(self)
+	end
 end
 
 function CExtEntity:IsDualWielding()
@@ -392,6 +411,50 @@ function CExtEntity:AddExperience(fAmount)
 			self:RefreshEntity()
 		end
 	end
+end
+
+function CExtEntity:CreateCorpse()
+	self:RespawnUnit()
+	self._hCorpseItem = CreateItem("internal_corpse", nil, nil)
+	self:AddItem(self._hCorpseItem)
+	self._hCorpseItem:ApplyDataDrivenModifier(self, self, "modifier_internal_corpse_state", {})
+	
+	--This is a dumb hack but Valve hasn't exposed a method for making targets unattackable with attack-move
+	self:AddAbility("elder_titan_echo_stomp")
+	local hAbility = self:FindAbilityByName("elder_titan_echo_stomp")
+	self:AddNewModifier(self, hAbility, "modifier_elder_titan_echo_stomp", { duration=99999999 })
+	
+	if not self:IsRevivable() then
+		local hInventory = self:GetInventory()		
+		if hInventory:IsEmpty() then
+			self._hCorpseItem:ApplyDataDrivenModifier(self, self, "modifier_internal_corpse_unselectable", {})
+		else
+			self._nCorpseListener = CustomGameEventManager:RegisterListener("iw_lootable_interact", function(_, args) self:OnCorpseLootableInteract(args) end)
+		end
+	end
+end
+
+function CExtEntity:OnCorpseLootableInteract(args)
+	if args.lootable == self:entindex() then
+		local hInventory = self:GetInventory()
+		if hInventory:IsEmpty() then
+			self._hCorpseItem:ApplyDataDrivenModifier(self, self, "modifier_internal_corpse_unselectable", {})
+			CustomGameEventManager:UnregisterListener(self._nCorpseListener)
+		end
+	end
+end
+
+function CExtEntity:OnCorpseReviveInterrupted(args)
+	--self:RemoveItem(self._hCorpseItem)
+end
+
+function CExtEntity:OnCorpseReviveFinish(args)
+	self:RemoveAbility("elder_titan_echo_stomp")
+	self:RemoveModifierByName("modifier_elder_titan_echo_stomp")
+	self:RemoveItem(self._hCorpseItem)
+	self.RemoveModifierByName("modifier_internal_corpse_state")
+	self.RemoveModifierByName("modifier_internal_corpse_unselectable")
+	self._hCorpseItem = nil
 end
 
 function CExtEntity:SetAttacking(hEntity)
@@ -615,10 +678,6 @@ function CExtEntity:GetSpellbook()
 	return nil
 end
 
-function CExtEntity:GetInventory()
-	return nil
-end
-
 function CExtEntity:RefreshLoadout()
 	return nil
 end
@@ -671,6 +730,22 @@ function CExtEntity:OnToggleRun(args)
 	if IsValidExtendedEntity(hEntity) and hEntity:IsControllableByAnyPlayer() then
 		hEntity:ToggleRunMode()
 	end
+end
+
+function CExtEntity:Interact(hEntity)
+	if not self:HasModifier("modifier_internal_corpse_state") then
+		return false
+	elseif self:IsRevivable() and self:GetTeamNumber() == hEntity:GetTeamNumber() then
+		--TODO: Implement revives for friendly party members/revivable units
+		return true
+	end
+end
+
+function CExtEntity:InteractFilterExclude(hEntity)
+	return not self:IsAlive() and hEntity:IsRealHero()
+end
+
+function CExtEntity:GetCustomInteractError(hEntity)
 end
 
 function IsValidExtendedEntity(hEntity)

@@ -70,16 +70,17 @@ function CWorldObject:OnCreated()
 	end
 end
 
-function CWorldObject:OnInteract(hEntity)
+function CWorldObject:Interact(hEntity)
 	if self._hPostcondition then
 		self._hPostcondition:EvaluateExpression()
 	end
 	if self.ScriptOnInteract then
-		self:ScriptOnInteract(hEntity)
+		return self:ScriptOnInteract(hEntity)
 	end
+	return true
 end
 
-function CWorldObject:InteractFilter(hEntity)
+function CWorldObject:InteractFilterExclude(hEntity)
 	if not self._hPrecondition:EvaluateExpression() then
 		return false
 	elseif self.ScriptInteractFilter then

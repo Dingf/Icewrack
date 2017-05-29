@@ -48,8 +48,8 @@
 		"EnduranceFlat"			"47"
 		"AgilityFlat"			"15"
 		"CunningFlat"			"24"
-		"IntelligenceFlat"		"16"
-		"WisdomFlat"			"8"
+		"IntelligenceFlat"		"12"
+		"WisdomFlat"			"11"
 
 		"SkillTwoHanded"		"4"
 		"SkillCombat"			"4"
@@ -85,12 +85,12 @@
 		"AccuracyFlat"			"65"
 		"DodgeFlat"			"0"
 
-		"StrengthFlat"			"42"
-		"EnduranceFlat"			"45"
+		"StrengthFlat"			"45"
+		"EnduranceFlat"			"51"
 		"AgilityFlat"			"14"
 		"CunningFlat"			"15"
 		"IntelligenceFlat"		"19"
-		"WisdomFlat"			"28"
+		"WisdomFlat"			"33"
 
 		"ResistPhysical"		"25"
 		"ResistFire"			"50"
@@ -99,7 +99,7 @@
 		"SkillOneHanded"		"3"
 		"SkillCombat"			"3"
 		"SkillArmor"			"3"
-		"SkillBody"			"3"
+		"SkillBody"			"2"
 
 		"MovementNoiseFlat"		"5"
 		"VisibilityFlat"		"1.5"
@@ -135,12 +135,12 @@
 		"AccuracyFlat"			"80"
 		"DodgeFlat"			"30"
 
-		"StrengthFlat"			"32"
-		"EnduranceFlat"			"24"
-		"AgilityFlat"			"44"
-		"CunningFlat"			"26"
-		"IntelligenceFlat"		"18"
-		"WisdomFlat"			"17"
+		"StrengthFlat"			"25"
+		"EnduranceFlat"			"17"
+		"AgilityFlat"			"35"
+		"CunningFlat"			"23"
+		"IntelligenceFlat"		"15"
+		"WisdomFlat"			"16"
 
 		"ResistCold"			"50"
 
@@ -178,11 +178,11 @@
 		"AccuracyFlat"			"70"
 		"DodgeFlat"			"25"
 
-		"StrengthFlat"			"26"
-		"EnduranceFlat"			"19"
-		"AgilityFlat"			"30"
+		"StrengthFlat"			"22"
+		"EnduranceFlat"			"18"
+		"AgilityFlat"			"32"
 		"CunningFlat"			"40"
-		"IntelligenceFlat"		"33"
+		"IntelligenceFlat"		"20"
 		"WisdomFlat"			"14"
 
 		"SkillOneHanded"		"3"
@@ -190,6 +190,8 @@
 		"SkillPerception"		"4"
 		"SkillStealth"			"3"
 		"SkillThievery"			"2"
+		"SkillShadow"			"2"
+		"SkillSpeech"			"3"
 
 		"MovementNoiseFlat"		"2"
 	}
@@ -220,12 +222,12 @@
 		"AccuracyFlat"			"50"
 		"DodgeFlat"			"0"
 
-		"StrengthFlat"			"12"
-		"EnduranceFlat"			"15"
-		"AgilityFlat"			"18"
-		"CunningFlat"			"35"
+		"StrengthFlat"			"13"
+		"EnduranceFlat"			"10"
+		"AgilityFlat"			"11"
+		"CunningFlat"			"26"
 		"IntelligenceFlat"		"55"
-		"WisdomFlat"			"29"
+		"WisdomFlat"			"25"
 
 		"ResistFire"			"90"
 		"MaxResistFire"			"15"

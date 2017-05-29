@@ -42,7 +42,6 @@ if _VERSION < "Lua 5.2" then
     bit32 = bit.bit32
 end
 
-require("corpse")
 require("ext_entity")
 require("ext_ability")
 require("party")
@@ -643,7 +642,7 @@ function CAutomatorCondition:SelectTarget(hEntity, tRememberedUnitList)
 		end
 		
 		for k,v in pairs(tTargetList) do
-			if not (IsCorpseEntity(v) or IsValidExtendedEntity(v)) or (v:IsAlive() == bCanTargetDead) then
+			if not IsValidExtendedEntity(v) or (v:IsAlive() == bCanTargetDead) then
 				tTargetList[k] = nil
 			end
 			if not hEntity:IsTargetInLOS(v) or (not hEntity:IsTargetDetected(v) and v:GetTeamNumber() ~= hEntity:GetTeamNumber()) then

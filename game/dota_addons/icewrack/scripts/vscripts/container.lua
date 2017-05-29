@@ -25,6 +25,7 @@ CContainer = setmetatable({}, { __call =
 		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
 		if not tExtIndexTable then
 			tExtIndexTable = ExtendIndexTable(hEntity, CContainer)
+			tExtIndexTable.__index._bIsContainer = true
 			tIndexTableList[tBaseIndexTable] = tExtIndexTable
 		end
 		setmetatable(hEntity, tExtIndexTable)
@@ -44,19 +45,22 @@ CContainer = setmetatable({}, { __call =
 	end
 })
 
-function CContainer:OnInteract(hEntity)
-	CustomGameEventManager:Send_ServerToAllClients("iw_lootable_interact", { entindex = hEntity:entindex(), lootable = self:entindex() })
+function CContainer:Interact(hEntity)
+	if hEntity:IsRealHero() then
+		CustomGameEventManager:Send_ServerToAllClients("iw_lootable_interact", { entindex = hEntity:entindex(), lootable = self:entindex() })
+		return true
+	end
 end
 
-function CContainer:InteractFilter(hEntity)
+function CContainer:InteractFilterInclude(hEntity)
 	return hEntity:IsRealHero()
 end
 
 function CContainer:GetCustomInteractError(hEntity)
 end
 
-function IsValidContainer(hProp)
-    return (IsValidInstance(hProp) and IsValidEntity(hProp) and hProp._bIsContainer == true)
+function IsValidContainer(hEntity)
+    return (IsValidInstance(hEntity) and IsValidEntity(hEntity) and hEntity._bIsContainer == true)
 end
 
 end

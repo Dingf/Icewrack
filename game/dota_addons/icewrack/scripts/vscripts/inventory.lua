@@ -8,7 +8,6 @@ if not CInventory then
 
 require("mechanics/attributes")
 require("mechanics/modifier_triggers")
-require("ext_entity")
 require("ext_item")
 require("ext_modifier")
 
@@ -18,12 +17,12 @@ end
 
 CInventory = setmetatable({}, { __call = 
 	function(self, hEntity)
-		LogAssert(IsValidExtendedEntity(hEntity) or IsValidContainer(hEntity), "Type mismatch (expected \"%s\", got %s)", "CExtEntity\" or \"CContainer", type(hEntity))
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), "Type mismatch (expected \"%s\", got %s)", "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._hInventory and hEntity._hInventory._bIsInventory then
 			return hEntity._hInventory
 		end
 			
-		self = setmetatable({}, {__index = CInventory})
+		self = setmetatable({ _bIsInventory = true }, {__index = CInventory})
 		
 		hEntity._hInventory = self
 		hEntity.GetInventory = GetInventory

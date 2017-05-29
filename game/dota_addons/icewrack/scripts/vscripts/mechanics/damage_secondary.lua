@@ -21,7 +21,7 @@ function DealSecondaryDamage(self, keys)
 	if not hVictim or not hVictim:IsAlive() or hVictim:IsInvulnerable() then
 		return false
 	end
-	if IsValidExtendedEntity(hVictim) and IsValidExtendedEntity(hAttacker) then
+	if IsValidExtendedEntity(hVictim) and IsValidExtendedEntity(hAttacker) and hVictim:IsAlive() then
 		local bDamageResult = false
 		for k,v in pairs(stIcewrackDamageTypeEnum) do
 			local nDamageType = v

@@ -6,7 +6,7 @@ function iw_axe_culling_blade:OnAbilityPhaseStart()
 	return true
 end
 
-function iw_axe_culling_blade:CastFilterResultTarget()
+function iw_axe_culling_blade:CastFilterResultTarget(hTarget)
 	if IsServer() then
 		local hEntity = self:GetCaster()
 		local hAttackSource = hEntity:GetCurrentAttackSource()
@@ -21,7 +21,7 @@ function iw_axe_culling_blade:CastFilterResultTarget()
 	end
 end
 
-function iw_axe_culling_blade:GetCustomCastErrorTarget()
+function iw_axe_culling_blade:GetCustomCastErrorTarget(hTarget)
 	if self._bEquipFailed then return "#iw_error_cast_2h_melee" end
 end
 

@@ -6,7 +6,7 @@ function UpdateStatusBarEntity(nEntityIndex)
 	$.GetContextPanel().visible = true;
 	$("#Name").text = $.Localize("#" + Entities.GetUnitName(nEntityIndex));
 	if (bIsCorpseEntity)
-		$("#Name").text += " ( Corpse )";
+		$("#Name").text += $.Localize("#iw_ui_corpse_suffix");
 	
 	var fHealth = bIsCorpseEntity ? 0 : Entities.GetHealth(nEntityIndex);
 	var fMaxHealth = Entities.GetMaxHealth(nEntityIndex);
@@ -21,6 +21,8 @@ function UpdateStatusBarEntity(nEntityIndex)
 			continue;
 
 		var szModifierName = Buffs.GetName(nEntityIndex, nBuffIndex);
+		if (szModifierName == "modifier_elder_titan_echo_stomp")	//TODO: Remove me when we figure out a better way to do attack-move immunity
+			continue;
 		var nLastEntityIndex = $.GetContextPanel().GetAttributeInt("last_entindex", -1);
 		if (nBuffCount >= $.GetContextPanel()._tBuffIcons.length)
 		{
