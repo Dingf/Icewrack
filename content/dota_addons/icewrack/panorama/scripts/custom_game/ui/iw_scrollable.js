@@ -1,20 +1,8 @@
 "use strict";
 
-function UpdateScrollable()
-{
-	for (var i = $("#Scrollable")._tMouseOverStack.length; i > 0; i--)
-	{
-		$("#Scrollable")._tScrollableStack.push($("#Scrollable")._tMouseOverStack[i-1]);
-	}
-	$("#Scrollable")._tMouseOverStack = [];
-	$.GetContextPanel()._nUpdateCallbackID = 0;
-}
-
 function OnScrollableMouseOver(hContextPanel, tArgs)
 {
-	hContextPanel._tMouseOverStack.push(tArgs.panel);
-	if (hContextPanel._nUpdateCallbackID !== 0)
-		hContextPanel._nUpdateCallbackID = $.Schedule(0.03, UpdateScrollable);
+	$("#Scrollable")._tScrollableStack.push(tArgs.panel);
 	return true;
 }
 

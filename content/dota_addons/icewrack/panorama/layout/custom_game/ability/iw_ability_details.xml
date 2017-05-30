@@ -34,9 +34,9 @@
 			</Panel>
 		</Panel>
 		<Panel hittest="false" class="AbilityDetailsDivider" />
-		<Label class="AbilityDetailsDescriptionLabel" id="DescriptionLabel" />
+		<Label html="true" class="AbilityDetailsDescriptionLabel" id="DescriptionLabel" />
 		<Panel hittest="false" class="AbilityDetailsNotesContainer" id="NotesContainer"/>
 		<Panel hittest="false" class="AbilityDetailsDivider" />
-		<Label class="AbilityDetailsLoreLabel" id="LoreLabel" />
+		<Label html="true" class="AbilityDetailsLoreLabel" id="LoreLabel" />
 	</Panel>
 </root>

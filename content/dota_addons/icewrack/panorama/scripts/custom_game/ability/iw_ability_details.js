@@ -365,8 +365,6 @@ function CreateAbilityDetails(hParent, szName)
 		hStatPanel.FindChild("Title").text = $.Localize(stAbilityDetailsStatNames[i]);
 	}
 	
-	hPanel.FindChildTraverse("DescriptionLabel").html = true;
-	
 	RegisterCustomEventHandler(hPanel, "AbilityDetailsPartyUpdate", OnAbilityDetailsPartyUpdate);
 	RegisterCustomEventHandler(hPanel, "AbilityDetailsSetVisible", OnAbilityDetailsSetVisible);
 	RegisterCustomEventHandler(hPanel, "AbilityDetailsUpdate", OnAbilityDetailsUpdate);
