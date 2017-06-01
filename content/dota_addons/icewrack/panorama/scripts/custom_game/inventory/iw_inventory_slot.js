@@ -33,7 +33,7 @@ function OnInventorySlotUpdate(hContextPanel, tArgs)
 		{
 			if (nItemIndex !== nCurrentItemIndex)
 			{
-				var tItemData = tInventoryData.item_list[nItemIndex];
+				var tItemData = CustomNetTables.GetTableValue("items", nItemIndex);
 				hContextPanel.FindChildTraverse("ItemTexture").SetImage("file://{images}/items/" + tItemData.name + ".tga");
 				hContextPanel.FindChildTraverse("ItemTexture").style.opacity = "1.0";
 				for (var k in tItemData)

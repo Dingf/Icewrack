@@ -2,7 +2,7 @@ iw_drow_ranger_bullseye = class({})
 
 function iw_drow_ranger_bullseye:OnAbilityPhaseStart()
 	local hEntity = self:GetCaster()
-	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK)
+	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT)
 	return true
 end
 
@@ -28,9 +28,13 @@ end
 function iw_drow_ranger_bullseye:OnSpellStart()
 	local hEntity = self:GetCaster()
 	if IsServer() then
+		local szEffectName = "particles/units/heroes/hero_drow/drow_bullseye.vpcf"
+		if hEntity:HasModifier("modifier_iw_drow_ranger_frost_arrows") then
+			szEffectName = "particles/units/heroes/hero_drow/drow_bullseye_frost.vpcf"
+		end
 		local tProjectileInfo =
 		{
-			EffectName = "particles/units/heroes/hero_drow/drow_bullseye.vpcf",
+			EffectName = szEffectName,
 			Ability = self,
 			iMoveSpeed = hEntity:GetProjectileSpeed() * 1.5,
 			Source = hEntity,
@@ -39,7 +43,7 @@ function iw_drow_ranger_bullseye:OnSpellStart()
 		}
 		
 		ProjectileManager:CreateTrackingProjectile(tProjectileInfo)
-		hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_START)
+		hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START)
 		EmitSoundOn("Hero_DrowRanger.Bullseye.Launch", hEntity)
 	end
 end

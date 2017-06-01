@@ -2,7 +2,7 @@ iw_axe_culling_blade = class({})
 
 function iw_axe_culling_blade:OnAbilityPhaseStart()
 	local hEntity = self:GetCaster()
-	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK)
+	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT)
 	return true
 end
 
@@ -44,7 +44,7 @@ function iw_axe_culling_blade:OnSpellStart()
 		ParticleManager:SetParticleControlEnt(nHitParticleID, 0, hTarget, PATTACH_POINT_FOLLOW, "attach_hitloc", vTargetPosition, true)
 		ParticleManager:ReleaseParticleIndex(nHitParticleID)
 		
-		hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_START)
+		hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START)
 		if DealAttackDamage(hEntity, tDamageTable) then
 			if hTarget:GetHealth() == 0 then
 				local nKillParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_axe/axe_culling_blade_kill.vpcf", PATTACH_CUSTOMORIGIN, hEntity)

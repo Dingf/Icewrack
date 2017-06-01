@@ -36,5 +36,12 @@
 			"Precondition"	""
 			"Chance"	"100"
 		}
+
+		"6"
+		{
+			"LootList"	"drop_list_test_dagger"
+			"Precondition"	""
+			"Chance"	"100"
+		}
 	}
 }

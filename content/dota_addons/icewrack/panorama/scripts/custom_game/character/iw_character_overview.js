@@ -57,7 +57,6 @@ function OnOverviewUpdate(hContextPanel, tArgs)
 	if (nEntityIndex !== -1)
 	{
 		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-		var tInventoryData = CustomNetTables.GetTableValue("inventory", nEntityIndex);
 		var tEntityAttackSourceData = tEntityData.attack_source[String(tEntityData.attack_source.Level)];
 		
 		var nEntityAttackSourceCount = 0;
@@ -67,7 +66,7 @@ function OnOverviewUpdate(hContextPanel, tArgs)
 			for (var k in tEntityAttackSourceData)
 			{
 				var nSourceIndex = tEntityAttackSourceData[k];
-				var tSourceData = tInventoryData.item_list[nSourceIndex];
+				var tSourceData = CustomNetTables.GetTableValue("items", nSourceIndex);
 				if (tSourceData)
 				{
 					tEntityAttackSources.push({ name:Abilities.GetAbilityName(nSourceIndex), data:tSourceData });

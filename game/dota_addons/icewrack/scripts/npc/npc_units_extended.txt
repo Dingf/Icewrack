@@ -31,7 +31,7 @@
 			"ScriptFile"		"animation/animation_iw_axe.lua"
 		}
 
-		"EquipFlags"			"58719294"
+		"EquipFlags"			"58719839"
 
 		"MaxStaminaFlat"		"90"
 		"StaminaUsageAttackFlat"	"5"
@@ -71,7 +71,7 @@
 
 		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_dragon_knight.vsndevts"
 
-		"EquipFlags"			"1048125"
+		"EquipFlags"			"58719773"
 
 		"MaxStaminaFlat"		"110"
 		"StaminaUsageAttackFlat"	"5"
@@ -122,7 +122,7 @@
 			"ScriptFile"		"animation/animation_iw_drow_ranger.lua"
 		}
 
-		"EquipFlags"			"4294967295"
+		"EquipFlags"			"58588579"
 
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
@@ -165,7 +165,7 @@
 		"CorpseTime"			"89"
 		"IsPlayableHero"		"1"
 
-		"EquipFlags"			"66582613"
+		"EquipFlags"			"58588197"
 
 		"MaxStaminaFlat"		"100"
 		"StaminaUsageAttackFlat"	"3"
@@ -207,7 +207,7 @@
 		"CorpseTime"			"59"
 		"IsPlayableHero"		"1"
 
-		"EquipFlags"			"58191872"
+		"EquipFlags"			"58587136"
 
 		"MaxStaminaFlat"		"50"
 		"StaminaUsageAttackFlat"	"5"
@@ -252,7 +252,7 @@
 		"CorpseTime"			"80"
 		"IsPlayableHero"		"1"
 
-		"EquipFlags"			"58194958"
+		"EquipFlags"			"58588686"
 
 		"MaxStaminaFlat"		"80"
 		"StaminaUsageAttackFlat"	"5"

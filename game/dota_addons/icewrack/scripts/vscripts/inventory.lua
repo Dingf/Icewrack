@@ -75,7 +75,8 @@ function CInventory:RefreshInventory()
 	else
 	end
 	for k,v in pairs(self._tEquippedItems) do
-		self._tNetTableItemList[v:entindex()] = v:UpdateNetTable()
+		v:UpdateNetTable()
+		self._tNetTableItemList[v:entindex()] = true
 	end
 	self:UpdateNetTable()
 end
@@ -177,8 +178,9 @@ function CInventory:EquipItem(hItem, nSlot)
 					end
 					hItem:ApplyModifiers(IW_MODIFIER_ON_EQUIP, hEntity)
 				end
+				hItem:UpdateNetTable()
 				self._tEquippedItems[i] = hItem
-				self._tNetTableItemList[hItem:entindex()] = hItem:UpdateNetTable()
+				self._tNetTableItemList[hItem:entindex()] = true
 				self._tNetTableEquippedItems[i] = hItem:entindex()
 				self:RefreshInventory()
 				hEntity:RefreshEntity()
@@ -204,8 +206,9 @@ function CInventory:UnequipItem(nSlot)
 			hEntity:RemoveChild(hItem)
 		end
 		hItem:RemoveModifiers(IW_MODIFIER_ON_EQUIP)
+		hItem:UpdateNetTable()
 		self._tEquippedItems[nSlot] = nil
-		self._tNetTableItemList[hItem:entindex()] = hItem:UpdateNetTable()
+		self._tNetTableItemList[hItem:entindex()] = true
 		self._tNetTableEquippedItems[nSlot] = nil
 		self:RefreshInventory()
 		hEntity:RefreshEntity()
@@ -279,7 +282,8 @@ function CInventory:TransferItem(hItem, hEntity)
 			self._tItemList[hItem] = nil
 			self._tNetTableItemList[nItemIndex] = nil
 		else
-			self._tNetTableItemList[nItemIndex] = hItem:UpdateNetTable()
+			hItem:UpdateNetTable()
+			self._tNetTableItemList[nItemIndex] = true
 		end
 		self:RefreshInventory()
 	end
@@ -333,7 +337,8 @@ function CInventory:AddItemToInventory(hItem)
 				local hInventoryItem = k
 				if hInventoryItem and hInventoryItem:GetName() == hItem:GetName() and hInventoryItem:GetStackCount() < hInventoryItem:GetMaxStacks() then
 					local nOverflow = hInventoryItem:ModifyStackCount(nAmount)
-					self._tNetTableItemList[hInventoryItem:entindex()] = hInventoryItem:UpdateNetTable()
+					hInventoryItem:UpdateNetTable()
+					self._tNetTableItemList[hInventoryItem:entindex()] = true
 					if nOverflow > 0 then
 						nAmount = nOverflow
 						hItem:SetStackCount(nOverflow)
@@ -365,8 +370,9 @@ function CInventory:AddItemToInventory(hItem)
 		hItem:ApplyModifiers(IW_MODIFIER_ON_ACQUIRE, self._hEntity)
 		hItem:SetPurchaser(self._hEntity)
 		hItem:SetStackCount(nAmount)
+		hItem:UpdateNetTable()
 		self._tItemList[hItem] = hInventoryUnit
-		self._tNetTableItemList[hItem:entindex()] = hItem:UpdateNetTable()
+		self._tNetTableItemList[hItem:entindex()] = true
 		self._tInventoryUnits[hInventoryUnit] = self._tInventoryUnits[hInventoryUnit] + 1
 		self:EquipItem(hItem)
 		self:RefreshInventory()

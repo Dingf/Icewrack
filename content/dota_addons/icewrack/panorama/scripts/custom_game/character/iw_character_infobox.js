@@ -85,8 +85,6 @@ function OnInfoboxUpdate(hContextPanel, tArgs)
 	hContextPanel.FindChildTraverse("InfoboxSubtitle").text = szLocalizedSubtitleString.replace(/\{0\}/g, Entities.GetLevel(nEntityIndex));
 	
 	var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-	var tInventoryData = CustomNetTables.GetTableValue("inventory", nEntityIndex);
-	
 	if (tEntityData)
 	{
 		var hHealthLabel = hContextPanel.FindChildTraverse("Stat11").FindChild("Label");
@@ -110,7 +108,7 @@ function OnInfoboxUpdate(hContextPanel, tArgs)
 			{
 				//TODO: Implement non-item attack sources (like from abilities)
 				var nSourceIndex = tEntityAttackSourceData[k];
-				var tSourceData = tInventoryData.item_list[nSourceIndex];
+				var tSourceData = CustomNetTables.GetTableValue("items", nSourceIndex);
 				for (var i = 0; i < stDamageTypeNames.length; i++)
 				{
 					var fDamagePercent = 1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DMG_PURE_PCT + ((i > 0) ? Math.max(1, i - 2) : i))/100.0;

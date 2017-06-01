@@ -189,8 +189,7 @@ function DealAttackDamage(self, keys)
 			keys.damage[v].max = fMaxDamage
 		end
 		
-		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_DEAL_ATTACK, keys)
-		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_TAKE_ATTACK, keys)
+		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK_DAMAGE, keys)
 		
 		if keys.CanDodge then
 			local fBonusAccuracy = keys.BonusAccuracy or 0
@@ -199,7 +198,7 @@ function DealAttackDamage(self, keys)
 					hVictim:DetectEntity(hAttacker, IW_COMBAT_LINGER_TIME)
 					hVictim:AddThreat(hAttacker, fTotalDamage * 0.25, true)
 				end
-				hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DODGE_ATTACK, keys)
+				hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DODGE_ATTACK_DAMAGE, keys)
 				ShowMissMessage(hVictim)
 				return false
 			end
@@ -207,9 +206,10 @@ function DealAttackDamage(self, keys)
 		
 		local bDamageResult = DealPrimaryDamage(self, keys)
 		keys.result = bDamageResult
-		
-		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_DEAL_ATTACK, keys)
-		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_TAKE_ATTACK, keys)
+		if bDamageResult then
+			hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DEAL_ATTACK_DAMAGE, keys)
+			hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_TAKE_ATTACK_DAMAGE, keys)
+		end
 		return bDamageResult
 	end
 	return false

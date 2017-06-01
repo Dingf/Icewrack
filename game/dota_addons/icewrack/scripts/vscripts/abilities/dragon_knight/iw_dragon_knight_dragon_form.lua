@@ -49,7 +49,7 @@ function iw_dragon_knight_dragon_form:OnSpellStart()
 	{
 		health = self:GetSpecialValueFor("health"),
 		stamina = self:GetSpecialValueFor("stamina"),
-		speed = self:GetSpecialValueFor("speed"),
+		move_speed = self:GetSpecialValueFor("speed"),
 		duration = self:GetSpecialValueFor("duration"),
 		modelname = hEntity:GetModelName(),
 	}

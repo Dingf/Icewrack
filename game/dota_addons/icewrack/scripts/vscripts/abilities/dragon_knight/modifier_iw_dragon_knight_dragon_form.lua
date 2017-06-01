@@ -28,6 +28,7 @@ end
 function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 	local hEntity = self:GetParent()
 	if IsServer() and IsValidExtendedEntity(hEntity) then
+		self._fBaseModelScale = hEntity:GetModelScale()
 		self._szBaseAttackCap = hEntity:GetAttackCapability()
 		self._szBaseProjectile = hEntity:GetRangedProjectileName()
 		self._tWearables = {}
@@ -45,6 +46,7 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 		hEntity:AddAttackSource(hAttackSource, 2)
 		hEntity:GetInventory():AddItemToInventory(hAttackSource)
 		
+		hEntity:SetModelScale(2.0)
 		hEntity:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK)
 		hEntity:SetRangedProjectileName("particles/units/heroes/hero_dragon_knight/iw_dragon_knight_dragon_form_attack.vpcf")
 		CTimer(0.03, function() hEntity:SetMaterialGroup("1") end)
@@ -71,6 +73,7 @@ function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
 		hEntity:RemoveAttackSource(hAttackSource, 2)
 		hEntity:GetInventory():RemoveItem(hAttackSource)
 		
+		hEntity:SetModelScale(self._fBaseModelScale)
 		hEntity:SetAttackCapability(self._szBaseAttackCap)
 		hEntity:SetRangedProjectileName(self._szBaseProjectile)
 		EmitSoundOn("Hero_DragonKnight.ElderDragonForm.Revert", hEntity)

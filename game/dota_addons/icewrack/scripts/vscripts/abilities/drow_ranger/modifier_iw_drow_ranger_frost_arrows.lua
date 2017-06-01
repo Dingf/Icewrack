@@ -11,8 +11,8 @@ end
 function modifier_iw_drow_ranger_frost_arrows:DeclareExtEvents()
 	local funcs =
 	{
-		[IW_MODIFIER_EVENT_ON_ATTACK_START] = 1,
-		[IW_MODIFIER_EVENT_ON_PRE_ATTACK] = 1,
+		[IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START] = 1,
+		[IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT] = 1,
 	}
 	return funcs
 end

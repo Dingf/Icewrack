@@ -112,14 +112,14 @@
 
 	"iw_dragon_knight_razorscales"
 	{
-		"AbilitySkill"		"37434"
+		"AbilitySkill"		"37433"
 	}
 
 	"iw_dragon_knight_dragon_form"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_dragon_form.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL"
-		"AbilitySkill"		"9648906"
+		"AbilitySkill"		"9648650"
 
 		"ManaCost"		"80"
 
@@ -181,5 +181,9 @@
 				"Rate"			"1.0"
 			}
 		}
+	}
+
+	"iw_bounty_hunter_jinada"
+	{
 	}
 }

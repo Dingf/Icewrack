@@ -30,33 +30,7 @@
 			m_fDrag = 0.1
 		},
 		{
-			_class = "C_OP_LerpEndCapScalar"
-			m_flOutput = 0.0
-			m_bDisableOperator = true
-		},
-		{
-			_class = "C_OP_EndCapTimedDecay"
-			m_flDecayTime = 1.0
-			m_bDisableOperator = true
-		},
-		{
 			_class = "C_OP_Decay"
-		},
-		{
-			_class = "C_OP_FadeOutSimple"
-			m_flFadeOutTime = 0.15
-			m_bDisableOperator = true
-		},
-		{
-			_class = "C_OP_RampScalarLinearSimple"
-			m_flEndTime = 99999.0
-			m_Rate = -30.0
-			m_nOpEndCapState = 1
-			m_bDisableOperator = true
-		},
-		{
-			_class = "C_OP_SpinUpdate"
-			m_bDisableOperator = true
 		},
 		{
 			_class = "C_OP_InterpolateRadius"
@@ -67,21 +41,6 @@
 		{
 			_class = "C_OP_ColorInterpolate"
 			m_ColorFade = [ 28, 2, 92, 255 ]
-		},
-		{
-			_class = "C_OP_VectorNoise"
-			m_bAdditive = true
-			m_vecOutputMax = [ 3.0, 3.0, 3.0 ]
-			m_vecOutputMin = [ -3.0, -3.0, -3.0 ]
-			m_nFieldOutput = 0
-			m_fl4NoiseScale = 0.25
-			m_bDisableOperator = true
-		},
-		{
-			_class = "C_OP_DistanceToCP"
-			m_flInputMin = 20.0
-			m_nFieldOutput = 7
-			m_bDisableOperator = true
 		},
 		{
 			_class = "C_OP_FadeInSimple"
@@ -96,31 +55,7 @@
 			m_flRadiusRandExponent = 0.5
 		},
 		{
-			_class = "C_INIT_RingWave"
-			m_nControlPointNumber = 3
-			m_flInitialRadius = 10.0
-			m_flInitialSpeedMax = 10.0
-			m_flPitch = 90.0
-			m_bEvenDistribution = true
-			m_flParticlesPerOrbit = 8.0
-			m_bXYVelocityOnly = false
-			m_flInitialSpeedMin = 10.0
-			m_bDisableOperator = true
-		},
-		{
-			_class = "C_INIT_RemapScalar"
-			m_flInputMax = 0.25
-			m_bScaleInitialRange = true
-			m_bDisableOperator = true
-		},
-		{
 			_class = "C_INIT_RandomAlpha"
-		},
-		{
-			_class = "C_INIT_RemapScalar"
-			m_flInputMax = 0.25
-			m_bScaleInitialRange = true
-			m_bDisableOperator = true
 		},
 		{
 			_class = "C_INIT_CreateWithinSphere"

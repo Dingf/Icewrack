@@ -3,7 +3,7 @@ iw_axe_counter_helix = class({})
 function iw_axe_counter_helix:OnAbilityPhaseStart()
 	local hEntity = self:GetCaster()
 	EmitSoundOn("Hero_Axe.CounterHelix", hEntity)
-	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK)
+	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT)
 	return true
 end
 
@@ -45,7 +45,7 @@ function iw_axe_counter_helix:OnSpellStart()
 		CanDodge = true,
 	}
 	
-	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_START)
+	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START)
 	local hNearbyEntities = Entities:FindAllInSphere(hEntity:GetAbsOrigin(), self:GetAOERadius())
 	for k,v in pairs(hNearbyEntities) do
 		if v ~= hEntity and IsValidExtendedEntity(v) then

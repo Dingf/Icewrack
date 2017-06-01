@@ -757,6 +757,23 @@
 		}
 	}
 
+	"iw_bounty_hunter_jinada"
+	{
+		"modifier_iw_bounty_hunter_jinada"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_jinada.lua"
+
+			"IsHidden"			"1"
+
+			"Properties"			{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" {}
+		}
+	}
+
 
 
 
@@ -863,6 +880,22 @@
 			"Properties"
 			{
 				"IW_PROPERTY_ATTR_END_FLAT"			{"50" "100"}
+			}
+
+			"IsHidden"			"1"
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_MULTIPLE MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates" { }
+			"DatadrivenProperties" { }
+			"DatadrivenEvents" { }
+		}
+	}
+	"item_test_dagger"
+	{
+		"modifier_item_test_dagger"
+		{
+			"Properties"
+			{
+				"IW_PROPERTY_ATTR_CUN_FLAT"			{"50" "100"}
 			}
 
 			"IsHidden"			"1"

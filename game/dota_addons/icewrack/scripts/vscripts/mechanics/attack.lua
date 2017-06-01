@@ -41,7 +41,7 @@ function OnAttack(self, keys)
 		hEntity:SpendStamina(fAttackCost)
 		hEntity:Stop()
 		hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
-		hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_START)
+		hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START)
 	end
 end
 
@@ -61,7 +61,7 @@ function OnAttackStart(self, keys)
 			else
 				hAttacker:RemoveModifierByName("modifier_internal_miss_debuff")
 			end
-			hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK)
+			hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT)
 		end
 	end
 end

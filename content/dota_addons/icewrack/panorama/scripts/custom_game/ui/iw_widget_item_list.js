@@ -104,26 +104,26 @@ function OnItemListUpdate(hContextPanel, tArgs)
 	var hBodyPanel = hContextPanel.FindChildTraverse("ListBody");
 	for (var k in tItemList)
 	{
-		var nItemFlags = tItemList[k].flags;
-		if (nItemFlags & IW_ITEM_FLAG_HIDDEN)
+		var tItemData = CustomNetTables.GetTableValue("items", k);
+		if (tItemData.flags & IW_ITEM_FLAG_HIDDEN)
 		{
 			continue;
 		}
 		
 		if (!hContextPanel._tItemPanels[k])
 		{
-			hContextPanel._tItemPanels[k] = CreateItemEntry(hBodyPanel, "Item" + k, nEntityIndex, Number(k), tItemList[k], nContextFilter);
+			hContextPanel._tItemPanels[k] = CreateItemEntry(hBodyPanel, "Item" + k, nEntityIndex, Number(k), tItemData, nContextFilter);
 		}
 		else
 		{
 			hContextPanel._tItemPanels[k].visible = true;
-			DispatchCustomEvent(hContextPanel._tItemPanels[k], "ItemEntryUpdate", { item:tItemList[k] });
+			DispatchCustomEvent(hContextPanel._tItemPanels[k], "ItemEntryUpdate", { item:tItemData });
 		}
 		
 		DispatchCustomEvent(hContextPanel._tItemPanels[k], "ItemEntryEquip", { state:false });
-		if ((nItemFilter !== 0) && (tItemList[k].type > 0))
+		if ((nItemFilter !== 0) && (tItemData.type > 0))
 		{
-			if ((nItemFilter & tItemList[k].type) === 0)
+			if ((nItemFilter & tItemData.type) === 0)
 			{
 				hContextPanel._tItemPanels[k].visible = false;
 			}

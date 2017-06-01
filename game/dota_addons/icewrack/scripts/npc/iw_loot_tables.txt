@@ -52,4 +52,13 @@
 			"Max"		"1"
 		}
 	}
+	"drop_list_test_dagger"
+	{
+		"item_test_dagger"
+		{
+			"Weight"	"5"
+			"Min"		"2"
+			"Max"		"2"
+		}
+	}
 }

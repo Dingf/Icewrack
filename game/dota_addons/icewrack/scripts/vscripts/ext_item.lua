@@ -256,7 +256,8 @@ function CExtItem:UpdateNetTable()
 		tPropertiesBase[v] = self:GetBasePropertyValue(v)
 		tPropertiesBonus[v] = self:GetPropertyValue(v) - tPropertiesBase[v]
 	end
-	return tNetTable
+	
+	CustomNetTables:SetTableValue("items", tostring(self:entindex()), tNetTable)
 end
 
 function CExtItem:ApplyModifiers(nTrigger, hEntity)

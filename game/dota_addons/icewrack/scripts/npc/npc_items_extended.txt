@@ -133,6 +133,30 @@
 		}
 	}
 
+	"item_test_dagger"
+	{
+		"ItemType"		"IW_ITEM_TYPE_WEAPON_1H | IW_ITEM_TYPE_WEAPON_DAGGER"
+		"ItemSlots"		"IW_INVENTORY_SLOT_MAIN_HAND | IW_INVENTORY_SLOT_OFF_HAND"
+		"ItemFlags"		"IW_ITEM_FLAG_ATTACK_SOURCE"
+		"ItemWeight"		"2.0"
+		"ItemValue"		"1"
+
+		"MaxStacks"		"1"
+
+		"Properties"
+		{
+			"IW_PROPERTY_ATTACK_RANGE"			"120"
+			"IW_PROPERTY_ATTACK_SP_FLAT"			"4"
+			"IW_PROPERTY_DMG_SLASH_BASE"			"8"
+			"IW_PROPERTY_DMG_SLASH_VAR"			"4"
+			"IW_PROPERTY_DMG_PIERCE_BASE"			"5"
+			"IW_PROPERTY_DMG_PIERCE_VAR"			"2"
+			"IW_PROPERTY_BASE_ATTACK_FLAT"			"3.1"
+			"IW_PROPERTY_CRIT_CHANCE_FLAT"			"0.07"
+			"IW_PROPERTY_CRIT_MULTI_FLAT"			"0.75"
+		}
+	}
+
 	"item_test_potion"
 	{
 		"ItemType"		"IW_ITEM_TYPE_CONSUMABLE_POTION"

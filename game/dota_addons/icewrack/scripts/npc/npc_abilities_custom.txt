@@ -668,6 +668,22 @@
 		}
 	}
 
+	"iw_bounty_hunter_jinada"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"bounty_hunter_jinada"
+
+		"MaxLevel"				"1"
+
+		"Modifiers"
+		{
+			"modifier_iw_bounty_hunter_jinada"		"IW_MODIFIER_ON_ACQUIRE"
+		}
+	}
+
 	"iw_combo_shatter"
 	{
 		"BaseClass"				"ability_lua"
