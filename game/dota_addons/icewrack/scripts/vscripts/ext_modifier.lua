@@ -155,10 +155,10 @@ function AddModifier(szAbilityName, szModifierName, hTarget, hSource, tModifierA
 	end
 	
 	local szClassname = hAbility:GetClassname()
-	if IsInstanceOf(hAbility, CDOTA_Ability_Lua) or IsInstanceOf(hAbility, CDOTA_Item_Lua) then
-		hTarget:AddNewModifier(hSource, hAbility, szModifierName, tModifierArgs)
-	else
+	if IsInstanceOf(hAbility, CDOTA_Ability_DataDriven) or IsInstanceOf(hAbility, CDOTA_Item_DataDriven) then
 		hAbility:ApplyDataDrivenModifier(hSource, hTarget, szModifierName, tModifierArgs)
+	else
+		hTarget:AddNewModifier(hSource, hAbility, szModifierName, tModifierArgs)
 	end
 	
 	local hModifier = nil

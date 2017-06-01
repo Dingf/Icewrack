@@ -420,9 +420,7 @@ function CExtEntity:CreateCorpse()
 	self._hCorpseItem:ApplyDataDrivenModifier(self, self, "modifier_internal_corpse_state", {})
 	
 	--This is a dumb hack but Valve hasn't exposed a method for making targets unattackable with attack-move
-	self:AddAbility("elder_titan_echo_stomp")
-	local hAbility = self:FindAbilityByName("elder_titan_echo_stomp")
-	self:AddNewModifier(self, hAbility, "modifier_elder_titan_echo_stomp", { duration=99999999 })
+	AddModifier("elder_titan_echo_stomp", "modifier_elder_titan_echo_stomp", self, self, { duration=99999999 })
 	
 	if not self:IsRevivable() then
 		local hInventory = self:GetInventory()		
