@@ -11,8 +11,8 @@
 	horizontal-align: middle;
     background-color: gradient(linear, 0% 0%, 0% 100%, from(#78000080), to(#59000080));
 	padding: 4px 15px 4px 15px;
-	opacity: 0.001;
 	border-radius: 5px;
+	opacity: 1.0;
 }
 
 #Text
@@ -54,10 +54,16 @@
 	}
 }
 
+.ErrorMessageHidden
+{
+	opacity: 0.0;
+}
+
 .PopOutEffect
 {
 	animation-name: PopOutErrorMsg;
 	animation-duration: 2.0s;
 	animation-timing-function: ease-in-out;
 	animation-iteration-count: 1;
+	opacity: 0.0;
 }

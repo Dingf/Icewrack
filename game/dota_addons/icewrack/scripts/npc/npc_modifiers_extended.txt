@@ -684,9 +684,6 @@
 			"Properties"		{}
 
 			"DatadrivenAttributes"		""
-			"DatadrivenStates"	{}
-			"DatadrivenProperties"		{}
-			"DatadrivenEvents" {}
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"		{}
 			"DatadrivenEvents" {}
@@ -706,9 +703,6 @@
 			"Properties"		{}
 
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
-			"DatadrivenStates"	{}
-			"DatadrivenProperties"		{}
-			"DatadrivenEvents" {}
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"		{}
 			"DatadrivenEvents" {}
@@ -723,8 +717,6 @@
 			"Properties"		{}
 
 			"DatadrivenAttributes"		""
-			"DatadrivenStates"	{}
-			"DatadrivenProperties"		{}
 			"DatadrivenEvents" {}
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"
@@ -747,9 +739,6 @@
 			"Properties"		{}
 
 			"DatadrivenAttributes"		""
-			"DatadrivenStates"	{}
-			"DatadrivenProperties"	{}
-			"DatadrivenEvents" {}
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"		{}
 			"DatadrivenEvents" {}
@@ -769,7 +758,42 @@
 			"DatadrivenAttributes"		""
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"		{}
-			"DatadrivenEvents" {}
+			"DatadrivenEvents" 	{}
+		}
+	}
+
+	"iw_bounty_hunter_track"
+	{
+		"modifier_iw_bounty_hunter_track"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_track.lua"
+
+			"IsHidden"			"1"
+
+			"Properties"			{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+
+		"modifier_iw_bounty_hunter_track_reveal"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_track_reveal.lua"
+
+			"IsHidden"			"1"
+
+			"Properties"			{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_PROVIDES_VISION"		"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_INVISIBLE" 			"MODIFIER_STATE_VALUE_DISABLED"
+			}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
 		}
 	}
 

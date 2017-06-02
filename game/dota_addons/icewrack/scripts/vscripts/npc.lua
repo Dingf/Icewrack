@@ -95,7 +95,8 @@ CIcewrackNPCEntity = setmetatable({}, { __call =
 			return hEntity
 		end
 		
-		if not hEntity:IsRealHero() then
+		--TODO: Remove the name check
+		if not hEntity:IsRealHero() and hEntity:GetUnitName() == "npc_iw_test_beast" then
 			local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
 			LogAssert(tExtEntityTemplate, "Failed to load template \"%d\" - no data exists for this entry.", hEntity:GetUnitName())
 			
@@ -132,11 +133,9 @@ CIcewrackNPCEntity = setmetatable({}, { __call =
 				hAutomator:InsertCondition(szAutomatorName, CAutomatorCondition(hEntity, "npc_think", 0, 0, 0))
 				hAutomator:SetEnabled(true)
 			end
-			
-			hEntity:SetThink("NPCThink", hEntity, "NPCThink", 0.1)
+			--hEntity:SetThink("DetectThink", hEntity, "NPCDetectThink", 0.1)
 		end
-		
-		return self
+		return hEntity
 	end})
 	
 CIcewrackNPCEntity.CallWrapper = function(self, keys) if keys.entindex then CIcewrackNPCEntity(EntIndexToHScript(keys.entindex)) end end
@@ -190,7 +189,7 @@ function CIcewrackNPCEntity:AddThreat(hEntity, fThreatAmount, bUseDistance)
 			tThreatTable[nEntityIndex] = tThreatTable[nEntityIndex] + fThreatValue
 			if self:GetBehaviorCooperativeness() >= IW_NPC_BEHAVIOR_COOP_SYNERGY then
 				local fShareRadius = self._fShareRadius
-				local hNearbyEntities = Entities:FindAllInSphere(self:GetAbsOrigin(), fShareRadius)
+				local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, fShareRadius, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 				for k,v in pairs(hNearbyEntities) do
 					if v:GetTeamNumber() == self:GetTeamNumber() and v ~= self and IsValidNPCEntity(v) then
 						if v:GetBehaviorCooperativeness() >= IW_NPC_BEHAVIOR_COOP_SYNERGY then
@@ -232,7 +231,7 @@ function CIcewrackNPCEntity:DetectEntity(hEntity, fDetectTime)
 	end
 	if self:GetBehaviorCooperativeness() >= IW_NPC_BEHAVIOR_COOP_SOCIAL then
 		local fShareRadius = self._fShareRadius
-		local hNearbyEntities = Entities:FindAllInSphere(self:GetAbsOrigin(), fShareRadius)
+		local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, fShareRadius, DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 		for k,v in pairs(hNearbyEntities) do
 			if v:GetTeamNumber() == self:GetTeamNumber() and IsValidNPCEntity(v) then
 				if v ~= self and v:GetBehaviorCooperativeness() >= IW_NPC_BEHAVIOR_COOP_SOCIAL then
@@ -246,20 +245,20 @@ function CIcewrackNPCEntity:DetectEntity(hEntity, fDetectTime)
 	end
 end
 
-function CIcewrackNPCEntity:NPCThink()
-	if self:GetMainControllingPlayer() ~= 0 and not GameRules:IsGamePaused() then
+function CIcewrackNPCEntity:DetectThink()
+	if not self:IsControllableByAnyPlayer() and not GameRules:IsGamePaused() then
 		local nVisionMask = self._nVisionMask
 		local nVisionRange = self:GetCurrentVisionRange()
 		local fVisionDetect = self._fVisionDetect
 		local nDifficulty = GameRules:GetCustomGameDifficulty()
 		
-		local hNearbyEntities = Entities:FindAllInSphere(self:GetAbsOrigin(), nVisionRange * 2.0)
+		local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, nVisionRange * 2.0, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 		for k,v in pairs(hNearbyEntities) do
 			local hEntity = v
-			if IsValidExtendedEntity(hEntity) and hEntity:GetTeamNumber() ~= self:GetTeamNumber() and self:IsTargetInVisionArea(hEntity) then
+			if IsValidExtendedEntity(hEntity) and hEntity:IsAlive() and hEntity:GetTeamNumber() ~= self:GetTeamNumber() and self:IsTargetInVisionArea(hEntity) then
 				local vTargetVector = hEntity:GetAbsOrigin() - self:GetAbsOrigin()
 				local fVisionValue = hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_FLAT) * nVisionRange/math.max(IW_NPC_VISION_DISTANCE_MIN, vTargetVector:Length2D())
-				local fVisionMultiplier = 1.0 + hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_PCT)
+				local fVisionMultiplier = math.max(0.0, 1.0 + hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_PCT)/100.0)
 				if hEntity:IsMoving() then
 					fVisionMultiplier = fVisionMultiplier * 2.0
 				end
@@ -279,7 +278,7 @@ function CIcewrackNPCEntity:NPCThink()
 			end
 		end
 	end
-	return 0.1
+	return 0.03
 end
 
 local function ClearNoisePoint(self, nIndex)
@@ -306,6 +305,7 @@ function CIcewrackNPCEntity:AddNoiseEvent(hEntity, vNoiseOrigin, fNoiseValue, bN
 		end
 		local fNoiseMultiplier = math.max(0, 1.0 + hEntity:GetPropertyValue(IW_PROPERTY_MOVE_NOISE_PCT)/100)
 		fNoiseValue = fNoiseValue * fNoiseMultiplier
+	DebugDrawSphere(vNoiseOrigin, Vector(0, fNoiseValue * 64, 0), 255, 48.0, true, 0.1)
 	
 		local nNoiseTableIndex = self._nNoiseTableIndex
 		local fEntityMoveSpeed = hEntity:GetMoveSpeedModifier(hEntity:GetBaseMoveSpeed()) * 0.25
@@ -359,6 +359,8 @@ local function EvaluateAttackTargetDesire(self)
 						hAttackTarget = hTarget
 					end
 				end
+			else
+				self._tDetectTable[k] = nil
 			end
 		end
 	end
@@ -367,12 +369,8 @@ end
 
 local function OnAttackTarget(self, hTarget)
 	self:SetAttacking(hTarget)
-	if self:IsTargetInLOS(hTarget) then
-		hTarget:MakeVisibleToTeam(self:GetTeamNumber(), 0.1)
-		self:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
-	else
-		self:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, hTarget:GetAbsOrigin(), false)
-	end
+	hTarget:MakeVisibleToTeam(self:GetTeamNumber(), 0.1)
+	self:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
 end
 
 local function EvaluateInvestigateNoiseDesire(self)
@@ -660,23 +658,62 @@ local stNPCActionTable =
 	[EvaluateNPCMovementDesire] = OnNPCMovement,
 }
 
-function CIcewrackNPCEntity:OnNPCThink()
-	if self:GetMainControllingPlayer() ~= 0 then
-		local hBestAction = nil
-		local hActionTarget = nil
-		local fBestDesire = 0
-		for k,v in pairs(stNPCActionTable) do
-			local fDesireValue,hTarget = k(self)
-			if fDesireValue > fBestDesire then
-				fBestDesire = fDesireValue
-				hActionTarget = hTarget
-				hBestAction = v
+local function EvaluateNPCDetect(self)
+	local nVisionMask = self._nVisionMask
+	local nVisionRange = self:GetCurrentVisionRange()
+	local fVisionDetect = self._fVisionDetect
+	local nDifficulty = GameRules:GetCustomGameDifficulty()
+	
+	--TODO: Change back to nVisionRange * 2.0
+	local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, nVisionRange * 1.0, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+	for k,v in pairs(hNearbyEntities) do
+		local hEntity = v
+		if IsValidExtendedEntity(hEntity) and hEntity:IsAlive() and hEntity:GetTeamNumber() ~= self:GetTeamNumber() and self:IsTargetInVisionArea(hEntity) then
+			local vTargetVector = hEntity:GetAbsOrigin() - self:GetAbsOrigin()
+			local fVisionValue = hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_FLAT) * nVisionRange/math.max(IW_NPC_VISION_DISTANCE_MIN, vTargetVector:Length2D())
+			local fVisionMultiplier = math.max(0.0, 1.0 + hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_PCT)/100.0)
+			if hEntity:IsMoving() then
+				fVisionMultiplier = fVisionMultiplier * 2.0
+			end
+			fVisionValue = fVisionValue * fVisionMultiplier
+			if fVisionValue > fVisionDetect or CalcDistanceBetweenEntityOBB(self, hEntity) < IW_NPC_TOUCH_RADIUS then
+DebugDrawSphere(hEntity:GetAbsOrigin(), Vector(0, 255, 0), 255, 48.0, true, 0.1)
+				self:DetectEntity(hEntity, stNPCDetectionTime[nDifficulty])
 			end
 		end
-		if hBestAction and fBestDesire > 0 then
-			hBestAction(self, hActionTarget)
-			return true
+	end
+	
+	for k,v in pairs(self._tThreatTable) do
+		if v < 1 then
+			self._tThreatTable[k] = 1
+		else
+			self._tThreatTable[k] = v * stNPCThreatDecayRate[nDifficulty]
 		end
+	end
+end
+
+local function EvaluateNPCAction(self)
+	local hBestAction = nil
+	local hActionTarget = nil
+	local fBestDesire = 0
+	for k,v in pairs(stNPCActionTable) do
+		local fDesireValue,hTarget = k(self)
+		if fDesireValue > fBestDesire then
+			fBestDesire = fDesireValue
+			hActionTarget = hTarget
+			hBestAction = v
+		end
+	end
+	if hBestAction and fBestDesire > 0 then
+		hBestAction(self, hActionTarget)
+	end
+end
+
+function CIcewrackNPCEntity:OnNPCThink()
+	if self:GetMainControllingPlayer() ~= 0 then
+		EvaluateNPCDetect(self)
+		EvaluateNPCAction(self)
+		return true
 	end
 end
 

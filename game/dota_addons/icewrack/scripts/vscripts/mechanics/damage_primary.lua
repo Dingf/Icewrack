@@ -132,13 +132,13 @@ function DealPrimaryDamage(self, keys)
 					end
 				end
 				
-				local fBonusThreat = keys.BonusThreat or 0.0
+				local fThreatMultiplier = keys.ThreatMultiplier or 1.0
 				local hVictimHealth = hVictim:GetHealth()
 				fDamageAmount = math.max(0, math.floor(fDamageAmount))
 				
 				if IsValidNPCEntity(hVictim) then
 					hVictim:DetectEntity(hAttacker, IW_COMBAT_LINGER_TIME)
-					hVictim:AddThreat(hAttacker, fDamageAmount + fBonusThreat, true)
+					hVictim:AddThreat(hAttacker, fDamageAmount * fThreatMultiplier, true)
 				end
 				CreateDamageVisuals(hVictim, nDamageType, bIsCrit)
 				hVictim:ModifyHealth(math.max(0, hVictim:GetHealth() - fDamageAmount), hAttacker, true, 0)

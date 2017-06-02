@@ -186,4 +186,8 @@
 	"iw_bounty_hunter_jinada"
 	{
 	}
+
+	"iw_bounty_hunter_track"
+	{
+	}
 }

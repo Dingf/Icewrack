@@ -271,12 +271,12 @@
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"threat"			"400"
+				"threat"			"1000"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"threat_bonus"			"2.0"
+				"threat_bonus"			"5.0"
 			}
 		}
 	}
@@ -290,7 +290,7 @@
 		"AbilityTextureName"			"axe_battle_hunger"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"30.0"
+		"AbilityCooldown"			"10.0"
 
 		"Modifiers"
 		{
@@ -363,7 +363,7 @@
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.3"
 
-		"AbilityCooldown"			"10.0"
+		"AbilityCooldown"			"12.0"
 
 		"AbilitySpecial"
 		{
@@ -393,7 +393,7 @@
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.1"
 		"AbilityCastRange"			"900"
-		"AbilityCooldown"			"6.0"
+		"AbilityCooldown"			"8.0"
 
 		"AbilitySpecial"
 		{
@@ -453,7 +453,7 @@
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.05"
 		"AbilityCastRange"			"150"
-		"AbilityCooldown"			"8.0"
+		"AbilityCooldown"			"6.0"
 
 		"AbilitySpecial"
 		{
@@ -466,6 +466,11 @@
 			{
 				"var_type"			"FIELD_INTEGER"
 				"bash_chance"			"100"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"threat"			"2.5"
 			}
 		}
 	}
@@ -551,6 +556,7 @@
 		"AbilityTextureName"			"drow_ranger_frost_arrows"
 
 		"MaxLevel"				"1"
+		"AbilityCooldown"			"1.0"
 
 		"Modifiers"
 		{
@@ -585,7 +591,6 @@
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.25"
 		"AbilityCastRange"			"150"
-		"AbilityCooldown"			"1"
 
 		"Modifiers"
 		{
@@ -617,6 +622,7 @@
 		"AbilityTextureName"			"drow_ranger_trueshot"
 
 		"MaxLevel"				"1"
+		"AbilityCooldown"			"1.0"
 		"AbilityAOERadius"			"1800"
 
 		"Modifiers"
@@ -681,6 +687,24 @@
 		"Modifiers"
 		{
 			"modifier_iw_bounty_hunter_jinada"		"IW_MODIFIER_ON_ACQUIRE"
+		}
+	}
+
+	"iw_bounty_hunter_track"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"bounty_hunter_track"
+
+		"MaxLevel"				"1"
+		"AbilityAOERadius"			"1800"
+
+		"Modifiers"
+		{
+			"modifier_iw_bounty_hunter_track"		"IW_MODIFIER_ON_ACQUIRE"
+			"modifier_iw_bounty_hunter_track_reveal"	"IW_MODIFIER_ON_ACQUIRE"
 		}
 	}
 

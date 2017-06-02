@@ -154,6 +154,7 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._tExtModifierEventTable = {}
 		hEntity._tExtModifierEventIndex = {}
 		
+		hEntity._nOrderID = 0
 		hEntity._tOrderTable = { UnitIndex = hEntity:entindex() }
 		
 		hEntity._bRunMode = true
@@ -270,6 +271,10 @@ function CExtEntity:GetCurrentLevelExperience()
 	return self._fLevelXP
 end
 
+function CExtEntity:GetLastOrderID()
+	return self._nLastOrderID
+end
+
 function CExtEntity:IsMassive()
 	return bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_MASSIVE)
 end
@@ -381,6 +386,8 @@ function CExtEntity:IssueOrder(nOrder, hTarget, hAbility, vPosition, bQueue, bRe
 			return false
 		end
 	end
+	
+	self._nOrderID = self._nOrderID + 1
 	tOrderTable.OrderType = nOrder
 	tOrderTable.TargetIndex = nTargetEntindex
 	tOrderTable.AbilityIndex = nAbilityEntindex

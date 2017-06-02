@@ -53,9 +53,9 @@ stFriendlyFireMultipliers =
 stAAMNPCThinkRates =
 {
 	[IW_DIFFICULTY_EASY] = 1.0,
-	[IW_DIFFICULTY_NORMAL] = 0.25,
-	[IW_DIFFICULTY_HARD] = 0.1,
-	[IW_DIFFICULTY_UNTHAW] = 0.03,
+	[IW_DIFFICULTY_NORMAL] = 0.5,
+	[IW_DIFFICULTY_HARD] = 0.25,
+	[IW_DIFFICULTY_UNTHAW] = 0.1,
 }
 
 stNPCDetectionTime =

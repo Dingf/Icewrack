@@ -132,27 +132,15 @@ local function OnMoveToTarget(hEntity, hTarget)
 	return true
 end
 
-local function OnDelayedVisionAttack(hEntity, hTarget)
-	local tOrderTable = hEntity._tOrderTable
-	if tOrderTable then
-		local vTargetPos = hTarget:GetAbsOrigin()
-		if tOrderTable.OrderType ~= DOTA_UNIT_ORDER_MOVE_TO_POSITION then
-			return
-		elseif tOrderTable.TargetIndex ~= 0 then
-			return
-		elseif tOrderTable.AbilityIndex ~= 0 then
-			return
-		elseif not tOrderTable.Position or (tOrderTable.Position - vTargetPos):Length2D() > 64.0 then
-			return
-		end
+local function OnDelayedVisionAttack(hEntity, hTarget, nOrderID)
+	if hEntity:GetLastOrderID() == nOrderID then
 		local fAttackRange = hEntity:GetAttackRange()
-		local fDistance = (hEntity:GetAbsOrigin() - vTargetPos):Length2D()
+		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
 		if hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) and fDistance <= fAttackRange then
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
 		else
-			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vTargetPos, false)
-			CTimer(0.03, OnDelayedVisionAttack, hEntity, hTarget)
+			CTimer(0.03, OnDelayedVisionAttack, hEntity, hTarget, nOrderID)
 		end
 	end
 end
@@ -168,38 +156,22 @@ local function OnAttackTarget(hEntity, hTarget)
 		end
 	end
 	if IsValidExtendedEntity(hEntity) and not hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) then
-		hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, hTarget:GetAbsOrigin(), false)
-		CTimer(0.03, OnDelayedVisionAttack, hEntity, hTarget)
+		hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
+		CTimer(0.03, OnDelayedVisionAttack, hEntity, hTarget, hEntity:GetLastOrderID())
 		return false
 	end
 	return true
 end
 
-local function OnDelayedVisionCast(self, hEntity, hTarget, vLocation)
-	local tOrderTable = hEntity._tOrderTable
-	if tOrderTable then
-		local vTargetPos = hTarget and hTarget:GetAbsOrigin() or vLocation
-		if tOrderTable.OrderType ~= DOTA_UNIT_ORDER_MOVE_TO_POSITION then
-			return
-		elseif tOrderTable.TargetIndex ~= 0 then
-			return
-		elseif tOrderTable.AbilityIndex ~= 0 then
-			return
-		elseif not tOrderTable.Position or (tOrderTable.Position - vTargetPos):Length2D() > 64.0 then
-			return
-		end
-		local fCastRange = self:GetCastRange()
-		local fDistance = (hEntity:GetAbsOrigin() - vTargetPos):Length2D()
-		if hEntity:IsTargetInLOS(hTarget or vLocation) and fDistance <= fCastRange then
+local function OnDelayedVisionCastPosition(hAbility, hEntity, vPosition, nOrderID)
+	if hEntity:GetLastOrderID() == nOrderID then
+		local fCastRange = hAbility:GetCastRange()
+		local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D()
+		if hEntity:IsTargetInLOS(vPosition) and fDistance <= fCastRange then
 			hEntity:Stop()
-			if hTarget then
-				hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, self, nil, false)
-			else
-				hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_POSITION, nil, self, vLocation, false)
-			end
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_POSITION, nil, hAbility, vPosition, false)
 		else
-			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vTargetPos, false)
-			CTimer(0.03, OnDelayedVisionCast, self, hEntity, hTarget, vTargetPos)
+			CTimer(0.03, OnDelayedVisionCastPosition, hAbility, hEntity, vPosition, nOrderID)
 		end
 	end
 end
@@ -211,12 +183,25 @@ local function OnCastPosition(hEntity, hAbility, vPosition)
 			local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D()
 			if not hEntity:IsTargetInLOS(vPosition) or fDistance > fCastRange then
 				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vPosition, false)
-				CTimer(0.03, OnDelayedVisionCast, hAbility, hEntity, nil, vPosition)
+				CTimer(0.03, OnDelayedVisionCastTarget, hAbility, hEntity, vPosition, hEntity:GetLastOrderID())
 				return false
 			end
 		end
 	end
 	return true
+end
+
+local function OnDelayedVisionCastTarget(hAbility, hEntity, hTarget, nOrderID)
+	if hEntity:GetLastOrderID() == nOrderID then
+		local fCastRange = hAbility:GetCastRange()
+		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
+		if hEntity:IsTargetInLOS(hTarget) and fDistance <= fCastRange then
+			hEntity:Stop()
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, hAbility, nil, false)
+		else
+			CTimer(0.03, OnDelayedVisionCastTarget, hAbility, hEntity, hTarget, nOrderID)
+		end
+	end
 end
 
 local function OnCastTarget(hEntity, hAbility, hTarget)
@@ -226,7 +211,7 @@ local function OnCastTarget(hEntity, hAbility, hTarget)
 			local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
 			if not hEntity:IsTargetInLOS(hTarget) or fDistance > fCastRange then
 				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, hTarget:GetAbsOrigin(), false)
-				CTimer(0.03, OnDelayedVisionCast, hAbility, hEntity, hTarget, nil)
+				CTimer(0.03, OnDelayedVisionCastTarget, hAbility, hEntity, hTarget, hEntity:GetLastOrderID())
 				return false
 			end
 		end

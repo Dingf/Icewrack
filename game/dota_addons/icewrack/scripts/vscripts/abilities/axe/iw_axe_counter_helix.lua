@@ -46,7 +46,7 @@ function iw_axe_counter_helix:OnSpellStart()
 	}
 	
 	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START)
-	local hNearbyEntities = Entities:FindAllInSphere(hEntity:GetAbsOrigin(), self:GetAOERadius())
+	local hNearbyEntities = FindUnitsInRadius(hEntity:GetTeamNumber(), hEntity:GetAbsOrigin(), nil, self:GetAOERadius(), DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 	for k,v in pairs(hNearbyEntities) do
 		if v ~= hEntity and IsValidExtendedEntity(v) then
 			tDamageTable.target = v

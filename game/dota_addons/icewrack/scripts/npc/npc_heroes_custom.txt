@@ -154,7 +154,7 @@
 		"Ability1"			""
 		"Ability2"			"iw_bounty_hunter_jinada"
 		"Ability3"			""
-		"Ability4"			""
+		"Ability4"			"iw_bounty_hunter_track"
 		"Ability5"			""
 		"Ability6"			""
 		"Ability7"			""

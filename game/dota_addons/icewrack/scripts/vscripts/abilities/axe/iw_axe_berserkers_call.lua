@@ -25,7 +25,8 @@ function iw_axe_berserkers_call:OnSpellStart()
 	
 	local fRadius = self:GetAOERadius()
 	local fThreatAmount = self:GetSpecialValueFor("threat") + self:GetSpecialValueFor("threat_bonus") * hEntity:GetSpellpower()
-	local hNearbyEntities = Entities:FindAllInSphere(hEntity:GetAbsOrigin(), self:GetAOERadius())
+	local hNearbyEntities = FindUnitsInRadius(hEntity:GetTeamNumber(), hEntity:GetAbsOrigin(), nil, self:GetAOERadius(), DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+
 	for k,v in pairs(hNearbyEntities) do
 		if v ~= hEntity and IsValidNPCEntity(v) and v:GetTeamNumber() ~= hEntity:GetTeamNumber() then
 			v:AddThreat(hEntity, fThreatAmount, false)

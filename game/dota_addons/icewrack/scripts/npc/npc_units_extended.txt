@@ -21,6 +21,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"39"
 		"IsPlayableHero"		"1"
@@ -56,7 +57,7 @@
 		"SkillAthletics"		"2"
 
 		"MovementNoiseFlat"		"5"
-		"VisibilityFlat"		"2.0"
+		"VisibilityFlat"		"1.5"
 	}
 
 	"npc_dota_hero_dragon_knight"
@@ -64,7 +65,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
-		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"35"
 		"IsPlayableHero"		"1"
@@ -102,7 +103,7 @@
 		"SkillBody"			"2"
 
 		"MovementNoiseFlat"		"5"
-		"VisibilityFlat"		"1.5"
+		"VisibilityFlat"		"1.25"
 	}
 
 	"npc_dota_hero_drow_ranger"
@@ -110,7 +111,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_RANGED"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
-		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"105"
 		"IsPlayableHero"		"1"
@@ -153,6 +154,7 @@
 		"SkillNature"			"2"
 
 		"MovementNoiseFlat"		"3"
+		"VisibilityFlat"		"1.0"
 	}
 
 	"npc_dota_hero_bounty_hunter"
@@ -160,7 +162,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
-		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"89"
 		"IsPlayableHero"		"1"
@@ -194,6 +196,7 @@
 		"SkillSpeech"			"3"
 
 		"MovementNoiseFlat"		"2"
+		"VisibilityFlat"		"1.0"
 	}
 
 	"npc_dota_hero_lina"
@@ -201,8 +204,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
-		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
-		"UnitFlags"			""
+		"UnitFlags"			"IW_UNIT_FLAG_NO_CORPSE"
 		"UnitHeight"			"128"
 		"CorpseTime"			"59"
 		"IsPlayableHero"		"1"
@@ -240,6 +242,8 @@
 		"SkillAir"			"1"
 		"SkillMetamagic"		"2"
 		"SkillLore"			"2"
+
+		"VisibilityFlat"		"1.5"
 	}
 
 	"npc_dota_hero_omniknight"
@@ -247,7 +251,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
-		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"80"
 		"IsPlayableHero"		"1"
@@ -280,7 +284,7 @@
 		"SkillSpeech"			"1"
 
 		"MovementNoiseFlat"		"5"
-		"VisibilityFlat"		"1.5"
+		"VisibilityFlat"		"1.25"
 	}
 
 	"npc_dota_hero_legion_commander"
@@ -288,7 +292,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
-		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"39"
 		"IsPlayableHero"		"1"
@@ -321,7 +325,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
-		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
+		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
 
@@ -350,7 +354,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
-		"UnitFlags"			""
+		"UnitFlags"			"IW_UNIT_FLAG_NO_CORPSE"
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
 

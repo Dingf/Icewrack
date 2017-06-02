@@ -54,6 +54,7 @@ function iw_dragon_knight_shield_slam:OnSpellStart()
 		attacker = hEntity,
 		target = hTarget,
 		source = self,
+		ThreatMultiplier = self:GetSpecialValueFor("threat"),
 		damage =
 		{
 			[IW_DAMAGE_TYPE_CRUSH] = 

@@ -47,8 +47,8 @@
 		*Persuasion dialogue options check against speech
 		
 	STEALTH:
-		*15% reduced movement noise
-		*15% reduced visibility
+		*10% reduced movement noise
+		*10% reduced visibility
 		
 	THIEVERY:
 		*Required to pick locks, disarm traps, and steal from enemies
@@ -109,8 +109,8 @@ function modifier_internal_skill_bonus:OnRefresh()
 	
 	self:SetPropertyValue(IW_PROPERTY_SHOP_PRICE_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_SPEECH) * -10)
 	
-	self:SetPropertyValue(IW_PROPERTY_MOVE_NOISE_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_STEALTH) * -15)
-	self:SetPropertyValue(IW_PROPERTY_VISIBILITY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_STEALTH) * -15)
+	self:SetPropertyValue(IW_PROPERTY_MOVE_NOISE_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_STEALTH) * -10)
+	self:SetPropertyValue(IW_PROPERTY_VISIBILITY_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_STEALTH) * -10)
 end
 
 end
