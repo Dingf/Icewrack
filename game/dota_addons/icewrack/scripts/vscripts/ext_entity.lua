@@ -119,7 +119,7 @@ CExtEntity = setmetatable({}, { __call =
 		end
 		
 		local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
-		LogAssert(tExtEntityTemplate, "Failed to load template \"%d\" - no data exists for this entry.", hEntity:GetUnitName())
+		LogAssert(tExtEntityTemplate, "Failed to load template \"%s\" - no data exists for this entry.", hEntity:GetUnitName())
 		
 		hEntity = CContainer(hEntity, nInstanceID)
 		local tBaseIndexTable = getmetatable(hEntity).__index
@@ -154,7 +154,7 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._tExtModifierEventTable = {}
 		hEntity._tExtModifierEventIndex = {}
 		
-		hEntity._nOrderID = 0
+		hEntity._nLastOrderID = 0
 		hEntity._tOrderTable = { UnitIndex = hEntity:entindex() }
 		
 		hEntity._bRunMode = true
@@ -387,7 +387,6 @@ function CExtEntity:IssueOrder(nOrder, hTarget, hAbility, vPosition, bQueue, bRe
 		end
 	end
 	
-	self._nOrderID = self._nOrderID + 1
 	tOrderTable.OrderType = nOrder
 	tOrderTable.TargetIndex = nTargetEntindex
 	tOrderTable.AbilityIndex = nAbilityEntindex

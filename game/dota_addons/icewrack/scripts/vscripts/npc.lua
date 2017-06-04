@@ -95,8 +95,7 @@ CIcewrackNPCEntity = setmetatable({}, { __call =
 			return hEntity
 		end
 		
-		--TODO: Remove the name check
-		if not hEntity:IsRealHero() and hEntity:GetUnitName() == "npc_iw_test_beast" then
+		if not hEntity:IsRealHero() then
 			local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
 			LogAssert(tExtEntityTemplate, "Failed to load template \"%d\" - no data exists for this entry.", hEntity:GetUnitName())
 			
@@ -651,11 +650,11 @@ end
 
 local stNPCActionTable =
 {
-	[EvaluateAttackTargetDesire] = OnAttackTarget,
-	[EvaluateInvestigateNoiseDesire] = OnInvestigateNoise,
+	--[EvaluateAttackTargetDesire] = OnAttackTarget,
+	--[EvaluateInvestigateNoiseDesire] = OnInvestigateNoise,
 	[EvaluateFleeFromEnemiesDesire] = OnFleeFromEnemies,
 	[EvaluateFleeAvoidanceZoneDesire] = OnFleeAvoidanceZone,
-	[EvaluateNPCMovementDesire] = OnNPCMovement,
+	--[EvaluateNPCMovementDesire] = OnNPCMovement,
 }
 
 local function EvaluateNPCDetect(self)
@@ -664,8 +663,7 @@ local function EvaluateNPCDetect(self)
 	local fVisionDetect = self._fVisionDetect
 	local nDifficulty = GameRules:GetCustomGameDifficulty()
 	
-	--TODO: Change back to nVisionRange * 2.0
-	local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, nVisionRange * 1.0, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+	local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, nVisionRange * 2.0, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 	for k,v in pairs(hNearbyEntities) do
 		local hEntity = v
 		if IsValidExtendedEntity(hEntity) and hEntity:IsAlive() and hEntity:GetTeamNumber() ~= self:GetTeamNumber() and self:IsTargetInVisionArea(hEntity) then

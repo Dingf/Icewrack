@@ -26,8 +26,8 @@ function iw_drow_ranger_bullseye:GetCustomCastErrorTarget(hTarget)
 end
 
 function iw_drow_ranger_bullseye:OnSpellStart()
-	local hEntity = self:GetCaster()
 	if IsServer() then
+		local hEntity = self:GetCaster()
 		local szEffectName = "particles/units/heroes/hero_drow/drow_bullseye.vpcf"
 		if hEntity:HasModifier("modifier_iw_drow_ranger_frost_arrows") then
 			szEffectName = "particles/units/heroes/hero_drow/drow_bullseye_frost.vpcf"

@@ -165,11 +165,21 @@ function OnTooltipAbilityLoad()
 			if (tSpecialSections && tSpecialSections[i])
 			{
 				var tAbilitySpecials = tSpecialSections[i].split("|");
-				var fSpecialBaseValue = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecials[0]);
+				var tAbilityBaseValues = tAbilitySpecials[0].split("*", 2);
+
+				var fSpecialBaseValue = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilityBaseValues[0]);
 				var fSpecialBonusValue = 0;
-				if (tAbilitySpecials[0] === "r")
+				if (tAbilityBaseValues[0] === "r")
 				{
 					fSpecialBaseValue = (Abilities.GetAOERadius(nAbilityIndex)/100.0).toFixed(2);
+				}
+				else if (tAbilityBaseValues.length > 1)
+				{
+					var fSpecialBaseMultiplier = parseFloat(tAbilityBaseValues[1]);
+					if (fSpecialBaseMultiplier)
+					{
+						fSpecialBaseValue *= fSpecialBaseMultiplier;
+					}
 				}
 				var fSpecialTotal = fSpecialBaseValue;
 				if (typeof(fSpecialTotal) === "number")

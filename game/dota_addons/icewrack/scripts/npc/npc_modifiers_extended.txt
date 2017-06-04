@@ -762,6 +762,33 @@
 		}
 	}
 
+	"iw_bounty_hunter_smoke_bomb"
+	{
+		"modifier_iw_bounty_hunter_smoke_bomb"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_smoke_bomb.lua"
+
+			"IsDebuff"			"1"
+			"StatusEffect"			"IW_STATUS_EFFECT_BLIND"
+
+			"Texture"			"iw_bounty_hunter_smoke_bomb"
+
+			"Properties"
+			{
+				"IW_PROPERTY_VISIBILITY_PCT"	"%visibility"
+				"IW_PROPERTY_ACCURACY_PCT"	"%accuracy"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_BLIND"			"MODIFIER_STATE_VALUE_ENABLED"		
+			}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+	}
+
 	"iw_bounty_hunter_track"
 	{
 		"modifier_iw_bounty_hunter_track"

@@ -38,9 +38,18 @@ function OnTooltipModifierLoad()
 		szFormattedText += tTextSections[i];
 		if (tSpecialSections && tSpecialSections[i])
 		{
-			var fSpecialValue = tModifierArgs[tSpecialSections[i]];
+			var tSpecialBaseValues = tSpecialSections[i].split("*", 2);
+			var fSpecialValue = tModifierArgs[tSpecialBaseValues[0]];
 			if (typeof(fSpecialValue) === "number")
 			{
+				if (tSpecialBaseValues.length > 1)
+				{
+					var fSpecialBaseMultiplier = parseFloat(tSpecialBaseValues[1]);
+					if (fSpecialBaseMultiplier)
+					{
+						fSpecialValue *= fSpecialBaseMultiplier;
+					}
+				}
 				szFormattedText += "<font color=\"#ffffff\">";
 				szFormattedText += Math.round(fSpecialValue * 100)/100;
 				szFormattedText += "</font>";

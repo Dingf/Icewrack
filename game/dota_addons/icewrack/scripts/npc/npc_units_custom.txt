@@ -56,7 +56,7 @@
 		// General
 		//----------------------------------------------------------------
 		"BaseClass"				"npc_dota_base_additive"
-		"Model"					"models/props_structures/iw_training_dummy.vmdl"
+		"Model"					"models/development/invisiblebox.mdl"
 		"SoundSet"				""
 		"Level"					"0"
 

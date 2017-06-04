@@ -183,6 +183,21 @@
 		}
 	}
 
+	"iw_bounty_hunter_smoke_bomb"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/bounty_hunter/iw_bounty_hunter_smoke_bomb.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_KEYWORD_AOE"
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_bounty_hunter"
+			{
+				"Animation"		"ACT_DOTA_CAST_ABILITY_1"
+				"Rate"			"1.0"
+			}
+		}
+	}
+
 	"iw_bounty_hunter_jinada"
 	{
 	}

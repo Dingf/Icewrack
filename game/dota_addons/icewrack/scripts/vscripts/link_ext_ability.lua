@@ -93,15 +93,15 @@ function CExtAbilityLinker:GetBehavior()
 end
 
 function CExtAbilityLinker:GetAbilityTargetTeam()
-	return self._nAbilityTargetTeam
+	return self._nAbilityTargetTeam or DOTA_UNIT_TARGET_TEAM_NONE
 end
 
 function CExtAbilityLinker:GetAbilityTargetType()
-	return self._nAbilityTargetType
+	return self._nAbilityTargetType or DOTA_UNIT_TARGET_NONE
 end
 
 function CExtAbilityLinker:GetAbilityTargetFlags()
-	return self._nAbilityTargetFlags
+	return self._nAbilityTargetFlags or DOTA_UNIT_TARGET_FLAG_NONE
 end
 
 function CExtAbilityLinker:GetCastAnimation()

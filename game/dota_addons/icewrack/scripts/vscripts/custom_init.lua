@@ -92,7 +92,6 @@ function CreateAvoidanceZone(vPosition, fRadius, fValue, fDuration)
 	hDummy._fAvoidanceRadius = fRadius
 	hDummy._fAvoidanceValue = fValue
 	hDummy:SetThink(function() hDummy:RemoveSelf() end, "RemoveAvoidanceZone", fDuration)
-	DebugDrawSphere(vPosition, Vector(255, 0, 0), 128.0, fRadius, true, fDuration)
 	return hDummy
 
 end

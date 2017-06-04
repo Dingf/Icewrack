@@ -26,12 +26,6 @@
 		"CorpseTime"			"39"
 		"IsPlayableHero"		"1"
 
-		"Animation"
-		{
-			"Model"			"models/heroes/axe/axe.vmdl"
-			"ScriptFile"		"animation/animation_iw_axe.lua"
-		}
-
 		"EquipFlags"			"58719839"
 
 		"MaxStaminaFlat"		"90"
@@ -166,6 +160,8 @@
 		"UnitHeight"			"128"
 		"CorpseTime"			"89"
 		"IsPlayableHero"		"1"
+
+		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_bounty_hunter.vsndevts"
 
 		"EquipFlags"			"58588197"
 

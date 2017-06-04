@@ -20,6 +20,6 @@ function PerformAccuracyCheck(hVictim, hAttacker, fBonusAccuracy)
 		fDodgeMultiplier = fDodgeMultiplier * 1.5
 	end
 	local fScoreDiff = (hVictim:GetDodgeScore() * fDodgeMultiplier) - ((hAttacker:GetAccuracyScore() + fBonusAccuracy) * fAccuracyMultiplier)
-	local fDodgeChance = (math.tanh(math.max(-2.0, math.min(2.0, (fScoreDiff/100.0)))) + 1.0)/2.0
+	local fDodgeChance = (math.tanh(math.max(-1.5, math.min(1.5, (fScoreDiff/200.0)))) + 1.0)/2.0
 	return RandomFloat(0.0, 1.0) >= fDodgeChance
 end

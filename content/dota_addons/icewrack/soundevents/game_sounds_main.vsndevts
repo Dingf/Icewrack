@@ -515,3 +515,44 @@
 		}
 	}
 }
+
+"General.LevelUp.Bonus"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/ui/scan_cycle.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"0.000000"
+					}
+					"pitch"
+					{
+						"value"		"1.000000"
+					}
+					"soundlevel"
+					{
+						"value"		"75.000000"
+					}
+					"event_type"
+					{
+						"value"		"3.000000"
+					}
+				}
+			}
+		}
+	}
+}

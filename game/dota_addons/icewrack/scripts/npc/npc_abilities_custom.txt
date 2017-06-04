@@ -674,6 +674,54 @@
 		}
 	}
 
+	"iw_bounty_hunter_smoke_bomb"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityTextureName"			"iw_bounty_hunter_smoke_bomb"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.2"
+		"AbilityCastRange"			"550"
+		"AbilityAOERadius"			"350"
+
+		"Modifiers"
+		{
+			"modifier_iw_bounty_hunter_smoke_bomb"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"proj_speed"			"900"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"visibility"			"-100.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"accuracy"			"-100.0"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"12.0"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"avoidance"			"250"
+			}
+		}
+	}
+
 	"iw_bounty_hunter_jinada"
 	{
 		"BaseClass"				"ability_lua"

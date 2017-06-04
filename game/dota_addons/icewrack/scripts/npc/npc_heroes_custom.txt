@@ -153,7 +153,7 @@
 		"AbilityLayout"			"6"
 		"Ability1"			""
 		"Ability2"			"iw_bounty_hunter_jinada"
-		"Ability3"			""
+		"Ability3"			"iw_bounty_hunter_smoke_bomb"
 		"Ability4"			"iw_bounty_hunter_track"
 		"Ability5"			""
 		"Ability6"			""

@@ -183,7 +183,7 @@ local function OnCastPosition(hEntity, hAbility, vPosition)
 			local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D()
 			if not hEntity:IsTargetInLOS(vPosition) or fDistance > fCastRange then
 				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vPosition, false)
-				CTimer(0.03, OnDelayedVisionCastTarget, hAbility, hEntity, vPosition, hEntity:GetLastOrderID())
+				CTimer(0.03, OnDelayedVisionCastPosition, hAbility, hEntity, vPosition, hEntity:GetLastOrderID())
 				return false
 			end
 		end
@@ -256,6 +256,7 @@ function CIcewrackGameMode:ExecuteOrderFilter(keys)
 		tOrderTable.AbilityIndex = keys.entindex_ability
 		tOrderTable.Position = vPosition
 		tOrderTable.Queue = false
+		hEntity._nLastOrderID = hEntity._nLastOrderID + 1
 		
 		if nOrderType == DOTA_UNIT_ORDER_MOVE_TO_POSITION then
 			return OnMoveToPosition(hEntity, vPosition)
