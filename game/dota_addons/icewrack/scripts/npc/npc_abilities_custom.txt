@@ -674,6 +674,61 @@
 		}
 	}
 
+	"iw_bounty_hunter_trapjaw"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityTextureName"			"default"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.2"
+		"AbilityCastRange"			"100"
+		"AbilityAOERadius"			"50"
+
+		"Modifiers"
+		{
+			"modifier_iw_bounty_hunter_trapjaw_buff"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_bounty_hunter_trapjaw_timer"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_bounty_hunter_trapjaw_root"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"60.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"root_duration"			"7.5"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_min"			"55"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_max"			"64"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_min_bonus"		"0.8"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_max_bonus"		"0.8"
+			}
+		}
+	}
+
 	"iw_bounty_hunter_smoke_bomb"
 	{
 		"BaseClass"				"ability_lua"

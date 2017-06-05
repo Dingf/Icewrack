@@ -823,6 +823,12 @@ stExtModifierEventValues =
 	IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT = 12,
 }
 
+stExtModifierClassEnum =
+{  
+	IW_MODIFIER_CLASS_NONE = 0, IW_MODIFIER_CLASS_PHYSICAL = 1, IW_MODIFIER_CLASS_MAGICAL = 2, IW_MODIFIER_CLASS_ANY = 3
+}
+
+for k,v in pairs(stExtModifierClassEnum) do _G[k] = v end
 for k,v in pairs(stExtModifierEventValues) do _G[k] = v end
 
 stExtModifierEventAliases =

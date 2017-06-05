@@ -745,23 +745,6 @@
 		}
 	}
 
-	"iw_bounty_hunter_jinada"
-	{
-		"modifier_iw_bounty_hunter_jinada"
-		{
-			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_jinada.lua"
-
-			"IsHidden"			"1"
-
-			"Properties"			{}
-
-			"DatadrivenAttributes"		""
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"		{}
-			"DatadrivenEvents" 	{}
-		}
-	}
-
 	"iw_bounty_hunter_smoke_bomb"
 	{
 		"modifier_iw_bounty_hunter_smoke_bomb"
@@ -785,6 +768,92 @@
 				"MODIFIER_STATE_BLIND"			"MODIFIER_STATE_VALUE_ENABLED"		
 			}
 			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+	}
+
+	"iw_bounty_hunter_jinada"
+	{
+		"modifier_iw_bounty_hunter_jinada"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_jinada.lua"
+
+			"IsHidden"			"1"
+
+			"Properties"			{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+	}
+
+	"iw_bounty_hunter_trapjaw"
+	{
+		"modifier_iw_bounty_hunter_trapjaw_buff"
+		{
+			"IsHidden"			"1"
+
+			"Properties"			{}
+
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_ATTACK_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_INVISIBLE"			"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_INVULNERABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_NO_HEALTH_BAR"			"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_NO_UNIT_COLLISION"		"MODIFIER_STATE_VALUE_ENABLED"
+			}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
+		}
+
+		"modifier_iw_bounty_hunter_trapjaw_timer"
+		{
+			"Duration"			"%duration"
+			"IsHidden"			"1"
+			"IsStrict"			"1"
+
+			"Properties"			{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"
+			{
+				"MODIFIER_EVENT_ON_DESTROY"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/units/npc_iw_bounty_hunter_trapjaw.lua"
+						"Function"	"OnDestroy"
+					}
+				}
+			}
+		}
+
+		"modifier_iw_bounty_hunter_trapjaw_root"
+		{
+			"Duration"			"%root_duration"
+			"IsDebuff"			"1"
+
+			"StatusEffect"			"IW_STATUS_EFFECT_ROOT"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
+
+			"Texture"			"default"
+
+			"Properties"			{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_ROOTED"			"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_PROVIDES_VISION"	"MODIFIER_STATE_VALUE_ENABLED"
+			}
+			"DatadrivenProperties"	{}
 			"DatadrivenEvents" 	{}
 		}
 	}

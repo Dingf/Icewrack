@@ -1,5 +1,6 @@
 "use strict";
 
+//TODO: Investigate why sometimes there is a ton of extra whitespace at the end of a tooltip (maybe has to do with html?)
 function OnTooltipAbilityLoad()
 {
 	var nEntityIndex = parseInt($.GetContextPanel().GetAttributeString("entindex", ""));

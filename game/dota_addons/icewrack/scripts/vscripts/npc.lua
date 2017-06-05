@@ -670,7 +670,7 @@ local function EvaluateNPCDetect(self)
 			local vTargetVector = hEntity:GetAbsOrigin() - self:GetAbsOrigin()
 			local fVisionValue = hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_FLAT) * nVisionRange/math.max(IW_NPC_VISION_DISTANCE_MIN, vTargetVector:Length2D())
 			local fVisionMultiplier = math.max(0.0, 1.0 + hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_PCT)/100.0)
-			if hEntity:IsMoving() then
+			if hEntity:IsMoving() and hEntity:GetRunMode() then
 				fVisionMultiplier = fVisionMultiplier * 2.0
 			end
 			fVisionValue = fVisionValue * fVisionMultiplier

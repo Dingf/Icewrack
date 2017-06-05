@@ -9,7 +9,13 @@
 	</scripts>
 	
 	<Panel hittest="false" class="TooltipModifierRoot" ontooltiploaded="OnTooltipModifierLoad()">
-		<Label hittest="false" class="TooltipModifierTitle" id="Title" />
+		<Panel hittest="false" class="TooltipModifierTitleGroup">
+			<Label hittest="false" class="TooltipModifierTitleName" id="Title" />
+			<Panel hittest="false" class="TooltipModifierTitleExtraGroup">
+				<Label hittest="false" class="TooltipModifierTitleExtra" id="Class" />
+				<Label hittest="false" class="TooltipModifierTitleExtra" id="Status" />
+			</Panel>
+		</Panel>
 		<Panel hittest="false" class="TooltipModifierDivider" />
 		<Label hittest="false" html="true" class="TooltipModifierDescriptionLabel" id="Description" />
 	</Panel>

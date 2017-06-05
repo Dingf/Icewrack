@@ -6,13 +6,6 @@ require("mechanics/status_effects")
 
 if not CExtModifier then
 
-stExtModifierClassEnum =
-{  
-	IW_MODIFIER_CLASS_NONE = 0, IW_MODIFIER_CLASS_PHYSICAL = 1, IW_MODIFIER_CLASS_MAGICAL = 2, IW_MODIFIER_CLASS_ANY = 3
-}
-
-for k,v in pairs(stExtModifierClassEnum) do _G[k] = v end
-
 local stExtModifierData = LoadKeyValues("scripts/npc/npc_modifiers_extended.txt")
 
 local tIndexTableList = {}
@@ -43,8 +36,6 @@ CExtModifier = setmetatable({}, { __call =
 		hModifier._bIsLuaModifier = hModifier.OnCreated and true or false
 		hModifier._szAbilityName = szAbilityName
 		
-		hModifier._nStatusEffect = stIcewrackStatusEffectEnum[tExtModifierTemplate.StatusEffect] or IW_STATUS_EFFECT_NONE
-		hModifier._nModifierClass = stExtModifierClassEnum[tExtModifierTemplate.ModifierClass] or IW_MODIFIER_CLASS_NONE
 		hModifier._nModifierEntityFlags = GetFlagValue(tExtModifierTemplate.ModifierEntityFlags, stExtEntityFlagEnum)
 		hModifier._bIsDispellable = tExtModifierTemplate.IsDispellable == 1
 		hModifier._bIsStrict =  tExtModifierTemplate.IsStrict == 1
@@ -64,14 +55,6 @@ CExtModifier = setmetatable({}, { __call =
 
 function CExtModifier:GetAbilityName()
 	return self._szAbilityName
-end
-
-function CExtModifier:GetStatusEffect()
-	return self._nStatusEffect
-end
-
-function CExtModifier:GetModifierClass()
-	return self._nModifierClass
 end
 
 function CExtModifier:GetUnitFlags()

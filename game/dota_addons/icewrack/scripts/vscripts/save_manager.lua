@@ -166,9 +166,9 @@ function CSaveManager:PrecacheSaveEntities(hContext)
 				PrecacheResource("soundfile", stExtEntityData[k].SoundEvents, hContext)
 			end
 			if tExtEntityTemplate.Animation then
-				local szModelName = tExtEntityTemplate.Animation.Model
-				local szScriptFile = tExtEntityTemplate.Animation.ScriptFile
-				RegisterCustomAnimationScriptForModel(szModelName, szScriptFile)
+				for k2,v2 in pairs(tExtEntityTemplate.Animation) do
+					RegisterCustomAnimationScriptForModel(k2, v2)
+				end
 			end
 		end
 	end

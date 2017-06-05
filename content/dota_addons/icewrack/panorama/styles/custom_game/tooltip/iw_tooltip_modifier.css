@@ -4,10 +4,32 @@
 	flow-children: down;
 }
 
-.TooltipModifierTitle
+.TooltipModifierTitleGroup
+{
+	width: 100%;
+	flow-children: right;
+}
+
+.TooltipModifierTitleName
 {
 	color: #ffffff;
-	font-size: 18px;
+	font-size: 20px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+}
+
+.TooltipModifierTitleExtraGroup
+{
+	height: 100%;
+	width: fill-parent-flow(1.0);
+	flow-children: down;
+}
+
+.TooltipModifierTitleExtra
+{
+	width: 100%;
+	text-align: right;
+	color: #ffffff80;
+	font-size: 12px;
 	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
 }
 

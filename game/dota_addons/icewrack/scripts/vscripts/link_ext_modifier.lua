@@ -121,6 +121,8 @@ local function OnModifierCreatedDefault(self, keys)
 			keys = tModifierArgsTable[tostring(self:RetrieveModifierID())]
 			if keys then
 				RecordModifierArgs(self, keys)
+				keys.modifier_class = self:GetModifierClass()
+				keys.status_effect = self:GetStatusEffect()
 				for k,v in pairs(keys) do
 					if k ~= "texture" and type(v) ~= "table" then
 						table.insert(tModifierStringBuilder, k)
@@ -553,6 +555,9 @@ for k,v in pairs(stExtModifierData) do
 		hLuaModifier.RetrieveModifierID = function(self) hLuaModifier._nModifierID = hLuaModifier._nModifierID + 1 return hLuaModifier._nModifierID end
 		hLuaModifier._tModifierNetTable = {}
 		
+		hLuaModifier._nStatusEffect = stIcewrackStatusEffectEnum[tLinkLuaModifierTemplate.StatusEffect] or IW_STATUS_EFFECT_NONE
+		hLuaModifier._nModifierClass = stExtModifierClassEnum[tLinkLuaModifierTemplate.ModifierClass] or IW_MODIFIER_CLASS_NONE
+		
 		if hLuaModifier.CheckState then
 			local tBaseResults = hLuaModifier:CheckState()
 			for k,v in pairs(tBaseResults or {}) do
@@ -575,6 +580,8 @@ for k,v in pairs(stExtModifierData) do
 		hLuaModifier.CheckState = function() return hLuaModifier._tDatadrivenStateTable end
 		hLuaModifier.DeclareFunctions = function() return hLuaModifier._tDeclareFunctionList end
 		hLuaModifier.DeclareExtEvents = function() return hLuaModifier._tDeclareExtEventList end
+		hLuaModifier.GetStatusEffect = function() return hLuaModifier._nStatusEffect end
+		hLuaModifier.GetModifierClass = function() return hLuaModifier._nModifierClass end
 		
 		if hLuaModifier.OnCreated then table.insert(hLuaModifier._tOnCreatedList, hLuaModifier.OnCreated) end
 		table.insert(hLuaModifier._tOnCreatedList, 1, OnModifierCreatedDefault)

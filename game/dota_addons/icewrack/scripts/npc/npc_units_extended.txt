@@ -113,8 +113,7 @@
 		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_drow_ranger.vsndevts"
 		"Animation"
 		{
-			"Model"			"models/heroes/drow/drow.vmdl"
-			"ScriptFile"		"animation/animation_iw_drow_ranger.lua"
+			"models/heroes/drow/drow.vmdl"		"animation/animation_iw_drow_ranger.lua"
 		}
 
 		"EquipFlags"			"58588579"
@@ -162,6 +161,10 @@
 		"IsPlayableHero"		"1"
 
 		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_bounty_hunter.vsndevts"
+		"Animation"
+		{
+			"models/items/lone_druid/bear_trap/bear_trap.vmdl"		"animation/animation_iw_bounty_hunter_trapjaw.lua"
+		}
 
 		"EquipFlags"			"58588197"
 

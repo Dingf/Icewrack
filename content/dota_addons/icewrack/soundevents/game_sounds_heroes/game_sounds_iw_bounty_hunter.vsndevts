@@ -103,3 +103,56 @@
 		}
 	}
 }
+
+"Hero_BountyHunter.Trapjaw"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/weapons/hero/bounty_hunter/jinata.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"1.500000"
+					}
+					"pitch_rand_min"
+					{
+						"value"		"-0.10000"
+					}
+					"pitch_rand_max"
+					{
+						"value"		"0.10000"
+					}
+					"pitch"
+					{
+						"value"		"0.600000"
+					}
+					"soundlevel"
+					{
+						"value"		"100.000000"
+					}
+					"distance_max"
+					{
+						"value"		"1800.000000"
+					}
+					"event_type"
+					{
+						"value"		"1.000000"
+					}
+				}
+			}
+		}
+	}
+}

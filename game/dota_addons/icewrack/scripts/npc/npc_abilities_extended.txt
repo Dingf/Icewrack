@@ -183,6 +183,31 @@
 		}
 	}
 
+	"iw_bounty_hunter_trapjaw"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/bounty_hunter/iw_bounty_hunter_trapjaw.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL"
+
+		"Properties"
+		{
+			"IW_PROPERTY_CRIT_CHANCE_FLAT"		"0.07"
+			"IW_PROPERTY_CRIT_MULTI_FLAT"		"0.75"
+		}
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_bounty_hunter"
+			{
+				"Animation"		"ACT_DOTA_CAST_ABILITY_4"
+				"Rate"			"1.0"
+			}
+		}
+	}
+
+	"iw_bounty_hunter_jinada"
+	{
+	}
+
 	"iw_bounty_hunter_smoke_bomb"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/bounty_hunter/iw_bounty_hunter_smoke_bomb.lua"
@@ -196,10 +221,6 @@
 				"Rate"			"1.0"
 			}
 		}
-	}
-
-	"iw_bounty_hunter_jinada"
-	{
 	}
 
 	"iw_bounty_hunter_track"

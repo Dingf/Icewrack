@@ -59,6 +59,6 @@ function RefreshLoadout(hEntity)
 	end
 end
 
-function Spawn(keys)
+function Spawn(args)
 	thisEntity.RefreshLoadout = RefreshLoadout
 end
