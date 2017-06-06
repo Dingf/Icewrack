@@ -320,7 +320,7 @@
 		"ProjectileSpeed"		"1800"
 		"ArmorPhysical"			"0"
 		"MagicalResistance"		"0"
-		"StatusHealth"			"5000"
+		"StatusHealth"			"50"
 		"StatusHealthRegen"		"0.0"
 		"StatusMana"			"50"
 		"StatusManaRegen"		"1000.0"

@@ -16,10 +16,7 @@ CContainer = setmetatable({}, { __call =
 		end
 		
 		local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()] or {}
-		if not IsValidInstance(hEntity) then
-			hEntity = CInstance(hEntity, nInstanceID)
-		end
-		hEntity = CInteractable(hEntity)
+		hEntity = CInteractable(hEntity, nInstanceID)
 		
 		local tBaseIndexTable = getmetatable(hEntity).__index
 		local tExtIndexTable = tIndexTableList[tBaseIndexTable]

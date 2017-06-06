@@ -803,36 +803,12 @@
 				"MODIFIER_STATE_ATTACK_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
 				"MODIFIER_STATE_INVISIBLE"			"MODIFIER_STATE_VALUE_ENABLED"
 				"MODIFIER_STATE_INVULNERABLE"			"MODIFIER_STATE_VALUE_ENABLED"
-				"MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
 				"MODIFIER_STATE_NO_HEALTH_BAR"			"MODIFIER_STATE_VALUE_ENABLED"
 				"MODIFIER_STATE_NO_UNIT_COLLISION"		"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_FLYING_FOR_PATHING_PURPOSES_ONLY"	"MODIFIER_STATE_VALUE_ENABLED"
 			}
 			"DatadrivenProperties"		{}
 			"DatadrivenEvents"		{}
-		}
-
-		"modifier_iw_bounty_hunter_trapjaw_timer"
-		{
-			"Duration"			"%duration"
-			"IsHidden"			"1"
-			"IsStrict"			"1"
-
-			"Properties"			{}
-
-			"DatadrivenAttributes"		""
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"		{}
-			"DatadrivenEvents"
-			{
-				"MODIFIER_EVENT_ON_DESTROY"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/units/npc_iw_bounty_hunter_trapjaw.lua"
-						"Function"	"OnDestroy"
-					}
-				}
-			}
 		}
 
 		"modifier_iw_bounty_hunter_trapjaw_root"
@@ -855,6 +831,20 @@
 			}
 			"DatadrivenProperties"	{}
 			"DatadrivenEvents" 	{}
+		}
+
+		"modifier_iw_bounty_hunter_trapjaw_stack"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_trapjaw_stack.lua"
+
+			"Texture"			"default"
+
+			"Properties"			{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
 		}
 	}
 

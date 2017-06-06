@@ -18,16 +18,14 @@ CWorldObject = setmetatable({}, { __call =
 		local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()]
 		LogAssert(tInteractableTemplate, "Failed to load template \"%d\" - no data exists for this entry.", hEntity:GetUnitName())
 		
-		if not IsValidInstance(hEntity) then
-			hEntity = CInstance(hEntity, nInstanceID)
-		end
-		hEntity = CInteractable(hEntity)
+		hEntity = CInteractable(hEntity, nInstanceID)
 		local tBaseIndexTable = getmetatable(hEntity).__index
 		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
 		if not tExtIndexTable then
 			tExtIndexTable = ExtendIndexTable(hEntity, CWorldObject)
 			tIndexTableList[tBaseIndexTable] = tExtIndexTable
 		end
+		setmetatable(hEntity, tExtIndexTable)
 		
 		hEntity._bIsWorldObject = true
 		hEntity._nObjectState = 0
@@ -39,23 +37,28 @@ CWorldObject = setmetatable({}, { __call =
 			szScriptFilename = string.gsub(szScriptFilename, "\\", "/")
 			szScriptFilename = string.gsub(szScriptFilename, "scripts/vscripts/", "")
 			szScriptFilename = string.gsub(szScriptFilename, ".lua", "")
-			local hScriptFile = nil
-			if stWorldObjectScriptData[szScriptFilename] then
-				hScriptFile = stWorldObjectScriptData[szScriptFilename]
-			else
-				hScriptFile = assert(loadfile(szScriptFilename))
-				stWorldObjectScriptData[szScriptFilename] = hScriptFile
-			end
 			
 			local tContext = getfenv()
-			local tSandbox = setmetatable({}, { __index = tContext })
-			setfenv(1, tSandbox)
-			hScriptFile()
-			hEntity.ScriptOnCreated = type(tSandbox.OnCreated) == "function" and tSandbox.OnCreated or nil
-			hEntity.ScriptOnInteract = type(tSandbox.OnInteract) == "function" and tSandbox.OnInteract or nil
-			hEntity.ScriptInteractFilter = type(tSandbox.InteractFilter) == "function" and tSandbox.InteractFilter or nil
-			hEntity.ScriptGetCustomInteractError = type(tSandbox.GetCustomInteractError) == "function" and tSandbox.GetCustomInteractError or nil
-			setfenv(1, tContext)
+			local tScriptData = nil
+			if stWorldObjectScriptData[szScriptFilename] then
+				tScriptData = stWorldObjectScriptData[szScriptFilename]
+			else
+				tScriptData = setmetatable({}, { __index = tContext })
+				setfenv(1, tScriptData)
+				dofile(szScriptFilename)
+				setfenv(1, tContext)
+				stWorldObjectScriptData[szScriptFilename] = tScriptData
+			end
+			
+			if tScriptData then
+				setfenv(1, tScriptData)
+				hEntity.ScriptOnCreated = OnCreated
+				hEntity.ScriptOnInteract = OnInteract
+				hEntity.ScriptInteractFilterExclude = OnInteractFilterExclude
+				hEntity.ScriptInteractFilterInclude = OnInteractFilterInclude
+				hEntity.ScriptGetCustomInteractError = OnGetCustomInteractError
+				setfenv(1, tContext)
+			end
 		end
 		
 		hEntity:OnCreated()
@@ -63,6 +66,16 @@ CWorldObject = setmetatable({}, { __call =
 		return hEntity
 	end
 })
+
+function CWorldObject:GetObjectState()
+	return self._nObjectState
+end
+
+function CWorldObject:SetObjectState(nState)
+	if type(nState) == "number" then
+		self._nObjectState = nState
+	end
+end
 
 function CWorldObject:OnCreated()
 	if self.ScriptOnCreated then
@@ -83,10 +96,17 @@ end
 function CWorldObject:InteractFilterExclude(hEntity)
 	if not self._hPrecondition:EvaluateExpression() then
 		return false
-	elseif self.ScriptInteractFilter then
-		return self:ScriptInteractFilter(hEntity)
+	elseif self.ScriptInteractFilterExclude then
+		return self:ScriptInteractFilterExclude(hEntity)
 	end
 	return true
+end
+
+function CWorldObject:InteractFilterInclude(hEntity)
+	if self.ScriptInteractFilterInclude then
+		return self:ScriptInteractFilterInclude(hEntity)
+	end
+	return false
 end
 
 function CWorldObject:GetCustomInteractError(hEntity)

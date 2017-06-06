@@ -11,7 +11,7 @@ end
 function modifier_iw_bounty_hunter_track_reveal:OnIntervalThink()
 	local hEntity = self:GetParent()
 	local hCaster = self:GetCaster()
-	if IsServer() and hEntity:GetTeamNumber() ~= hCaster:GetTeamNumber() and hEntity:IsMoving() then
+	if IsServer() and hEntity:IsMoving() then
 		AddFOWViewer(hCaster:GetTeamNumber(), hEntity:GetAbsOrigin(), 16.0, 0.0, true)
 	end
 end

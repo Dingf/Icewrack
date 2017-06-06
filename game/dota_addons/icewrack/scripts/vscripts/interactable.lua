@@ -2,13 +2,6 @@ if not CInteractable then
 
 DEFAULT_INTERACT_RANGE = 128
 
-local stInteractableTypeEnum =
-{
-	IW_INTERACTABLE_TYPE_NONE = 0,
-    IW_INTERACTABLE_TYPE_CONTAINER = 1,
-	IW_INTERACTABLE_TYPE_WORLD_OBJECT = 2,
-}
-
 local stInteractableResultEnum =
 {
 	IW_INTERACTABLE_RESULT_FAIL = 0,
@@ -16,21 +9,23 @@ local stInteractableResultEnum =
 	IW_INTERACTABLE_RESULT_EN_ROUTE = 2,
 }
 
-for k,v in pairs(stInteractableTypeEnum) do _G[k] = v end
 for k,v in pairs(stInteractableResultEnum) do _G[k] = v end
 
 local stInteractableData = LoadKeyValues("scripts/npc/npc_interactables_extended.txt")
 
 local tIndexTableList = {}
 CInteractable = setmetatable({}, { __call =
-	function(self, hEntity)
+	function(self, hEntity, nInstanceID)
 		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), "Type mismatch (expected \"%s\", got %s)", "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsInteractable then
 			return hEntity
 		end
 		
+		if not IsValidInstance(hEntity) then
+			hEntity = CInstance(hEntity, nInstanceID)
+		end
+		
 		local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()] or {}
-		hEntity._nInteractType = stInteractableTypeEnum[tInteractableTemplate.Type] or IW_INTERACTABLE_TYPE_NONE
 		hEntity._fInteractRange = tInteractableTemplate.InteractRange or DEFAULT_INTERACT_RANGE
 		hEntity._szInteractZone = tInteractableTemplate.InteractZone
 		

@@ -93,7 +93,7 @@ local function OnInteractableActivate(hEntity, hTarget)
 			local hSelectedEntity = EntIndexToHScript(v)
 			if hTarget:OnInteractFilter(hSelectedEntity) then
 				local fDistance = hSelectedEntity:GetRangeToUnit(hTarget) - hTarget:GetHullRadius() - hSelectedEntity:GetHullRadius()
-					if not hBestEntity or fDistance < fBestDistance then
+				if not hBestEntity or fDistance < fBestDistance then
 					hBestEntity = hSelectedEntity
 					fBestDistance = fDistance
 				end

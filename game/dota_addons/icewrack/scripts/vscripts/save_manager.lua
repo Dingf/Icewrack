@@ -32,9 +32,9 @@ IW_SAVE_MODE_NORMAL = 0
 IW_SAVE_MODE_QUICKSAVE = 1
 IW_SAVE_MODE_AUTOSAVE = 2
 
-IW_SAVE_STATE_DISABLED = 0
-IW_SAVE_STATE_ENABLED = 1
-IW_SAVE_STATE_PERSISTENT = 2
+IW_SAVE_STATE_DISABLED = 0		--This instance won't spawn at all
+IW_SAVE_STATE_ENABLED = 1		--This instance will spawn if the map has it listed in its instance list or if it is not an ext_entity/interactable
+IW_SAVE_STATE_PERSISTENT = 2	--This instance is player-controlled and will always spawn if its not disabled/dead
 
 local function TableToSaveString(tData, bIsChild)
 	local tSaveTable = {}
@@ -313,9 +313,9 @@ local function SaveEntityData(hInstance)
 	tEntityTable.Stamina = hInstance:IsAlive() and hInstance:GetStamina() or 0
 	tEntityTable.StaminaTime = hInstance:GetStaminaRegenTime() - GameRules:GetGameTime()
 	tEntityTable.Team = hInstance:GetTeamNumber()
-	tEntityTable.State = (hInstance:GetMainControllingPlayer() == 0) and IW_SAVE_STATE_PERSISTENT or IW_SAVE_STATE_ENABLED
 	tEntityTable.LastMap = GetMapName()
 	tEntityTable.RunMode = hInstance:GetRunMode() and 1 or 0
+	tEntityTable.State = (hInstance:GetMainControllingPlayer() == 0) and IW_SAVE_STATE_PERSISTENT or IW_SAVE_STATE_ENABLED
 	
 	tEntityTable.Properties = {}
 	for k,v in pairs(stIcewrackPropertyEnum) do
@@ -401,13 +401,15 @@ local function SaveInteractableData(hInstance)
 	tInteractableData.UnitName = hInstance:GetUnitName()
 	tInteractableData.Position = hInstance:GetAbsOrigin()
 	tInteractableData.Forward = hInstance:GetForwardVector()
+	tInteractableData.LastMap = GetMapName()
+	tInteractableData.Team = hInstance:GetTeamNumber()
 	tInteractableData.State = IW_SAVE_STATE_ENABLED
 	if IsValidContainer(hInstance) then
-		tInteractableData.Type = IW_INTERACTABLE_TYPE_CONTAINER
+		tInteractableData.Type = IW_INSTANCE_CONTAINER
 		tInteractableData.Inventory = SaveInventoryData(hInstance)
 		return tInteractableData
-	elseif IsValidProp(hInstance) then
-		tInteractableData.Type = IW_INTERACTABLE_TYPE_WORLD_OBJECT
+	elseif IsValidWorldObject(hInstance) then
+		tInteractableData.Type = IW_INSTANCE_WORLD_OBJECT
 		tInteractableData.ObjectState = hInstance._nObjectState 
 		return tInteractableData
 	end
@@ -631,7 +633,7 @@ local function LoadEntityData(hEntity, tEntityData)
 	end
 end
 
-local function LoadMapEntities()
+local function LoadStaticEntities()
 	local tEntitySaveList = CSaveManager._tSaveData.Entities or {}
 	for k,v in pairs(CSaveManager._tInstanceData) do
 		local nInstanceID = tonumber(k)
@@ -656,12 +658,13 @@ local function LoadMapEntities()
 	end
 end
 
-local function LoadPlayerEntities()
+local function LoadDynamicEntities()
 	local tEntitySaveList = CSaveManager._tSaveData.Entities or {}
 	for k,v in pairs(tEntitySaveList) do
 		local nInstanceID = tonumber(k)
-		local nInstanceState = v.State
-		if nInstanceState == IW_SAVE_STATE_PERSISTENT and (v.Health ~= 0 or v.LastMap == GetMapName()) then
+		local bIsPersistentInstance = (v.State == IW_SAVE_STATE_PERSISTENT and (v.Health > 0 or v.LastMap == GetMapName()))
+		local bIsMapDynamicInstance = (v.State == IW_SAVE_STATE_ENABLED and nInstanceID >= IW_INSTANCE_DYNAMIC_BASE and v.LastMap == GetMapName())
+		if bIsPersistentInstance or bIsMapDynamicInstance then
 			local hEntity = GetInstanceByID(nInstanceID)
 			if not hEntity then
 				if nInstanceID == CGameState:GetGameStateValue("game.hero_selection") then
@@ -673,25 +676,66 @@ local function LoadPlayerEntities()
 			end
 			if IsValidExtendedEntity(hEntity) then
 				LoadEntityData(hEntity, v)
-				hEntity:SetControllableByPlayer(0, true)
+				if bIsPersistentInstance then
+					hEntity:SetControllableByPlayer(0, true)
+				end
 			end
 		end
 	end
 end
 
-local function LoadSavedContainers()
+local function LoadStaticInteractables()
 	local tInteractableSaveList = CSaveManager._tSaveData.Interactables or {}
 	for k,v in pairs(CSaveManager._tInstanceData) do
 		local nInstanceID = tonumber(k)
 		local hPrecondition = CExpression(v.Precondition or "")
-		if stInstanceData[k] and stInstanceData[k].Type == IW_INSTANCE_CONTAINER and hPrecondition:EvaluateExpression() then
-			local tContainerData = tInteractableSaveList[k]
-			if tContainerData and tContainerData.State ~= IW_SAVE_STATE_DISABLED then
-				local szUnitName = stInstanceData[k].Name
+		if stInstanceData[k] and hPrecondition:EvaluateExpression() then
+			local tInteractableData = tInteractableSaveList[k]
+			if stInstanceData[k].Type == IW_INSTANCE_CONTAINER then
+				if tInteractableData and tInteractableData.State == IW_SAVE_STATE_ENABLED then
+					local szUnitName = stInstanceData[k].Name
+					local nUnitTeam = stInstanceData[k].Team
+					local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID, false)
+					LoadInventoryData(hContainer, tInteractableData.Inventory)
+					hContainer:SetForwardVector(StringToVector(v.Forward))
+				end
+			elseif stInstanceData[k].Type == IW_INSTANCE_PROP then
+				local tInteractableData = tInteractableSaveList[k]
+				if not tInteractableData or tInteractableData.State == IW_SAVE_STATE_ENABLED then
+					local szUnitName = stInstanceData[k].Name
+					local nUnitTeam = stInstanceData[k].Team
+					local hObject = CWorldObject(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID)
+					if tInteractableData and tInteractableData.ObjectState then
+						hObject._nObjectState = tInteractableData.ObjectState
+					end
+					hObject:SetForwardVector(StringToVector(v.Forward))
+				end
+			end
+		end
+	end
+end
+
+local function LoadDynamicInteractables()
+	local tInteractableSaveList = CSaveManager._tSaveData.Interactables or {}
+	for k,v in pairs(tInteractableSaveList) do
+		local nInstanceID = tonumber(k)
+		local bIsPersistentInstance = (v.State == IW_SAVE_STATE_PERSISTENT and (v.Health > 0 or v.LastMap == GetMapName()))
+		local bIsMapDynamicInstance = (v.State == IW_SAVE_STATE_ENABLED and nInstanceID >= IW_INSTANCE_DYNAMIC_BASE and v.LastMap == GetMapName())
+		if bIsPersistentInstance or bIsMapDynamicInstance then
+			if v.Type == IW_INSTANCE_CONTAINER then
+				local szUnitName = stInstanceData[k].UnitName
 				local nUnitTeam = stInstanceData[k].Team
 				local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID, false)
-				LoadInventoryData(hContainer, tContainerData.Inventory)
+				LoadInventoryData(hContainer, v.Inventory)
 				hContainer:SetForwardVector(StringToVector(v.Forward))
+			elseif v.Type == IW_INSTANCE_PROP then
+				local szUnitName = stInstanceData[k].UnitName
+				local nUnitTeam = stInstanceData[k].Team
+				local hObject = CWorldObject(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID)
+				if tInteractableData and tInteractableData.ObjectState then
+					hObject._nObjectState = tInteractableData.ObjectState
+				end
+				hObject:SetForwardVector(StringToVector(v.Forward))
 			end
 		end
 	end
@@ -1006,10 +1050,10 @@ function CSaveManager:LoadGame()
 	LoadGlobalData()
 	LoadGameStates()
 	LoadPhysicalItems()
-	LoadMapEntities()
-	LoadPlayerEntities()
-	LoadSavedContainers()
-	LoadWorldObjects()
+	LoadStaticEntities()
+	LoadDynamicEntities()
+	LoadStaticInteractables()
+	LoadDynamicInteractables()
 	LoadAbilities()
 	LoadParty()
 	LoadEntityPositions()

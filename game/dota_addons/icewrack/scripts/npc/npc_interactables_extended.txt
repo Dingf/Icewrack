@@ -1,5 +1,16 @@
 "IcewrackExtendedPropDefinitions"
 {
+	"npc_iw_bounty_hunter_trapjaw"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_WORLD_OBJECT"
+		"InteractRange"		"64"
+
+		"Precondition"		""
+		"Postcondition"		""
+
+		"ScriptFile"		"scripts/vscripts/units/npc_iw_bounty_hunter_trapjaw.lua"
+	}
+
 	"prop_iw_anvil"
 	{
 		"Type"			"IW_INTERACTABLE_TYPE_WORLD_OBJECT"
