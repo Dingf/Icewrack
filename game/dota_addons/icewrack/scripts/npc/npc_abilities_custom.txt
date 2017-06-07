@@ -679,11 +679,11 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
 		"AbilityTextureName"			"default"
 
 		"MaxLevel"				"1"
-		"AbilityCastPoint"			"0.2"
+		"AbilityCastPoint"			"3.5"
 		"AbilityCastRange"			"100"
 		"AbilityAOERadius"			"50"
 
@@ -710,6 +710,11 @@
 			{
 				"var_type"			"FIELD_FLOAT"
 				"damage"			"125"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"trapjaw_const"			"1"
 			}
 		}
 	}

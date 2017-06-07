@@ -73,6 +73,7 @@ function CExtModifier:GetRealDurationMultiplier(hTarget)
 	local hSource = self:GetCaster()
 	local fDurationMultiplier = 1.0
 	if self:IsDebuff() then
+		print("lol", hSource:GetOtherDebuffDuration())
 		fDurationMultiplier = hTarget:GetSelfDebuffDuration()
 		if self:GetModifierClass() == IW_MODIFIER_CLASS_PHYSICAL then
 			fDurationMultiplier = fDurationMultiplier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetPhysicalDebuffDefense())

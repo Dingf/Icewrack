@@ -146,6 +146,17 @@ CExtItem = setmetatable({}, { __call =
 			end
 		end
 		
+		hItem._tAbilitySpecialTable = {}
+		local tAbilitySpecial = tBaseItemTemplate.AbilitySpecial or {}
+		for k,v in pairs(tAbilitySpecial) do
+			for k2,v2 in pairs(v) do
+				if k2 ~= "var_type" then
+					hItem._tAbilitySpecialTable[k2] = v2
+					break
+				end
+			end
+		end
+		
 		hItem._tNetTable =
 		{
 			identified = hItem._bIsIdentified,
@@ -266,9 +277,9 @@ function CExtItem:ApplyModifiers(nTrigger, hEntity)
 		if not nTrigger or v == nTrigger then
 			local hModifier = nil
 			if IsInstanceOf(self, CDOTA_Item_Lua) then
-				hModifier = hEntity:AddNewModifier(hEntity, self, k, {})
+				hModifier = hEntity:AddNewModifier(hEntity, self, k, self._tAbilitySpecialTable)
 			else
-				hModifier = self:ApplyDataDrivenModifier(hEntity, hEntity, k, {})
+				hModifier = self:ApplyDataDrivenModifier(hEntity, hEntity, k, self._tAbilitySpecialTable)
 			end
 			if hModifier then
 				self._tActiveModifierList[hModifier] = v

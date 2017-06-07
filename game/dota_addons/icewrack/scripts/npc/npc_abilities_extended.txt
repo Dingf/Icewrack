@@ -198,7 +198,7 @@
 		{
 			"npc_dota_hero_bounty_hunter"
 			{
-				"Animation"		"ACT_DOTA_CAST_ABILITY_4"
+				"Animation"		"ACT_DOTA_TELEPORT"
 				"Rate"			"1.0"
 			}
 		}

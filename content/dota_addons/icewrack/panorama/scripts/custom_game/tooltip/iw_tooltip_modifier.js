@@ -49,10 +49,17 @@ function OnTooltipModifierLoad()
 			{
 				if (tSpecialBaseValues.length > 1)
 				{
-					var fSpecialBaseMultiplier = parseFloat(tSpecialBaseValues[1]);
-					if (fSpecialBaseMultiplier)
+					if (tSpecialBaseValues[1] === "stack_count")
 					{
-						fSpecialValue *= fSpecialBaseMultiplier;
+						fSpecialValue *= Buffs.GetStackCount(nEntityIndex, nBuffIndex);
+					}
+					else
+					{
+						var fSpecialBaseMultiplier = parseFloat(tSpecialBaseValues[1]);
+						if (fSpecialBaseMultiplier)
+						{
+							fSpecialValue *= fSpecialBaseMultiplier;
+						}
 					}
 				}
 				szFormattedText += "<font color=\"#ffffff\">";

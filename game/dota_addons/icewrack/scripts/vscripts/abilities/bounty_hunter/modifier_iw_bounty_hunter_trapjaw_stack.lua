@@ -8,4 +8,3 @@ function modifier_iw_bounty_hunter_trapjaw_stack:OnCreated(args)
 		self:SetStackCount(nStackLimit)
 	end
 end
-

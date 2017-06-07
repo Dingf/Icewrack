@@ -54,6 +54,17 @@ CExtAbility = setmetatable({ _tIndexTableList = {} }, { __call =
 			end
 		end
 		
+		hAbility._tAbilitySpecialTable = {}
+		local tAbilitySpecial = tBaseAbilityTemplate.AbilitySpecial or {}
+		for k,v in pairs(tAbilitySpecial) do
+			for k2,v2 in pairs(v) do
+				if k2 ~= "var_type" then
+					hAbility._tAbilitySpecialTable[k2] = v2
+					break
+				end
+			end
+		end
+		
 		for k,v in pairs(hAbility._tPropertyList or {}) do
 			local nPropertyID = stIcewrackPropertyEnum[k]
 			if nPropertyID then
@@ -94,9 +105,9 @@ function CExtAbility:ApplyModifiers(nTrigger, hEntity)
 		if not nTrigger or v == nTrigger then
 			local hModifier = nil
 			if IsInstanceOf(self, CDOTA_Ability_Lua) then
-				hModifier = hEntity:AddNewModifier(hEntity, self, k, {})
+				hModifier = hEntity:AddNewModifier(hEntity, self, k, self._tAbilitySpecialTable)
 			else
-				hModifier = self:ApplyDataDrivenModifier(hEntity, hEntity, k, {})
+				hModifier = self:ApplyDataDrivenModifier(hEntity, hEntity, k, self._tAbilitySpecialTable)
 			end
 			if hModifier then
 				self._tActiveModifierList[hModifier] = v
