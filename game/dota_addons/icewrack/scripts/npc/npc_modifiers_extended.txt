@@ -837,6 +837,8 @@
 		{
 			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_trapjaw_stack.lua"
 
+			"MaxStacks"			"8"
+
 			"Texture"			"default"
 
 			"Properties"			{}

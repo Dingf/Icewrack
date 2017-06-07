@@ -15,6 +15,7 @@ CWorldObject = setmetatable({}, { __call =
 			return hEntity
 		end
 		
+		local szEntityName = hEntity:GetUnitName()
 		local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()]
 		LogAssert(tInteractableTemplate, "Failed to load template \"%d\" - no data exists for this entry.", hEntity:GetUnitName())
 		
@@ -28,7 +29,7 @@ CWorldObject = setmetatable({}, { __call =
 		setmetatable(hEntity, tExtIndexTable)
 		
 		hEntity._bIsWorldObject = true
-		hEntity._nObjectState = 0
+		hEntity._fObjectState = 0
 		hEntity._hPrecondition = CExpression(tInteractableTemplate.Precondition or "")
 		hEntity._hPostcondition = CExpression(tInteractableTemplate.Postcondition or "")
 		
@@ -52,11 +53,12 @@ CWorldObject = setmetatable({}, { __call =
 			
 			if tScriptData then
 				setfenv(1, tScriptData)
-				hEntity.ScriptOnCreated = OnCreated
-				hEntity.ScriptOnInteract = OnInteract
-				hEntity.ScriptInteractFilterExclude = OnInteractFilterExclude
-				hEntity.ScriptInteractFilterInclude = OnInteractFilterInclude
-				hEntity.ScriptGetCustomInteractError = OnGetCustomInteractError
+				local tBaseClass = tScriptData[szEntityName]
+				if tBaseClass then
+					for k,v in pairs(tBaseClass) do
+						hEntity[k] = v
+					end
+				end
 				setfenv(1, tContext)
 			end
 		end
@@ -68,27 +70,28 @@ CWorldObject = setmetatable({}, { __call =
 })
 
 function CWorldObject:GetObjectState()
-	return self._nObjectState
+	return self._fObjectState
 end
 
-function CWorldObject:SetObjectState(nState)
-	if type(nState) == "number" then
-		self._nObjectState = nState
+function CWorldObject:SetObjectState(fState)
+	if type(fState) == "number" then
+		self._fObjectState = fState
+		self:OnChangeState(fState)
 	end
 end
 
 function CWorldObject:OnCreated()
-	if self.ScriptOnCreated then
-		self:ScriptOnCreated()
-	end
+end
+
+function CWorldObject:OnChangeState(fNewState)
 end
 
 function CWorldObject:Interact(hEntity)
 	if self._hPostcondition then
 		self._hPostcondition:EvaluateExpression()
 	end
-	if self.ScriptOnInteract then
-		return self:ScriptOnInteract(hEntity)
+	if self.OnInteract then
+		return self:OnInteract(hEntity)
 	end
 	return true
 end
@@ -96,15 +99,15 @@ end
 function CWorldObject:InteractFilterExclude(hEntity)
 	if not self._hPrecondition:EvaluateExpression() then
 		return false
-	elseif self.ScriptInteractFilterExclude then
-		return self:ScriptInteractFilterExclude(hEntity)
+	elseif self.OnInteractFilterExclude then
+		return self:OnInteractFilterExclude(hEntity)
 	end
 	return true
 end
 
 function CWorldObject:InteractFilterInclude(hEntity)
-	if self.ScriptInteractFilterInclude then
-		return self:ScriptInteractFilterInclude(hEntity)
+	if self.OnInteractFilterInclude then
+		return self:OnInteractFilterInclude(hEntity)
 	end
 	return false
 end
@@ -112,8 +115,8 @@ end
 function CWorldObject:GetCustomInteractError(hEntity)
 	if not self._hPrecondition:EvaluateExpression() then
 		return "TODO: The precondition failed. Replace me."
-	elseif self.ScriptGetCustomInteractError then
-		return self:ScriptGetCustomInteractError(hEntity)
+	elseif self.OnGetCustomInteractError then
+		return self:OnGetCustomInteractError(hEntity)
 	end
 end
 

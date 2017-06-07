@@ -59,8 +59,8 @@ function UpdateBuffIcon(hPanel)
 		{
 			hPanel.FindChildTraverse("StackLabel").visible = false;
 		}
-		$.Schedule(0.03, hPanel._hUpdateFunction);
 	}
+	$.Schedule(0.03, hPanel._hUpdateFunction);
 }
 
 function OnBuffIconLoad()

@@ -404,13 +404,18 @@ local function SaveInteractableData(hInstance)
 	tInteractableData.LastMap = GetMapName()
 	tInteractableData.Team = hInstance:GetTeamNumber()
 	tInteractableData.State = IW_SAVE_STATE_ENABLED
+	
+	local hOwner = hInstance:GetOwner()
+	if hOwner then
+		tInteractableData.Owner = hOwner:GetInstanceID()
+	end
 	if IsValidContainer(hInstance) then
 		tInteractableData.Type = IW_INSTANCE_CONTAINER
 		tInteractableData.Inventory = SaveInventoryData(hInstance)
 		return tInteractableData
 	elseif IsValidWorldObject(hInstance) then
 		tInteractableData.Type = IW_INSTANCE_WORLD_OBJECT
-		tInteractableData.ObjectState = hInstance._nObjectState 
+		tInteractableData.ObjectState = hInstance._fObjectState 
 		return tInteractableData
 	end
 end
@@ -446,12 +451,13 @@ function CSaveManager:SaveGame(szSaveName)
 	end
 	
 	for _,hInstance in pairs(CInstance:GetInstanceList()) do
-		local szInstanceName = tostring(hInstance:GetInstanceID())
-		if hInstance:GetInstanceID() == 0 then
+		local nInstanceID = hInstance:GetInstanceID()
+		local szInstanceName = tostring(nInstanceID)
+		if nInstanceID == 0 then
 			--Do nothing; this is the "default" property instance used by CExtEntity
 		elseif hInstance:IsNull() or not IsValidEntity(hInstance) then
 			local tSaveValue = nil
-			if hInstance:GetInstanceID() < IW_INSTANCE_DYNAMIC_BASE then
+			if nInstanceID < IW_INSTANCE_DYNAMIC_BASE then
 				tSaveValue = { State = IW_SAVE_STATE_DISABLED }
 			end
 			if hInstance._bIsExtendedEntity then
@@ -695,20 +701,22 @@ local function LoadStaticInteractables()
 				if tInteractableData and tInteractableData.State == IW_SAVE_STATE_ENABLED then
 					local szUnitName = stInstanceData[k].Name
 					local nUnitTeam = stInstanceData[k].Team
-					local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID, false)
+					local hOwner = GetInstanceByID(tInteractableData.Owner)
+					local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, hOwner, hOwner, nUnitTeam), nInstanceID, false)
 					LoadInventoryData(hContainer, tInteractableData.Inventory)
 					hContainer:SetForwardVector(StringToVector(v.Forward))
 				end
-			elseif stInstanceData[k].Type == IW_INSTANCE_PROP then
+			elseif stInstanceData[k].Type == IW_INSTANCE_WORLD_OBJECT then
 				local tInteractableData = tInteractableSaveList[k]
 				if not tInteractableData or tInteractableData.State == IW_SAVE_STATE_ENABLED then
 					local szUnitName = stInstanceData[k].Name
 					local nUnitTeam = stInstanceData[k].Team
-					local hObject = CWorldObject(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID)
+					local hOwner = tInteractableData and GetInstanceByID(tInteractableData.Owner) or nil
+					local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, StringToVector(v.Position), false, hOwner, hOwner, nUnitTeam), nInstanceID)
 					if tInteractableData and tInteractableData.ObjectState then
-						hObject._nObjectState = tInteractableData.ObjectState
+						hWorldObject:SetObjectState(tInteractableData.ObjectState)
 					end
-					hObject:SetForwardVector(StringToVector(v.Forward))
+					hWorldObject:SetForwardVector(StringToVector(v.Forward))
 				end
 			end
 		end
@@ -722,40 +730,19 @@ local function LoadDynamicInteractables()
 		local bIsPersistentInstance = (v.State == IW_SAVE_STATE_PERSISTENT and (v.Health > 0 or v.LastMap == GetMapName()))
 		local bIsMapDynamicInstance = (v.State == IW_SAVE_STATE_ENABLED and nInstanceID >= IW_INSTANCE_DYNAMIC_BASE and v.LastMap == GetMapName())
 		if bIsPersistentInstance or bIsMapDynamicInstance then
+			local szUnitName = v.UnitName
+			local nUnitTeam = v.Team
+			local hOwner = GetInstanceByID(v.Owner)
 			if v.Type == IW_INSTANCE_CONTAINER then
-				local szUnitName = stInstanceData[k].UnitName
-				local nUnitTeam = stInstanceData[k].Team
-				local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID, false)
+				local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, hOwner, hOwner, nUnitTeam), nInstanceID, false)
 				LoadInventoryData(hContainer, v.Inventory)
 				hContainer:SetForwardVector(StringToVector(v.Forward))
-			elseif v.Type == IW_INSTANCE_PROP then
-				local szUnitName = stInstanceData[k].UnitName
-				local nUnitTeam = stInstanceData[k].Team
-				local hObject = CWorldObject(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID)
-				if tInteractableData and tInteractableData.ObjectState then
-					hObject._nObjectState = tInteractableData.ObjectState
+			elseif v.Type == IW_INSTANCE_WORLD_OBJECT then
+				local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, StringToVector(v.Position), false, hOwner, hOwner, nUnitTeam), nInstanceID)
+				if v.ObjectState then
+					hWorldObject:SetObjectState(v.ObjectState)
 				end
-				hObject:SetForwardVector(StringToVector(v.Forward))
-			end
-		end
-	end
-end
-
-local function LoadWorldObjects()
-	local tInteractableSaveList = CSaveManager._tSaveData.Interactables or {}
-	for k,v in pairs(CSaveManager._tInstanceData) do
-		local nInstanceID = tonumber(k)
-		local hPrecondition = CExpression(v.Precondition or "")
-		if stInstanceData[k] and stInstanceData[k].Type == IW_INSTANCE_PROP and hPrecondition:EvaluateExpression() then
-			local tPropData = tInteractableSaveList[k]
-			if not tPropData or tPropData.State ~= IW_SAVE_STATE_DISABLED then
-				local szUnitName = stInstanceData[k].Name
-				local nUnitTeam = stInstanceData[k].Team
-				local hObject = CWorldObject(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID)
-				if tPropData and tPropData.ObjectState then
-					hObject._nObjectState = tPropData.ObjectState
-				end
-				hObject:SetForwardVector(StringToVector(v.Forward))
+				hWorldObject:SetForwardVector(StringToVector(v.Forward))
 			end
 		end
 	end
@@ -1027,7 +1014,7 @@ local function LoadModifiers()
 		local nInstanceState = v.State
 		if nInstanceState == 2 or (nInstanceState == 1 and bIsCurrentMap) then
 			local hInstance = GetInstanceByID(nInstanceID)
-			if IsValidExtendedEntity(hEntity) then
+			if IsValidExtendedEntity(hInstance) then
 				for k2,v2 in pairs(v.Modifiers or {}) do
 					LoadSavedModifierData(hInstance, v2, tonumber(k2))
 				end

@@ -1,16 +1,18 @@
 require("world_object")
 
-local CIcewrack_BountyTrapjaw = class({})
+--States
+--  0 = Placed, but not armed. Trapjaw takes 3.0s to arm
+--  1 = Armed. Will trigger on any nearby non-flying enemy
+--  2 = Used. The Trapjaw has triggered on an enemy and cannot trigger again
 
-function CIcewrack_BountyTrapjaw:OnTrapjawTrigger(hTarget)
+npc_iw_bounty_hunter_trapjaw = class({})
+
+function npc_iw_bounty_hunter_trapjaw:OnTrapjawTrigger(hTarget)
 	local hModifier = self:FindModifierByName("modifier_iw_bounty_hunter_trapjaw_buff")
 	local hAbility = hModifier:GetAbility()
 	local hCaster = hModifier:GetCaster()
 	if hTarget and hAbility and hCaster then
-		self:SetObjectState(1)
-		self:ForceKill(false)
-		self:SetThink(function() self:RespawnUnit() end, "TrapjawRespawn", 1.0)
-	
+		self:SetObjectState(2)
 		local tDamageTable =
 		{
 			attacker = hCaster,
@@ -20,8 +22,8 @@ function CIcewrack_BountyTrapjaw:OnTrapjawTrigger(hTarget)
 			{
 				[IW_DAMAGE_TYPE_PIERCE] = 
 				{
-					min = hAbility:GetSpecialValueFor("damage_min") + (hCaster:GetSpellpower() * hAbility:GetSpecialValueFor("damage_min_bonus")),
-					max = hAbility:GetSpecialValueFor("damage_max") + (hCaster:GetSpellpower() * hAbility:GetSpecialValueFor("damage_max_bonus")),
+					min = hAbility:GetSpecialValueFor("damage"),
+					max = hAbility:GetSpecialValueFor("damage"),
 				}
 			}
 		}
@@ -35,7 +37,7 @@ function CIcewrack_BountyTrapjaw:OnTrapjawTrigger(hTarget)
 	end
 end
 
-function CIcewrack_BountyTrapjaw:OnTrapjawThink()
+function npc_iw_bounty_hunter_trapjaw:OnTrapjawThink()
 	if not self._fTriggerRadius then
 		local hModifier = self:FindModifierByName("modifier_iw_bounty_hunter_trapjaw_buff")
 		if hModifier then
@@ -46,33 +48,54 @@ function CIcewrack_BountyTrapjaw:OnTrapjawThink()
 			end
 		end
 	end
-	local fTriggerRadius = self._fTriggerRadius
-	local hParentEntity = self._hParentEntity
-	if fTriggerRadius and hParentEntity and self:GetObjectState() == 0 then
-		local tUnitsList = FindUnitsInRadius(hParentEntity:GetTeamNumber(), self:GetAbsOrigin(), nil, fTriggerRadius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
-		for k,v in pairs(tUnitsList) do
-			if IsValidExtendedEntity(v) and not v:IsFlying() and not v:IsCorpse() then
-				self:OnTrapjawTrigger(v)
-				return
+	local nObjectState = self:GetObjectState()
+	if nObjectState < 2 then
+		if nObjectState == 0 and GameRules:GetGameTime() - self._fCreateTime > 3.0 then
+			self:SetObjectState(1)
+		end
+		local fTriggerRadius = self._fTriggerRadius
+		local hParentEntity = self._hParentEntity
+		if fTriggerRadius and hParentEntity and nObjectState == 1 then
+			local tUnitsList = FindUnitsInRadius(hParentEntity:GetTeamNumber(), self:GetAbsOrigin(), nil, fTriggerRadius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+			for k,v in pairs(tUnitsList) do
+				if IsValidExtendedEntity(v) and not v:IsFlying() and not v:IsCorpse() then
+					self:OnTrapjawTrigger(v)
+					return
+				end
 			end
 		end
 		return 0.1
 	end
 end
 
-function OnInteract(self, hEntity)
-	--TODO: Actually implement me
+function npc_iw_bounty_hunter_trapjaw:OnChangeState(fNewState)
+	if fNewState == 2 then
+		self:ForceKill(false)
+		self:SetThink(function() self:RespawnUnit() end, "TrapjawRespawn", 1.0)
+	end
+end
+
+function npc_iw_bounty_hunter_trapjaw:OnInteract(hEntity)
+	local hModifier = hEntity:FindModifierByName("modifier_iw_bounty_hunter_trapjaw_stack")
+	if hModifier then
+		hModifier:SetStackCount(hModifier:GetStackCount() + 1)
+		self:RemoveSelf()
+	end
 	return true
 end
 
-function OnInteractFilterInclude(self, hEntity)
+function npc_iw_bounty_hunter_trapjaw:OnInteractFilterInclude(hEntity)
 	return hEntity:GetUnitName() == "npc_dota_hero_bounty_hunter"
 end
 
 function Spawn(args)
 	if not IsValidWorldObject(thisEntity) then
-		thisEntity = CWorldObject(thisEntity)
-		setmetatable(thisEntity, ExtendIndexTable(thisEntity, CIcewrack_BountyTrapjaw))
-		thisEntity:SetThink("OnTrapjawThink", thisEntity, "TrapjawThink", 3.0)
+		local hParent = thisEntity:GetOwner()
+		local hAbility = hParent:FindAbilityByName("iw_bounty_hunter_trapjaw")
+		thisEntity:AddNewModifier(hParent, hAbility, "modifier_iw_bounty_hunter_trapjaw_buff", {})
+		
+		setmetatable(thisEntity, ExtendIndexTable(thisEntity, npc_iw_bounty_hunter_trapjaw))
+		thisEntity._fCreateTime = GameRules:GetGameTime()
+		thisEntity:SetThink("OnTrapjawThink", thisEntity, "TrapjawThink", 0.1)
 	end
 end
