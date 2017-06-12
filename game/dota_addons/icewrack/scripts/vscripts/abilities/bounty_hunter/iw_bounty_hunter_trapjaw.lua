@@ -20,5 +20,7 @@ function iw_bounty_hunter_trapjaw:OnSpellStart()
 		
 		local hStackModifier = self._hStackModifier
 		hStackModifier:SetStackCount(hStackModifier:GetStackCount() - 1)
+		
+		EmitSoundOn("Hero_BountyHunter.Trapjaw.Start", hTrapEntity)
 	end
 end

@@ -5,6 +5,9 @@ require("ext_modifier")
 require("link_functions")
 end
 
+
+if not CExtModifierLinker then CExtModifierLinker = {}
+
 local stLuaModifierIgnoredArgs =
 {
 	creationtime = true,
@@ -20,22 +23,103 @@ if not _G.stExtModifierTemplates then
 	_G.stExtModifierTemplates = {}
 end
 
-local function ApplyPropertyValues(self)
+function CExtModifierLinker:IsDebuff()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.IsDebuff then
+		return tBaseFunctions:IsDebuff()
+	end
+	return self._bIsDebuff
+end
+
+function CExtModifierLinker:IsHidden()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.IsHidden then
+		return tBaseFunctions:IsHidden()
+	end
+	return self._bIsHidden
+end
+
+function CExtModifierLinker:GetAttributes()
+	return self._nDatadrivenAttributes
+end
+
+function CExtModifierLinker:RemoveOnDeath()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.RemoveOnDeath then
+		return tBaseFunctions:RemoveOnDeath()
+	end
+	return not self._bIsPermanent
+end
+
+function CExtModifierLinker:GetStatusEffect()
+	return self._nStatusEffect
+end
+
+function CExtModifierLinker:GetModifierClass()
+	return self._nModifierClass
+end
+
+function CExtModifierLinker:GetStatusEffectName()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.GetStatusEffectName then
+		return tBaseFunctions:GetStatusEffectName()
+	end
+	return self._szVisualStatusName
+end
+
+function CExtModifierLinker:StatusEffectPriority()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.StatusEffectPriority then
+		return tBaseFunctions:StatusEffectPriority()
+	end
+	return self._nVisualStatusPriority
+end
+
+function CExtModifierLinker:HeroEffectPriority()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.HeroEffectPriority then
+		return tBaseFunctions:HeroEffectPriority()
+	end
+	return self._nVisualHeroPriority
+end
+
+function CExtModifierLinker:GetEffectName()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.GetEffectName then
+		return tBaseFunctions:GetEffectName()
+	end
+	return self._szHeroVisualName or self._szVisualName
+end
+
+function CExtModifierLinker:GetEffectAttachType()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.GetEffectAttachType then
+		return tBaseFunctions:GetEffectAttachType()
+	end
+	return self._nVisualAttachType
+end
+
+function CExtModifierLinker:RetrieveModifierID()
+	self._nModifierID = self._nModifierID + 1
+	return self._nModifierID
+end
+
+function CExtModifierLinker:ApplyPropertyValues()
 	local hTarget = self:GetParent()
 	if IsValidInstance(hTarget) then
 		hTarget:UpdateNetTable()
 	end
 end
 
-local function RemovePropertyValues(self)
+function CExtModifierLinker:RemovePropertyValues()
 	local hTarget = self:GetParent()
 	if IsValidInstance(hTarget) then
 		hTarget:UpdateNetTable()
 	end
 end
 
-function RefreshModifier(self, bRerollRandom)
-	RemovePropertyValues(self)
+function CExtModifierLinker:RefreshModifier(bRerollRandom)
+	self:RemovePropertyValues()
 	for k,v in pairs(self._tPropertyList or {}) do
 		local szPropertyType = type(v)
 		if szPropertyType == "table" and (bRerollRandom or not rawget(self._tPropertyValues, k)) then
@@ -53,10 +137,10 @@ function RefreshModifier(self, bRerollRandom)
 		end
 	end
 	self:OnRefresh()
-	ApplyPropertyValues(self)
+	self:ApplyPropertyValues()
 end
 
-local function CullModifierStacks(self)
+function CExtModifierLinker:CullModifierStacks()
 	local hParent = self:GetParent()
 	if self._nMaxStacks > 0 or self._nMaxStacksPerCaster > 0 then
 		local nGlobalStackCount = 0
@@ -85,7 +169,7 @@ local function CullModifierStacks(self)
 	return nil
 end
 
-local function RecordModifierArgs(self, keys)
+function CExtModifierLinker:RecordModifierArgs(keys)
 	for k,v in pairs(keys) do
 		if not stLuaModifierIgnoredArgs[k] then
 			local nPropertyID = k
@@ -103,7 +187,7 @@ local function RecordModifierArgs(self, keys)
 	end
 end
 
-local function OnModifierCreatedDefault(self, keys)
+function CExtModifierLinker:OnModifierCreatedDefault(keys)
 	self._tModifierArgs = {}
 	if not keys then keys = {} end
 	
@@ -120,7 +204,7 @@ local function OnModifierCreatedDefault(self, keys)
 		if tModifierArgsTable then
 			keys = tModifierArgsTable[tostring(self:RetrieveModifierID())]
 			if keys then
-				RecordModifierArgs(self, keys)
+				self:RecordModifierArgs(keys)
 				keys.modifier_class = self:GetModifierClass()
 				keys.status_effect = self:GetStatusEffect()
 				for k,v in pairs(keys) do
@@ -139,7 +223,7 @@ local function OnModifierCreatedDefault(self, keys)
 	elseif IsServer() and IsValidInstance(hTarget) then
 		self = CExtModifier(CInstance(self))
 		hTarget:AddChild(self)
-		RecordModifierArgs(self, keys)
+		self:RecordModifierArgs(keys)
 		local nModifierID = self:RetrieveModifierID()
 		local szModifierName = self:GetName()
 		local tNetTableModifierArgs = {}
@@ -164,7 +248,7 @@ local function OnModifierCreatedDefault(self, keys)
 			self:SetDuration(self._fDuration, true)
 		end
 		
-		CullModifierStacks(self)
+		self:CullModifierStacks()
 		
 		if IsValidExtendedEntity(hTarget) then
 			if self:IsDebuff() then
@@ -199,10 +283,10 @@ local function OnModifierCreatedDefault(self, keys)
 	end
 end
 
-local function OnModifierDestroyDefault(self)
+function CExtModifierLinker:OnModifierDestroyDefault()
 	local hTarget = self:GetParent()
 	if IsServer() and IsValidInstance(hTarget) then
-		RemovePropertyValues(self)
+		self:RemovePropertyValues()
 		hTarget:RemoveChild(self)
 		if IsValidExtendedEntity(hTarget) then
 			local tExtModifierEvents = self:DeclareExtEvents()
@@ -224,10 +308,10 @@ local function OnModifierDestroyDefault(self)
 	end
 end
 
-local function OnModifierRefreshDefault(self)
+function CExtModifierLinker:OnModifierRefreshDefault()
 end
 
-function OnCreated(self, params)
+function CExtModifierLinker:OnCreated(params)
 	if not params.entity then
 		params.entity = self:GetParent()
 	end
@@ -240,23 +324,23 @@ function OnCreated(self, params)
 	end
 end
 
-function OnDestroy(self)
+function CExtModifierLinker:OnDestroy()
 	for k,v in ipairs(self._tOnDestroyList) do
 		v(self)
 	end
 end
 
-function OnRefresh(self)
+function CExtModifierLinker:OnRefresh()
 	for k,v in ipairs(self._tOnRefreshList) do
 		v(self)
 	end
 end
 
-function GetTexture(self)
+function CExtModifierLinker:GetTexture()
 	return self._szTextureArgsString
 end
 
-function GetModifierSeedList(self)
+function CExtModifierLinker:GetModifierSeedList()
 	return self._tModifierSeedList
 end
 
@@ -438,62 +522,43 @@ for k,v in pairs(stExtModifierData) do
 		local hLuaModifier = tContext[k2]
 		_G.stExtModifierTemplates[k2] = hLuaModifier
 		
+		hLuaModifier._tBaseFunctions = {}
+		for k,v in pairs(CExtModifierLinker) do
+			if hLuaModifier[k] and type(hLuaModifier[k]) == "function" then
+				hLuaModifier._tBaseFunctions[k] = hLuaModifier[k]
+			end
+			hLuaModifier[k] = v
+		end
+		local tBaseFunctions = hLuaModifier._tBaseFunctions
+		
 		if not hLuaModifier._tDeclareFunctionList then hLuaModifier._tDeclareFunctionList = {} end
 		if not hLuaModifier._tDeclareExtEventList then hLuaModifier._tDeclareExtEventList = {} end
-		if not hLuaModifier._tOnCreatedList then hLuaModifier._tOnCreatedList = {} end
-		if not hLuaModifier._tOnDestroyList then hLuaModifier._tOnDestroyList = {} end
-		if not hLuaModifier._tOnRefreshList then hLuaModifier._tOnRefreshList = {} end
+		if not hLuaModifier._tOnCreatedList then hLuaModifier._tOnCreatedList = { CExtModifierLinker.OnModifierCreatedDefault } end
+		if not hLuaModifier._tOnDestroyList then hLuaModifier._tOnDestroyList = { CExtModifierLinker.OnModifierDestroyDefault } end
+		if not hLuaModifier._tOnRefreshList then hLuaModifier._tOnRefreshList = { CExtModifierLinker.OnModifierRefreshDefault } end
 		if not hLuaModifier._tModifierSeedList then hLuaModifier._tModifierSeedList = {} end
 		
 		ParseDatadrivenStates(hLuaModifier, tLinkLuaModifierTemplate)
 		ParseDatadrivenProperties(hLuaModifier, tLinkLuaModifierTemplate)
-		
-		if not hLuaModifier.IsDebuff then
-			if tLinkLuaModifierTemplate.IsDebuff == 1 then
-				hLuaModifier.IsDebuff = function() return true end
-			else
-				hLuaModifier.IsDebuff = function() return false end
-			end
-		end
-		if not hLuaModifier.IsHidden then
-			if tLinkLuaModifierTemplate.IsHidden == 1 then
-				hLuaModifier.IsHidden = function() return true end
-			else
-				hLuaModifier.IsHidden = function() return false end
-			end
-		end
 
 		if not IsServer() then
 			if tLinkLuaModifierTemplate.VisualStatus then
 				hLuaModifier._szVisualStatusName = tLinkLuaModifierTemplate.VisualStatus
-				hLuaModifier.GetStatusEffectName = function() return hLuaModifier._szVisualStatusName end
 				hLuaModifier._nVisualStatusPriority = tLinkLuaModifierTemplate.VisualStatusPriority or 1
-				hLuaModifier.StatusEffectPriority = function() return hLuaModifier._nVisualStatusPriority end
 				hLuaModifier._nVisualHeroPriority = tLinkLuaModifierTemplate.VisualHeroPriority or 1
-				hLuaModifier.HeroEffectPriority = function() return hLuaModifier._nVisualHeroPriority end
 			end
 			
 			if tLinkLuaModifierTemplate.VisualEffect then
 				hLuaModifier._szVisualName = tLinkLuaModifierTemplate.VisualEffect
-				hLuaModifier.GetEffectName = function() return hLuaModifier._szVisualName end
 				if tLinkLuaModifierTemplate.HeroVisualEffect then
 					hLuaModifier._szHeroVisualName = tLinkLuaModifierTemplate.HeroVisualEffect
-					hLuaModifier.GetHeroEffectName = function() return hLuaModifier._szHeroVisualName end
-				else
-					hLuaModifier.GetHeroEffectName = hLuaModifier.GetEffectName
 				end
 				hLuaModifier._nVisualAttachType = _G[tLinkLuaModifierTemplate.VisualAttachType] or PATTACH_ABSORIGIN
-				hLuaModifier.GetEffectAttachType = function() return hLuaModifier._nVisualAttachType end
 			end
 			
 			hLuaModifier._szTextureName = tLinkLuaModifierTemplate.Texture or k
 			hLuaModifier.GetTexture = GetTexture
 		else
-			hLuaModifier.ApplyPropertyValues = ApplyPropertyValues
-			hLuaModifier.RemovePropertyValues = RemovePropertyValues
-			hLuaModifier.RefreshModifier = RefreshModifier
-			hLuaModifier.GetModifierSeedList = GetModifierSeedList
-			
 			hLuaModifier._fDuration = tLinkLuaModifierTemplate.Duration or -1
 			hLuaModifier._nMaxStacks = tLinkLuaModifierTemplate.MaxStacks or 0
 			hLuaModifier._nMaxStacksPerCaster = tLinkLuaModifierTemplate.MaxStacksPerCaster or 0
@@ -514,18 +579,20 @@ for k,v in pairs(stExtModifierData) do
 			local szDatadrivenAttributes = tLinkLuaModifierTemplate.DatadrivenAttributes
 			if szDatadrivenAttributes then
 				hLuaModifier._bIsPermanent = false
-				hLuaModifier._nAttributes = 0
-				for w in string.gmatch(szDatadrivenAttributes, "MODIFIER_ATTRIBUTE_[%w_]+") do
-					local nAttributeValue = _G[w]
+				hLuaModifier._nDatadrivenAttributes = 0
+				for k in string.gmatch(szDatadrivenAttributes, "MODIFIER_ATTRIBUTE_[%w_]+") do
+					local nAttributeValue = _G[k]
 					if nAttributeValue then
-						hLuaModifier._nAttributes = hLuaModifier._nAttributes + nAttributeValue
+						hLuaModifier._nDatadrivenAttributes = hLuaModifier._nDatadrivenAttributes + nAttributeValue
 						if nAttributeValue == MODIFIER_ATTRIBUTE_PERMANENT then
 							hLuaModifier._bIsPermanent = true
 						end
 					end
 				end
-				hLuaModifier.GetAttributes = function() if IsServer() then return hLuaModifier._nAttributes end end
-				hLuaModifier.RemoveOnDeath = function() return not hLuaModifier._bIsPermanent end
+				if tBaseFunctions.GetAttributes then
+					local nBaseAttributes = hLuaModifier:GetAttributes()
+					hLuaModifier._nDatadrivenAttributes = bit32.bor(hLuaModifier._nDatadrivenAttributes, nBaseAttributes)
+				end
 			end
 			
 			if tLinkLuaModifierTemplate.SoundEffect then
@@ -545,18 +612,22 @@ for k,v in pairs(stExtModifierData) do
 					end)
 			end
 			
-			tLinkLuaModifierTemplate.GetModifierSeedList = GetModifierSeedList
-			
 			ParseDatadrivenEvents(hLuaModifier, tLinkLuaModifierTemplate)
 			ParseExtendedEvents(hLuaModifier, tLinkLuaModifierTemplate)
 		end
 		
 		hLuaModifier._nModifierID = 0
-		hLuaModifier.RetrieveModifierID = function(self) hLuaModifier._nModifierID = hLuaModifier._nModifierID + 1 return hLuaModifier._nModifierID end
 		hLuaModifier._tModifierNetTable = {}
 		
 		hLuaModifier._nStatusEffect = stIcewrackStatusEffectEnum[tLinkLuaModifierTemplate.StatusEffect] or IW_STATUS_EFFECT_NONE
 		hLuaModifier._nModifierClass = stExtModifierClassEnum[tLinkLuaModifierTemplate.ModifierClass] or IW_MODIFIER_CLASS_NONE
+		
+		hLuaModifier._bIsDebuff = (tLinkLuaModifierTemplate.IsDebuff == 1)
+		hLuaModifier._bIsHidden = (tLinkLuaModifierTemplate.IsHidden == 1)
+		
+		if tBaseFunctions.OnCreated then table.insert(hLuaModifier._tOnCreatedList, tBaseFunctions.OnCreated) end
+		if tBaseFunctions.OnDestroy then table.insert(hLuaModifier._tOnDestroyList, tBaseFunctions.OnDestroy) end
+		if tBaseFunctions.OnRefresh then table.insert(hLuaModifier._tOnRefreshList, tBaseFunctions.OnRefresh) end
 		
 		if hLuaModifier.CheckState then
 			local tBaseResults = hLuaModifier:CheckState()
@@ -564,33 +635,24 @@ for k,v in pairs(stExtModifierData) do
 				hLuaModifier._tDatadrivenStateTable[k] = v
 			end
 		end
+		hLuaModifier.CheckState = function() return hLuaModifier._tDatadrivenStateTable end
+		
 		if hLuaModifier.DeclareFunctions then
 			local tBaseResults = hLuaModifier:DeclareFunctions()
 			for k,v in pairs(tBaseResults or {}) do
 				table.insert(hLuaModifier._tDeclareFunctionList, v)
 			end
 		end
+		hLuaModifier.DeclareFunctions = function() return hLuaModifier._tDeclareFunctionList end
+		
 		if hLuaModifier.DeclareExtEvents then
 			local tBaseResults = hLuaModifier:DeclareExtEvents()
 			for k,v in pairs(tBaseResults or {}) do
 				hLuaModifier._tDeclareExtEventList[k] = v
 			end
 		end
-		
-		hLuaModifier.CheckState = function() return hLuaModifier._tDatadrivenStateTable end
-		hLuaModifier.DeclareFunctions = function() return hLuaModifier._tDeclareFunctionList end
 		hLuaModifier.DeclareExtEvents = function() return hLuaModifier._tDeclareExtEventList end
-		hLuaModifier.GetStatusEffect = function() return hLuaModifier._nStatusEffect end
-		hLuaModifier.GetModifierClass = function() return hLuaModifier._nModifierClass end
-		
-		if hLuaModifier.OnCreated then table.insert(hLuaModifier._tOnCreatedList, hLuaModifier.OnCreated) end
-		table.insert(hLuaModifier._tOnCreatedList, 1, OnModifierCreatedDefault)
-		hLuaModifier.OnCreated = OnCreated
-		if hLuaModifier.OnDestroy then table.insert(hLuaModifier._tOnDestroyList, hLuaModifier.OnDestroy) end
-		table.insert(hLuaModifier._tOnDestroyList, OnModifierDestroyDefault)
-		hLuaModifier.OnDestroy = OnDestroy
-		if hLuaModifier.OnRefresh then table.insert(hLuaModifier._tOnRefreshList, hLuaModifier.OnRefresh) end
-		table.insert(hLuaModifier._tOnRefreshList, OnModifierRefreshDefault)
-		hLuaModifier.OnRefresh = OnRefresh
 	end
+end
+
 end

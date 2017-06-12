@@ -226,4 +226,11 @@
 	"iw_bounty_hunter_track"
 	{
 	}
+
+	"iw_lina_pyrotheosis"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/lina/iw_lina_pyrotheosis.lua"
+
+		"ManaCost"		"50"
+	}
 }

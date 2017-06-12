@@ -251,7 +251,6 @@ function OnActionBarIconDragDrop(szPanelID, hDraggedPanel)
 	if ((nDragType & 0x0c) && (nAbilityIndex !== -1) && (nEntityIndex === nCasterIndex))
 	{
 		var nSlot = $.GetContextPanel().GetAttributeInt("slot", -1);
-		DispatchCustomEvent($.GetContextPanel(), "ActionBarTooltipIconBind", { entindex:nEntityIndex, slot:nSlot, ability:nAbilityIndex });
 		if (nDragType & 0x04)
 		{
 			var hRefPanel = hDraggedPanel._hRefPanel;
@@ -261,6 +260,7 @@ function OnActionBarIconDragDrop(szPanelID, hDraggedPanel)
 				DispatchCustomEvent(hRefPanel, "ActionBarTooltipIconBind", { entindex:nEntityIndex, slot:nRefSlot, ability:0 });
 			}
 		}
+		DispatchCustomEvent($.GetContextPanel(), "ActionBarTooltipIconBind", { entindex:nEntityIndex, slot:nSlot, ability:nAbilityIndex });
 		hDraggedPanel._bDragCompleted = true;
 	}
 	return true;

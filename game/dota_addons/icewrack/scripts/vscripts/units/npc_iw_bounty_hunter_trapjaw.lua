@@ -1,3 +1,4 @@
+require("mechanics/effect_shatter")
 require("world_object")
 
 --States
@@ -29,6 +30,7 @@ function npc_iw_bounty_hunter_trapjaw:OnTrapjawTrigger(hTarget)
 			}
 		}
 		DealPrimaryDamage(hAbility, tDamageTable)
+		TriggerShatter(hTarget)
 		
 		self:AddChild(hCaster)	--This is to make sure that the root debuff uses the caster's stats (such as outgoing debuff duration)
 		hTarget:RemoveModifierByName("modifier_iw_bounty_hunter_trapjaw_root")
@@ -89,6 +91,7 @@ function npc_iw_bounty_hunter_trapjaw:OnInteract(hEntity)
 			end
 		end
 		hStackModifier:SetStackCount(hStackModifier:GetStackCount() + 1)
+		EmitSoundOn("Hero_BountyHunter.Trapjaw.PickUp", hEntity)
 		self:RemoveSelf()
 	end
 	return true

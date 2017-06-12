@@ -872,6 +872,8 @@
 
 			"IsHidden"			"1"
 
+			"Duration"			"0.5"
+
 			"Properties"			{}
 
 			"DatadrivenAttributes"		""
@@ -880,7 +882,10 @@
 				"MODIFIER_STATE_PROVIDES_VISION"		"MODIFIER_STATE_VALUE_ENABLED"
 				"MODIFIER_STATE_INVISIBLE" 			"MODIFIER_STATE_VALUE_DISABLED"
 			}
-			"DatadrivenProperties"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_PROVIDES_FOW_POSITION"	"1"
+			}
 			"DatadrivenEvents" 	{}
 		}
 	}

@@ -363,7 +363,7 @@
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.3"
 
-		"AbilityCooldown"			"12.0"
+		"AbilityCooldown"			"20.0"
 
 		"AbilitySpecial"
 		{
@@ -393,7 +393,7 @@
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.1"
 		"AbilityCastRange"			"900"
-		"AbilityCooldown"			"8.0"
+		"AbilityCooldown"			"13.0"
 
 		"AbilitySpecial"
 		{
@@ -453,7 +453,7 @@
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.05"
 		"AbilityCastRange"			"150"
-		"AbilityCooldown"			"6.0"
+		"AbilityCooldown"			"5.0"
 
 		"AbilitySpecial"
 		{
@@ -658,7 +658,7 @@
 
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.3"
-		"AbilityCooldown"			"7.0"
+		"AbilityCooldown"			"10.0"
 		"AbilitySpecial"
 		{
 			"01"
@@ -691,7 +691,7 @@
 		{
 			"modifier_iw_bounty_hunter_trapjaw_buff"		"IW_MODIFIER_NO_TRIGGER"
 			"modifier_iw_bounty_hunter_trapjaw_root"		"IW_MODIFIER_NO_TRIGGER"
-			"modifier_iw_bounty_hunter_trapjaw_stack"		"IW_MODIFIER_ON_ACQUIRE"
+			"modifier_iw_bounty_hunter_trapjaw_stack"		"IW_MODIFIER_ON_LEARN"
 		}
 
 		"AbilitySpecial"
@@ -731,6 +731,7 @@
 		"AbilityCastPoint"			"0.2"
 		"AbilityCastRange"			"550"
 		"AbilityAOERadius"			"350"
+		"AbilityCooldown"			"6.0"
 
 		"Modifiers"
 		{
@@ -798,6 +799,37 @@
 		{
 			"modifier_iw_bounty_hunter_track"		"IW_MODIFIER_ON_ACQUIRE"
 			"modifier_iw_bounty_hunter_track_reveal"	"IW_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"iw_lina_pyrotheosis"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
+		"AbilityTextureName"			"lina_fiery_soul"
+
+		"MaxLevel"				"1"
+		"AbilityCooldown"			"110.0"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"fire_damage"			"100.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"20.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"cooldown_reduction"		"1.0"
+			}
 		}
 	}
 

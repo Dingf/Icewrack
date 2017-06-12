@@ -116,6 +116,7 @@ function CSpellbook:UnlearnAbility(szAbilityName)
 				hAbility:ToggleAbility()
 			end
 			hAbility:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
+			hAbility:RemoveModifiers(IW_MODIFIER_ON_LEARN, hEntity)
 			self:UpdateNetTable()
 		end
 		self._tSpellList[szAbilityName]:RemoveAbility(szAbilityName)
@@ -168,6 +169,7 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel, nInstanceID)
 			stamina_upkeep = hAbility:GetStaminaUpkeep(),
 		}
 		self:UpdateNetTable()
+		hAbility:ApplyModifiers(IW_MODIFIER_ON_LEARN, hEntity)
 		return hAbility
 	elseif self._tSpellList[szAbilityName] then
 		hSpellUnit = self._tSpellList[szAbilityName]
