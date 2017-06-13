@@ -282,12 +282,21 @@ function UpdateActionBarIconCooldown(hContextPanel)
 	var nAbilityIndex = hContextPanel.GetAttributeInt("abilityindex", -1);
 	var nLastAbilityIndex = hContextPanel.GetAttributeInt("last_abilityindex", -1);
 	var fCooldownTimeRemaining = Abilities.GetCooldownTimeRemaining(nAbilityIndex);
+	var fLastCooldownTime = hContextPanel._fLastCooldownTime;
 	if (fCooldownTimeRemaining > 0.0)
 	{
 		hContextPanel.FindChildTraverse("RefreshOverlay").RemoveClass("RefreshOverlayAnim");
 		hContextPanel.FindChildTraverse("CooldownLabel").visible = true;
 		hContextPanel.FindChildTraverse("CooldownLabel").text = "" + Math.ceil(fCooldownTimeRemaining);
 		hContextPanel.FindChildTraverse("Cooldown").visible = true;
+		
+		//Reset the animation if the cooldown has jumped more than 0.5s
+		if (fLastCooldownTime - fCooldownTimeRemaining > 0.5)
+		{
+			hLeftFill.RemoveClass("CooldownAnimation");
+			hRightFill.RemoveClass("CooldownAnimation");
+		}
+		
 		var fCooldownPercent = fCooldownTimeRemaining/Abilities.GetCooldownLength(nAbilityIndex);
 		if (fCooldownPercent >= 0.5)
 		{
@@ -329,6 +338,7 @@ function UpdateActionBarIconCooldown(hContextPanel)
 				}
 			}
 		}
+		hContextPanel._fLastCooldownTime = fCooldownTimeRemaining;
 		hContextPanel.SetAttributeInt("last_cooldown", 1);
 	}
 	else
@@ -478,6 +488,7 @@ function OnActionBarIconUpdate(szTableName, szKey, tData)
 function OnActionBarIconLoad()
 {
 	$("#DragContainer").visible = false;
+	$.GetContextPanel()._fLastCooldownTime = 0;
 	
 	$.RegisterEventHandler("DragStart", $.GetContextPanel(), OnActionBarIconDragStart);
 	$.RegisterEventHandler("DragEnd", $.GetContextPanel(), OnActionBarIconDragEnd);

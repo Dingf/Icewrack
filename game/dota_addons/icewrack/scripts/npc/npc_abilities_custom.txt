@@ -813,6 +813,12 @@
 		"MaxLevel"				"1"
 		"AbilityCooldown"			"110.0"
 
+		"Modifiers"
+		{
+			"modifier_iw_lina_pyrotheosis"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_lina_pyrotheosis_cooldown"	"IW_MODIFIER_ON_ACQUIRE"
+		}
+
 		"AbilitySpecial"
 		{
 			"01"
@@ -828,7 +834,7 @@
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"cooldown_reduction"		"1.0"
+				"cooldown_reduction"		"10.0"
 			}
 		}
 	}

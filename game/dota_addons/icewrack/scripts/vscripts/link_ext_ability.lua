@@ -18,6 +18,7 @@ end
 if IsServer() then
 require("timer")
 require("mechanics/modifier_triggers")
+require("mechanics/skills")
 require("instance")
 require("expression")
 end
@@ -105,8 +106,8 @@ function CExtAbilityLinker:GetAbilityTargetFlags()
 end
 
 function CExtAbilityLinker:GetCastAnimation()
-	if self._tAbilityCastAnimations then
-		local tAnimationTable = self._tAbilityCastAnimations[self:GetCaster():GetUnitName()]
+	local tAnimationTable = self._tAbilityCastAnimations[self:GetCaster():GetUnitName()]
+	if self._tAbilityCastAnimations and tAnimationTable then
 		return GameActivity_t[tAnimationTable.Animation] or 0
 	end
 	local tBaseFunctions = self._tBaseFunctions
@@ -120,8 +121,8 @@ function CExtAbilityLinker:GetCastAnimation()
 end
 
 function CExtAbilityLinker:GetPlaybackRateOverride()
-	if self._tAbilityCastAnimations then
-		local tAnimationTable = self._tAbilityCastAnimations[self:GetCaster():GetUnitName()]
+	local tAnimationTable = self._tAbilityCastAnimations[self:GetCaster():GetUnitName()]
+	if self._tAbilityCastAnimations and tAnimationTable then
 		return tAnimationTable.Rate or 1.0
 	end
 	local tBaseFunctions = self._tBaseFunctions
@@ -299,14 +300,28 @@ end
 end]]
 
 function CExtAbilityLinker:CheckSkillRequirements(hEntity)
-	local nAbilitySkill = self:GetSkillRequirements()
-	for i=1,4 do
-		local nLevel = bit32.extract(nAbilitySkill, (i-1)*8, 3)
-		local nSkill = bit32.extract(nAbilitySkill, ((i-1)*8)+3, 5)
-		--TODO: Make this not hardcoded
-		if nSkill ~= 0 and nSkill <= 26 then
-			if hEntity:GetPropertyValue(IW_PROPERTY_SKILL_FIRE + nSkill - 1) < nLevel then
-				return false
+	if IsServer() then
+		local nAbilitySkill = self:GetSkillRequirements()
+		for i=1,4 do
+			local nLevel = bit32.extract(nAbilitySkill, (i-1)*8, 3)
+			local nSkill = bit32.extract(nAbilitySkill, ((i-1)*8)+3, 5)
+			--TODO: Make this not hardcoded
+			if nSkill ~= 0 and nSkill <= 26 then
+				if hEntity:GetPropertyValue(IW_PROPERTY_SKILL_FIRE + nSkill - 1) < nLevel then
+					return false
+				end
+			end
+		end
+	end
+	return true
+end
+
+function CExtAbilityLinker:IsSkillRequired(nSkill)
+	if IsServer() and stIcewrackSkillValues[nSkill] then
+		local nAbilitySkill = self:GetSkillRequirements()
+		for i=1,4 do
+			if bit32.extract(nAbilitySkill, ((i-1)*8)+3, 5) == nSkill then
+				return true
 			end
 		end
 	end
@@ -550,6 +565,9 @@ function CExtAbilityLinker:GetCustomCastErrorTarget(hTarget)
 end
 
 function CExtAbilityLinker:OnAbilityPhaseStart()
+	local hEntity = self:GetCaster()
+	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ABILITY_CAST, self)
+	
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then
 		local hBaseFunction = tBaseFunctions.OnAbilityPhaseStart
@@ -591,6 +609,8 @@ function CExtAbilityLinker:OnSpellStart()
 			hBaseFunction(self)
 		end
 	end
+	
+	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_ABILITY_CAST, self)
 end
 
 function CExtAbilityLinker:OnChannelFinish(bInterrupted)

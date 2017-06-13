@@ -807,6 +807,12 @@ TraceMasks_t =
 	MASK_ALL = 0xffffffff,
 }
 
+stExtModifierClassEnum =
+{  
+	IW_MODIFIER_CLASS_NONE = 0, IW_MODIFIER_CLASS_PHYSICAL = 1, IW_MODIFIER_CLASS_MAGICAL = 2, IW_MODIFIER_CLASS_ANY = 3
+}
+for k,v in pairs(stExtModifierClassEnum) do _G[k] = v end
+
 stExtModifierEventValues =
 {
 	IW_MODIFIER_EVENT_ON_CAST_FILTER = 1,
@@ -821,14 +827,10 @@ stExtModifierEventValues =
 	IW_MODIFIER_EVENT_ON_DODGE_ATTACK_DAMAGE = 10,
 	IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START = 11,
 	IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT = 12,
+	IW_MODIFIER_EVENT_ON_PRE_ABILITY_CAST = 13,
+	IW_MODIFIER_EVENT_ON_POST_ABILITY_CAST = 14,
 }
 
-stExtModifierClassEnum =
-{  
-	IW_MODIFIER_CLASS_NONE = 0, IW_MODIFIER_CLASS_PHYSICAL = 1, IW_MODIFIER_CLASS_MAGICAL = 2, IW_MODIFIER_CLASS_ANY = 3
-}
-
-for k,v in pairs(stExtModifierClassEnum) do _G[k] = v end
 for k,v in pairs(stExtModifierEventValues) do _G[k] = v end
 
 stExtModifierEventAliases =
@@ -845,6 +847,8 @@ stExtModifierEventAliases =
 	[IW_MODIFIER_EVENT_ON_DODGE_ATTACK_DAMAGE] = "OnDodgeAttackDamage",
 	[IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START] = "OnAttackEventStart",
 	[IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT] = "OnPreAttackEvent",
+	[IW_MODIFIER_EVENT_ON_PRE_ABILITY_CAST] = "OnPreAbilityCast",
+	[IW_MODIFIER_EVENT_ON_POST_ABILITY_CAST] = "OnPostAbilityCast",
 }
 
 for k,v in pairs(TraceContents_t) do _G[k] = v end

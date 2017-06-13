@@ -890,6 +890,43 @@
 		}
 	}
 
+	"iw_lina_pyrotheosis"
+	{
+		"modifier_iw_lina_pyrotheosis"
+		{
+			"Duration"			"%duration"
+
+			"ScriptFile"			"scripts/vscripts/abilities/lina/modifier_iw_lina_pyrotheosis.lua"
+
+			"Texture"			"lina_fiery_soul"
+
+			"Properties"
+			{
+				"IW_PROPERTY_DMG_FIRE_PCT"	"%fire_damage"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+
+		"modifier_iw_lina_pyrotheosis_cooldown"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/lina/modifier_iw_lina_pyrotheosis_cooldown.lua"
+			"IsHidden"			"1"
+
+			"Properties"	{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+	}
+
+
+
 
 
 

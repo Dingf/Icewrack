@@ -54,6 +54,40 @@
 		*Required to pick locks, disarm traps, and steal from enemies
 ]]
 
+stIcewrackSkillEnum =
+{
+	IW_SKILL_FIRE = 1,       IW_SKILL_TWOHAND = 14,
+	IW_SKILL_EARTH = 2,	     IW_SKILL_ONEHAND = 15,
+	IW_SKILL_WATER = 3,      IW_SKILL_MARKSMAN = 16,
+	IW_SKILL_AIR = 4,        IW_SKILL_UNARMED = 17,
+	IW_SKILL_LIGHT = 5,      IW_SKILL_ARMOR = 18,
+	IW_SKILL_SHADOW = 6,     IW_SKILL_COMBAT = 19,
+	IW_SKILL_BODY = 7,       IW_SKILL_ATHLETICS = 20,
+	IW_SKILL_MIND = 8,       IW_SKILL_SURVIVAL = 21,
+	IW_SKILL_NATURE = 9,     IW_SKILL_PERCEPTION = 22,
+	IW_SKILL_DEATH = 10,     IW_SKILL_LORE = 23,
+	IW_SKILL_DIVINE = 11,    IW_SKILL_SPEECH = 24,
+	IW_SKILL_SHAPE = 12,     IW_SKILL_STEALTH = 25,
+	IW_SKILL_METAMAGIC = 13, IW_SKILL_THIEVERY = 26,
+}
+for k,v in pairs(stIcewrackSkillEnum) do _G[k] = v end
+stIcewrackSkillValues =
+{
+	[IW_SKILL_FIRE] = true,      [IW_SKILL_TWOHAND] = true,
+	[IW_SKILL_EARTH] = true,     [IW_SKILL_ONEHAND] = true,
+	[IW_SKILL_WATER] = true,     [IW_SKILL_MARKSMAN] = true,
+	[IW_SKILL_AIR] = true,       [IW_SKILL_UNARMED] = true,
+	[IW_SKILL_LIGHT] = true,     [IW_SKILL_ARMOR] = true,
+	[IW_SKILL_SHADOW] = true,    [IW_SKILL_COMBAT] = true,
+	[IW_SKILL_BODY] = true,      [IW_SKILL_ATHLETICS] = true,
+	[IW_SKILL_MIND] = true,      [IW_SKILL_SURVIVAL] = true,
+	[IW_SKILL_NATURE] = true,    [IW_SKILL_PERCEPTION] = true,
+	[IW_SKILL_DEATH] = true,     [IW_SKILL_LORE] = true,
+	[IW_SKILL_DIVINE] = true,    [IW_SKILL_SPEECH] = true,
+	[IW_SKILL_SHAPE] = true,     [IW_SKILL_STEALTH] = true,
+	[IW_SKILL_METAMAGIC] = true, [IW_SKILL_THIEVERY] = true,
+}
+
 IW_MAX_ASSIGNABLE_SKILL = 5
 
 if IsServer() and not modifier_internal_skill_bonus then
