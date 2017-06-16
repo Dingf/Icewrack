@@ -81,6 +81,8 @@ function DealPrimaryDamage(self, keys)
 				fDamageAmount = fDamageAmount * hSource:GetDamageModifier(nDamageType)
 				fDamageAmount = fDamageAmount * hVictim:GetDamageEffectiveness()
 				
+				print("hey you", hSource:GetDamageModifier(nDamageType))
+				
 				if nDamageType >= IW_DAMAGE_TYPE_CRUSH and nDamageType <= IW_DAMAGE_TYPE_PIERCE then
 					local fArmor = hVictim:GetArmor(nDamageType)
 					local fArmorIgnore = hSource:GetPropertyValue(IW_PROPERTY_IGNORE_ARMOR_FLAT) + (fArmor * hSource:GetPropertyValue(IW_PROPERTY_IGNORE_ARMOR_PCT)/100.0)

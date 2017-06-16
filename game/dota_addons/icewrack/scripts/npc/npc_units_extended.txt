@@ -208,6 +208,8 @@
 		"CorpseTime"			"59"
 		"IsPlayableHero"		"1"
 
+		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_lina.vsndevts"
+
 		"EquipFlags"			"58587136"
 
 		"MaxStaminaFlat"		"50"

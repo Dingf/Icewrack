@@ -297,7 +297,7 @@ function UpdateActionBarIconCooldown(hContextPanel)
 			hRightFill.RemoveClass("CooldownAnimation");
 		}
 		
-		var fCooldownPercent = fCooldownTimeRemaining/Abilities.GetCooldownLength(nAbilityIndex);
+		var fCooldownPercent = Math.min(1.0, fCooldownTimeRemaining/Abilities.GetCooldown(nAbilityIndex));
 		if (fCooldownPercent >= 0.5)
 		{
 			hLeftFill.visible = true;
@@ -310,7 +310,7 @@ function UpdateActionBarIconCooldown(hContextPanel)
 				if (!Game.IsGamePaused())
 				{
 					hRightFill.AddClass("CooldownAnimation");
-					hRightFill.style["animation-duration"] = (Abilities.GetCooldownLength(nAbilityIndex)/2.0) + "s";
+					hRightFill.style["animation-duration"] = (Abilities.GetCooldown(nAbilityIndex)/2.0) + "s";
 				}
 				else
 				{
@@ -330,7 +330,7 @@ function UpdateActionBarIconCooldown(hContextPanel)
 				if (!Game.IsGamePaused())
 				{
 					hLeftFill.AddClass("CooldownAnimation");
-					hLeftFill.style["animation-duration"] = (Abilities.GetCooldownLength(nAbilityIndex)/2.0) + "s";
+					hLeftFill.style["animation-duration"] = (Abilities.GetCooldown(nAbilityIndex)/2.0) + "s";
 				}
 				else
 				{

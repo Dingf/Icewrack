@@ -8,6 +8,10 @@ function modifier_iw_lina_pyrotheosis:DeclareExtEvents()
 	return funcs
 end
 
+function modifier_iw_lina_pyrotheosis:OnDestroy(args)
+	StopSoundOn("Hero_Lina.Pyrotheosis.Loop", self:GetCaster())
+end
+
 function modifier_iw_lina_pyrotheosis:OnPostAbilityCast(hAbility)
 	local hParentAbility = self:GetAbility()
 	if hAbility:IsSkillRequired(IW_SKILL_FIRE) and hAbility ~= hParentAbility then

@@ -811,7 +811,7 @@
 		"AbilityTextureName"			"lina_fiery_soul"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"110.0"
+		"AbilityCooldown"			"115.0"
 
 		"Modifiers"
 		{
@@ -834,7 +834,7 @@
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"cooldown_reduction"		"10.0"
+				"cooldown_reduction"		"2.5"
 			}
 		}
 	}

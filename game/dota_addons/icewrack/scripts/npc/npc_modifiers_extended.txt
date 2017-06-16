@@ -899,6 +899,7 @@
 			"ScriptFile"			"scripts/vscripts/abilities/lina/modifier_iw_lina_pyrotheosis.lua"
 
 			"Texture"			"lina_fiery_soul"
+			"VisualEffect"			"particles/units/heroes/hero_lina/lina_pyrotheosis.vpcf"
 
 			"Properties"
 			{

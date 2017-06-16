@@ -14,6 +14,7 @@ function OnTooltipMouseOver()
 	$("#Tooltip").RemoveClass("ActionBarTooltipFadeOut");
 }
 
+
 function OnTooltipMouseOut()
 {
 	$("#Tooltip").RemoveClass("ActionBarTooltipVisible");
