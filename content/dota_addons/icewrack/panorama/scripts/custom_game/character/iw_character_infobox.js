@@ -145,7 +145,7 @@ function OnInfoboxUpdate(hContextPanel, tArgs)
 		hAttackLabel.text = Math.floor(fDamageBase) + "-" + Math.floor(fDamageBase + fDamageVar);
 		
 		var hSpellpowerLabel = hContextPanel.FindChildTraverse("Stat51").FindChild("Label");
-		hSpellpowerLabel.text = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER);
+		hSpellpowerLabel.text = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER) + (GetAttributeValue(tEntityData, Instance.IW_PROPERTY_ATTR_INT_FLAT) * 1.0);
 		
 		var szArmorString = Math.floor(GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_CRUSH_FLAT) * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_CRUSH_PCT)/100)) + " / " + 
 							Math.floor(GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_SLASH_FLAT) * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_ARMOR_SLASH_PCT)/100)) + " / " + 

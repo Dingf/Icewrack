@@ -16,16 +16,17 @@
 			m_flOverbrightFactor = 5.0
 			m_flAddSelfAmount = 2.5
 			m_bSaturateColorPreAlphaBlend = false
-			m_hTexture = resource:"materials/particle/smoke/steam/steam.vtex"
+			m_hTexture = resource:"materials/particle/impact/fleks5.vtex"
 			m_flAnimationRate = 30.0
 			m_bAnimateInFPS = true
+			m_bAdditive = true
 		},
 	]
 	m_Operators = 
 	[
 		{
 			_class = "C_OP_BasicMovement"
-			m_Gravity = [ 0.0, 0.0, 750.0 ]
+			m_Gravity = [ 0.0, 0.0, 450.0 ]
 			m_fDrag = 0.1
 		},
 		{
@@ -69,8 +70,8 @@
 		},
 		{
 			_class = "C_INIT_RandomRadius"
-			m_flRadiusMax = 40.0
-			m_flRadiusMin = 25.0
+			m_flRadiusMax = 5.0
+			m_flRadiusMin = 2.0
 		},
 		{
 			_class = "C_INIT_RandomColor"

@@ -4,7 +4,7 @@ function iw_bounty_hunter_smoke_bomb:OnSpellStart()
 	if IsServer() then
 		local hEntity = self:GetCaster()
 		local vTargetPos = self:GetCursorPosition()
-		local hCastDummy = CInstance(CreateDummyUnit(vTargetPos, hEntity:GetOwner(), 0))
+		local hCastDummy = CreateDummyUnit(vTargetPos, hEntity:GetOwner(), 0)
 	
 		local tProjectileInfo =
 		{

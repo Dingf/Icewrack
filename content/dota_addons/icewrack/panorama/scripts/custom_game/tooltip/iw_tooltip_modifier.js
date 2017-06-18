@@ -9,6 +9,7 @@ function OnTooltipModifierLoad()
 	var szTextureName = Buffs.GetTexture(nEntityIndex, nBuffIndex);
 	var tArgumentsList = szTextureName.split(" ");
 	var szArgumentRegex = /(\w+)=([+-]*\w+\.?\w*)/;
+	$.Msg(szTextureName);
 	for (var k in tArgumentsList)
 	{
 		var tResults = szArgumentRegex.exec(tArgumentsList[k]);

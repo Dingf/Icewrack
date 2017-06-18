@@ -87,7 +87,7 @@ stExtEntityFlagEnum =
 	IW_UNIT_FLAG_NO_CORPSE = 4,
 	IW_UNIT_FLAG_CAN_REVIVE = 8,
 	IW_UNIT_FLAG_CONSIDERED_DEAD = 16,
-	--IW_UNIT_FLAG_REQ_ATTACK_SOURCE = 8
+	IW_UNIT_FLAG_REQ_ATTACK_SOURCE = 32,
 }
 
 for k,v in pairs(stExtEntityUnitClassEnum) do _G[k] = v end
@@ -150,6 +150,9 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._tAttackingTable = setmetatable({}, stZeroDefaultMetatable)
 		hEntity._tAttackedByTable = setmetatable({}, stZeroDefaultMetatable)
 		hEntity._tAttackSourceTable = {}
+		hEntity._hAttackSourceOverride = nil
+		hEntity._tAttackQueue = {}
+		
 		
 		hEntity._tExtModifierEventTable = {}
 		hEntity._tExtModifierEventIndex = {}
@@ -481,6 +484,12 @@ function CExtEntity:SetAttacking(hEntity)
 	end
 end
 
+function CExtEntity:SetOverrideAttackSource(hSource)
+	if IsValidInstance(hSource) then
+		self._hAttackSourceOverride = hSource
+	end
+end
+
 function CExtEntity:AddAttackSource(hSource, nLevel)
 	if IsValidInstance(hSource) and type(nLevel) == "number" and nLevel > 0 then
 		if not self._tAttackSourceTable[nLevel] then
@@ -488,7 +497,8 @@ function CExtEntity:AddAttackSource(hSource, nLevel)
 			self._tNetTable.attack_source[nLevel] = {}
 		end
 		table.insert(self._tAttackSourceTable[nLevel], hSource)
-		self:RefreshBaseAttackTime()
+		hSource:ApplyModifiers(IW_MODIFIER_ON_ATTACK_SOURCE, self)
+		self:RefreshEntity()
 		if self._tNetTable then
 			local tAttackSourceNetTable = self._tNetTable.attack_source
 			local nHighestSourceLevel = tAttackSourceNetTable.Level
@@ -504,6 +514,13 @@ end
 function CExtEntity:GetCurrentAttackSource(bSwapSource)
 	local nHighestLevel = 0
 	local hHighestSource = nil
+	if self._hAttackSourceOverride then
+		local hAttackSourceOverride = self._hAttackSourceOverride
+		if bSwapSource then
+			self._hAttackSourceOverride = nil
+		end
+		return hAttackSourceOverride
+	end
 	for k,v in pairs(self._tAttackSourceTable) do
 		if k > nHighestLevel then
 			local _,hSource = next(v)
@@ -516,7 +533,7 @@ function CExtEntity:GetCurrentAttackSource(bSwapSource)
 	if bSwapSource and hHighestSource and #self._tAttackSourceTable[nHighestLevel] > 1 then
 		table.remove(self._tAttackSourceTable[nHighestLevel], 1)
 		table.insert(self._tAttackSourceTable[nHighestLevel], hHighestSource)
-		self:RefreshBaseAttackTime()
+		self:RefreshEntity()
 	end
 	return hHighestSource, nHighestLevel
 end
@@ -525,8 +542,9 @@ function CExtEntity:RemoveAttackSource(hSource, nLevel)
 	if type(nLevel) == "number" and self._tAttackSourceTable[nLevel] then
 		for k,v in pairs(self._tAttackSourceTable[nLevel]) do
 			if v == hSource then
+				hSource:RemoveModifiers(IW_MODIFIER_ON_ATTACK_SOURCE, self)
 				table.remove(self._tAttackSourceTable[nLevel], k)
-				self:RefreshBaseAttackTime()
+				self:RefreshEntity()
 				if self._tNetTable then
 					local tAttackSourceNetTable = self._tNetTable.attack_source
 					if nLevel == tAttackSourceNetTable.Level and not next(tAttackSourceNetTable[nLevel]) then
@@ -547,6 +565,11 @@ function CExtEntity:RemoveAttackSource(hSource, nLevel)
 		end
 	end
 	return false
+end
+
+function CExtEntity:CanPayAttackCosts()
+	local hAttackSource = self:GetCurrentAttackSource() or self
+	return self:GetHealth() >= hAttackSource:GetAttackHealthCost() and self:GetMana() >= hAttackSource:GetAttackManaCost() and self:GetStamina() >= hAttackSource:GetAttackStaminaCost()
 end
 
 function CExtEntity:TriggerExtendedEvent(nEventID, args)

@@ -10,6 +10,7 @@
 		"Modifiers"
 		{
 			"modifier_internal_attack"			"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_internal_attack_disarm"			"LUA_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -148,6 +149,15 @@
 
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 	}
+
+	"iw_lina_lesser_fireball_source"
+	{
+		"BaseClass"				"item_lua"
+		"ScriptFile"				"ext_item"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+	}
+
 
 
 	"item_test"

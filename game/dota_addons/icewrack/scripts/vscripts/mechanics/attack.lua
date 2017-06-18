@@ -9,10 +9,17 @@ require("mechanics/accuracy")
 local shMissModifier = CreateItem("internal_miss_debuff", nil, nil)
 
 modifier_internal_attack = class({})
-modifier_internal_attack._tDeclareFunctionList =
-{
-	MODIFIER_PROPERTY_ATTACK_RANGE_BONUS
-}
+function modifier_internal_attack:DeclareFunctions()
+	local funcs =
+	{
+		MODIFIER_PROPERTY_ATTACK_RANGE_BONUS,
+		MODIFIER_EVENT_ON_ATTACK,
+		MODIFIER_EVENT_ON_ATTACK_START,
+		MODIFIER_EVENT_ON_ATTACK_LANDED,
+		MODIFIER_EVENT_ON_ATTACK_FAIL,
+	}
+	return funcs
+end
 
 function modifier_internal_attack:GetModifierAttackRangeBonus(args)
 	local hEntity = self:GetParent()
@@ -27,42 +34,79 @@ function modifier_internal_attack:GetModifierAttackRangeBonus(args)
 	return 0
 end
 
-function OnAttack(self, keys)
-	local hEntity = keys.entity
-	local hTarget = keys.target
-	if IsValidExtendedEntity(hEntity) and IsValidExtendedEntity(hTarget) then
-		local hAttackSource = hEntity:GetCurrentAttackSource(true)
-		if not hAttackSource then
-			hAttackSource = hEntity
+function modifier_internal_attack:OnRefresh()
+	local hEntity = self:GetParent()
+	if bit32.band(hEntity:GetUnitFlags(), IW_UNIT_FLAG_REQ_ATTACK_SOURCE) ~= 0 then
+		local hAttackSource = hEntity:GetCurrentAttackSource()
+		local bIsDisarmed = hEntity:HasModifier("modifier_internal_attack_disarm")
+		if not hAttackSource and not bIsDisarmed then
+			local hAbility = self:GetAbility()
+			hEntity:AddNewModifier(hEntity, hAbility, "modifier_internal_attack_disarm", {})
+		elseif hAttackSource and bIsDisarmed then
+			hEntity:RemoveModifierByName("modifier_internal_attack_disarm")
 		end
-		hEntity:RefreshEntity()	
-		
-		local fAttackCost = hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT) * (hEntity:GetFatigueMultiplier() + hAttackSource:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
-		hEntity:SpendStamina(fAttackCost)
-		hEntity:Stop()
-		hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
-		hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START)
 	end
 end
 
-function OnAttackStart(self, keys)
+function modifier_internal_attack:OnAttack(keys)
+	local hEntity = keys.attacker
 	local hTarget = keys.target
-	local hAttacker = keys.attacker
-	if IsValidExtendedEntity(hTarget) and IsValidExtendedEntity(hAttacker) and not hTarget:IsCorpse() then
-		if not hAttacker:IsTargetInLOS(hTarget) then
-			hAttacker:Stop()
-			hAttacker:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
+	if hEntity == self:GetParent() and IsValidExtendedEntity(hEntity) and IsValidExtendedEntity(hTarget) then
+		local hAttackSource = hEntity:GetCurrentAttackSource(true) or hEntity
+		hEntity:RefreshEntity()
+		
+		hEntity:SetHealth(hEntity:GetHealth() - hAttackSource:GetAttackHealthCost())
+		hEntity:SetMana(hEntity:GetMana() - hAttackSource:GetAttackManaCost())
+		hEntity:SpendStamina(hAttackSource:GetAttackStaminaCost())
+		
+		hEntity:Stop()
+		hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
+		hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START)
+		
+		table.insert(hEntity._tAttackQueue, hAttackSource)
+	end
+end
+
+
+function modifier_internal_attack:OnAttackStart(keys)
+	local hEntity = keys.attacker
+	local hTarget = keys.target
+	if hEntity == self:GetParent() and IsValidExtendedEntity(hTarget) and IsValidExtendedEntity(hEntity) and not hTarget:IsCorpse() then
+		if not hEntity:CanPayAttackCosts() then
+			hEntity:Stop()
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
+		elseif not hEntity:IsTargetInLOS(hTarget) then
+			hEntity:Stop()
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
 		else
-			hAttacker:SetAttacking(hTarget)
+			hEntity:SetAttacking(hTarget)
 			local fBonusAccuracy = keys.BonusAccuracy or 0
-			if not PerformAccuracyCheck(hTarget, hAttacker, fBonusAccuracy) then
-				shMissModifier:ApplyDataDrivenModifier(hAttacker, hAttacker, "modifier_internal_miss_debuff", {})
+			if not PerformAccuracyCheck(hTarget, hEntity, fBonusAccuracy) then
+				shMissModifier:ApplyDataDrivenModifier(hEntity, hEntity, "modifier_internal_miss_debuff", {})
 				hTarget:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DODGE_ATTACK, keys)
 			else
-				hAttacker:RemoveModifierByName("modifier_internal_miss_debuff")
+				hEntity:RemoveModifierByName("modifier_internal_miss_debuff")
 			end
-			hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT)
+			hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT)
 		end
+	end
+end
+
+function modifier_internal_attack:OnAttackLanded(keys)
+	local hEntity = keys.attacker
+	local hTarget = keys.target
+	if hEntity == self:GetParent() and IsValidExtendedEntity(hTarget) and IsValidExtendedEntity(hEntity) then
+		keys.Percent = 100
+		_,keys.source = next(hEntity._tAttackQueue)
+		DealAttackDamage(self, keys)
+		table.remove(hEntity._tAttackQueue, 1)
+	end
+end
+
+function modifier_internal_attack:OnAttackFail(keys)
+	local hEntity = keys.attacker
+	if hEntity == self:GetParent() and IsValidExtendedEntity(hEntity) then
+		table.remove(hEntity._tAttackQueue, 1)
 	end
 end
 

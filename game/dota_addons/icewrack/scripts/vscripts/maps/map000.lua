@@ -46,10 +46,11 @@ local stHeroBountyResponseLines =
 local stHeroLinaResponseLines =
 {
 	"lina_lina_battlebegins_01",
-	"lina_lina_death_11",
 	"lina_lina_spawn_08",
-	"lina_lina_respawn_04",
-	"lina_lina_respawn_09",
+	"lina_lina_spawn_09",
+	"lina_lina_respawn_08",
+	"lina_lina_rare_02",
+	"lina_lina_rare_04",
 }
 
 local stHeroOmniResponseLines =

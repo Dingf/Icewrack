@@ -159,6 +159,11 @@ function GetOverviewRunStaminaCost(tSourceData, nEntityIndex)
 	}
 }
 
+function GetOverviewSpellpower(tSourceData, nEntityIndex)
+{
+	return GetPropertyValue(tSourceData, Instance.IW_PROPERTY_SPELLPOWER) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_INT_FLAT) * 1.0)
+}
+
 function GetOverviewPhysicalDefense(tSourceData, nEntityIndex)
 {
 	var fDefense = Math.max(0, GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DEFENSE_PHYS) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_END_FLAT) * 1.00));
@@ -343,7 +348,7 @@ var stOverviewMiscLabelFunctions =
 	"iw_ui_character_overview_fatigue_multi" : GetOverviewFatigueMultiplier,
 	"iw_ui_character_overview_move_speed"    : GetOverviewMovementSpeed,
 	"iw_ui_character_overview_run_cost"      : GetOverviewRunStaminaCost,
-	"iw_ui_character_overview_spellpower"    : GetOverviewRawValue.bind(this, Instance.IW_PROPERTY_SPELLPOWER),
+	"iw_ui_character_overview_spellpower"    : GetOverviewSpellpower,
 	"iw_ui_character_overview_cast_speed"    : GetOverviewZeroPercent.bind(this, false, Instance.IW_PROPERTY_CAST_SPEED),
 	"iw_ui_character_overview_buff_self"     : GetOverviewBuffDuration.bind(this, Instance.IW_PROPERTY_BUFF_SELF),
 	"iw_ui_character_overview_debuff_self"   : GetOverviewBuffDuration.bind(this, Instance.IW_PROPERTY_DEBUFF_SELF),

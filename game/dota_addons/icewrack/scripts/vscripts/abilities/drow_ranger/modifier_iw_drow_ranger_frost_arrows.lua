@@ -12,7 +12,7 @@ function modifier_iw_drow_ranger_frost_arrows:DeclareExtEvents()
 	local funcs =
 	{
 		[IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START] = 1,
-		[IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT] = 1,
+		[IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT] = 2,
 	}
 	return funcs
 end
@@ -57,7 +57,7 @@ function modifier_iw_drow_ranger_frost_arrows:GetActivityTranslationModifiers()
 	end
 end
 
-function modifier_iw_drow_ranger_frost_arrows:OnRefresh()
+function modifier_iw_drow_ranger_frost_arrows:OnRefresh(args)
 	local hEntity = self:GetCaster()
 	local hAbility = self:GetAbility()
 	local hAttackSource = hEntity:GetCurrentAttackSource()

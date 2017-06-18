@@ -469,8 +469,10 @@ function CSaveManager:SaveGame(szSaveName)
 			end
 		elseif IsValidExtendedEntity(hInstance) then
 			tSaveData.Entities[szInstanceName] = SaveEntityData(hInstance)
-		elseif IsValidExtendedItem(hInstance) and not bit32.btest(hInstance:GetItemFlags(), IW_ITEM_FLAG_DONT_SAVE) then
-			tSaveData.Items[szInstanceName] = SaveItemData(hInstance)
+		elseif IsValidExtendedItem(hInstance) then
+			if not bit32.btest(hInstance:GetItemFlags(), IW_ITEM_FLAG_DONT_SAVE) then
+				tSaveData.Items[szInstanceName] = SaveItemData(hInstance)
+			end
 		elseif IsValidInteractable(hInstance) then
 			tSaveData.Interactables[szInstanceName] = SaveInteractableData(hInstance)
 		elseif IsValidExtendedAbility(hInstance) then

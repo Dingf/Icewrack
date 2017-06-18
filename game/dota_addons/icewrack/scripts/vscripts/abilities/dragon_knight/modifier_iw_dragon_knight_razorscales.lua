@@ -26,7 +26,7 @@ function modifier_iw_dragon_knight_razorscales:OnCreated(args)
 	end
 end
 
-function modifier_iw_dragon_knight_razorscales:OnRefresh(args)
+function modifier_iw_dragon_knight_razorscales:OnRefresh()
 	if IsServer() then
 		self:RecalculateArmorValue()
 	end

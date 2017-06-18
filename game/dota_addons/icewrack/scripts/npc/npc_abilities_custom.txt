@@ -651,7 +651,7 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"	
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
 		"AbilityTextureName"			"drow_ranger_marksmanship"
@@ -802,6 +802,93 @@
 		}
 	}
 
+	"iw_lina_lesser_fireball"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityTextureName"			"black_dragon_fireball"
+
+		"MaxLevel"				"1"
+		"AbilityCastRange"			"800"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_min"			"4.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_max"			"13.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_min_bonus"		"0.4"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_max_bonus"		"0.4"
+			}
+		}
+	}
+
+	"iw_lina_lesser_fireball_orb"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"				"ability_datadriven"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST | DOTA_ABILITY_BEHAVIOR_ATTACK"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityCastRange"			"800"
+		
+		"MaxLevel"				"1"
+
+		"Modifiers"
+		{
+			"modifier_iw_lina_lesser_fireball_orb"
+			{
+				"Passive"	"1"
+				"IsHidden"	"1"
+	
+				"Orb"
+				{
+					"Priority"	"DOTA_ORB_PRIORITY_ABILITY"
+					"ProjectileName"	"particles/units/heroes/hero_lina/lina_base_attack.vpcf"
+					"CastAttack"	"1"
+				}
+	
+				"OnOrbFire"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/abilities/lina/iw_lina_lesser_fireball.lua"
+						"Function"	"OnLesserFireballOrbFire"
+						"Target"	"TARGET"
+					}
+				}
+	
+				"OnOrbImpact"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"scripts/vscripts/abilities/lina/iw_lina_lesser_fireball.lua"
+						"Function"	"OnLesserFireballOrbImpact"
+						"Target"	"TARGET"
+					}
+				}
+			}
+		}
+	}
+
 	"iw_lina_pyrotheosis"
 	{
 		"BaseClass"				"ability_lua"
@@ -811,7 +898,7 @@
 		"AbilityTextureName"			"lina_fiery_soul"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"115.0"
+		"AbilityCooldown"			"130.0"
 
 		"Modifiers"
 		{
@@ -829,12 +916,17 @@
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"duration"			"20.0"
+				"base_attack_time"		"-30.0"
 			}
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"cooldown_reduction"		"2.5"
+				"duration"			"10.0"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"cooldown_reduction"		"1.0"
 			}
 		}
 	}

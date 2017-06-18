@@ -100,9 +100,4 @@ function modifier_internal_attribute_bonus:GetModifierAttackSpeedBonus_Constant(
 	return hEntity:GetAttributeValue(IW_ATTRIBUTE_AGILITY) * 1.0
 end
 
-function modifier_internal_attribute_bonus:OnRefresh()
-	local hEntity = self:GetParent()
-	self:SetPropertyValue(IW_PROPERTY_SPELLPOWER, (hEntity:GetAttributeValue(IW_ATTRIBUTE_INTELLIGENCE) * 1.0))
-end
-
 end

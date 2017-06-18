@@ -132,7 +132,7 @@ local function OnMoveToTarget(hEntity, hTarget)
 	return true
 end
 
-local function OnDelayedVisionAttack(hEntity, hTarget, nOrderID)
+local function OnAttackTargetVisionThink(hEntity, hTarget, nOrderID)
 	if hEntity:GetLastOrderID() == nOrderID then
 		local fAttackRange = hEntity:GetAttackRange()
 		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
@@ -140,7 +140,19 @@ local function OnDelayedVisionAttack(hEntity, hTarget, nOrderID)
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
 		else
-			CTimer(0.03, OnDelayedVisionAttack, hEntity, hTarget, nOrderID)
+			CTimer(0.03, OnAttackTargetVisionThink, hEntity, hTarget, nOrderID)
+		end
+	end
+end
+
+local function OnAttackTargetCostThink(hEntity, hTarget, nOrderID)
+	if hEntity:GetLastOrderID() == nOrderID then
+		if hEntity:CanPayAttackCosts() then
+			hEntity:SetIdleAcquire(true)
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
+		else
+			hEntity:SetIdleAcquire(false)
+			CTimer(0.03, OnAttackTargetCostThink, hEntity, hTarget, nOrderID)
 		end
 	end
 end
@@ -157,13 +169,17 @@ local function OnAttackTarget(hEntity, hTarget)
 	end
 	if IsValidExtendedEntity(hEntity) and not hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) then
 		hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
-		CTimer(0.03, OnDelayedVisionAttack, hEntity, hTarget, hEntity:GetLastOrderID())
+		CTimer(0.03, OnAttackTargetVisionThink, hEntity, hTarget, hEntity:GetLastOrderID())
+		return false
+	end
+	if IsValidExtendedEntity(hEntity) and not hEntity:CanPayAttackCosts() then
+		CTimer(0.03, OnAttackTargetCostThink, hEntity, hTarget, hEntity:GetLastOrderID())
 		return false
 	end
 	return true
 end
 
-local function OnDelayedVisionCastPosition(hAbility, hEntity, vPosition, nOrderID)
+local function OnCastPositionVisionThink(hAbility, hEntity, vPosition, nOrderID)
 	if hEntity:GetLastOrderID() == nOrderID then
 		local fCastRange = hAbility:GetCastRange()
 		local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D()
@@ -171,7 +187,7 @@ local function OnDelayedVisionCastPosition(hAbility, hEntity, vPosition, nOrderI
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_POSITION, nil, hAbility, vPosition, false)
 		else
-			CTimer(0.03, OnDelayedVisionCastPosition, hAbility, hEntity, vPosition, nOrderID)
+			CTimer(0.03, OnCastPositionVisionThink, hAbility, hEntity, vPosition, nOrderID)
 		end
 	end
 end
@@ -183,7 +199,7 @@ local function OnCastPosition(hEntity, hAbility, vPosition)
 			local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D()
 			if not hEntity:IsTargetInLOS(vPosition) or fDistance > fCastRange then
 				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vPosition, false)
-				CTimer(0.03, OnDelayedVisionCastPosition, hAbility, hEntity, vPosition, hEntity:GetLastOrderID())
+				CTimer(0.03, OnCastPositionVisionThink, hAbility, hEntity, vPosition, hEntity:GetLastOrderID())
 				return false
 			end
 		end
@@ -191,7 +207,7 @@ local function OnCastPosition(hEntity, hAbility, vPosition)
 	return true
 end
 
-local function OnDelayedVisionCastTarget(hAbility, hEntity, hTarget, nOrderID)
+local function OnCastTargetVisionThink(hAbility, hEntity, hTarget, nOrderID)
 	if hEntity:GetLastOrderID() == nOrderID then
 		local fCastRange = hAbility:GetCastRange()
 		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
@@ -199,22 +215,32 @@ local function OnDelayedVisionCastTarget(hAbility, hEntity, hTarget, nOrderID)
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, hAbility, nil, false)
 		else
-			CTimer(0.03, OnDelayedVisionCastTarget, hAbility, hEntity, hTarget, nOrderID)
+			CTimer(0.03, OnCastTargetVisionThink, hAbility, hEntity, hTarget, nOrderID)
 		end
 	end
 end
 
 local function OnCastTarget(hEntity, hAbility, hTarget)
 	if IsValidExtendedAbility(hAbility) then
+		local fCastRange = hAbility:GetCastRange()
+		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
 		if not bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_DOES_NOT_REQ_VISION) and hTarget then
-			local fCastRange = hAbility:GetCastRange()
-			local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
 			if not hEntity:IsTargetInLOS(hTarget) or fDistance > fCastRange then
 				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, hTarget:GetAbsOrigin(), false)
-				CTimer(0.03, OnDelayedVisionCastTarget, hAbility, hEntity, hTarget, hEntity:GetLastOrderID())
+				CTimer(0.03, OnCastTargetVisionThink, hAbility, hEntity, hTarget, hEntity:GetLastOrderID())
 				return false
 			end
 		end
+		if bit32.btest(hAbility:GetBehavior(), DOTA_ABILITY_BEHAVIOR_AUTOCAST) and fDistance <= fCastRange then
+			return hAbility:OnSpellStartAutoCast(hTarget)
+		end
+	end
+	return true
+end
+
+local function OnToggleAutoCast(hEntity, hAbility)
+	if bit32.btest(hAbility:GetBehavior(), DOTA_ABILITY_BEHAVIOR_AUTOCAST) and hAbility.OnToggleAutoCast then
+		return hAbility:OnToggleAutoCast() or true
 	end
 	return true
 end
@@ -222,9 +248,8 @@ end
 function CIcewrackGameMode:ExecuteOrderFilter(keys)
 	local nOrderType = keys.order_type
 	local hTarget = EntIndexToHScript(keys.entindex_target)
-	local hAbility = keys.entindex_ability ~= -1 and EntIndexToHScript(keys.entindex_ability) or nil
+	local hAbility = (keys.entindex_ability > 0) and EntIndexToHScript(keys.entindex_ability) or nil
 	local vPosition = Vector(keys.position_x, keys.position_y, keys.position_z)
-	
 	
     local nUnitListSize = 0
 	local tUnitList = keys.units
@@ -268,6 +293,8 @@ function CIcewrackGameMode:ExecuteOrderFilter(keys)
 			return OnCastPosition(hEntity, hAbility, vPosition)
 		elseif nOrderType == DOTA_UNIT_ORDER_CAST_TARGET then
 			return OnCastTarget(hEntity, hAbility, hTarget)
+		elseif nOrderType == DOTA_UNIT_ORDER_CAST_TOGGLE_AUTO then
+			return OnToggleAutoCast(hEntity, hAbility)
 		end
 	end
 	return true

@@ -157,20 +157,25 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel, nInstanceID)
 		end
 		hSpellUnit:AddAbility(szAbilityName)
 		local hAbility = CExtAbility(hSpellUnit:FindAbilityByName(szAbilityName), nInstanceID)
-		hAbility:SetCaster(hEntity)
-		hAbility:SetLevel(nLevel)
-		hAbility:SetOwner(hEntity)
-		self._tSpellList[szAbilityName] = hSpellUnit
-		self._tNetTable.Spells[hAbility:entindex()] =
-		{
-			skill = hAbility:GetSkillRequirements(),
-			stamina = hAbility:GetStaminaCost(),
-			mana_upkeep = hAbility:GetManaUpkeep(),
-			stamina_upkeep = hAbility:GetStaminaUpkeep(),
-		}
-		self:UpdateNetTable()
-		hAbility:ApplyModifiers(IW_MODIFIER_ON_LEARN, hEntity)
-		return hAbility
+		if IsInstanceOf(hAbility, CDOTA_Ability_DataDriven) then
+			hSpellUnit:RemoveAbility(szAbilityName)
+			return
+		else
+			hAbility:SetCaster(hEntity)
+			hAbility:SetLevel(nLevel)
+			hAbility:SetOwner(hEntity)
+			self._tSpellList[szAbilityName] = hSpellUnit
+			self._tNetTable.Spells[hAbility:entindex()] =
+			{
+				skill = hAbility:GetSkillRequirements(),
+				stamina = hAbility:GetStaminaCost(),
+				mana_upkeep = hAbility:GetManaUpkeep(),
+				stamina_upkeep = hAbility:GetStaminaUpkeep(),
+			}
+			self:UpdateNetTable()
+			hAbility:ApplyModifiers(IW_MODIFIER_ON_LEARN, hEntity)
+			return hAbility
+		end
 	elseif self._tSpellList[szAbilityName] then
 		hSpellUnit = self._tSpellList[szAbilityName]
 		local hAbility = hSpellUnit:FindAbilityByName(szAbilityName)
@@ -185,23 +190,28 @@ end
 function CSpellbook:OnAbilityBind(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	local hSpellbook = hEntity:GetSpellbook()
-	if IsValidExtendedEntity(hEntity) and hSpellbook and hSpellbook._tBindTable[args.slot] and not GameRules:IsInCombat() then
+	if IsValidExtendedEntity(hEntity) and hSpellbook and not GameRules:IsInCombat() then
 		local hAbility = EntIndexToHScript(args.ability)
 		local szAbilityName = hAbility and hAbility:GetAbilityName() or ""
 		local hSpellUnit = hSpellbook._tSpellList[szAbilityName]
 		if args.ability == -1 or (hSpellUnit and hSpellUnit:FindAbilityByName(szAbilityName) == hAbility) then
 			local tBindNetTable = hSpellbook._tNetTable.Binds
-			if hSpellbook._tBindTable[args.slot] ~= -1 then
+			local nLastAbilityIndex = hSpellbook._tBindTable[args.slot]
+			if nLastAbilityIndex ~= -1 and nLastAbilityIndex ~= args.ability then
 				local hOldAbility = EntIndexToHScript(hSpellbook._tBindTable[args.slot])
 				if hOldAbility:GetToggleState() then
 					hOldAbility:ToggleAbility()
+				elseif hOldAbility:GetAutoCastState() then
+					hOldAbility:ToggleAutoCast()
 				end
 				hOldAbility:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
+				hOldAbility:OnAbilityUnbind()
 			end
 			hSpellbook._tBindTable[args.slot] = args.ability
 			if hAbility then
-				if hAbility:CheckSkillRequirements(hEntity) then
+				if nLastAbilityIndex ~= args.ability and hAbility:CheckSkillRequirements(hEntity) then
 					hAbility:ApplyModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
+					hAbility:OnAbilityBind()
 				end
 				tBindNetTable[args.slot] = args.ability
 			else

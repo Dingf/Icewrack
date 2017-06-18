@@ -81,8 +81,6 @@ function DealPrimaryDamage(self, keys)
 				fDamageAmount = fDamageAmount * hSource:GetDamageModifier(nDamageType)
 				fDamageAmount = fDamageAmount * hVictim:GetDamageEffectiveness()
 				
-				print("hey you", hSource:GetDamageModifier(nDamageType))
-				
 				if nDamageType >= IW_DAMAGE_TYPE_CRUSH and nDamageType <= IW_DAMAGE_TYPE_PIERCE then
 					local fArmor = hVictim:GetArmor(nDamageType)
 					local fArmorIgnore = hSource:GetPropertyValue(IW_PROPERTY_IGNORE_ARMOR_FLAT) + (fArmor * hSource:GetPropertyValue(IW_PROPERTY_IGNORE_ARMOR_PCT)/100.0)
@@ -164,14 +162,17 @@ function DealAttackDamage(self, keys)
 	local hAttacker = keys.attacker
 	if IsValidExtendedEntity(hVictim) and IsValidExtendedEntity(hAttacker) and hVictim:IsAlive() then
 		local bIsUnarmed = false
-		local hAttackSource = hAttacker:GetCurrentAttackSource()
+		local hAttackSource = keys.source
 		if not hAttackSource then
-			hAttackSource = hAttacker
-			bIsUnarmed = true
-		elseif IsValidExtendedItem(hAttackSource) and bit32.btest(hAttackSource:GetItemFlags(), IW_ITEM_FLAG_NO_DAMAGE) then
-			return true
+			hAttackSource = hAttacker:GetCurrentAttackSource()
+			if not hAttackSource then
+				hAttackSource = hAttacker
+				bIsUnarmed = true
+			elseif IsValidExtendedItem(hAttackSource) and bit32.btest(hAttackSource:GetItemFlags(), IW_ITEM_FLAG_NO_DAMAGE) then
+				return true
+			end
+			keys.source = hAttackSource
 		end
-		keys.source = hAttackSource
 		
 		local fTotalDamage = 0
 		local fDamagePercent = (keys.Percent or 100)/100.0

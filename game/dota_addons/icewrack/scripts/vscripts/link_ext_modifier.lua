@@ -336,6 +336,14 @@ function CExtModifierLinker:OnRefresh()
 	end
 end
 
+function CExtModifierLinker:OnSpellStartAutoCast()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.OnSpellStartAutoCast then
+		return tBaseFunctions:OnSpellStartAutoCast()
+	end
+	return true
+end
+
 function CExtModifierLinker:GetTexture()
 	return self._szTextureArgsString
 end
@@ -557,7 +565,6 @@ for k,v in pairs(stExtModifierData) do
 			end
 			
 			hLuaModifier._szTextureName = tLinkLuaModifierTemplate.Texture or k
-			hLuaModifier.GetTexture = GetTexture
 		else
 			hLuaModifier._fDuration = tLinkLuaModifierTemplate.Duration or -1
 			hLuaModifier._nMaxStacks = tLinkLuaModifierTemplate.MaxStacks or 0

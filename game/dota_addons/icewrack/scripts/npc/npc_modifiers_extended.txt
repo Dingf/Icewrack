@@ -24,6 +24,19 @@
 
 	"internal_attack"
 	{
+		"modifier_internal_attack_disarm"
+		{
+			"IsHidden"			"1"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_DISARMED"	"MODIFIER_STATE_VALUE_ENABLED"
+			}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents"		{}
+		}
 		"modifier_internal_attack"
 		{
 			"IsHidden"			"1"
@@ -36,34 +49,7 @@
 			{
 				"MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE_ILLUSION"		"-100"
 			}
-			"DatadrivenEvents"
-			{
-				"MODIFIER_EVENT_ON_ATTACK_LANDED"
-				{
-					"AttackDamage"
-					{
-						"Percent"	"100.0"
-					}
-				}
-
-				"MODIFIER_EVENT_ON_ATTACK"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/mechanics/attack.lua"
-						"Function"	"OnAttack"
-					}
-				}
-				
-				"MODIFIER_EVENT_ON_ATTACK_START"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/mechanics/attack.lua"
-						"Function"	"OnAttackStart"
-					}
-				}
-			}
+			"DatadrivenEvents"	{}
 		}
 	}
 
@@ -904,6 +890,7 @@
 			"Properties"
 			{
 				"IW_PROPERTY_DMG_FIRE_PCT"	"%fire_damage"
+				"IW_PROPERTY_BASE_ATTACK_PCT"	"%base_attack_time"
 			}
 
 			"DatadrivenAttributes"		""

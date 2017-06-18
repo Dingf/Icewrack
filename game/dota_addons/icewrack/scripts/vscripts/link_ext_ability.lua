@@ -39,11 +39,12 @@ stExtAbilityFlagEnum =
 	IW_ABILITY_FLAG_CAN_CAST_IN_TOWN    = 2048,		--TODO: Implement me
 	IW_ABILITY_FLAG_USES_ATTACK_STAMINA = 4096,
 	IW_ABILITY_FLAG_USES_ATTACK_RANGE   = 8192,
-	IW_ABILITY_FLAG_KEYWORD_SPELL       = 16384,
-	IW_ABILITY_FLAG_KEYWORD_ATTACK      = 32768,
-	IW_ABILITY_FLAG_KEYWORD_SINGLE      = 65536,
-	IW_ABILITY_FLAG_KEYWORD_AOE         = 131072,
-	IW_ABILITY_FLAG_KEYWORD_WEATHER     = 262144,
+	IW_ABILITY_FLAG_AUTOCAST_ATTACK     = 16384,
+	IW_ABILITY_FLAG_KEYWORD_SPELL       = 32768,
+	IW_ABILITY_FLAG_KEYWORD_ATTACK      = 65536,
+	IW_ABILITY_FLAG_KEYWORD_SINGLE      = 131072,
+	IW_ABILITY_FLAG_KEYWORD_AOE         = 262144,
+	IW_ABILITY_FLAG_KEYWORD_WEATHER     = 524288,
 }
 
 for k,v in pairs(stExtAbilityFlagEnum) do _G[k] = v end
@@ -106,9 +107,12 @@ function CExtAbilityLinker:GetAbilityTargetFlags()
 end
 
 function CExtAbilityLinker:GetCastAnimation()
-	local tAnimationTable = self._tAbilityCastAnimations[self:GetCaster():GetUnitName()]
-	if self._tAbilityCastAnimations and tAnimationTable then
-		return GameActivity_t[tAnimationTable.Animation] or 0
+	if self._tAbilityCastAnimations then
+		local tAnimationTable = self._tAbilityCastAnimations[self:GetCaster():GetUnitName()]
+		if tAnimationTable then
+			self._nLastAnimationIndex = RandomInt(1, #tAnimationTable)
+			return GameActivity_t[tAnimationTable[self._nLastAnimationIndex]] or 0
+		end
 	end
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then
@@ -121,9 +125,11 @@ function CExtAbilityLinker:GetCastAnimation()
 end
 
 function CExtAbilityLinker:GetPlaybackRateOverride()
-	local tAnimationTable = self._tAbilityCastAnimations[self:GetCaster():GetUnitName()]
-	if self._tAbilityCastAnimations and tAnimationTable then
-		return tAnimationTable.Rate or 1.0
+	if self._tAbilityPlaybackRates then
+		local tPlaybackTable = self._tAbilityPlaybackRates[self:GetCaster():GetUnitName()]
+		if tPlaybackTable and self._nLastAnimationIndex then
+			return tPlaybackTable[self._nLastAnimationIndex]
+		end
 	end
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then
@@ -325,7 +331,7 @@ function CExtAbilityLinker:IsSkillRequired(nSkill)
 			end
 		end
 	end
-	return true
+	return false
 end
 
 function CExtAbilityLinker:IsWeatherAbility()
@@ -564,6 +570,26 @@ function CExtAbilityLinker:GetCustomCastErrorTarget(hTarget)
 	return self:GetCustomCastError(nil, hTarget)
 end
 
+function CExtAbilityLinker:OnAbilityBind()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.OnAbilityBind
+		if hBaseFunction then
+			return hBaseFunction(self)
+		end
+	end
+end
+
+function CExtAbilityLinker:OnAbilityUnbind()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.OnAbilityUnbind
+		if hBaseFunction then
+			return hBaseFunction(self)
+		end
+	end
+end
+
 function CExtAbilityLinker:OnAbilityPhaseStart()
 	local hEntity = self:GetCaster()
 	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ABILITY_CAST, self)
@@ -655,13 +681,34 @@ end
 function CExtAbilityLinker:OnToggle()
 	if self:GetToggleState() then
 		self:ApplyModifiers(IW_MODIFIER_ON_TOGGLE)
-		CTimer(0.03, OnExtAbilityUpkeepThink, self)
+		if self:GetManaUpkeep() > 0 or self:GetStaminaUpkeep() > 0 then
+			CTimer(0.03, OnExtAbilityUpkeepThink, self)
+		end
 	else
 		self:RemoveModifiers(IW_MODIFIER_ON_TOGGLE)
 	end
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then
 		local hBaseFunction = tBaseFunctions.OnToggle
+		if hBaseFunction then
+			hBaseFunction(self)
+		end
+	end
+end
+
+function CExtAbilityLinker:OnToggleAutoCast()
+	--Unlike OnToggle(), OnToggleAutoCast() is called when the command is issued, not when the ability changes toggle states
+	if not self:GetAutoCastState() then
+		self:ApplyModifiers(IW_MODIFIER_ON_TOGGLE)
+		if self:GetManaUpkeep() > 0 or self:GetStaminaUpkeep() > 0 then
+			CTimer(0.03, OnExtAbilityUpkeepThink, self)
+		end
+	else
+		self:RemoveModifiers(IW_MODIFIER_ON_TOGGLE)
+	end
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.OnToggleAutoCast
 		if hBaseFunction then
 			hBaseFunction(self)
 		end
@@ -752,10 +799,16 @@ function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemp
 		end
 	end
 	
+	hExtAbility._tAbilityCastAnimations = {}
+	hExtAbility._tAbilityPlaybackRates = {}
 	if type(tExtTemplate.AbilityCastAnimation) == "table" then
-		hExtAbility._tAbilityCastAnimations = {}
 		for k,v in pairs(tExtTemplate.AbilityCastAnimation) do
-			hExtAbility._tAbilityCastAnimations[k] = v
+			hExtAbility._tAbilityCastAnimations[k] = {}
+			hExtAbility._tAbilityPlaybackRates[k] = {}
+			for k2,v2 in pairs(v) do
+				table.insert(hExtAbility._tAbilityCastAnimations[k], k2)
+				table.insert(hExtAbility._tAbilityPlaybackRates[k], v2)
+			end
 		end
 	end
 	

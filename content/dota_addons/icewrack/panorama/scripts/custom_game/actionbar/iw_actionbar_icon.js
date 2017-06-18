@@ -30,7 +30,14 @@ function OnActionBarIconActivateEvent(hContextPanel, tArgs)
 		}
 		else
 		{
-			Abilities.ExecuteAbility(nAbilityIndex, nEntityIndex, false);
+			if (GameUI.IsControlDown() && Abilities.IsAutocast(nAbilityIndex))
+			{
+				Game.PrepareUnitOrders({ OrderType:dotaunitorder_t.DOTA_UNIT_ORDER_CAST_TOGGLE_AUTO, AbilityIndex:nAbilityIndex });
+			}
+			else
+			{
+				Abilities.ExecuteAbility(nAbilityIndex, nEntityIndex, false);
+			}
 		}
 	}
 	return true;
@@ -75,7 +82,7 @@ function OnActionBarIconDoubleClickEvent(hContextPanel, tArgs)
 			{
 				Abilities.ExecuteAbility(nAbilityIndex, nEntityIndex, false);
 			}
-			else if (Abilities.IsAutocast(nAbilityIndex))
+			else if (GameUI.IsControlDown() && Abilities.IsAutocast(nAbilityIndex))
 			{
 				Game.PrepareUnitOrders({ OrderType:dotaunitorder_t.DOTA_UNIT_ORDER_CAST_TOGGLE_AUTO, AbilityIndex:nAbilityIndex });
 			}

@@ -77,7 +77,7 @@ function modifier_iw_drow_ranger_feral_bond:OnRespawn(args)
 	end
 end
 
-function modifier_iw_drow_ranger_feral_bond:OnRefresh(args)
+function modifier_iw_drow_ranger_feral_bond:OnRefresh()
 	if IsServer() then
 		local hEntity = self:GetParent()
 		local hAbility = self:GetAbility()

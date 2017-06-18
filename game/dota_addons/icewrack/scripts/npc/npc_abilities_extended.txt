@@ -38,8 +38,7 @@
 		{
 			"npc_dota_hero_axe"
 			{
-				"Animation"		"ACT_DOTA_CAST_ABILITY_3"
-				"Rate"			"1.0"
+				"ACT_DOTA_CAST_ABILITY_3"	"1.0"
 			}
 		}
 	}
@@ -56,8 +55,7 @@
 		{
 			"npc_dota_hero_axe"
 			{
-				"Animation"		"ACT_DOTA_CAST_ABILITY_4"
-				"Rate"			"1.0"
+				"ACT_DOTA_CAST_ABILITY_4"	"1.0"
 			}
 		}
 	}
@@ -80,8 +78,7 @@
 		{
 			"npc_dota_hero_dragon_knight"
 			{
-				"Animation"		"ACT_DOTA_CAST_ABILITY_1"
-				"Rate"			"1.0"
+				"ACT_DOTA_CAST_ABILITY_1"	"1.0"
 			}
 		}
 	}
@@ -104,8 +101,7 @@
 		{
 			"npc_dota_hero_dragon_knight"
 			{
-				"Animation"		"ACT_DOTA_CAST_ABILITY_2"
-				"Rate"			"1.0"
+				"ACT_DOTA_CAST_ABILITY_2"	"1.0"
 			}
 		}
 	}
@@ -127,8 +123,7 @@
 		{
 			"npc_dota_hero_dragon_knight"
 			{
-				"Animation"		"ACT_DOTA_TELEPORT"
-				"Rate"			"1.0"
+				"ACT_DOTA_TELEPORT"	"1.0"
 			}
 		}
 	}
@@ -152,8 +147,7 @@
 		{
 			"npc_dota_hero_drow_ranger"
 			{
-				"Animation"		"ACT_DOTA_CAST_ABILITY_2"
-				"Rate"			"1.0"
+				"ACT_DOTA_CAST_ABILITY_2"	"1.0"
 			}
 		}
 	}
@@ -169,7 +163,7 @@
 	"iw_drow_ranger_bullseye"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_bullseye.lua"
-		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_USES_ATTACK_RANGE"
+		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_USES_ATTACK_RANGE"
 
 		"StaminaCost"		"12"
 
@@ -177,8 +171,7 @@
 		{
 			"npc_dota_hero_drow_ranger"
 			{
-				"Animation"		"ACT_DOTA_CAST_ABILITY_4"
-				"Rate"			"1.0"
+				"ACT_DOTA_CAST_ABILITY_4"	"1.0"
 			}
 		}
 	}
@@ -198,8 +191,7 @@
 		{
 			"npc_dota_hero_bounty_hunter"
 			{
-				"Animation"		"ACT_DOTA_TELEPORT"
-				"Rate"			"1.0"
+				"ACT_DOTA_TELEPORT"	"1.0"
 			}
 		}
 	}
@@ -217,14 +209,22 @@
 		{
 			"npc_dota_hero_bounty_hunter"
 			{
-				"Animation"		"ACT_DOTA_CAST_ABILITY_1"
-				"Rate"			"1.0"
+				"ACT_DOTA_CAST_ABILITY_1"	"1.0"
 			}
 		}
 	}
 
 	"iw_bounty_hunter_track"
 	{
+	}
+
+	"iw_lina_lesser_fireball"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/lina/iw_lina_lesser_fireball.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_AUTOCAST_ATTACK"
+		"AbilitySkill"		"9"
+
+		"ManaCost"		"10"
 	}
 
 	"iw_lina_pyrotheosis"

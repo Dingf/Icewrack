@@ -29,8 +29,8 @@
 		"EquipFlags"			"58719839"
 
 		"MaxStaminaFlat"		"90"
-		"StaminaUsageAttackFlat"	"5"
-		"StaminaUsageRunFlat"		"3"
+		"AttackCostStaminaFlat"		"5"
+		"RunCostStaminaFlat"		"3"
 
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
@@ -69,8 +69,8 @@
 		"EquipFlags"			"58719773"
 
 		"MaxStaminaFlat"		"110"
-		"StaminaUsageAttackFlat"	"5"
-		"StaminaUsageRunFlat"		"3"
+		"AttackCostStaminaFlat"	"5"
+		"RunCostStaminaFlat"		"3"
 		"HealthRegenFlat"		"100003"
 
 		"BaseAttackTimeFlat"		"1.7"
@@ -123,8 +123,8 @@
 		"MovementSpeedFlat"		"300"
 
 		"MaxStaminaFlat"		"90"
-		"StaminaUsageAttackFlat"	"4"
-		"StaminaUsageRunFlat"		"2"
+		"AttackCostStaminaFlat"	"4"
+		"RunCostStaminaFlat"		"2"
 
 		"AccuracyFlat"			"80"
 		"DodgeFlat"			"30"
@@ -169,8 +169,8 @@
 		"EquipFlags"			"58588197"
 
 		"MaxStaminaFlat"		"100"
-		"StaminaUsageAttackFlat"	"3"
-		"StaminaUsageRunFlat"		"2"
+		"AttackCostStaminaFlat"	"3"
+		"RunCostStaminaFlat"		"2"
 
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
@@ -213,11 +213,11 @@
 		"EquipFlags"			"58587136"
 
 		"MaxStaminaFlat"		"50"
-		"StaminaUsageAttackFlat"	"5"
-		"StaminaUsageRunFlat"		"0"
+		"AttackCostStaminaFlat"	"5"
+		"RunCostStaminaFlat"		"0"
 
 		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"770"
+		"AttackRange"			"100"
 		"MovementSpeedFlat"		"250"
 
 		"BaseCritChance"		"1.0"
@@ -234,9 +234,6 @@
 
 		"ResistFire"			"90"
 		"MaxResistFire"			"15"
-
-		"DamageFireBase"		"9"
-		"DamageFireVar"			"6"
 
 		"SkillFire"			"4"
 		"SkillLight"			"2"
@@ -260,8 +257,8 @@
 		"EquipFlags"			"58588686"
 
 		"MaxStaminaFlat"		"80"
-		"StaminaUsageAttackFlat"	"5"
-		"StaminaUsageRunFlat"		"3"
+		"AttackCostStaminaFlat"	"5"
+		"RunCostStaminaFlat"		"3"
 
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
@@ -301,8 +298,8 @@
 		"EquipFlags"			"58719294"
 
 		"MaxStaminaFlat"		"100"
-		"StaminaUsageAttackFlat"	"5"
-		"StaminaUsageRunFlat"		"3"
+		"AttackCostStaminaFlat"	"5"
+		"RunCostStaminaFlat"		"3"
 
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"

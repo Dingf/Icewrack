@@ -158,7 +158,11 @@ function OnTooltipAbilityLoad()
 		var tSpecialSections = szLocalizedText.match(/[^{}]+(?=})/g);
 		var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
 		
-		var fSpellpower = tEntityData ? GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER) : 0;
+		var fSpellpower = 0;
+		if (tEntityData)
+		{
+			fSpellpower = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER) + (GetAttributeValue(tEntityData, Instance.IW_PROPERTY_ATTR_INT_FLAT) * 1.0);
+		}
 		var szFormattedText = "";
 		for (var i = 0; i < tTextSections.length; i++)
 		{

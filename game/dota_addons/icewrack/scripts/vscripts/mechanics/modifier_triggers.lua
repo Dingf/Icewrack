@@ -12,6 +12,7 @@ stIcewrackModifierTriggers =
 	IW_MODIFIER_ON_CHANNEL_SUCCESS = 5,
 	IW_MODIFIER_ON_EQUIP = 6,
 	IW_MODIFIER_ON_LEARN = 7,
+	IW_MODIFIER_ON_ATTACK_SOURCE = 8,
 }
 
 for k,v in pairs(stIcewrackModifierTriggers) do _G[k] = v end

@@ -476,7 +476,7 @@ local function SelectByValue(tTargetList, nValueType, bComparison, bPercent)
 end
 
 local function SelectByRandom(tTargetList)
-	return tTargetList[RandomInt(1, #tTableList)]
+	return tTargetList[RandomInt(1, #tTargetList)]
 end
 
 local function SelectByThreat(hCondition, tTargetList)
