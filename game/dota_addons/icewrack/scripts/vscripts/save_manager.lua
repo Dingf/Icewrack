@@ -767,6 +767,7 @@ local function LoadAbilities()
 							hAbility:StartCooldown(v2.Cooldown)
 						end
 						if v2.IsAutoCast == 1 then
+							hAbility:OnToggleAutoCast()
 							hAbility:ToggleAutoCast()
 						end
 						if v2.IsToggled == 1 then

@@ -158,23 +158,34 @@ local function OnAttackTargetCostThink(hEntity, hTarget, nOrderID)
 end
 
 local function OnAttackTarget(hEntity, hTarget)
-	if IsValidInteractable(hTarget) then
-		local nResult = OnInteractableActivate(hEntity, hTarget)
-		if nResult == IW_INTERACTABLE_RESULT_EN_ROUTE then
+	if IsValidExtendedEntity(hEntity) then 
+		if IsValidInteractable(hTarget) then
+			local nResult = OnInteractableActivate(hEntity, hTarget)
+			if nResult == IW_INTERACTABLE_RESULT_EN_ROUTE then
+				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
+				return false
+			elseif nResult == IW_INTERACTABLE_RESULT_SUCCESS then
+				return false
+			end
+		end
+		
+		if hEntity:GetOrbAttackSource() then
+			hEntity:OnOrbPreAttack()
+		end
+		
+		if not hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) then
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
-			return false
-		elseif nResult == IW_INTERACTABLE_RESULT_SUCCESS then
+			CTimer(0.03, OnAttackTargetVisionThink, hEntity, hTarget, hEntity:GetLastOrderID())
 			return false
 		end
-	end
-	if IsValidExtendedEntity(hEntity) and not hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) then
-		hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
-		CTimer(0.03, OnAttackTargetVisionThink, hEntity, hTarget, hEntity:GetLastOrderID())
-		return false
-	end
-	if IsValidExtendedEntity(hEntity) and not hEntity:CanPayAttackCosts() then
-		CTimer(0.03, OnAttackTargetCostThink, hEntity, hTarget, hEntity:GetLastOrderID())
-		return false
+		if not hEntity:CanPayAttackCosts() then
+			CTimer(0.03, OnAttackTargetCostThink, hEntity, hTarget, hEntity:GetLastOrderID())
+			return false
+		end
+		
+		if hEntity:GetOrbAttackSource() then
+			hEntity:OnOrbPostAttack()
+		end
 	end
 	return true
 end

@@ -830,12 +830,12 @@
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_min_bonus"		"0.4"
+				"damage_min_bonus"		"0.5"
 			}
 			"04"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_max_bonus"		"0.4"
+				"damage_max_bonus"		"0.5"
 			}
 		}
 	}

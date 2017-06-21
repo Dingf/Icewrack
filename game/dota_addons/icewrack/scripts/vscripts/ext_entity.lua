@@ -149,10 +149,11 @@ CExtEntity = setmetatable({}, { __call =
 		
 		hEntity._tAttackingTable = setmetatable({}, stZeroDefaultMetatable)
 		hEntity._tAttackedByTable = setmetatable({}, stZeroDefaultMetatable)
-		hEntity._tAttackSourceTable = {}
-		hEntity._hAttackSourceOverride = nil
 		hEntity._tAttackQueue = {}
 		
+		hEntity._tAttackSourceTable = {}
+		hEntity._hOrbAttackSource = nil
+		hEntity._bOrbAttackState = nil
 		
 		hEntity._tExtModifierEventTable = {}
 		hEntity._tExtModifierEventIndex = {}
@@ -484,9 +485,29 @@ function CExtEntity:SetAttacking(hEntity)
 	end
 end
 
-function CExtEntity:SetOverrideAttackSource(hSource)
+function CExtEntity:SetOrbAttackSource(hSource)
 	if IsValidInstance(hSource) then
-		self._hAttackSourceOverride = hSource
+		self._hOrbAttackSource = hSource
+		self._bOrbAttackState = true
+	end
+end
+
+function CExtEntity:GetOrbAttackSource()
+	if self._bOrbAttackState ~= nil then
+		return self._hOrbAttackSource
+	end
+end
+
+function CExtEntity:OnOrbPreAttack()
+	if self._hOrbAttackSource and self._bOrbAttackState == false then
+		self._bOrbAttackState = nil
+		self._hOrbAttackSource = nil
+	end
+end
+
+function CExtEntity:OnOrbPostAttack()
+	if self._hOrbAttackSource and self._bOrbAttackState == true then
+		self._bOrbAttackState = false
 	end
 end
 
@@ -514,12 +535,9 @@ end
 function CExtEntity:GetCurrentAttackSource(bSwapSource)
 	local nHighestLevel = 0
 	local hHighestSource = nil
-	if self._hAttackSourceOverride then
-		local hAttackSourceOverride = self._hAttackSourceOverride
-		if bSwapSource then
-			self._hAttackSourceOverride = nil
-		end
-		return hAttackSourceOverride
+	local hOrbAttackSource = self:GetOrbAttackSource()
+	if hOrbAttackSource then
+		return hOrbAttackSource, -1
 	end
 	for k,v in pairs(self._tAttackSourceTable) do
 		if k > nHighestLevel then

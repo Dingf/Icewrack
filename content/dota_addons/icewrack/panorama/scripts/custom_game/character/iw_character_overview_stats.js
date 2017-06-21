@@ -97,6 +97,26 @@ function GetOverviewArmorIgnore(tSourceData, nEntityIndex)
 	}
 }
 
+function GetOverviewAttackHealthCost(tSourceData, nEntityIndex)
+{
+	var fBaseAttackCost = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_HP_FLAT);
+	var fPercentAttackCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_HP_PCT)/100.0;
+	if (fBaseAttackCost > 0.0)
+	{
+		return Math.round(fBaseAttackCost * (1.0 + fPercentAttackCost) * 100)/100.0;
+	}
+}
+
+function GetOverviewAttackManaCost(tSourceData, nEntityIndex)
+{
+	var fBaseAttackCost = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_MP_FLAT);
+	var fPercentAttackCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_MP_PCT)/100.0;
+	if (fBaseAttackCost > 0.0)
+	{
+		return Math.round(fBaseAttackCost * (1.0 + fPercentAttackCost) * 100)/100.0;
+	}
+}
+
 function GetOverviewAttackStaminaCost(tSourceData, nEntityIndex)
 {
 	var fBaseAttackCost = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_SP_FLAT);
@@ -277,19 +297,21 @@ function GetOverviewLifesteal(tSourceData, nEntityIndex)
 
 var stOverviewAttackSourceLabelFunctions =
 {
-	"iw_ui_character_overview_attack_range"  : GetOverviewAttackRange,
-	"iw_ui_character_overview_accuracy"      : GetOverviewAccuracy,
-	"iw_ui_character_overview_crit_chance"   : GetOverviewCritChance,
-	"iw_ui_character_overview_crit_multi"    : GetOverviewCritMultiplier,
-	"iw_ui_character_overview_chance_bash"   : GetOverviewStatusChance.bind(this, 0),
-	"iw_ui_character_overview_chance_maim"   : GetOverviewStatusChance.bind(this, 1),
-	"iw_ui_character_overview_chance_bleed"  : GetOverviewStatusChance.bind(this, 2),
-	"iw_ui_character_overview_chance_burn"   : GetOverviewStatusChance.bind(this, 3),
-	"iw_ui_character_overview_chance_chill"  : GetOverviewStatusChance.bind(this, 4),
-	"iw_ui_character_overview_chance_shock"  : GetOverviewStatusChance.bind(this, 5),
-	"iw_ui_character_overview_chance_weaken" : GetOverviewStatusChance.bind(this, 6),
-	"iw_ui_character_overview_armor_ignore"  : GetOverviewArmorIgnore,
-	"iw_ui_character_overview_attack_cost"   : GetOverviewAttackStaminaCost
+	"iw_ui_character_overview_attack_range"   : GetOverviewAttackRange,
+	"iw_ui_character_overview_accuracy"       : GetOverviewAccuracy,
+	"iw_ui_character_overview_crit_chance"    : GetOverviewCritChance,
+	"iw_ui_character_overview_crit_multi"     : GetOverviewCritMultiplier,
+	"iw_ui_character_overview_chance_bash"    : GetOverviewStatusChance.bind(this, 0),
+	"iw_ui_character_overview_chance_maim"    : GetOverviewStatusChance.bind(this, 1),
+	"iw_ui_character_overview_chance_bleed"   : GetOverviewStatusChance.bind(this, 2),
+	"iw_ui_character_overview_chance_burn"    : GetOverviewStatusChance.bind(this, 3),
+	"iw_ui_character_overview_chance_chill"   : GetOverviewStatusChance.bind(this, 4),
+	"iw_ui_character_overview_chance_shock"   : GetOverviewStatusChance.bind(this, 5),
+	"iw_ui_character_overview_chance_weaken"  : GetOverviewStatusChance.bind(this, 6),
+	"iw_ui_character_overview_armor_ignore"   : GetOverviewArmorIgnore,
+	"iw_ui_character_overview_attack_hp_cost" : GetOverviewAttackHealthCost,
+	"iw_ui_character_overview_attack_mp_cost" : GetOverviewAttackManaCost,
+	"iw_ui_character_overview_attack_sp_cost" : GetOverviewAttackStaminaCost,
 };
 
 var stOverviewDefenseLabelFunctions =

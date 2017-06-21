@@ -570,6 +570,16 @@ function CExtAbilityLinker:GetCustomCastErrorTarget(hTarget)
 	return self:GetCustomCastError(nil, hTarget)
 end
 
+function CExtAbilityLinker:OnAbilityLearned()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.OnAbilityLearned
+		if hBaseFunction then
+			return hBaseFunction(self)
+		end
+	end
+end
+
 function CExtAbilityLinker:OnAbilityBind()
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then

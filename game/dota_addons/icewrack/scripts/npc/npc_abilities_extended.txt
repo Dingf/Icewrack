@@ -66,7 +66,7 @@
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_KEYWORD_AOE"
 		"AbilitySkill"		"10"
 
-		"ManaCost"		"25"
+		"ManaCost"		"40"
 
 		"Properties"
 		{
@@ -117,7 +117,7 @@
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL"
 		"AbilitySkill"		"9648650"
 
-		"ManaCost"		"80"
+		"ManaCost"		"100"
 
 		"AbilityCastAnimation"
 		{

@@ -174,6 +174,7 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel, nInstanceID)
 			}
 			self:UpdateNetTable()
 			hAbility:ApplyModifiers(IW_MODIFIER_ON_LEARN, hEntity)
+			hAbility:OnAbilityLearned()
 			return hAbility
 		end
 	elseif self._tSpellList[szAbilityName] then

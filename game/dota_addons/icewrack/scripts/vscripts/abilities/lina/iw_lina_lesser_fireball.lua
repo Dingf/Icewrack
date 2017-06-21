@@ -1,9 +1,10 @@
 iw_lina_lesser_fireball = class({})
 
-function iw_lina_lesser_fireball:OnAbilityBind()
+function iw_lina_lesser_fireball:OnAbilityLearned()
 	local hEntity = self:GetCaster()
 	local hAbility = hEntity:AddAbility("iw_lina_lesser_fireball_orb")
 	hAbility:SetLevel(1)
+	hAbility:SetActivated(false)
 	
 	local hAttackSource = self._hAttackSource
 	if not hAttackSource then
@@ -15,15 +16,22 @@ function iw_lina_lesser_fireball:OnAbilityBind()
 	end
 end
 
+function iw_lina_lesser_fireball:OnAbilityBind()
+	local hEntity = self:GetCaster()
+	local hAbility = hEntity:FindAbilityByName("iw_lina_lesser_fireball_orb")
+	hAbility:SetActivated(true)
+end
+
 function iw_lina_lesser_fireball:OnAbilityUnbind()
 	local hEntity = self:GetCaster()
-	hEntity:RemoveModifierByName("modifier_iw_lina_lesser_fireball_orb")
-	hEntity:RemoveAbility("iw_lina_lesser_fireball_orb")
+	local hAbility = hEntity:FindAbilityByName("iw_lina_lesser_fireball_orb")
+	hAbility:SetActivated(false)
 end
 
 function iw_lina_lesser_fireball:OnSpellStartAutoCast(hTarget)
 	local hEntity = self:GetCaster()
 	local hAbility = hEntity:FindAbilityByName("iw_lina_lesser_fireball_orb")
+	hEntity:SetOrbAttackSource(self._hAttackSource)
 	hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, hAbility, nil, false)
 	return false
 end
