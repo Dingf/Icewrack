@@ -9,7 +9,6 @@ function OnTooltipModifierLoad()
 	var szTextureName = Buffs.GetTexture(nEntityIndex, nBuffIndex);
 	var tArgumentsList = szTextureName.split(" ");
 	var szArgumentRegex = /(\w+)=([+-]*\w+\.?\w*)/;
-	$.Msg(szTextureName);
 	for (var k in tArgumentsList)
 	{
 		var tResults = szArgumentRegex.exec(tArgumentsList[k]);
@@ -35,7 +34,6 @@ function OnTooltipModifierLoad()
 	var szLocalizedText = $.Localize("DOTA_Tooltip_" + szModifierName + "_Description");
 	szLocalizedText = szLocalizedText.replace(/\n/g, "<br>");
 	var tSpecialSections = szLocalizedText.match(/[^{}]+(?=})/g);
-	var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
 	var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
 	
 	var szFormattedText = "";

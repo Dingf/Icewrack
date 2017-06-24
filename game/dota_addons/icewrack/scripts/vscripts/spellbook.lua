@@ -45,6 +45,7 @@ CSpellbook = setmetatable({ _stAbilityCombos = {} }, { __call =
 		
 		self._tNetTable = {}
 		self._tNetTable.Spells = {}
+		self._tNetTable.SpellList = {}
 		self._tNetTable.Binds = {}
 		
 		self._tBindTable = {}
@@ -122,6 +123,7 @@ function CSpellbook:UnlearnAbility(szAbilityName)
 		self._tSpellList[szAbilityName]:RemoveAbility(szAbilityName)
 		self._tSpellList[szAbilityName] = nil
 		
+		self._tNetTable.SpellList[szAbilityName] = nil
 		for k,v in pairs(self._tNetTable.Spells) do
 			if EntIndexToHScript(k):GetAbilityName() == szAbilityName then
 				table.remove(self._tNetTable.Spells, k)
@@ -165,6 +167,7 @@ function CSpellbook:LearnAbility(szAbilityName, nLevel, nInstanceID)
 			hAbility:SetLevel(nLevel)
 			hAbility:SetOwner(hEntity)
 			self._tSpellList[szAbilityName] = hSpellUnit
+			self._tNetTable.SpellList[szAbilityName] = hAbility:entindex()
 			self._tNetTable.Spells[hAbility:entindex()] =
 			{
 				skill = hAbility:GetSkillRequirements(),

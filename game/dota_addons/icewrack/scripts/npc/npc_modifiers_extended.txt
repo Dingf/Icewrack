@@ -739,6 +739,7 @@
 
 			"IsDebuff"			"1"
 			"StatusEffect"			"IW_STATUS_EFFECT_BLIND"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
 			"Texture"			"iw_bounty_hunter_smoke_bomb"
 
@@ -881,6 +882,7 @@
 		"modifier_iw_lina_pyrotheosis"
 		{
 			"Duration"			"%duration"
+			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
 
 			"ScriptFile"			"scripts/vscripts/abilities/lina/modifier_iw_lina_pyrotheosis.lua"
 
@@ -890,7 +892,7 @@
 			"Properties"
 			{
 				"IW_PROPERTY_DMG_FIRE_PCT"	"%fire_damage"
-				"IW_PROPERTY_BASE_ATTACK_PCT"	"%base_attack_time"
+				"IW_PROPERTY_CHANCE_BURN"	"%burn_chance"
 			}
 
 			"DatadrivenAttributes"		""

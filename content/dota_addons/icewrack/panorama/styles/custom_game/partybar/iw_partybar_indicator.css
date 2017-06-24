@@ -1,0 +1,23 @@
+.PartybarIndicatorRoot
+{
+}
+
+.PartybarIndicatorTextureContainer
+{
+	width: 24px;
+	height: 24px;
+}
+
+.PartybarIndicatorTexture
+{
+	width: 100%;
+	height: 100%;
+}
+
+.PartyBarInidicatorHitbox
+{
+	width: 20px;
+	height: 20px;
+	horizontal-align: center;
+	vertical-align: center;
+}

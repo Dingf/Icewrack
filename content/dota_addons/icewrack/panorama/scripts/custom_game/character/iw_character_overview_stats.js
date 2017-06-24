@@ -23,7 +23,6 @@ function GetOverviewZeroPercent(bOptional, nProperty, tSourceData, tEntityIndex)
 	}
 }
 
-
 function GetOverviewAttackSpeed(tSourceData, nEntityIndex)
 {
 	var fBaseAttackTime = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_BASE_ATTACK_FLAT) * (1.0 + GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_BASE_ATTACK_PCT)/100.0);
@@ -38,7 +37,7 @@ function GetOverviewAttackRange(tSourceData, nEntityIndex)
 
 function GetOverviewAccuracy(tSourceData, nEntityIndex)
 {
-	var fBaseAccuracy = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ACCURACY_FLAT) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_AGI_FLAT) * 2.0);
+	var fBaseAccuracy = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ACCURACY_FLAT) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_AGI_FLAT) * 1.0);
 	var fIncAccuracy = 1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ACCURACY_PCT)/100.0;
 	return Math.max(0, Math.floor(fBaseAccuracy * fIncAccuracy));
 }
@@ -245,7 +244,7 @@ function GetOverviewMana(tSourceData, nEntityIndex)
 
 function GetOverviewManaRegeneration(tSourceData, nEntityIndex)
 {
-	var fRegenPerSec = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MP_REGEN_FLAT) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_WIS_FLAT) * 0.025);
+	var fRegenPerSec = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MP_REGEN_FLAT) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_WIS_FLAT) * 0.05);
 	fRegenPerSec += (GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MAX_MP_REGEN) * Entities.GetMaxMana(nEntityIndex));
 	fRegenPerSec *= (1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MP_REGEN_PCT)/100.0);
 	if (fRegenPerSec > 0)

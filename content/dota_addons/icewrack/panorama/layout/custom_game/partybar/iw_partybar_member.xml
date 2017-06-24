@@ -7,6 +7,7 @@
 		<include src="file://{resources}/scripts/custom_game/constants/iw_instance.js" />
 		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
 		<include src="file://{resources}/scripts/custom_game/partybar/iw_partybar_member.js" />
+		<include src="file://{resources}/scripts/custom_game/partybar/iw_partybar_indicator.js" />
 	</scripts>
 	
 	<Panel hittest="false" class="PartyBarMember" onload="OnPartyBarMemberLoad()">
@@ -37,12 +38,5 @@
 		<Image hittest="false" class="PartyBarOverlay" />
 		<Image hittest="false" class="PartyBarSecondarySelectOverlay" id="SecondarySelectOverlay"/>
 		<Image hittest="false" class="PartyBarPrimarySelectOverlay" id="PrimarySelectOverlay"/>
-		<Panel onmouseover="OnIndicatorMouseOver()"
-			onmouseout="OnIndicatorMouseOut()"
-			onactivate="OnIndicatorActivate()"
-			class="PartyBarIndicator" id="Indicator">
-			<Image id="IndicatorOff" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_off.tga"/>
-			<Image id="IndicatorOn" src="file://{images}/custom_game/partybar/iw_partybar_aam_indicator_on.tga"/>
-		</Panel>
 	</Panel>
 </root>

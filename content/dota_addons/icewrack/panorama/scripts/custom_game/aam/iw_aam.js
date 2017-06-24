@@ -202,17 +202,10 @@ function OnAAMStateMouseOver()
 {
 	$("#AAM").AddClass("AAMStateMouseOver");
 	var hTooltipHitbox = $("#AAM").FindChildTraverse("TooltipHitbox");
-	switch($.GetContextPanel().GetAttributeInt("state", -1))
+	var nState = $.GetContextPanel().GetAttributeInt("state", -1);
+	if (nState !== -1)
 	{
-		case AAM_STATE_DISABLED:
-			$.DispatchEvent("DOTAShowTextTooltip", hTooltipHitbox, $.Localize("#iw_ui_aam_state_off"));
-			break;
-		case AAM_STATE_ENABLED:
-			$.DispatchEvent("DOTAShowTextTooltip", hTooltipHitbox, $.Localize("#iw_ui_aam_state_on"));
-			break;
-		case AAM_STATE_ENABLED_WHILE_NOT_SELECTED:
-			$.DispatchEvent("DOTAShowTextTooltip", hTooltipHitbox, $.Localize("#iw_ui_aam_state_not_selected"));
-			break;
+		$.DispatchEvent("DOTAShowTextTooltip", hTooltipHitbox, $.Localize("#iw_ui_aam_state_" + nState));
 	}
 }
 
@@ -235,22 +228,10 @@ function OnAAMStateUpdate(hContextPanel, tArgs)
 	var hTooltipHitbox = hContextPanel.FindChildTraverse("TooltipHitbox");
 	if (hStateButton)
 	{
-		if (hContextPanel.FindChild("AAM").BHasClass("AAMStateMouseOver"))
+		if (hContextPanel.FindChild("AAM").BHasClass("AAMStateMouseOver") && (tArgs.value !== -1))
 		{
-			switch (tArgs.value)
-			{
-				case AAM_STATE_DISABLED:
-					$.DispatchEvent("DOTAShowTextTooltip", hTooltipHitbox, $.Localize("#iw_ui_aam_state_off"));
-					break;
-				case AAM_STATE_ENABLED:
-					$.DispatchEvent("DOTAShowTextTooltip", hTooltipHitbox, $.Localize("#iw_ui_aam_state_on"));
-					break;
-				case AAM_STATE_ENABLED_WHILE_NOT_SELECTED:
-					$.DispatchEvent("DOTAShowTextTooltip", hTooltipHitbox, $.Localize("#iw_ui_aam_state_not_selected"));
-					break;
-			}
+			$.DispatchEvent("DOTAShowTextTooltip", hTooltipHitbox, $.Localize("#iw_ui_aam_state_" + tArgs.value));
 		}
-		
 		hStateButton.FindChildTraverse("TextureOff").visible = (tArgs.value === 0);
 		hStateButton.FindChildTraverse("TextureOn").visible = (tArgs.value === 1);
 		hStateButton.FindChildTraverse("TextureNS").visible = (tArgs.value === 2);

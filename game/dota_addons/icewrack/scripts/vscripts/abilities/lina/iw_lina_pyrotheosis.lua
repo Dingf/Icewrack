@@ -14,7 +14,7 @@ function iw_lina_pyrotheosis:OnSpellStart()
 	local tModifierArgs =
 	{
 		fire_damage = self:GetSpecialValueFor("fire_damage"),
-		base_attack_time = self:GetSpecialValueFor("base_attack_time"),
+		burn_chance = self:GetSpecialValueFor("burn_chance"),
 		duration = self:GetSpecialValueFor("duration"),
 	}
 	hEntity:AddNewModifier(hEntity, self, "modifier_iw_lina_pyrotheosis", tModifierArgs)

@@ -11,8 +11,8 @@ var stAttributesDetailParams =
 	[5, 1, 1],
 	[1, 1, 1],
 	[5, 5],
-	[1, 2],
-	[0.025, 0.5, 0.5, 1]
+	[1, 0.5, 0.5],
+	[2, 0.05, 1]
 ];
 
 function ConfirmAttributeSelection(hContextPanel)

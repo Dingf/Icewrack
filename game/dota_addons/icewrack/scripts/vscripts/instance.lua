@@ -349,7 +349,7 @@ function CInstance:GetSelfBuffDuration()
 end
 
 function CInstance:GetOtherBuffDuration()
-	return math.max(0, 1.0 + self:GetPropertyValue(IW_PROPERTY_BUFF_OTHER)/100.0 + (self:GetAttributeValue(IW_ATTRIBUTE_WISDOM) * 0.005))
+	return math.max(0, 1.0 + self:GetPropertyValue(IW_PROPERTY_BUFF_OTHER)/100.0 + (self:GetAttributeValue(IW_ATTRIBUTE_INTELLIGENCE) * 0.005))
 end
 
 function CInstance:GetSelfDebuffDuration()
@@ -357,7 +357,7 @@ function CInstance:GetSelfDebuffDuration()
 end
 
 function CInstance:GetOtherDebuffDuration()
-	return math.max(0, 1.0 + self:GetPropertyValue(IW_PROPERTY_DEBUFF_OTHER)/100.0 + (self:GetAttributeValue(IW_ATTRIBUTE_WISDOM) * 0.005))
+	return math.max(0, 1.0 + self:GetPropertyValue(IW_PROPERTY_DEBUFF_OTHER)/100.0 + (self:GetAttributeValue(IW_ATTRIBUTE_INTELLIGENCE) * 0.005))
 end
 
 function CInstance:GetAccuracyScore()

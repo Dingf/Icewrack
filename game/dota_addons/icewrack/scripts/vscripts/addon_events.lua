@@ -168,7 +168,7 @@ local function OnAttackTarget(hEntity, hTarget)
 				return false
 			end
 		end
-		
+
 		if hEntity:GetOrbAttackSource() then
 			hEntity:OnOrbPreAttack()
 		end
@@ -181,10 +181,6 @@ local function OnAttackTarget(hEntity, hTarget)
 		if not hEntity:CanPayAttackCosts() then
 			CTimer(0.03, OnAttackTargetCostThink, hEntity, hTarget, hEntity:GetLastOrderID())
 			return false
-		end
-		
-		if hEntity:GetOrbAttackSource() then
-			hEntity:OnOrbPostAttack()
 		end
 	end
 	return true
@@ -231,7 +227,16 @@ local function OnCastTargetVisionThink(hAbility, hEntity, hTarget, nOrderID)
 	end
 end
 
+local function OnCastTargetOrbThink(hAbility, hEntity, hTarget, nOrderID)
+	if hEntity:GetLastOrderID() == nOrderID then
+		CTimer(0.03, OnCastTargetOrbThink, hAbility, hEntity, vPosition, nOrderID)
+	elseif hEntity:GetOrbAttackSource() then
+		hEntity:OnOrbPostAttack()
+	end
+end
+
 local function OnCastTarget(hEntity, hAbility, hTarget)
+	local nAbilityBehavior = hAbility:GetBehavior()
 	if IsValidExtendedAbility(hAbility) then
 		local fCastRange = hAbility:GetCastRange()
 		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
@@ -242,9 +247,11 @@ local function OnCastTarget(hEntity, hAbility, hTarget)
 				return false
 			end
 		end
-		if bit32.btest(hAbility:GetBehavior(), DOTA_ABILITY_BEHAVIOR_AUTOCAST) and fDistance <= fCastRange then
+		if bit32.btest(nAbilityBehavior, DOTA_ABILITY_BEHAVIOR_AUTOCAST) and fDistance <= fCastRange then
 			return hAbility:OnSpellStartAutoCast(hTarget)
 		end
+	elseif bit32.btest(nAbilityBehavior, DOTA_ABILITY_BEHAVIOR_AUTOCAST + DOTA_ABILITY_BEHAVIOR_ATTACK) then
+		CTimer(0.03, OnCastTargetOrbThink, hAbility, hEntity, hTarget, hEntity:GetLastOrderID())
 	end
 	return true
 end

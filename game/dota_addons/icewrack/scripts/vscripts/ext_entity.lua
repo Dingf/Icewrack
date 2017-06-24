@@ -628,7 +628,7 @@ function CExtEntity:RefreshHealthRegen()
 end
 
 function CExtEntity:RefreshManaRegen()
-	local fManaRegenPerSec = self:GetPropertyValue(IW_PROPERTY_MP_REGEN_FLAT) + (self:GetAttributeValue(IW_ATTRIBUTE_WISDOM) * 0.025)
+	local fManaRegenPerSec = self:GetPropertyValue(IW_PROPERTY_MP_REGEN_FLAT) + (self:GetAttributeValue(IW_ATTRIBUTE_WISDOM) * 0.05)
 	fManaRegenPerSec = fManaRegenPerSec + (self:GetPropertyValue(IW_PROPERTY_MAX_MP_REGEN)/100.0 * self:GetMaxHealth())
 	fManaRegenPerSec = fManaRegenPerSec * (1.0 + self:GetPropertyValue(IW_PROPERTY_MP_REGEN_PCT)/100)
 	self:SetBaseManaRegen(math.max(0, fManaRegenPerSec))

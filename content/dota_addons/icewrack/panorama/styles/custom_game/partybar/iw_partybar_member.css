@@ -1,7 +1,8 @@
 .PartyBarOverlay
 {
 	background-image: url("file://{images}/custom_game/partybar/iw_partybar_overlay.tga");
-	width: 320px;
+	background-size: 100% 100%;
+	width: 360px;
 	height: 128px;
 }
 
@@ -94,14 +95,14 @@
 .PartyBarValues
 {
 	margin-top: 11px;
-	flow-children: down;
+	height: 48px;
 }
 
 .PartyBarValueContainer
 {
 	width: 182px;
 	height: 16px;
-	margin-left: 134px; 
+	margin-left: 147px; 
 	opacity-mask: url("file://{images}/custom_game/partybar/iw_partybar_fill_mask.tga");
 }
 
@@ -121,14 +122,6 @@
 	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
 	width: 182px;
 	height: 16px;
-}
-
-.PartyBarIndicator
-{
-	width: 36px;
-	height: 36px;
-	margin-left: 98px;
-	overflow: clip;
 }
 
 .PartyBarActionContainer
@@ -179,6 +172,16 @@
 	background-image: url("file://{images}/custom_game/partybar/iw_partybar_select_overlay_primary.tga");
 }
 
+#MPContainer
+{
+	y: 16px;
+}
+
+#SPContainer
+{
+	y: 32px;
+}
+
 #HPBar
 {
 	background-image: url("file://{images}/custom_game/partybar/iw_partybar_hp_fill.tga");
@@ -198,6 +201,24 @@
 {
 	opacity: 0.5;
 	background-image: url("file://{images}/custom_game/partybar/iw_partybar_sp_fill.tga");
+}
+
+#AAMIndicator
+{
+	x: 101px;
+	y: 7px;
+}
+
+#RunIndicator
+{
+	x: 114px;
+	y: 28px;
+}
+
+#HoldIndicator
+{
+	x: 117px;
+	y: 50px;
 }
 
 #DeathMask

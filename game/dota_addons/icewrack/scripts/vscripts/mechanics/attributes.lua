@@ -25,12 +25,12 @@
         
     INTELLIGENCE (INT):
 		*Increases spellpower by 1
-        *Increases MP by 2
-        
-    WISDOM (WIS):
-		*Increases MP regeneration by 0.025/s
 		*Increases other buff duration by 0.5%
 		*Increases other debuff duration by 0.5%
+        
+    WISDOM (WIS):
+		*Increases MP regeneration by 0.05/s
+        *Increases MP by 2
 		*Increases resistance to magical debuffs by 1
 ]]
 
@@ -84,14 +84,14 @@ end
 function modifier_internal_attribute_bonus:GetModifierExtraManaBonus(args)
 	local hEntity = self:GetParent()
 	if not hEntity:IsRealHero() then
-		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_INTELLIGENCE) * 2)
+		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_WISDOM) * 2)
 	end
 end
 
 function modifier_internal_attribute_bonus:GetModifierManaBonus(args)
 	local hEntity = self:GetParent()
 	if hEntity:IsRealHero() then
-		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_INTELLIGENCE) * 2)
+		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_WISDOM) * 2)
 	end
 end
 

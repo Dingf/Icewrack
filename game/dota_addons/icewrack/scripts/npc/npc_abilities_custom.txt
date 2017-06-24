@@ -515,7 +515,7 @@
 
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"3.0"
-		"AbilityCooldown"			"200"
+		"AbilityCooldown"			"140"
 
 		"Modifiers"
 		{
@@ -527,7 +527,7 @@
 			"01"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"duration"			"120.0"
+				"duration"			"60.0"
 			}
 			"02"
 			{
@@ -810,7 +810,7 @@
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
-		"AbilityTextureName"			"black_dragon_fireball"
+		"AbilityTextureName"			"iw_lina_lesser_fireball"
 
 		"MaxLevel"				"1"
 		"AbilityCastRange"			"800"
@@ -848,6 +848,7 @@
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST | DOTA_ABILITY_BEHAVIOR_ATTACK"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityTextureName"			"iw_lina_lesser_fireball"
 		"AbilityCastRange"			"800"
 		
 		"MaxLevel"				"1"
@@ -898,7 +899,7 @@
 		"AbilityTextureName"			"lina_fiery_soul"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"130.0"
+		"AbilityCooldown"			"200.0"
 
 		"Modifiers"
 		{
@@ -916,7 +917,7 @@
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"base_attack_time"		"-30.0"
+				"burn_chance"			"100.0"
 			}
 			"03"
 			{

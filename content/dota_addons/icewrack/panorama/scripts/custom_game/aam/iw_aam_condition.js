@@ -68,6 +68,7 @@ function OnAAMConditionUpdateValue(hContextPanel, tArgs)
 	var nFlags1 = 0;
 	var nFlags2 = 0;
 	var nInverseMask = 0;
+	
 	var tChildren = hContextPanel.FindChildTraverse("ConditionItemList").Children();
 	for (var k in tChildren)
 	{
@@ -136,9 +137,6 @@ function OnAAMConditionValueUpdate(hContextPanel, tArgs)
 	}
 	else if (tArgs.panel.id === "ConditionMenu")
 	{
-		var hConditionIcon = hContextPanel.FindChildTraverse("ConditionIcon");
-		hConditionIcon.SetImage("file://{images}/spellicons/" + tArgs.value + ".png");
-		hContextPanel.SetAttributeString("ability", tArgs.value);
 		if (tArgs.value === "aam_skip_to_condition")
 		{
 			hContextPanel.FindChildTraverse("ConditionMenuExtra1").visible = true;
@@ -151,6 +149,7 @@ function OnAAMConditionValueUpdate(hContextPanel, tArgs)
 		}
 		
 		hContextPanel.SetHasClass("AAMConditionInvalid", false);
+		DispatchCustomEvent(hContextPanel, "AAMConditionSetAbility", { name:tArgs.value });
 		DispatchCustomEvent(hContextPanel, "AAMConditionUpdateValue", { quiet:false });
 	}
 	else
@@ -169,15 +168,32 @@ function OnAAMConditionItemDelete(hContextPanel, tArgs)
 	return true;
 }
 
+function OnAAMConditionSetAbility(hContextPanel, tArgs)
+{
+	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
+	var tEntitySpellbookInfo = CustomNetTables.GetTableValue("spellbook", String(nEntityIndex));
+	var nAbilityIndex = tEntitySpellbookInfo ? tEntitySpellbookInfo.SpellList[tArgs.name] : -1;
+	hContextPanel.SetAttributeInt("abilityindex", nAbilityIndex);
+	hContextPanel.SetAttributeString("ability", tArgs.name);
+	
+	var hConditionIcon = hContextPanel.FindChildTraverse("ConditionIcon");
+	if (nAbilityIndex !== -1)
+	{
+		hConditionIcon.SetImage("file://{images}/spellicons/" + Abilities.GetAbilityTextureName(nAbilityIndex) + ".png");
+	}
+	else
+	{
+		hConditionIcon.SetImage("file://{images}/spellicons/" + szActionName + ".png");
+	}
+	return true;
+}
+
 function OnAAMConditionSetValue(hContextPanel, tArgs)
 {
 	var nFlags1 = tArgs.flags1;
 	var nFlags2 = tArgs.flags2;
 	var nInverseMask = tArgs.invmask;
 	var szActionName = tArgs.ability;
-	
-	var hConditionIcon = hContextPanel.FindChildTraverse("ConditionIcon");
-	hConditionIcon.SetImage("file://{images}/spellicons/" + szActionName + ".png");
 	
 	var hConditionMenu = hContextPanel.FindChildTraverse("ConditionMenu");
 	hConditionMenu._mValue = tArgs.ability;
@@ -211,6 +227,8 @@ function OnAAMConditionSetValue(hContextPanel, tArgs)
 			DispatchCustomEvent(hPanel, "AAMConditionItemSetValue", { value:nValue, inverse:nInverse });
 		}
 	}
+	
+	DispatchCustomEvent(hContextPanel, "AAMConditionSetAbility", { name:szActionName });
 	//$.Schedule(0.03, DispatchCustomEvent.bind(this, hConditionMenu, "DropdownValueUpdate", { panel:hConditionMenu, value:tArgs.ability }));
 	return true;
 }
@@ -268,8 +286,17 @@ function OnAAMConditionIconMouseOver()
 	if (szAbilityName !== "")
 	{
 		var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
-		var szTooltipArgs = "abilityname=" + szAbilityName + "&entindex=" + nEntityIndex;
-		$.DispatchEvent("UIShowCustomLayoutParametersTooltip", hConditionIcon, "AbilityTooltip", "file://{resources}/layout/custom_game/tooltip/iw_tooltip_ability.xml", szTooltipArgs);
+		var nAbilityIndex = $.GetContextPanel().GetAttributeInt("abilityindex", -1);
+		if (nAbilityIndex !== -1)
+		{
+			var szTooltipArgs = "abilityindex=" + nAbilityIndex + "&entindex=" + nEntityIndex;
+			$.DispatchEvent("UIShowCustomLayoutParametersTooltip", hConditionIcon, "AbilityTooltip", "file://{resources}/layout/custom_game/tooltip/iw_tooltip_ability.xml", szTooltipArgs);
+		}
+		else
+		{
+			var szTooltipArgs = "abilityname=" + szAbilityName + "&entindex=" + nEntityIndex;
+			$.DispatchEvent("UIShowCustomLayoutParametersTooltip", hConditionIcon, "AbilityTooltip", "file://{resources}/layout/custom_game/tooltip/iw_tooltip_ability.xml", szTooltipArgs);
+		}
 	}
 }
 
@@ -330,6 +357,7 @@ function CreateAAMCondition(hParent, szName, nEntityIndex, bIsLocal)
 	RegisterCustomEventHandler(hPanel, "AAMConditionItemInvert", OnAAMConditionValueUpdate);
 	RegisterCustomEventHandler(hPanel, "AAMConditionItemDelete", OnAAMConditionItemDelete);
 	RegisterCustomEventHandler(hPanel, "AAMConditionSetValue", OnAAMConditionSetValue);
+	RegisterCustomEventHandler(hPanel, "AAMConditionSetAbility", OnAAMConditionSetAbility);
 	RegisterCustomEventHandler(hPanel, "AAMConditionUpdateValue", OnAAMConditionUpdateValue);
 	RegisterCustomEventHandler(hPanel, "AAMConditionSetPriority", OnAAMConditionSetPriority);
 	

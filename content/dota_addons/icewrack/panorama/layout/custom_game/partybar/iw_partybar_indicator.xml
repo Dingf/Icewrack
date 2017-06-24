@@ -1,0 +1,18 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/partybar/iw_partybar_indicator.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/partybar/iw_partybar_indicator.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="PartyBarIndicatorRoot">
+		<Panel hittest="false" class="PartybarIndicatorTextureContainer" id="TextureContainer" />
+		<Panel onactivate="OnIndicatorActivate()"
+			   onmouseover="OnIndicatorMouseOver()"
+			   onmouseout="OnIndicatorMouseOut()"
+			   class="PartyBarInidicatorHitbox" id="Hitbox"/>
+	</Panel>
+</root>

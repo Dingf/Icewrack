@@ -162,17 +162,14 @@ function DealAttackDamage(self, keys)
 	local hAttacker = keys.attacker
 	if IsValidExtendedEntity(hVictim) and IsValidExtendedEntity(hAttacker) and hVictim:IsAlive() then
 		local bIsUnarmed = false
-		local hAttackSource = keys.source
+		local hAttackSource = keys.source or hAttacker:GetCurrentAttackSource()
 		if not hAttackSource then
-			hAttackSource = hAttacker:GetCurrentAttackSource()
-			if not hAttackSource then
-				hAttackSource = hAttacker
-				bIsUnarmed = true
-			elseif IsValidExtendedItem(hAttackSource) and bit32.btest(hAttackSource:GetItemFlags(), IW_ITEM_FLAG_NO_DAMAGE) then
-				return true
-			end
-			keys.source = hAttackSource
+			hAttackSource = hAttacker
+			bIsUnarmed = true
+		elseif IsValidExtendedItem(hAttackSource) and bit32.btest(hAttackSource:GetItemFlags(), IW_ITEM_FLAG_NO_DAMAGE) then
+			return true
 		end
+		keys.source = hAttackSource
 		
 		local fTotalDamage = 0
 		local fDamagePercent = (keys.Percent or 100)/100.0

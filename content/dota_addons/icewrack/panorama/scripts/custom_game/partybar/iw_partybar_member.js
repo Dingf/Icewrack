@@ -1,54 +1,5 @@
 "use strict";
 
-function OnIndicatorMouseOverThink()
-{
-	if ($.GetContextPanel()._bMouseOver)
-	{
-		var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
-		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-		if (tEntityData)
-		{
-			var nRunMode = tEntityData.run_mode;
-			if (nRunMode === 0)
-			{
-				$.DispatchEvent("DOTAShowTextTooltip", $("#Indicator"), $.Localize("#iw_ui_run_mode_off"));
-			}
-			else
-			{
-				$.DispatchEvent("DOTAShowTextTooltip", $("#Indicator"), $.Localize("#iw_ui_run_mode_on"));
-			}
-		}
-		$.Schedule(0.03, OnIndicatorMouseOverThink);
-	}
-	else
-	{
-		$.GetContextPanel()._bTooltipVisible = false;
-		$.DispatchEvent("DOTAHideTextTooltip", $("#Indicator"));
-	}
-	return 0.03
-}
-
-function OnIndicatorMouseOver()
-{
-	$.GetContextPanel()._bTooltipVisible = false;
-	$.GetContextPanel()._bMouseOver = true;
-	OnIndicatorMouseOverThink();
-}
-
-function OnIndicatorMouseOut()
-{
-	$.GetContextPanel()._bMouseOver = false;
-}
-
-function OnIndicatorActivate()
-{
-	var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
-	if (nEntityIndex !== -1)
-	{
-		GameEvents.SendCustomGameEventToServer("iw_toggle_run", { entindex:nEntityIndex });
-	}
-}
-
 function ShowHPLabel()
 {
 	if ($("#HPLabel").GetAttributeInt("lock_label", 0) == 0)
@@ -207,6 +158,29 @@ function OnCenterPortraitUnit()
 	CenterPortraitUnit($.GetContextPanel());
 }
 
+function OnPartybarIndicatorActivate(hContextPanel, tArgs)
+{
+	var szPanelID = tArgs.panel.id;
+	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
+	if (nEntityIndex !== -1)
+	{
+		if (szPanelID === "AAMIndicator")
+		{
+			var tEntityAAMInfo = CustomNetTables.GetTableValue("aam", String(nEntityIndex));
+			GameEvents.SendCustomGameEventToServer("iw_aam_change_state", { entindex:nEntityIndex, state:(tEntityAAMInfo.State+1)%3, hidden:false });
+		}
+		else if (szPanelID === "RunIndicator")
+		{
+			GameEvents.SendCustomGameEventToServer("iw_toggle_run", { entindex:nEntityIndex });
+		}
+		else if (szPanelID === "HoldIndicator")
+		{
+			//TODO: Implement me
+		}
+	}
+	return true;
+}
+
 function UpdatePartyBarMemberValues()
 {
 	var hPanel = $.GetContextPanel();
@@ -269,9 +243,24 @@ function UpdatePartyBarMemberValues()
 			$("#ActionContainer").visible = false;
 		}
 		
-		var nRunMode = tEntityData.run_mode;
-		$("#IndicatorOff").visible = ((nRunMode === 0) || (!bIsEntityAlive));
-		$("#IndicatorOn").visible = ((nRunMode === 1) && (bIsEntityAlive));
+		var tEntityAAMData = CustomNetTables.GetTableValue("aam", nEntityIndex);
+		var nAAMState = bIsEntityAlive ? tEntityAAMData.State : 0;
+		var nPrevAAMState = $("#AAMIndicator").GetAttributeInt("state", 0);
+		if (nPrevAAMState !== nAAMState)
+		{
+			$("#AAMIndicator").SetAttributeInt("state", nAAMState);
+			DispatchCustomEvent($("#AAMIndicator"), "PartybarIndicatorRefresh");
+		}
+		
+		var nRunState = bIsEntityAlive ? tEntityData.run_mode : 0;
+		var nPrevRunState = $("#RunIndicator").GetAttributeInt("state", 0);
+		if (nPrevRunState !== nRunState)
+		{
+			$("#RunIndicator").SetAttributeInt("state", nRunState);
+			DispatchCustomEvent($("#RunIndicator"), "PartybarIndicatorRefresh");
+		}
+		
+		//TODO: Implement the indicator for hold position
 	}
 	$.Schedule(0.03, UpdatePartyBarMemberValues);
 }
@@ -283,7 +272,6 @@ function OnPartyBarMemberLoad()
 	$("#HPLabel").visible = false;
 	$("#MPLabel").visible = false;
 	$("#SPLabel").visible = false;
-	$("#IndicatorOn").visible = false;
 	
 	var hContextPanel = $.GetContextPanel();
 	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
@@ -293,8 +281,13 @@ function OnPartyBarMemberLoad()
 		$("#Portrait").SetImage("file://{images}/portraits/" + Entities.GetUnitName(nEntityIndex) + ".png");
 	}
 	
+	CreatePartybarIndicator(hContextPanel, "AAMIndicator", "iw_partybar_aam_indicator_", "iw_ui_aam_mode_", 3);
+	CreatePartybarIndicator(hContextPanel, "RunIndicator", "iw_partybar_run_indicator_", "iw_ui_run_mode_", 2);
+	CreatePartybarIndicator(hContextPanel, "HoldIndicator", "iw_partybar_hold_indicator_", "iw_ui_hold_mode_", 2);
+	
 	RegisterCustomEventHandler(hContextPanel, "PartybarMemberSelect", SelectPortraitUnit);
 	RegisterCustomEventHandler(hContextPanel, "PartybarMemberCenter", CenterPortraitUnit);
+	RegisterCustomEventHandler(hContextPanel, "PartybarIndicatorActivate", OnPartybarIndicatorActivate);
 	
 	UpdatePartyBarMemberValues();
 };
