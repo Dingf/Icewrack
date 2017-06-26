@@ -1,17 +1,9 @@
 require("timer")
 require("mechanics/status_effects")
 
+
 function ApplyWet(hVictim, hAttacker)
-	local tDispelledModifiers = {}
-	for k,v in pairs(hVictim:FindAllModifiers()) do
-		if IsValidExtendedModifier(v) and v:GetStatusEffect() == IW_STATUS_EFFECT_BURNING then
-			table.insert(tDispelledModifiers, v)
-		end
-	end
-	for k,v in pairs(tDispelledModifiers) do
-		v:Destroy()
-	end
-	
+	hVictim:DispelModifiers(IW_STATUS_MASK_BURNING)
 	local hModifier = hVictim:FindModifierByName("modifier_status_wet")
 	if hModifier then
 		hModifier:ForceRefresh()
@@ -24,7 +16,9 @@ function OnTriggerWet(hTrigger, tArgs)
 	local hEntity = tArgs.activator
 	CTimer(0.0, function()
 		if hTrigger:IsTouching(hEntity) then
-			ApplyWet(hEntity, hEntity)
+			if hEntity:GetPropertyValue(IW_PROPERTY_STATUS_WET) > -100 then
+				ApplyWet(hEntity, hEntity)
+			end
 			return 0.1
 		end
 	end)

@@ -26,10 +26,13 @@ function OnTooltipModifierLoad()
 	var szModifierName = Buffs.GetName(nEntityIndex, nBuffIndex);
 	$("#Title").text = $.Localize("DOTA_Tooltip_" + szModifierName);
 	
-	$("#Class").visible = (tModifierArgs["modifier_class"] !== 0);
-	$("#Class").text = $.Localize("#iw_ui_modifier_class_" + tModifierArgs["modifier_class"]);
-	$("#Status").visible = (tModifierArgs["status_effect"] !== 0);
-	$("#Status").text = $.Localize("#iw_ui_modifier_status_" + tModifierArgs["status_effect"]);
+	var nModifierClass = tModifierArgs["modifier_class"];
+	$("#Class").visible = ((typeof(nModifierClass) !== "undefined") && (nModifierClass !== 0));
+	$("#Class").text = $.Localize("#iw_ui_modifier_class_" + nModifierClass);
+	
+	var nStatusEffect = tModifierArgs["status_effect"];
+	$("#Status").visible = ((typeof(nStatusEffect) !== "undefined") && (nStatusEffect !== 0));
+	$("#Status").text = $.Localize("#iw_ui_modifier_status_" + nStatusEffect);
 	
 	var szLocalizedText = $.Localize("DOTA_Tooltip_" + szModifierName + "_Description");
 	szLocalizedText = szLocalizedText.replace(/\n/g, "<br>");

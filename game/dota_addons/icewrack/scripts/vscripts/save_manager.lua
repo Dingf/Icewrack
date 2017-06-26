@@ -278,14 +278,14 @@ local function SaveModifierData(hInstance)
 		local tSaveModifierList = {}
 		local tEntityModifierList = hInstance:FindAllModifiers()
 		for k,v in pairs(tEntityModifierList) do
-			if IsValidExtendedModifier(v) and not v:IsHidden() then
+			if IsValidExtendedModifier(v) and not v:IsHidden() and not v:IsProvidedByAura() then
 				local tModifierTable = {}
 				tModifierTable.Name = v:GetAbilityName() .. ":" .. v:GetName()
 				tModifierTable.Duration = v:GetRemainingTime()
 				tModifierTable.StackCount = v:GetStackCount()
 						
 				local hAbility = v:GetAbility()
-				tModifierTable.Source = hAbility:GetInstanceID() or 0
+				tModifierTable.Source = hAbility and hAbility:GetInstanceID() or 0
 				tModifierTable.Caster = v:GetCaster():GetInstanceID() or 0
 				tModifierTable.ModifierArgs = {}
 				for k2,v2 in pairs(v._tModifierArgs) do

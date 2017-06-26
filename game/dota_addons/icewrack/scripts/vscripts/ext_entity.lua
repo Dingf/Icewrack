@@ -618,6 +618,21 @@ function CExtEntity:RemoveFromRefreshList(hEntity)
 	end
 end
 
+function CExtEntity:DispelModifiers(nStatusEffectMask)
+	local tDispelledModifiers = {}
+	for k,v in pairs(self:FindAllModifiers()) do
+		if IsValidExtendedModifier(v) then
+			local nStatusEffect = bit32.lshift(1, v:GetStatusEffect() - 1)
+			if bit32.btest(nStatusEffect, nStatusEffectMask) then
+				table.insert(tDispelledModifiers, v)
+			end
+		end
+	end
+	for k,v in pairs(tDispelledModifiers) do
+		v:Destroy()
+	end
+end
+
 function CExtEntity:RefreshHealthRegen()
 	local fHealthRegenPerSec = self:GetPropertyValue(IW_PROPERTY_HP_REGEN_FLAT)
 	fHealthRegenPerSec = fHealthRegenPerSec + (self:GetPropertyValue(IW_PROPERTY_MAX_HP_REGEN)/100.0 * self:GetMaxHealth())

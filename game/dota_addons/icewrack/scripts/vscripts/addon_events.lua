@@ -279,7 +279,9 @@ function CIcewrackGameMode:ExecuteOrderFilter(keys)
 		GameRules.SharedUnitList = tUnitList
 		for k,v in pairs(tUnitList) do
 			local hEntity = EntIndexToHScript(v)
-			hEntity:IssueOrder(nOrderType, hTarget, hAbility, vPosition, false)
+			if IsValidExtendedEntity(hEntity) then
+				hEntity:IssueOrder(nOrderType, hTarget, hAbility, vPosition, false)
+			end
 		end
 		GameRules.SharedUnitList = {}
 		return false

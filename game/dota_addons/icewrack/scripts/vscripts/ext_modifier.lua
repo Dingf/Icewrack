@@ -69,6 +69,10 @@ function CExtModifier:IsStrict()
 	return self._bIsStrict
 end
 
+function CExtModifier:IsProvidedByAura()
+	return (self._tModifierArgs["isProvidedByAura"] == 1)
+end
+
 function CExtModifier:GetRealDurationMultiplier(hTarget)
 	local hSource = self:GetCaster()
 	local fDurationMultiplier = 1.0

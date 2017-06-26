@@ -205,8 +205,6 @@ function CExtModifierLinker:OnModifierCreatedDefault(keys)
 			keys = tModifierArgsTable[tostring(self:RetrieveModifierID())]
 			if keys then
 				self:RecordModifierArgs(keys)
-				keys.modifier_class = self:GetModifierClass()
-				keys.status_effect = self:GetStatusEffect()
 				for k,v in pairs(keys) do
 					if k ~= "texture" and type(v) ~= "table" then
 						table.insert(tModifierStringBuilder, k)
@@ -217,6 +215,12 @@ function CExtModifierLinker:OnModifierCreatedDefault(keys)
 				end
 			end
 		end
+		table.insert(tModifierStringBuilder, "modifier_class=")
+		table.insert(tModifierStringBuilder, self:GetModifierClass())
+		table.insert(tModifierStringBuilder, " ")
+		table.insert(tModifierStringBuilder, "status_effect=")
+		table.insert(tModifierStringBuilder, self:GetStatusEffect())
+		table.insert(tModifierStringBuilder, " ")
 		table.insert(tModifierStringBuilder, "texture=")
 		table.insert(tModifierStringBuilder, self._szTextureName)
 		self._szTextureArgsString = table.concat(tModifierStringBuilder, "")

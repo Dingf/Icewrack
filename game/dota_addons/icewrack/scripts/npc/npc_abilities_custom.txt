@@ -890,6 +890,45 @@
 		}
 	}
 
+	"iw_lina_warmth"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"default"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.45"
+		"AbilityCooldown"			"30"
+		"AbilityAOERadius"			"400"
+
+		"Modifiers"
+		{
+			"modifier_iw_lina_warmth_caster"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_lina_warmth"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"8.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"mana_regen"			"50.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"mana_regen_bonus"		"1.0"
+			}
+		}
+	}
+
 	"iw_lina_pyrotheosis"
 	{
 		"BaseClass"				"ability_lua"

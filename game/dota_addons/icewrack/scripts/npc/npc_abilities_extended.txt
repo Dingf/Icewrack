@@ -227,6 +227,22 @@
 		"ManaCost"		"10"
 	}
 
+	"iw_lina_warmth"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/lina/iw_lina_warmth.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_KEYWORD_AOE"
+
+		"ManaCost"		"25"
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_lina"
+			{
+				"ACT_DOTA_CAST_ABILITY_1"	"1.0"
+			}
+		}
+	}
+
 	"iw_lina_pyrotheosis"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/lina/iw_lina_pyrotheosis.lua"

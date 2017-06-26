@@ -877,6 +877,54 @@
 		}
 	}
 
+	"iw_lina_warmth"
+	{
+		"modifier_iw_lina_warmth_caster"
+		{
+			"Duration"			"%duration"
+			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
+
+			"ScriptFile"			"scripts/vscripts/abilities/lina/modifier_iw_lina_warmth_caster.lua"
+
+			"Texture"			"default"
+			"SoundEffect"			"Hero_Lina.Warmth.Loop"
+			
+			"Properties"
+			{
+				"IW_PROPERTY_MP_REGEN_PCT"	"%mana_regen"
+				"IW_PROPERTY_STATUS_FREEZE"	"-100000"
+				"IW_PROPERTY_STATUS_CHILL"	"-100000"
+				"IW_PROPERTY_STATUS_WET"	"-100000"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+
+		"modifier_iw_lina_warmth"
+		{
+			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
+
+			"ScriptFile"			"scripts/vscripts/abilities/lina/modifier_iw_lina_warmth.lua"
+
+			"Texture"			"default"
+			
+			"Properties"
+			{
+				"IW_PROPERTY_STATUS_FREEZE"	"-100000"
+				"IW_PROPERTY_STATUS_CHILL"	"-100000"
+				"IW_PROPERTY_STATUS_WET"	"-100000"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+	}
+
 	"iw_lina_pyrotheosis"
 	{
 		"modifier_iw_lina_pyrotheosis"
