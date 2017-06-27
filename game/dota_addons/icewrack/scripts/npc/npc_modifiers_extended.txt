@@ -892,6 +892,7 @@
 			"Properties"
 			{
 				"IW_PROPERTY_MP_REGEN_PCT"	"%mana_regen"
+				"IW_PROPERTY_RESIST_COLD"	"%cold_resist"
 				"IW_PROPERTY_STATUS_FREEZE"	"-100000"
 				"IW_PROPERTY_STATUS_CHILL"	"-100000"
 				"IW_PROPERTY_STATUS_WET"	"-100000"

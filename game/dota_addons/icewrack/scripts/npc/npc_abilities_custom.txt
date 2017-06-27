@@ -926,6 +926,17 @@
 				"var_type"			"FIELD_FLOAT"
 				"mana_regen_bonus"		"1.0"
 			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"cold_resist"			"25.0"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"cold_resist_bonus"		"0.25"
+			}
+			
 		}
 	}
 
