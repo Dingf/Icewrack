@@ -1,0 +1,52 @@
+"Hero_Axe.CounterHelix"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/weapons/hero/troll_warlord/whirling_ranged_cast.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"2.000000"
+					}
+					"pitch_rand_min"
+					{
+						"value"		"-0.200000"
+					}
+					"pitch_rand_max"
+					{
+						"value"		"0.200000"
+					}
+					"pitch"
+					{
+						"value"		"0.8500000"
+					}
+					"soundlevel"
+					{
+						"value"		"81.000000"
+					}
+					"distance_max"
+					{
+						"value"		"1800.000000"
+					}
+					"event_type"
+					{
+						"value"		"1.000000"
+					}
+				}
+			}
+		}
+	}
+}

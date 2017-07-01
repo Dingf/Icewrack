@@ -694,8 +694,13 @@ function CExtAbilityLinker:OnToggle()
 		if self:GetManaUpkeep() > 0 or self:GetStaminaUpkeep() > 0 then
 			CTimer(0.03, OnExtAbilityUpkeepThink, self)
 		end
+		self:EndCooldown()
 	else
 		self:RemoveModifiers(IW_MODIFIER_ON_TOGGLE)
+		local fCooldownTime = self:GetCooldown(self:GetLevel())
+		if fCooldownTime > 0 then
+			self:StartCooldown(fCooldownTime)
+		end
 	end
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then

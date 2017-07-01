@@ -290,7 +290,7 @@
 		"AbilityTextureName"			"axe_battle_hunger"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"10.0"
+		"AbilityCooldown"			"5.0"
 
 		"Modifiers"
 		{
@@ -327,25 +327,31 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
 		"AbilityTextureName"			"axe_counter_helix"
 
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.1"
+		"AbilityChannelTime"			"8.0"
 
-		"AbilityCooldown"			"1.0"
-
-		"Modifiers"
-		{
-			"modifier_iw_axe_counter_helix"		"IW_MODIFIER_NO_TRIGGER"
-		}
+		"AbilityCooldown"			"18.0"
 
 		"AbilitySpecial"
 		{
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"damage"			"110"
+				"damage"			"50"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"attack_interval"		"0.5"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"avoidance_factor"		"4.0"
 			}
 		}
 	}
@@ -355,27 +361,27 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"		
-		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
-		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"AbilityTextureName"			"axe_culling_blade"
 
 		"MaxLevel"				"1"
-		"AbilityCastPoint"			"0.3"
 
-		"AbilityCooldown"			"20.0"
+		"Modifiers"
+		{
+			"modifier_iw_axe_culling_blade"		"IW_MODIFIER_ON_ACQUIRE"
+		}
 
 		"AbilitySpecial"
 		{
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"damage"			"125"
+				"damage"			"100"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_missing"		"2.0"
+				"threshold"		"25.0"
 			}
 		}
 	}

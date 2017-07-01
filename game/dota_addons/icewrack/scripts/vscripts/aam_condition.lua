@@ -121,7 +121,7 @@ local function TargetUnitSubtype(hCondition, nValue, tTargetList, bInverse)
 	if nValue ~= 0 then
 		local tNewTargetList = {}
 		for k,v in pairs(tTargetList) do
-			if (v:GetUnitSubtype() == nValue) == bInverse then
+			if (bit32.btest(v:GetUnitSubtype(), bit32.lshift(1, nValue - 1))) == bInverse then
 				tTargetList[k] = nil
 			end
 		end

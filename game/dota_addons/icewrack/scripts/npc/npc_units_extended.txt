@@ -20,11 +20,17 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"39"
 		"IsPlayableHero"		"1"
+
+		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_axe.vsndevts"
+		"Animation"
+		{
+			"models/heroes/axe/axe.vmdl"		"animation/animation_iw_axe.lua"
+		}
 
 		"EquipFlags"			"58719839"
 
@@ -58,7 +64,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"35"
@@ -104,7 +110,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_RANGED"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"105"
@@ -154,7 +160,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"89"
@@ -202,7 +208,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			"IW_UNIT_FLAG_NO_CORPSE"
 		"UnitHeight"			"128"
 		"CorpseTime"			"59"
@@ -248,7 +254,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"80"
@@ -289,7 +295,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"39"
@@ -322,7 +328,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
@@ -351,7 +357,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			"IW_UNIT_FLAG_NO_CORPSE"
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
@@ -381,7 +387,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 		"IsPlayableHero"		"1"
@@ -407,7 +413,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			"IW_UNIT_FLAG_REQ_ATTACK_SOURCE"
 		"UnitHeight"			"128"
 
@@ -432,7 +438,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 	}
@@ -458,7 +464,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"64"
 
@@ -483,7 +489,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
 		"UnitType"			"IW_UNIT_TYPE_RANGED"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"64"
 
@@ -507,7 +513,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_BEAST"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_BEAST | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"64"
 
@@ -545,7 +551,7 @@
 	{
 		"UnitClass"			"IW_UNIT_CLASS_HERO"
 		"UnitType"			"IW_UNIT_TYPE_MAGIC"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			""
 		"UnitHeight"			"128"
 		"CorpseTime"			"49"

@@ -4,7 +4,7 @@ function iw_drow_ranger_feral_bond:CastFilterResultTarget(hTarget)
 	if IsServer() then
 		self._bSubtypeFailed = false
 		self._bClassFailed = false
-		if hTarget:GetUnitSubtype() ~= IW_UNIT_SUBTYPE_BEAST then
+		if not bit32.btest(hTarget:GetUnitSubtype(), IW_UNIT_SUBTYPE_BEAST) then
 			self._bTargetFailed = true
 			return UF_FAIL_CUSTOM
 		elseif hTarget:GetUnitClass() > IW_UNIT_CLASS_VETERAN then

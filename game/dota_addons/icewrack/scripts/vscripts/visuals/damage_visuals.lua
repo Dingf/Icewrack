@@ -1,9 +1,9 @@
 function CreateDamageVisuals(hTarget, nDamageType, bIsCrit)
 	if nDamageType >= IW_DAMAGE_TYPE_CRUSH and nDamageType <= IW_DAMAGE_TYPE_PIERCE then
 		local nUnitSubtype = hTarget:GetUnitSubtype()
-		if nUnitSubtype == IW_UNIT_SUBTYPE_BIOLOGICAL then
+		if bit32.btest(nUnitSubtype, IW_UNIT_SUBTYPE_BIOLOGICAL) then
 			ParticleManager:CreateParticle("particles/generic_gameplay/generic_hit_physical_b.vpcf", PATTACH_POINT, hTarget)
-		elseif nUnitSubtype == IW_UNIT_SUBTYPE_MECHANICAL then
+		elseif bit32.btest(nUnitSubtype, IW_UNIT_SUBTYPE_MECHANICAL) then
 			ParticleManager:CreateParticle("particles/generic_gameplay/generic_hit_physical_m.vpcf", PATTACH_POINT, hTarget)
 		end
 	elseif nDamageType == IW_DAMAGE_TYPE_FIRE then

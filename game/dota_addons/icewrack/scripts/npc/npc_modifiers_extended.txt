@@ -580,29 +580,20 @@
 		}
 	}
 
-	"iw_axe_counter_helix"
+	"iw_axe_culling_blade"
 	{
-		"modifier_iw_axe_counter_helix"
+		"modifier_iw_axe_culling_blade"
 		{
-			"IsHidden"			"1"
-			"IsDebuff"			"1"
-			"Duration"			"0.2"
+			"ScriptFile"			"scripts/vscripts/abilities/axe/modifier_iw_axe_culling_blade.lua"
 
-			"StatusEffect"			"IW_STATUS_EFFECT_STUN"
-			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
+			"IsHidden"			"1"
 
 			"Properties"			{}
 
 			"DatadrivenAttributes"		""
-			"DatadrivenStates"
-			{
-				"MODIFIER_STATE_STUNNED"	"MODIFIER_STATE_VALUE_ENABLED"
-			}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_OVERRIDE_ANIMATION"	"ACT_DOTA_DISABLED"
-			}
-			"DatadrivenEvents" {}
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
 		}
 	}
 

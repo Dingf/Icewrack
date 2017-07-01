@@ -8,8 +8,9 @@ var stAbilityDetailsStatNames =
 	"iw_ui_ability_stat_stamina",
 	"iw_ui_ability_stat_stamina_upkeep",
 	"iw_ui_ability_stat_cooldown",
-	"iw_ui_ability_stat_range",
-	"iw_ui_ability_stat_time"
+	"iw_ui_ability_stat_cast_range",
+	"iw_ui_ability_stat_cast_time",
+	"iw_ui_ability_stat_channel_time",
 ];
 
 function OnAbilityDetailsComboIconMouseOver(hContextPanel)
@@ -57,9 +58,10 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 	var hBehaviorLabel = hContextPanel.FindChildTraverse("Stat0");
 	var nAbilityBehavior = Abilities.GetBehavior(nAbilityIndex);
 	var nAbilityExtFlags = tAbilityTemplate ? tAbilityTemplate.extflags : 0;
+	
 	if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_PASSIVE)
 		szBehaviorText = $.Localize("iw_ui_ability_passive");
-	else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_CHANNELED)
+	else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_CHANNELLED)
 		szBehaviorText = $.Localize("iw_ui_ability_channeled");
 	else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_TOGGLE)
 		szBehaviorText = $.Localize("iw_ui_ability_toggled");
@@ -147,7 +149,7 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 		hCastTimeLabel.visible = true;
 		var nCastRange = Abilities.GetCastRange(nAbilityIndex);
 		if (nCastRange === 0)
-			hRangeLabel.FindChild("Value").text = $.Localize("iw_ui_ability_stat_range_self");
+			hRangeLabel.FindChild("Value").text = $.Localize("iw_ui_ability_stat_cast_range_self");
 		else
 			hRangeLabel.FindChild("Value").text = (nCastRange/100.0).toFixed(2) + "m";
 		
@@ -159,6 +161,10 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 		hRangeLabel.visible = false;
 		hCastTimeLabel.visible = false;
 	}
+	
+	var hChannelTimeLabel = hContextPanel.FindChildTraverse("Stat8");
+	hChannelTimeLabel.visible = (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_CHANNELLED);
+	hChannelTimeLabel.FindChild("Value").text = Abilities.GetChannelTime(nAbilityIndex).toFixed(1) + "s";
 	
 	var hSkillContainer = hContextPanel.FindChildTraverse("SkillContainer");
 	hSkillContainer.RemoveAndDeleteChildren();

@@ -152,15 +152,15 @@ function CIcewrack_Map0_00:ExecuteOrderFilter(keys)
 		if nOrderType == DOTA_UNIT_ORDER_TAUNT and keys.queue == 0 then
 			local szUnitName = hUnit:GetUnitName()
 			if szUnitName == "npc_dota_hero_axe" then
-				AddModifier("internal_animation", "modifier_internal_animation", hUnit, hUnit, { animation=ACT_DOTA_CAST_ABILITY_5, rate=1.0, weight=1.0, duration=1.8 })
+				AddModifier("internal_animation", "modifier_internal_animation", hUnit, hUnit, { animation=ACT_DOTA_TAUNT, rate=1.0, weight=1.0, duration=10.8, translate="come_get_it" })
 			elseif szUnitName == "npc_dota_hero_dragon_knight" then
 				AddModifier("internal_animation", "modifier_internal_animation", hUnit, hUnit, { animation=ACT_DOTA_VICTORY, rate=1.0, weight=1.0, duration=2.6 })
 			elseif szUnitName == "npc_dota_hero_drow_ranger" then
-				AddModifier("internal_animation", "modifier_internal_animation", hUnit, hUnit, { animation=ACT_DOTA_CAST_ABILITY_4, rate=0.6, weight=1.0, duration=1.67 })
+				AddModifier("internal_animation", "modifier_internal_animation", hUnit, hUnit, { animation=ACT_DOTA_ATTACK, rate=1.0, weight=1.0, duration=1.56, translate="frost_arrow" })
 			elseif szUnitName == "npc_dota_hero_bounty_hunter" then
 				AddModifier("internal_animation", "modifier_internal_animation", hUnit, hUnit, { animation=ACT_DOTA_IDLE_RARE, rate=1.0, weight=1.0, duration=2.67, translate="twinblade_idle_rare" })
 			elseif szUnitName == "npc_dota_hero_lina" then
-				AddModifier("internal_animation", "modifier_internal_animation", hUnit, hUnit, { animation=ACT_DOTA_CAST_ABILITY_1, rate=0.5, weight=1.0, duration=2 })
+				AddModifier("internal_animation", "modifier_internal_animation", hUnit, hUnit, { animation=ACT_DOTA_VICTORY, rate=1.0, weight=1.0, duration=3.5 })
 			elseif szUnitName == "npc_dota_hero_omniknight" then
 				AddModifier("internal_animation", "modifier_internal_animation", hUnit, hUnit, { animation=ACT_DOTA_CAST_ABILITY_4, rate=0.6, weight=1.0, duration=3 })
 			end

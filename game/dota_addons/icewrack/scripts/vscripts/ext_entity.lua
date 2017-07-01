@@ -38,13 +38,13 @@ stExtEntityUnitTypeEnum =
 stExtEntityUnitSubtypeEnum =
 {
     IW_UNIT_SUBTYPE_NONE = 0,
-	IW_UNIT_SUBTYPE_HUMANOID = 1,
-	IW_UNIT_SUBTYPE_BEAST = 2,
-	IW_UNIT_SUBTYPE_MECHANICAL = 3,
+	IW_UNIT_SUBTYPE_BIOLOGICAL = 1,
+	IW_UNIT_SUBTYPE_MECHANICAL = 2,
 	IW_UNIT_SUBTYPE_ELEMENTAL = 4,
-	IW_UNIT_SUBTYPE_UNDEAD = 5,
-	IW_UNIT_SUBTYPE_DEMON = 6,
-	IW_UNIT_SUBTYPE_DRAGON = 7,
+	IW_UNIT_SUBTYPE_HUMANOID = 8,
+	IW_UNIT_SUBTYPE_BEAST = 16,
+	IW_UNIT_SUBTYPE_UNDEAD = 32,
+	IW_UNIT_SUBTYPE_DEMON = 64,
 }
 
 --TODO: Make it so that disposition gains are harder based on relative morality distance
@@ -133,7 +133,7 @@ CExtEntity = setmetatable({}, { __call =
 		
 		hEntity._nUnitClass   = stExtEntityUnitClassEnum[tExtEntityTemplate.UnitClass] or IW_UNIT_CLASS_NORMAL
 		hEntity._nUnitType 	  = stExtEntityUnitTypeEnum[tExtEntityTemplate.UnitType] or 0
-		hEntity._nUnitSubtype = stExtEntityUnitSubtypeEnum[tExtEntityTemplate.UnitSubtype] or IW_UNIT_SUBTYPE_NONE
+		hEntity._nUnitSubtype = GetFlagValue(tExtEntityTemplate.UnitSubtype, stExtEntityUnitSubtypeEnum)
 		hEntity._nUnitFlags   = GetFlagValue(tExtEntityTemplate.UnitFlags, stExtEntityFlagEnum)
 		hEntity._nAlignment   = stExtEntityAlignment[tExtEntityTemplate.Alignment] or IW_ALIGNMENT_TRUE_NEUTRAL
 		hEntity._fUnitHeight  = tExtEntityTemplate.UnitHeight or 0

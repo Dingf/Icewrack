@@ -91,7 +91,7 @@ function CreateAvoidanceZone(vPosition, fRadius, fValue, fDuration)
 	hDummy:RemoveAbility("internal_dummy_buff")
 	hDummy._fAvoidanceRadius = fRadius
 	hDummy._fAvoidanceValue = fValue
-	hDummy:SetThink(function() hDummy:RemoveSelf() end, "RemoveAvoidanceZone", fDuration)
+	hDummy:SetThink(function() if not hDummy:IsNull() then hDummy:RemoveSelf() end end, "RemoveAvoidanceZone", fDuration)
 	return hDummy
 
 end

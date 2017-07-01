@@ -155,6 +155,7 @@ for k,v in pairs(stExtAbilityData) do
 				targetflag = GetFlagValue(tBaseAbilityTemplate.AbilityUnitTargetFlags, DOTA_UNIT_TARGET_FLAGS),
 				targettype = GetFlagValue(tBaseAbilityTemplate.AbilityUnitTargetType, DOTA_UNIT_TARGET_TYPE),
 				targetteam = DOTA_UNIT_TARGET_TEAM[tBaseAbilityTemplate.AbilityUnitTargetTeam] or DOTA_UNIT_TARGET_TEAM_NONE,
+				channeltime = tBaseAbilityTemplate.AbilityChannelTime or 0
 			}
 			CustomNetTables:SetTableValue("abilities", k, stAbilityNetTable[k])
 		end

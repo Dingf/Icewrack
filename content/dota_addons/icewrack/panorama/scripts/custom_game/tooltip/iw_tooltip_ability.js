@@ -16,8 +16,13 @@ function OnTooltipAbilityLoad()
 		var nAbilityExtFlags = tAbilityTemplate ? tAbilityTemplate.extflags : 0;
 		if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_PASSIVE)
 			szBehaviorText = $.Localize("iw_ui_ability_passive");
-		else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_CHANNELED)
+		else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_CHANNELLED)
+		{
 			szBehaviorText = $.Localize("iw_ui_ability_channeled");
+			szBehaviorText += ", ";
+			szBehaviorText += (nAbilityIndex ? Abilities.GetChannelTime(nAbilityIndex) : tAbilityTemplate.channeltime).toFixed(1);
+			szBehaviorText += "s";
+		}
 		else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_TOGGLE)
 			szBehaviorText = $.Localize("iw_ui_ability_toggled");
 		else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_AUTOCAST)
