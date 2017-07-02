@@ -343,13 +343,24 @@ end
 function CExtModifierLinker:OnSpellStartAutoCast()
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions.OnSpellStartAutoCast then
-		return tBaseFunctions:OnSpellStartAutoCast()
+		return tBaseFunctions.OnSpellStartAutoCast()
 	end
 	return true
 end
 
 function CExtModifierLinker:GetTexture()
 	return self._szTextureArgsString
+end
+
+function CExtModifierLinker:GetAuraEntityReject(hEntity)
+	if not hEntity:IsAlive() or not IsValidExtendedEntity(hEntity) then
+		return true
+	end
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions.GetAuraEntityReject then
+		return tBaseFunctions.GetAuraEntityReject(self, hEntity)
+	end
+	return false
 end
 
 function CExtModifierLinker:GetModifierSeedList()

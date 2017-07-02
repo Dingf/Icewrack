@@ -7,7 +7,7 @@ require("aam")
 IW_NPC_DEFAULT_THREAT_RAIUS = 1800.0	--The maximum threat falloff radius
 IW_NPC_DEFAULT_SHARE_RADIUS = 900.0		--The radius at which detection/threat is shared
 IW_NPC_VISION_DISTANCE_MIN = 128.0		--The minimum visibility distance; distances closer than this value will not increase visibility further
-IW_NPC_TOUCH_RADIUS = 8.0				--The distance at which an entity will be detected due to physical contact
+IW_NPC_TOUCH_RADIUS = 64.0				--The distance at which an entity will be detected due to physical contact
 IW_NPC_NOISE_TIME_MIN = 0.5				--The minimum amount of time that a noise point will remain 
 
 local stNPCBehaviorAggressiveEnum =
@@ -131,6 +131,7 @@ CIcewrackNPCEntity = setmetatable({}, { __call =
 				hAutomator:InsertSpecialAction("npc_think", CIcewrackNPCEntity.OnNPCThink)
 				hAutomator:InsertCondition(szAutomatorName, CAutomatorCondition(hEntity, "npc_think", 0, 0, 0))
 				hAutomator:SetEnabled(true)
+				hEntity:SetIdleAcquire(false)
 			end
 			--hEntity:SetThink("DetectThink", hEntity, "NPCDetectThink", 0.1)
 		end
@@ -304,7 +305,6 @@ function CIcewrackNPCEntity:AddNoiseEvent(hEntity, vNoiseOrigin, fNoiseValue, bN
 		end
 		local fNoiseMultiplier = math.max(0, 1.0 + hEntity:GetPropertyValue(IW_PROPERTY_MOVE_NOISE_PCT)/100)
 		fNoiseValue = fNoiseValue * fNoiseMultiplier
-	DebugDrawSphere(vNoiseOrigin, Vector(0, fNoiseValue * 64, 0), 255, 48.0, true, 0.1)
 	
 		local nNoiseTableIndex = self._nNoiseTableIndex
 		local fEntityMoveSpeed = hEntity:GetMoveSpeedModifier(hEntity:GetBaseMoveSpeed()) * 0.25
@@ -321,6 +321,7 @@ function CIcewrackNPCEntity:AddNoiseEvent(hEntity, vNoiseOrigin, fNoiseValue, bN
 		CTimer(fNoiseDuration, ClearNoisePoint, self, nNoiseTableIndex)
 		
 		if fNoiseValue > fNoiseDetect and not bNoDetect then
+	DebugDrawSphere(vNoiseOrigin, Vector(0, fNoiseValue * 64, 0), 255, 48.0, true, 1.0)
 			self:DetectEntity(hEntity, stNPCDetectionTime[GameRules:GetCustomGameDifficulty()])
 		end
 	end
@@ -350,7 +351,10 @@ local function EvaluateAttackTargetDesire(self)
 					end
 					for k2,v2 in pairs(tAvoidanceZones) do
 						if (hTarget:GetAbsOrigin() - v2:GetAbsOrigin()):Length2D() <= v2._fAvoidanceRadius then
-							fTargetThreat = fTargetThreat - (v2._fAvoidanceValue * fAvoidanceWeight)
+							local fAdjustedThreat = fTargetThreat - (v2._fAvoidanceValue * fAvoidanceWeight)
+							if fAdjustedThreat < 0 then
+								fTargetThreat = 0
+							end
 						end
 					end
 					if fTargetThreat > fHighestThreat then
@@ -663,19 +667,25 @@ local function EvaluateNPCDetect(self)
 	local fVisionDetect = self._fVisionDetect
 	local nDifficulty = GameRules:GetCustomGameDifficulty()
 	
-	local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, nVisionRange * 2.0, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+	local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, math.max(256.0, nVisionRange * 2.0), DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 	for k,v in pairs(hNearbyEntities) do
 		local hEntity = v
-		if IsValidExtendedEntity(hEntity) and hEntity:IsAlive() and hEntity:GetTeamNumber() ~= self:GetTeamNumber() and self:IsTargetInVisionArea(hEntity) then
-			local vTargetVector = hEntity:GetAbsOrigin() - self:GetAbsOrigin()
-			local fVisionValue = hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_FLAT) * nVisionRange/math.max(IW_NPC_VISION_DISTANCE_MIN, vTargetVector:Length2D())
-			local fVisionMultiplier = math.max(0.0, 1.0 + hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_PCT)/100.0)
-			if hEntity:IsMoving() and hEntity:GetRunMode() then
-				fVisionMultiplier = fVisionMultiplier * 2.0
+		if IsValidExtendedEntity(hEntity) and hEntity:IsAlive() and hEntity:GetTeamNumber() ~= self:GetTeamNumber() then
+			if self:IsTargetInVisionArea(hEntity) then
+				local vTargetVector = hEntity:GetAbsOrigin() - self:GetAbsOrigin()
+				local fVisionValue = hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_FLAT) * nVisionRange/math.max(IW_NPC_VISION_DISTANCE_MIN, vTargetVector:Length2D())
+				local fVisionMultiplier = math.max(0.0, 1.0 + hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_PCT)/100.0)
+				if hEntity:IsMoving() and hEntity:GetRunMode() then
+					fVisionMultiplier = fVisionMultiplier * 2.0
+				end
+				fVisionValue = fVisionValue * fVisionMultiplier
+				if fVisionValue > fVisionDetect then
+					self:DetectEntity(hEntity, stNPCDetectionTime[nDifficulty])
+				end
 			end
-			fVisionValue = fVisionValue * fVisionMultiplier
-			if fVisionValue > fVisionDetect or CalcDistanceBetweenEntityOBB(self, hEntity) < IW_NPC_TOUCH_RADIUS then
-DebugDrawSphere(hEntity:GetAbsOrigin(), Vector(0, 255, 0), 255, 48.0, true, 0.1)
+			if CalcDistanceBetweenEntityOBB(self, hEntity) < IW_NPC_TOUCH_RADIUS then
+			--TODO: Remove the DebugDrawSphere calls
+	DebugDrawSphere(hEntity:GetAbsOrigin(), Vector(0, 255, 255), 255, 48.0, true, 0.1)
 				self:DetectEntity(hEntity, stNPCDetectionTime[nDifficulty])
 			end
 		end

@@ -23,21 +23,42 @@ function OnAbilityEntryMouseOut()
 	$.GetContextPanel().RemoveClass("AbilityEntryHover");
 }
 
+function OnAbilityEntryMouseOverThink()
+{
+	if ($.GetContextPanel()._bMouseOver)
+	{
+		var nEntityIndex = $.GetContextPanel().GetAttributeInt("caster", -1);
+		var nAbilityIndex = $.GetContextPanel().GetAttributeInt("abilityindex", -1);
+		if (nAbilityIndex !== -1)
+		{
+			var nAbilityIndex = $.GetContextPanel().GetAttributeInt("abilityindex", -1);
+			var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
+			var szAbilityName = $.GetContextPanel().GetAttributeString("name", "");
+			var szTooltipArgs = (nAbilityIndex !== -1) ? "abilityindex=" + nAbilityIndex : "abilityname=" + szAbilityName;
+			if (nEntityIndex !== -1)
+				szTooltipArgs += "&entindex=" + nEntityIndex;
+			$.DispatchEvent("UIShowCustomLayoutParametersTooltip", $("#Icon"), "AbilityTooltip", "file://{resources}/layout/custom_game/tooltip/iw_tooltip_ability.xml", szTooltipArgs);
+		}
+		$.Schedule(0.03, OnAbilityEntryMouseOverThink);
+	}
+	else
+	{
+		$.GetContextPanel()._bTooltipVisible = false;
+		$.DispatchEvent("UIHideCustomLayoutTooltip", "AbilityTooltip");
+	}
+	return 0.03
+}
+
 function OnAbilityEntryIconMouseOver()
 {
-	var nAbilityIndex = $.GetContextPanel().GetAttributeInt("abilityindex", -1);
-	var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
-	var szAbilityName = $.GetContextPanel().GetAttributeString("name", "");
-	var szTooltipArgs = (nAbilityIndex !== -1) ? "abilityindex=" + nAbilityIndex : "abilityname=" + szAbilityName;
-	if (nEntityIndex !== -1)
-		szTooltipArgs += "&entindex=" + nEntityIndex;
-	$.DispatchEvent("UIShowCustomLayoutParametersTooltip", $("#Icon"), "AbilityTooltip", "file://{resources}/layout/custom_game/tooltip/iw_tooltip_ability.xml", szTooltipArgs);
-	
+	$.GetContextPanel()._bTooltipVisible = false;
+	$.GetContextPanel()._bMouseOver = true;
+	OnAbilityEntryMouseOverThink();
 }
 
 function OnAbilityEntryIconMouseOut()
 {
-	$.DispatchEvent("UIHideCustomLayoutTooltip", $("#Icon"), "AbilityTooltip");
+	$.GetContextPanel()._bMouseOver = false;
 }
 
 function OnAbilityEntrySelect(hContextPanel, tArgs)

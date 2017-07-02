@@ -114,7 +114,7 @@
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK"
 		"AbilitySkill"		"33561"
 
-		"ManaCost"		"5"
+		"ManaCost"		"8"
 	}
 
 	"iw_drow_ranger_feral_bond"
@@ -137,7 +137,7 @@
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_precision_aura.lua"
 		"AbilityFlags"		""
 
-		"ManaUpkeep"		"3"
+		"ManaUpkeep"		"4"
 	}
 
 	"iw_drow_ranger_bullseye"
@@ -145,7 +145,7 @@
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_bullseye.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_USES_ATTACK_RANGE"
 
-		"StaminaCost"		"12"
+		"StaminaCost"		"15"
 
 		"AbilityCastAnimation"
 		{
@@ -207,22 +207,6 @@
 		"ManaCost"		"10"
 	}
 
-	"iw_lina_warmth"
-	{
-		"ScriptFile"		"scripts/vscripts/abilities/lina/iw_lina_warmth.lua"
-		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_KEYWORD_AOE"
-
-		"ManaCost"		"25"
-
-		"AbilityCastAnimation"
-		{
-			"npc_dota_hero_lina"
-			{
-				"ACT_DOTA_CAST_ABILITY_1"	"1.0"
-			}
-		}
-	}
-
 	"iw_lina_pyrotheosis"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/lina/iw_lina_pyrotheosis.lua"
@@ -234,6 +218,22 @@
 			"npc_dota_hero_lina"
 			{
 				"ACT_DOTA_VICTORY"	"1.0"
+			}
+		}
+	}
+
+	"iw_warmth"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/iw_warmth.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_KEYWORD_AOE"
+
+		"ManaCost"		"25"
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_lina"
+			{
+				"ACT_DOTA_CAST_ABILITY_1"	"1.0"
 			}
 		}
 	}

@@ -22,7 +22,7 @@ function modifier_iw_bounty_hunter_smoke_bomb:GetAuraRadius()
 end
 
 function modifier_iw_bounty_hunter_smoke_bomb:GetAuraEntityReject(hEntity)
-	return not hEntity:IsAlive()
+	return hEntity:GetUnitName() == "npc_dota_hero_bounty_hunter"
 end
 
 function modifier_iw_bounty_hunter_smoke_bomb:IsAuraActiveOnDeath()
@@ -35,7 +35,6 @@ function modifier_iw_bounty_hunter_smoke_bomb:OnCreated(args)
 		if self:GetParent() == self:GetCaster() then
 			hAbility._hParentModifier = self
 			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, args.accuracy)
-			self:SetPropertyValue(IW_PROPERTY_VISIBILITY_PCT, args.visibility)
 			
 			local fRadius = self:GetAuraRadius()
 			local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_bounty_hunter/bounty_hunter_smoke_bomb.vpcf", PATTACH_WORLDORIGIN, self)
@@ -46,7 +45,6 @@ function modifier_iw_bounty_hunter_smoke_bomb:OnCreated(args)
 			CTimer(args.duration, function() self:GetParent():RemoveSelf() end)
 		else
 			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hAbility._hParentModifier:GetBasePropertyValue(IW_PROPERTY_ACCURACY_PCT))
-			self:SetPropertyValue(IW_PROPERTY_VISIBILITY_PCT, hAbility._hParentModifier:GetBasePropertyValue(IW_PROPERTY_VISIBILITY_PCT))
 		end
 	else
 		if self:GetParent() == self:GetCaster() then

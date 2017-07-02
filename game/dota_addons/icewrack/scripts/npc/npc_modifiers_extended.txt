@@ -736,7 +736,6 @@
 
 			"Properties"
 			{
-				"IW_PROPERTY_VISIBILITY_PCT"	"%visibility"
 				"IW_PROPERTY_ACCURACY_PCT"	"%accuracy"
 			}
 
@@ -745,6 +744,24 @@
 			{
 				"MODIFIER_STATE_BLIND"			"MODIFIER_STATE_VALUE_ENABLED"		
 			}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+
+		"modifier_iw_bounty_hunter_smoke_bomb_visibility"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_smoke_bomb_visibility.lua"
+
+			"IsDebuff"			"1"
+			"IsHidden"			"1"
+
+			"Properties"
+			{
+				"IW_PROPERTY_VISIBILITY_PCT"	"%visibility"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"	{}
 			"DatadrivenProperties"		{}
 			"DatadrivenEvents" 	{}
 		}
@@ -868,55 +885,6 @@
 		}
 	}
 
-	"iw_lina_warmth"
-	{
-		"modifier_iw_lina_warmth_caster"
-		{
-			"Duration"			"%duration"
-			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
-
-			"ScriptFile"			"scripts/vscripts/abilities/lina/modifier_iw_lina_warmth_caster.lua"
-
-			"Texture"			"default"
-			"SoundEffect"			"Hero_Lina.Warmth.Loop"
-			
-			"Properties"
-			{
-				"IW_PROPERTY_MP_REGEN_PCT"	"%mana_regen"
-				"IW_PROPERTY_RESIST_COLD"	"%cold_resist"
-				"IW_PROPERTY_STATUS_FREEZE"	"-100000"
-				"IW_PROPERTY_STATUS_CHILL"	"-100000"
-				"IW_PROPERTY_STATUS_WET"	"-100000"
-			}
-
-			"DatadrivenAttributes"		""
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"		{}
-			"DatadrivenEvents" 	{}
-		}
-
-		"modifier_iw_lina_warmth"
-		{
-			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
-
-			"ScriptFile"			"scripts/vscripts/abilities/lina/modifier_iw_lina_warmth.lua"
-
-			"Texture"			"default"
-			
-			"Properties"
-			{
-				"IW_PROPERTY_STATUS_FREEZE"	"-100000"
-				"IW_PROPERTY_STATUS_CHILL"	"-100000"
-				"IW_PROPERTY_STATUS_WET"	"-100000"
-			}
-
-			"DatadrivenAttributes"		""
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"		{}
-			"DatadrivenEvents" 	{}
-		}
-	}
-
 	"iw_lina_pyrotheosis"
 	{
 		"modifier_iw_lina_pyrotheosis"
@@ -947,6 +915,55 @@
 			"IsHidden"			"1"
 
 			"Properties"	{}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+	}
+
+	"iw_warmth"
+	{
+		"modifier_iw_warmth_caster"
+		{
+			"Duration"			"%duration"
+			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
+
+			"ScriptFile"			"scripts/vscripts/abilities/modifier_iw_warmth_caster.lua"
+
+			"Texture"			"default"
+			"SoundEffect"			"Hero_Lina.Warmth.Loop"
+			
+			"Properties"
+			{
+				"IW_PROPERTY_MP_REGEN_PCT"	"%mana_regen"
+				"IW_PROPERTY_RESIST_COLD"	"%cold_resist"
+				"IW_PROPERTY_STATUS_FREEZE"	"-100000"
+				"IW_PROPERTY_STATUS_CHILL"	"-100000"
+				"IW_PROPERTY_STATUS_WET"	"-100000"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 	{}
+		}
+
+		"modifier_iw_warmth"
+		{
+			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
+
+			"ScriptFile"			"scripts/vscripts/abilities/modifier_iw_warmth.lua"
+
+			"Texture"			"default"
+			
+			"Properties"
+			{
+				"IW_PROPERTY_STATUS_FREEZE"	"-100000"
+				"IW_PROPERTY_STATUS_CHILL"	"-100000"
+				"IW_PROPERTY_STATUS_WET"	"-100000"
+			}
 
 			"DatadrivenAttributes"		""
 			"DatadrivenStates"		{}

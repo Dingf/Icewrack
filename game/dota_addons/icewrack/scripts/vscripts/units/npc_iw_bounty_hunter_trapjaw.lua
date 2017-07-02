@@ -24,8 +24,8 @@ function npc_iw_bounty_hunter_trapjaw:OnTrapjawTrigger(hTarget)
 			{
 				[IW_DAMAGE_TYPE_PIERCE] = 
 				{
-					min = hAbility:GetSpecialValueFor("damage"),
-					max = hAbility:GetSpecialValueFor("damage"),
+					min = hAbility:GetSpecialValueFor("damage_min") + hAbility:GetSpecialValueFor("damage_bonus") * hCaster:GetSpellpower(),
+					max = hAbility:GetSpecialValueFor("damage_max") + hAbility:GetSpecialValueFor("damage_bonus") * hCaster:GetSpellpower(),
 				}
 			}
 		}

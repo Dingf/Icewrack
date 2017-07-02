@@ -38,7 +38,7 @@ function iw_axe_counter_helix:OnSpellStart()
 		
 		local fBaseAttackInterval = self:GetSpecialValueFor("attack_interval")
 		local fAvoidanceValue = fTotalDamage * fBaseAttackInterval/self._fAttackRate * self:GetSpecialValueFor("avoidance_factor")
-		self._hAvoidanceDummy = CreateAvoidanceZone(hEntity:GetAbsOrigin(), self:GetAOERadius(), fAvoidanceValue, self:GetChannelTime())
+		self._hAvoidanceDummy = CreateAvoidanceZone(hEntity:GetAbsOrigin(), self:GetAOERadius() + 64.0, fAvoidanceValue, self:GetChannelTime())
 		self._fLastChannelTime = 0
 		EmitSoundOn("Hero_Axe.CounterHelix.Start", hEntity)
 	end

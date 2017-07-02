@@ -225,10 +225,19 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 				
 			if ((typeof(fSpecialBaseValue) === "number") && (tAbilitySpecials.length > 1))
 			{
-				var fSpecialBonus = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecials[1]);
+				var tAbilitySpecialValues = tAbilitySpecials[1].split("*", 2);
+				var fSpecialBonus = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecialValues[0]);
 				if (typeof(fSpecialBonus) === "number")
 				{
 					fSpecialBonusValue = Math.round(fSpecialBonus * 100)/100;
+				}
+				if (tAbilitySpecialValues.length > 1)
+				{
+					var fSpecialBonusMultiplier = parseFloat(tAbilitySpecialValues[1]);
+					if (fSpecialBonusMultiplier)
+					{
+						fSpecialBonusValue *= fSpecialBonusMultiplier;
+					}
 				}
 			}
 			

@@ -712,12 +712,22 @@
 				"var_type"			"FIELD_FLOAT"
 				"root_duration"			"7.5"
 			}
-			"02"
+			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage"			"125"
+				"damage_min"			"100"
 			}
-			"03"
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_max"			"125"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_bonus"			"2.5"
+			}
+			"06"
 			{
 				"var_type"			"FIELD_INTEGER"
 				"trapjaw_const"			"1"
@@ -737,11 +747,12 @@
 		"AbilityCastPoint"			"0.2"
 		"AbilityCastRange"			"550"
 		"AbilityAOERadius"			"350"
-		"AbilityCooldown"			"6.0"
+		"AbilityCooldown"			"8.0"
 
 		"Modifiers"
 		{
 			"modifier_iw_bounty_hunter_smoke_bomb"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_bounty_hunter_smoke_bomb_visibility"		"IW_MODIFIER_NO_TRIGGER"
 		}
 
 		"AbilitySpecial"
@@ -764,9 +775,14 @@
 			"04"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"duration"			"12.0"
+				"accuracy_bonus"		"-1.0"
 			}
 			"05"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"20.0"
+			}
+			"06"
 			{
 				"var_type"			"FIELD_INTEGER"
 				"avoidance"			"250"
@@ -896,56 +912,6 @@
 		}
 	}
 
-	"iw_lina_warmth"
-	{
-		"BaseClass"				"ability_lua"
-		"ScriptFile"				"ext_ability"
-
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
-		"AbilityTextureName"			"default"
-
-		"MaxLevel"				"1"
-		"AbilityCastPoint"			"0.45"
-		"AbilityCooldown"			"30"
-		"AbilityAOERadius"			"400"
-
-		"Modifiers"
-		{
-			"modifier_iw_lina_warmth_caster"		"IW_MODIFIER_NO_TRIGGER"
-			"modifier_iw_lina_warmth"		"IW_MODIFIER_NO_TRIGGER"
-		}
-
-		"AbilitySpecial"
-		{
-			"01"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"duration"			"8.0"
-			}
-			"02"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"mana_regen"			"50.0"
-			}
-			"03"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"mana_regen_bonus"		"1.0"
-			}
-			"04"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"cold_resist"			"25.0"
-			}
-			"05"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"cold_resist_bonus"		"0.25"
-			}
-			
-		}
-	}
-
 	"iw_lina_pyrotheosis"
 	{
 		"BaseClass"				"ability_lua"
@@ -985,6 +951,56 @@
 				"var_type"			"FIELD_FLOAT"
 				"cooldown_reduction"		"1.0"
 			}
+		}
+	}
+
+	"iw_warmth"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"default"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.45"
+		"AbilityCooldown"			"30"
+		"AbilityAOERadius"			"400"
+
+		"Modifiers"
+		{
+			"modifier_iw_warmth_caster"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_warmth"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"5.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"mana_regen"			"50.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"mana_regen_bonus"		"1.0"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"cold_resist"			"25.0"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"cold_resist_bonus"		"0.25"
+			}
+			
 		}
 	}
 
