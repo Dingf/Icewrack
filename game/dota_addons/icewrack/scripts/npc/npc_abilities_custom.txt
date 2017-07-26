@@ -14,7 +14,6 @@
 				"IsHidden"						"1"
 				"States"
 				{
-					"MODIFIER_STATE_FLYING"				"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_ATTACK_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_INVULNERABLE"			"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
@@ -259,11 +258,11 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL"
 		"AbilityTextureName"			"axe_berserkers_call"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"12.0"
+		"AbilityCooldown"			"6.0"
 		"AbilityAOERadius"			"300"
 
 		"AbilitySpecial"
@@ -290,7 +289,7 @@
 		"AbilityTextureName"			"axe_battle_hunger"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"5.0"
+		"AbilityCooldown"			"30.0"
 
 		"Modifiers"
 		{
@@ -302,12 +301,12 @@
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"lifesteal"			"50"
+				"lifesteal"			"25"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"second_wind"			"50"
+				"second_wind"			"25"
 			}
 			"03"
 			{
@@ -318,6 +317,11 @@
 			{
 				"var_type"			"FIELD_FLOAT"
 				"health_loss"			"2.5"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"8.0"
 			}
 		}
 	}
@@ -333,8 +337,12 @@
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"0.1"
 		"AbilityChannelTime"			"8.0"
+		"AbilityCooldown"			"12.0"
 
-		"AbilityCooldown"			"18.0"
+		"Modifiers"
+		{
+			"modifier_iw_axe_counter_helix"		"IW_MODIFIER_NO_TRIGGER"
+		}
 
 		"AbilitySpecial"
 		{
@@ -352,6 +360,11 @@
 			{
 				"var_type"			"FIELD_FLOAT"
 				"avoidance_factor"		"4.0"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"move_speed"			"-50"
 			}
 		}
 	}
@@ -476,7 +489,7 @@
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"threat"			"2.5"
+				"threat"			"2.0"
 			}
 		}
 	}
@@ -521,7 +534,7 @@
 
 		"MaxLevel"				"1"
 		"AbilityCastPoint"			"3.0"
-		"AbilityCooldown"			"140"
+		"AbilityCooldown"			"300"
 
 		"Modifiers"
 		{
@@ -921,7 +934,7 @@
 		"AbilityTextureName"			"lina_fiery_soul"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"200.0"
+		"AbilityCooldown"			"100.0"
 
 		"Modifiers"
 		{

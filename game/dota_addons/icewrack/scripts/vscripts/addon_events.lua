@@ -303,6 +303,11 @@ function CIcewrackGameMode:ExecuteOrderFilter(keys)
 		tOrderTable.Queue = false
 		hEntity._nLastOrderID = hEntity._nLastOrderID + 1
 		
+		local bEventResult = hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_EXECUTE_ORDER, tOrderTable)
+		if bEventResult == false then
+			return false
+		end
+		
 		if nOrderType == DOTA_UNIT_ORDER_MOVE_TO_POSITION then
 			return OnMoveToPosition(hEntity, vPosition)
 		elseif nOrderType == DOTA_UNIT_ORDER_MOVE_TO_TARGET then

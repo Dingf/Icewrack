@@ -128,11 +128,11 @@ function modifier_internal_skill_bonus:OnRefresh()
 	self:SetPropertyValue(IW_PROPERTY_FATIGUE_MULTI, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ARMOR) * -20)
 	
 	self:SetPropertyValue(IW_PROPERTY_SP_REGEN_FLAT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_COMBAT) * 1.0)
-	self:SetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_COMBAT) * -15.0)
-	self:SetPropertyValue(IW_PROPERTY_SP_REGEN_TIME_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_COMBAT) * -15.0)
+	self:SetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_COMBAT) * -10)
+	self:SetPropertyValue(IW_PROPERTY_SP_REGEN_TIME_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_COMBAT) * -10)
 	
-	self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_FLAT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ATHLETICS) * 15)
-	self:SetPropertyValue(IW_PROPERTY_RUN_SP_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ATHLETICS) * -15)
+	self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_FLAT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ATHLETICS) * 20)
+	self:SetPropertyValue(IW_PROPERTY_RUN_SP_PCT, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_ATHLETICS) * -10)
 	
 	self:SetPropertyValue(IW_PROPERTY_RESIST_FIRE, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_SURVIVAL) * 10)
 	self:SetPropertyValue(IW_PROPERTY_RESIST_COLD, hEntity:GetPropertyValue(IW_PROPERTY_SKILL_SURVIVAL) * 10)

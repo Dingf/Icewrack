@@ -57,11 +57,6 @@ CSpellbook = setmetatable({ _stAbilityCombos = {} }, { __call =
 		return self
 	end})
 
-CSpellbook.CallWrapper = function(self, keys) if keys.entindex then CSpellbook(EntIndexToHScript(keys.entindex)) end end
-ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CSpellbook, "CallWrapper"), CSpellbook)
-ListenToGameEvent("iw_ability_combo", Dynamic_Wrap(CSpellbook, "OnAbilityCombo"), CSpellbook)
-ListenToGameEvent("iw_actionbar_bind", Dynamic_Wrap(CSpellbook, "OnAbilityBind"), CSpellbook)
-CustomGameEventManager:RegisterListener("iw_actionbar_bind", Dynamic_Wrap(CSpellbook, "OnAbilityBind"))
 
 function CSpellbook:GetKnownAbilities()
 	return self._tSpellList
@@ -242,5 +237,19 @@ function CSpellbook:OnAbilityCombo(args)
 		CSpellbook:UpdateNetTable()
 	end
 end
+
+function CSpellbook:OnEntityLoad(args)
+	local hEntity = EntIndexToHScript(args.entindex)
+	if hEntity then
+		return CSpellbook(EntIndexToHScript(args.entindex))
+	else
+		LogMessage("Failed to retrieve entity with enindex \"" .. args.entindex .. "\"", LOG_SEVERITY_ERROR)
+	end
+end
+
+ListenToGameEvent("iw_ability_combo", Dynamic_Wrap(CSpellbook, "OnAbilityCombo"), CSpellbook)
+ListenToGameEvent("iw_actionbar_bind", Dynamic_Wrap(CSpellbook, "OnAbilityBind"), CSpellbook)
+ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CSpellbook, "OnEntityLoad"), CSpellbook)
+CustomGameEventManager:RegisterListener("iw_actionbar_bind", Dynamic_Wrap(CSpellbook, "OnAbilityBind"))
 
 end

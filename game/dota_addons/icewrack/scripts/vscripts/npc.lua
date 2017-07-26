@@ -137,9 +137,6 @@ CIcewrackNPCEntity = setmetatable({}, { __call =
 		end
 		return hEntity
 	end})
-	
-CIcewrackNPCEntity.CallWrapper = function(self, keys) if keys.entindex then CIcewrackNPCEntity(EntIndexToHScript(keys.entindex)) end end
-ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CIcewrackNPCEntity, "CallWrapper"), CIcewrackNPCEntity)
 
 function CIcewrackNPCEntity:GetBehaviorAggressiveness()
 	return self:GetPropertyValue(IW_PROPERTY_BEHAVIOR_AGGRO)
@@ -718,7 +715,7 @@ local function EvaluateNPCAction(self)
 end
 
 function CIcewrackNPCEntity:OnNPCThink()
-	if self:GetMainControllingPlayer() ~= 0 then
+	if self:GetMainControllingPlayer() ~= 0 and self:IsAlive() then
 		EvaluateNPCDetect(self)
 		EvaluateNPCAction(self)
 		return true
@@ -728,5 +725,16 @@ end
 function IsValidNPCEntity(hEntity)
     return (IsValidExtendedEntity(hEntity) and hEntity._bIsNPCEntity == true)
 end
+
+function CIcewrackNPCEntity:OnEntityLoad(args)
+	local hEntity = EntIndexToHScript(args.entindex)
+	if hEntity then
+		return CIcewrackNPCEntity(EntIndexToHScript(args.entindex))
+	else
+		LogMessage("Failed to retrieve entity with enindex \"" .. args.entindex .. "\"", LOG_SEVERITY_ERROR)
+	end
+end
+	
+ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CIcewrackNPCEntity, "OnEntityLoad"), CIcewrackNPCEntity)
 
 end

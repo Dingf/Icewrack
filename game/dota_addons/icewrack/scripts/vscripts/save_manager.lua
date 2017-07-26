@@ -87,9 +87,6 @@ CSaveManager =
 	
 InitLogFile(CSaveManager._szSaveDirectory, "")		--This creates the saves folder if it doesn't exist
 
-ListenToGameEvent("iw_save_game", Dynamic_Wrap(CSaveManager, "OnSaveGame"), CSaveManager)
-ListenToGameEvent("iw_map_transition", Dynamic_Wrap(CSaveManager, "OnMapTransition"), CSaveManager)
-
 local tSaveListInfo = LoadKeyValues(CSaveManager._szSaveDirectory .. "iw_savelist.txt")
 if tSaveListInfo then
 	for k,v in pairs(tSaveListInfo) do
@@ -1053,5 +1050,8 @@ function CSaveManager:LoadGame()
 	RefreshAllEntities()
 	CInstance:SetAllowDynamicInstances(true)
 end
+
+ListenToGameEvent("iw_save_game", Dynamic_Wrap(CSaveManager, "OnSaveGame"), CSaveManager)
+ListenToGameEvent("iw_map_transition", Dynamic_Wrap(CSaveManager, "OnMapTransition"), CSaveManager)
 
 end

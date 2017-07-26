@@ -33,6 +33,7 @@
 		"AbilitySkill"		"115"
 
 		"StaminaCost"		"5"
+		"StaminaCostMultiplier"	"0.5"
 	}
 
 	"iw_axe_culling_blade"

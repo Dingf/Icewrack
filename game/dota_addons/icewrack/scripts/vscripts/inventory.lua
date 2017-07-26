@@ -48,16 +48,6 @@ CInventory = setmetatable({}, { __call =
 								
 		return self
 	end})
-	
-CustomGameEventManager:RegisterListener("iw_inventory_equip_item", Dynamic_Wrap(CInventory, "OnEquip"))
-CustomGameEventManager:RegisterListener("iw_inventory_drop_item", Dynamic_Wrap(CInventory, "OnDrop"))
-CustomGameEventManager:RegisterListener("iw_inventory_use_item", Dynamic_Wrap(CInventory, "OnUse"))
-CustomGameEventManager:RegisterListener("iw_inventory_use_finish", Dynamic_Wrap(CInventory, "OnUseFinish"))
-CustomGameEventManager:RegisterListener("iw_lootable_take_item", Dynamic_Wrap(CInventory, "OnTake"))
-CustomGameEventManager:RegisterListener("iw_lootable_store_item", Dynamic_Wrap(CInventory, "OnStore"))
-
-CInventory.CallWrapper = function(self, keys) if keys.entindex then CInventory(EntIndexToHScript(keys.entindex)) end end
-ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CInventory, "CallWrapper"), CInventory)
 
 function CInventory:UpdateNetTable()
 	self._tNetTable.item_list = self._tNetTableItemList
@@ -487,5 +477,24 @@ function CInventory:OnStore(args)
 		hEntityInventory:TransferItem(hItem, hLootable)
 	end
 end
+
+function CInventory:OnEntityLoad(args)
+	local hEntity = EntIndexToHScript(args.entindex)
+	if hEntity then
+		return CInventory(EntIndexToHScript(args.entindex))
+	else
+		LogMessage("Failed to retrieve entity with enindex \"" .. args.entindex .. "\"", LOG_SEVERITY_ERROR)
+	end
+end
+
+
+CustomGameEventManager:RegisterListener("iw_inventory_equip_item", Dynamic_Wrap(CInventory, "OnEquip"))
+CustomGameEventManager:RegisterListener("iw_inventory_drop_item", Dynamic_Wrap(CInventory, "OnDrop"))
+CustomGameEventManager:RegisterListener("iw_inventory_use_item", Dynamic_Wrap(CInventory, "OnUse"))
+CustomGameEventManager:RegisterListener("iw_inventory_use_finish", Dynamic_Wrap(CInventory, "OnUseFinish"))
+CustomGameEventManager:RegisterListener("iw_lootable_take_item", Dynamic_Wrap(CInventory, "OnTake"))
+CustomGameEventManager:RegisterListener("iw_lootable_store_item", Dynamic_Wrap(CInventory, "OnStore"))
+
+ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CInventory, "OnEntityLoad"), CInventory)
 
 end

@@ -192,6 +192,17 @@ function CExtAbilityLinker:GetCooldown(nLevel)
 	return self.BaseClass.GetCooldown(self, nLevel)
 end
 
+function CExtAbilityLinker:GetHealthCostMultiplier()
+	local hEntity = self:GetCaster()
+	local fFatigueMultiplier = 0.0
+	if IsServer() then
+		fFatigueMultiplier = hEntity and hEntity:GetFatigueMultiplier() or 1.0
+	else
+		fFatigueMultiplier = hEntity and hEntity:GetBaseMagicalResistanceValue() or 1.0
+	end
+	return (self._fHealthCostMultiplier or 1.0) * fFatigueMultiplier
+end
+
 function CExtAbilityLinker:GetHealthCost(nLevel)
 	local hEntity = self:GetCaster()
 	local fHealthCost = 0
@@ -209,7 +220,19 @@ function CExtAbilityLinker:GetHealthCost(nLevel)
 	else
 		fHealthCost = fHealthCost * (hEntity and hEntity:GetBaseMagicalResistanceValue() or 1.0)
 	end
+	fHealthCost = fHealthCost * self:GetHealthCostMultiplier()
 	return floor(fHealthCost)
+end
+
+function CExtAbilityLinker:GetManaCostMultiplier()
+	local hEntity = self:GetCaster()
+	local fFatigueMultiplier = 0.0
+	if IsServer() then
+		fFatigueMultiplier = hEntity and hEntity:GetFatigueMultiplier() or 1.0
+	else
+		fFatigueMultiplier = hEntity and hEntity:GetBaseMagicalResistanceValue() or 1.0
+	end
+	return (self._fManaCostMultiplier or 1.0) * fFatigueMultiplier
 end
 
 function CExtAbilityLinker:GetManaCost(nLevel)
@@ -223,12 +246,7 @@ function CExtAbilityLinker:GetManaCost(nLevel)
 		if not nLevel or nLevel == -1 then nLevel = self:GetLevel() end
 		fManaCost = tManaCosts[nLevel] or 0
 	end
-	
-	if IsServer() then
-		fManaCost = fManaCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
-	else
-		fManaCost = fManaCost * (hEntity and hEntity:GetBaseMagicalResistanceValue() or 1.0)
-	end
+	fManaCost = fManaCost * self:GetManaCostMultiplier()
 	return floor(fManaCost)
 end
 
@@ -239,8 +257,14 @@ function CExtAbilityLinker:GetManaUpkeep()
 	if tBaseFunctions and tBaseFunctions.GetManaUpkeep then
 		fManaUpkeep = tBaseFunctions.GetManaUpkeep(self)
 	end
-	fManaUpkeep = fManaUpkeep * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
+	fManaUpkeep = fManaUpkeep * self:GetManaCostMultiplier()
 	return fManaUpkeep
+end
+
+function CExtAbilityLinker:GetStaminaCostMultiplier()
+	local hEntity = self:GetCaster()
+	local fFatigueMultiplier = hEntity and hEntity:GetFatigueMultiplier() or 1.0
+	return (self._fStaminaCostMultiplier or 1.0) * fFatigueMultiplier
 end
 
 function CExtAbilityLinker:GetStaminaCost(nLevel)
@@ -266,18 +290,17 @@ function CExtAbilityLinker:GetStaminaCost(nLevel)
 	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_KEYWORD_ATTACK) then
 		fStaminaCost = fStaminaCost * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
 	end
-	fStaminaCost = fStaminaCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
+	fStaminaCost = fStaminaCost * self:GetStaminaCostMultiplier()
 	return floor(fStaminaCost)
 end
 
 function CExtAbilityLinker:GetStaminaUpkeep()
-	local hEntity = self:GetCaster()
 	local fStaminaUpkeep = self._fStaminaUpkeep or 0
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions and tBaseFunctions.GetStaminaUpkeep then
 		fStaminaUpkeep = tBaseFunctions.GetStaminaUpkeep(self)
 	end
-	fStaminaUpkeep = fStaminaUpkeep * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
+	fStaminaUpkeep = fStaminaUpkeep * self:GetStaminaCostMultiplier()
 	return fStaminaUpkeep
 end
 
@@ -794,6 +817,10 @@ function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemp
 	
 	hExtAbility._fManaUpkeep = tExtTemplate.ManaUpkeep or 0
 	hExtAbility._fStaminaUpkeep = tExtTemplate.StaminaUpkeep or 0
+	
+	hExtAbility._fHealthCostMultiplier = type(tExtTemplate.HealthCostMultiplier) == "number" and max(0.0, tExtTemplate.HealthCostMultiplier)
+	hExtAbility._fManaCostMultiplier = type(tExtTemplate.ManaCostMultiplier) == "number" and max(0.0, tExtTemplate.ManaCostMultiplier)
+	hExtAbility._fStaminaCostMultiplier = type(tExtTemplate.StaminaCostMultiplier) == "number" and max(0.0, tExtTemplate.StaminaCostMultiplier)
 	
 	hExtAbility._tAbilityCosts =
 	{

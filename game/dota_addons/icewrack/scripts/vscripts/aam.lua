@@ -81,15 +81,6 @@ CAbilityAutomatorModule = setmetatable({}, { __call =
 		return self
 	end})
 	
-CustomGameEventManager:RegisterListener("iw_aam_change_state", Dynamic_Wrap(CAbilityAutomatorModule, "OnChangeState"))
-CustomGameEventManager:RegisterListener("iw_aam_update_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnUpdate"))
-CustomGameEventManager:RegisterListener("iw_aam_move_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnMove"))
-CustomGameEventManager:RegisterListener("iw_aam_delete_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnDelete"))
-CustomGameEventManager:RegisterListener("iw_aam_save", Dynamic_Wrap(CAbilityAutomatorModule, "OnSave"))
-CustomGameEventManager:RegisterListener("iw_aam_load", Dynamic_Wrap(CAbilityAutomatorModule, "OnLoad"))
-CustomGameEventManager:RegisterListener("iw_aam_delete_automator", Dynamic_Wrap(CAbilityAutomatorModule, "OnDeleteAutomator"))
-
-ListenToGameEvent("iw_ext_entity_load", function(self, keys) CAbilityAutomatorModule(EntIndexToHScript(keys.entindex)) end, CAbilityAutomatorModule)
 
 function CAbilityAutomatorModule:SetEnabled(bState)
 	if type(bState) == "boolean" then
@@ -366,5 +357,24 @@ function CAbilityAutomatorModule:OnDeleteAutomator(args)
 		hAutomatorModule:UpdateNetTable()
 	end
 end
+
+function CAbilityAutomatorModule:OnEntityLoad(args)
+	local hEntity = EntIndexToHScript(args.entindex)
+	if hEntity then
+		return CAbilityAutomatorModule(EntIndexToHScript(args.entindex))
+	else
+		LogMessage("Failed to retrieve entity with enindex \"" .. args.entindex .. "\"", LOG_SEVERITY_ERROR)
+	end
+end
+
+CustomGameEventManager:RegisterListener("iw_aam_change_state", Dynamic_Wrap(CAbilityAutomatorModule, "OnChangeState"))
+CustomGameEventManager:RegisterListener("iw_aam_update_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnUpdate"))
+CustomGameEventManager:RegisterListener("iw_aam_move_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnMove"))
+CustomGameEventManager:RegisterListener("iw_aam_delete_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnDelete"))
+CustomGameEventManager:RegisterListener("iw_aam_save", Dynamic_Wrap(CAbilityAutomatorModule, "OnSave"))
+CustomGameEventManager:RegisterListener("iw_aam_load", Dynamic_Wrap(CAbilityAutomatorModule, "OnLoad"))
+CustomGameEventManager:RegisterListener("iw_aam_delete_automator", Dynamic_Wrap(CAbilityAutomatorModule, "OnDeleteAutomator"))
+
+ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CAbilityAutomatorModule, "OnEntityLoad"), CAbilityAutomatorModule)
 
 end

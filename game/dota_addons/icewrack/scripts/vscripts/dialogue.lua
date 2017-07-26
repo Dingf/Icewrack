@@ -70,8 +70,6 @@ CDialogueEntity = setmetatable({ _tDialogueNodeList = {} }, { __call =
 		
 		return hEntity
 	end})
-	
-CustomGameEventManager:RegisterListener("iw_dialogue_option", Dynamic_Wrap(CDialogueEntity, "OnDialogueOption"))
 
 local function ShowDialogueNode(nDialogueID)
 	local hDialogueNode = CDialogueEntity._tDialogueNodeList[nDialogueID] or CreateDialogueNode(nDialogueID)
@@ -127,5 +125,7 @@ function CDialogueEntity:OnDialogueOption(args)
 		end
 	end
 end
+	
+CustomGameEventManager:RegisterListener("iw_dialogue_option", Dynamic_Wrap(CDialogueEntity, "OnDialogueOption"))
 
 end

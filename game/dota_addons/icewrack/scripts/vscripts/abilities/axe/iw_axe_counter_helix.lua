@@ -38,8 +38,14 @@ function iw_axe_counter_helix:OnSpellStart()
 		
 		local fBaseAttackInterval = self:GetSpecialValueFor("attack_interval")
 		local fAvoidanceValue = fTotalDamage * fBaseAttackInterval/self._fAttackRate * self:GetSpecialValueFor("avoidance_factor")
-		self._hAvoidanceDummy = CreateAvoidanceZone(hEntity:GetAbsOrigin(), self:GetAOERadius() + 64.0, fAvoidanceValue, self:GetChannelTime())
+		
+		local tModifierArgs = 
+		{
+			avoidance = fAvoidanceValue,
+			move_speed = self:GetSpecialValueFor("move_speed")
+		}
 		self._fLastChannelTime = 0
+		hEntity:AddNewModifier(hEntity, self, "modifier_iw_axe_counter_helix", tModifierArgs)
 		EmitSoundOn("Hero_Axe.CounterHelix.Start", hEntity)
 	end
 end
@@ -97,8 +103,6 @@ function iw_axe_counter_helix:OnChannelThink(fThinkRate)
 end
 
 function iw_axe_counter_helix:OnChannelFinish(bInterrupted)
-	local hAvoidanceDummy = self._hAvoidanceDummy
-	if hAvoidanceDummy and not hAvoidanceDummy:IsNull() then
-		hAvoidanceDummy:RemoveSelf()
-	end
+	local hEntity = self:GetCaster()
+	hEntity:RemoveModifierByName("modifier_iw_axe_counter_helix")
 end

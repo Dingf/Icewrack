@@ -23,15 +23,15 @@
 					}
 					"pitch_rand_min"
 					{
-						"value"		"-0.200000"
+						"value"		"-0.100000"
 					}
 					"pitch_rand_max"
 					{
-						"value"		"0.200000"
+						"value"		"0.100000"
 					}
 					"pitch"
 					{
-						"value"		"0.8500000"
+						"value"		"0.600000"
 					}
 					"soundlevel"
 					{

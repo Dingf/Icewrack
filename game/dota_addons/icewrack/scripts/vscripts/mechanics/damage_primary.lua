@@ -141,8 +141,21 @@ function DealPrimaryDamage(self, keys)
 					hVictim:AddThreat(hAttacker, fDamageAmount * fThreatMultiplier, true)
 				end
 				CreateDamageVisuals(hVictim, nDamageType, bIsCrit)
-				hVictim:ModifyHealth(math.max(0, hVictim:GetHealth() - fDamageAmount), hAttacker, true, 0)
-				hVictim:SpendStamina(0)
+				
+				if hVictim:GetHealth() > 0 then
+					hVictim:ModifyHealth(math.max(0, hVictim:GetHealth() - fDamageAmount), hAttacker, true, 0)
+					hVictim:SpendStamina(0)
+					if hVictim:GetHealth() <= 0 then
+						local tKillInfoTable = 
+						{
+							attacker = hAttacker,
+							victim = hVictim,
+						}
+						hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_KILL, tKillInfoTable)
+						hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DEATH, tKillInfoTable)
+					end
+				end
+				
 				bDamageResult = true
 			end
 		end

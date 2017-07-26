@@ -829,6 +829,9 @@ stExtModifierEventValues =
 	IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT = 12,
 	IW_MODIFIER_EVENT_ON_PRE_ABILITY_CAST = 13,
 	IW_MODIFIER_EVENT_ON_POST_ABILITY_CAST = 14,
+	IW_MODIFIER_EVENT_ON_EXECUTE_ORDER = 15,
+	IW_MODIFIER_EVENT_ON_KILL = 16,
+	IW_MODIFIER_EVENT_ON_DEATH = 17,
 }
 
 for k,v in pairs(stExtModifierEventValues) do _G[k] = v end
@@ -849,6 +852,9 @@ stExtModifierEventAliases =
 	[IW_MODIFIER_EVENT_ON_PRE_ATTACK_EVENT] = "OnPreAttackEvent",
 	[IW_MODIFIER_EVENT_ON_PRE_ABILITY_CAST] = "OnPreAbilityCast",
 	[IW_MODIFIER_EVENT_ON_POST_ABILITY_CAST] = "OnPostAbilityCast",
+	[IW_MODIFIER_EVENT_ON_EXECUTE_ORDER] = "OnExecuteOrder",
+	[IW_MODIFIER_EVENT_ON_KILL] = "OnKill",
+	[IW_MODIFIER_EVENT_ON_DEATH] = "OnDeath",
 }
 
 for k,v in pairs(TraceContents_t) do _G[k] = v end

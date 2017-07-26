@@ -212,10 +212,6 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity:RefreshEntity()
 		return hEntity
 	end})
-	
-CustomGameEventManager:RegisterListener("iw_character_attributes_confirm", Dynamic_Wrap(CExtEntity, "OnAttributesConfirm"))
-CustomGameEventManager:RegisterListener("iw_character_skills_confirm", Dynamic_Wrap(CExtEntity, "OnSkillsConfirm"))
-CustomGameEventManager:RegisterListener("iw_toggle_run", Dynamic_Wrap(CExtEntity, "OnToggleRun"))
 
 function CExtEntity:GetUnitClass()
     return self._nUnitClass
@@ -597,7 +593,7 @@ function CExtEntity:TriggerExtendedEvent(nEventID, args)
 			local hEventFunction = v[szEventAlias]
 			if type(hEventFunction) == "function" then
 				local result = hEventFunction(v, args)
-				if result then
+				if result ~= nil then
 					return result
 				end
 			end
@@ -817,5 +813,9 @@ function RemoveEntity(hEntity)
 	    hEntity:RemoveEntity()
 	end
 end
+	
+CustomGameEventManager:RegisterListener("iw_character_attributes_confirm", Dynamic_Wrap(CExtEntity, "OnAttributesConfirm"))
+CustomGameEventManager:RegisterListener("iw_character_skills_confirm", Dynamic_Wrap(CExtEntity, "OnSkillsConfirm"))
+CustomGameEventManager:RegisterListener("iw_toggle_run", Dynamic_Wrap(CExtEntity, "OnToggleRun"))
 
 end
