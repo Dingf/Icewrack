@@ -643,6 +643,41 @@
 		}
 	}
 
+	"iw_dragon_knight_dragons_blood"
+	{
+		"modifier_iw_dragon_knight_dragons_blood"
+		{
+			"Duration"			"%duration"
+			"Texture"			"dragon_knight_dragon_blood"
+			"VisualEffect"			"particles/units/heroes/hero_dragon_knight/dragon_knight_dragons_blood_buff.vpcf"
+
+			"Properties"
+			{
+				"IW_PROPERTY_HP_REGEN_FLAT"	"%health_regen"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" {}
+		}
+
+		"modifier_iw_dragon_knight_dragons_blood_passive"
+		{
+			"Texture"			"dragon_knight_dragon_blood"
+
+			"Properties"
+			{
+				"IW_PROPERTY_HP_REGEN_FLAT"	"%health_regen"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" {}
+		}
+	}
+
 	"iw_dragon_knight_razorscales"
 	{
 		"modifier_iw_dragon_knight_razorscales"

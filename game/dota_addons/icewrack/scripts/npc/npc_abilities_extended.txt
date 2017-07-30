@@ -87,6 +87,20 @@
 		}
 	}
 
+	"iw_dragon_knight_dragons_blood"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_dragons_blood.lua"
+		"AbilitySkill"		"37433"
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_dragon_knight"
+			{
+				"ACT_DOTA_VICTORY"	"2.0"
+			}
+		}
+	}
+
 	"iw_dragon_knight_razorscales"
 	{
 		"AbilitySkill"		"37433"

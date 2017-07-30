@@ -77,7 +77,6 @@
 		"MaxStaminaFlat"		"110"
 		"AttackCostStaminaFlat"	"5"
 		"RunCostStaminaFlat"		"3"
-		"HealthRegenFlat"		"100003"
 
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
@@ -93,7 +92,6 @@
 		"IntelligenceFlat"		"19"
 		"WisdomFlat"			"33"
 
-		"ResistPhysical"		"25"
 		"ResistFire"			"50"
 
 		"SkillFire"			"2"

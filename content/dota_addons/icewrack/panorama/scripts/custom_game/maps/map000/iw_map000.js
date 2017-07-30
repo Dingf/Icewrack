@@ -24,16 +24,13 @@ function OnCharacterActivate()
 		
 		var nNumSkillIcons = 0;
 		var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
-		$.Msg("wtf", tEntitySpellbook);
 		if (tEntitySpellbook)
 		{
 			var tEntitySpellBinds = tEntitySpellbook.Binds
 			var nSpellbookSize = 0;
 			for (var k in tEntitySpellBinds)
 				nSpellbookSize++;
-			
-			$.Msg(nSpellbookSize);
-			$.Msg(tEntitySpellBinds);
+
 			if (nSpellbookSize > tSkillIcons.length)
 			{
 				for (var i = tSkillIcons.length; i < nSpellbookSize; i++)
@@ -131,7 +128,6 @@ function OnCharacterSelectButtonActivate(hContextPanel, tArgs)
 		GameEvents.SendCustomGameEventToServer("iw_change_level", { map:"main_menu" });
 	else if (szPanelID === "StartButton")
 	{
-		$.Msg("wtf2 ", nLastEntityIndex, " ", nDifficulty);
 		GameEvents.SendCustomGameEventToServer("iw_character_select_start", { entindex:nLastEntityIndex, difficulty:nDifficulty });
 	}
 	else if (szPanelID === "NextButton")

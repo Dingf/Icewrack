@@ -32,6 +32,7 @@ require("npc")
 local stDamageInfoTable = {}
 
 local function ApplyDamageEffect(hVictim, hAttacker, nDamageType, fDamage, fEffectBonus)
+print(fEffectBonus)
 	local fEffectiveDamage = fDamage * (1.0 + fEffectBonus)
 	local fDamagePercentHP = math.min(1.0, (math.max(fEffectiveDamage/hVictim:GetMaxHealth(), 0)))
 	if nDamageType == IW_DAMAGE_TYPE_CRUSH then

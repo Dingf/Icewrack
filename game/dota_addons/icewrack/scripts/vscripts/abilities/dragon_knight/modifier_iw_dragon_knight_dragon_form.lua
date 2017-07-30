@@ -48,8 +48,17 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 		
 		hEntity:SetModelScale(2.0)
 		hEntity:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK)
-		hEntity:SetRangedProjectileName("particles/units/heroes/hero_dragon_knight/iw_dragon_knight_dragon_form_attack.vpcf")
+		hEntity:SetRangedProjectileName("particles/units/heroes/hero_dragon_knight/dragon_knight_dragon_form_attack.vpcf")
 		CTimer(0.03, function() hEntity:SetMaterialGroup("1") end)
+		
+		local hSpellbook = hEntity:GetSpellbook()
+		local hDragonsBloodAbility = hSpellbook:GetAbility("iw_dragon_knight_dragons_blood")
+		local tModifierArgs =
+		{
+			health_regen = hDragonsBloodAbility:GetSpecialValueFor("health_regen") + hDragonsBloodAbility:GetSpecialValueFor("health_regen_bonus") * hEntity:GetSpellpower(),
+		}
+		hEntity:RemoveModifierByName("modifier_iw_dragon_knight_dragons_blood")
+		self._hDragonsBloodBuff = hEntity:AddNewModifier(hEntity, hDragonsBloodAbility, "modifier_iw_dragon_knight_dragons_blood_passive", tModifierArgs)
 		
 		hEntity:StartGesture(ACT_DOTA_CAST_ABILITY_4)
 		self:StartIntervalThink(0.8)
@@ -63,7 +72,6 @@ end
 function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
 	local hEntity = self:GetParent()
 	if IsServer() and IsValidExtendedEntity(hEntity) then
-		
 		for k,v in pairs(self._tWearables) do
 			v:RemoveEffects(EF_NODRAW)
 		end
@@ -81,6 +89,8 @@ function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
 		local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_dragon_knight/dragon_knight_transform_red.vpcf", PATTACH_WORLDORIGIN, self)
 		ParticleManager:SetParticleControl(nParticleID, 0, hEntity:GetAbsOrigin())
 		ParticleManager:ReleaseParticleIndex(nParticleID)
+		
+		self._hDragonsBloodBuff:Destroy()
 	end
 end
 
@@ -103,7 +113,7 @@ function modifier_iw_dragon_knight_dragon_form:OnAttack(args)
 			local tProjectileInfo = 
 			{
 				Ability = hBreatheFireAbility,
-				EffectName = "particles/units/heroes/hero_dragon_knight/iw_dragon_knight_breathe_fire_dragon.vpcf",
+				EffectName = "particles/units/heroes/hero_dragon_knight/dragon_knight_breathe_fire_dragon.vpcf",
 				vSpawnOrigin = hEntity:GetAbsOrigin(),
 				fDistance = fDistance,
 				fStartRadius = fStartRadius,

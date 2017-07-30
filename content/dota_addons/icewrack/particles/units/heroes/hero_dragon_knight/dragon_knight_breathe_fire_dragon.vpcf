@@ -130,7 +130,7 @@
 			m_ChildRef = resource:"particles/units/heroes/hero_dragon_knight/dragon_knight_breathe_fire_e.vpcf"
 		},
 		{
-			m_ChildRef = resource:"particles/units/heroes/hero_dragon_knight/iw_dragon_knight_breathe_fire_dragon_launch.vpcf"
+			m_ChildRef = resource:"particles/units/heroes/hero_dragon_knight/dragon_knight_breathe_fire_dragon_launch.vpcf"
 		},
 	]
 	m_controlPointConfigurations = 

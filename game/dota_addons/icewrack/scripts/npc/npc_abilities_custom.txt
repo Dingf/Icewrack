@@ -289,7 +289,7 @@
 		"AbilityTextureName"			"axe_battle_hunger"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"30.0"
+		"AbilityCooldown"			"10.0"
 
 		"Modifiers"
 		{
@@ -321,7 +321,7 @@
 			"05"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"duration"			"8.0"
+				"duration"			"5.0"
 			}
 		}
 	}
@@ -449,12 +449,12 @@
 			"07"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_min_bonus"		"0.6"
+				"damage_min_bonus"		"0.5"
 			}
 			"08"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_max_bonus"		"0.75"
+				"damage_max_bonus"		"0.5"
 			}
 		}
 	}
@@ -490,6 +490,49 @@
 			{
 				"var_type"			"FIELD_FLOAT"
 				"threat"			"2.0"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"damage_effect"			"400"
+			}
+		}
+	}
+
+	"iw_dragon_knight_dragons_blood"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"dragon_knight_dragon_blood"
+
+		"Modifiers"
+		{
+			"modifier_iw_dragon_knight_dragons_blood"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_dragon_knight_dragons_blood_passive"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"MaxLevel"				"1"
+		"AbilityCooldown"			"24.0"
+		"AbilityCastPoint"			"0.3"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"health_regen"			"30.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"health_regen_bonus"			"0.2"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"7.5"
 			}
 		}
 	}
@@ -555,13 +598,13 @@
 			}
 			"03"
 			{
-				"var_type"			"FIELD_INTEGER"
+				"var_type"			"FIELD_FLOAT"
 				"stamina"			"250"
 			}
 			"04"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"move_speed"			"25.0"
+				"move_speed"			"25"
 			}
 		}
 	}

@@ -110,3 +110,52 @@
 		}
 	}
 }
+
+"Hero_DragonKnight.DragonsBlood"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/weapons/hero/ogre_magi/bloodlust_target.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"2.000000"
+					}
+					"pitch"
+					{
+						"value"		"0.90000"
+					}
+					"pitch_rand_min"
+					{
+						"value"		"-0.10000"
+					}
+					"pitch_rand_max"
+					{
+						"value"		"0.10000"
+					}
+					"soundlevel"
+					{
+						"value"		"75.000000"
+					}
+					"event_type"
+					{
+						"value"		"3.000000"
+					}
+				}
+			}
+		}
+	}
+}
