@@ -20,7 +20,7 @@ stAbilityComboData = LoadKeyValues("scripts/npc/npc_abilities_combo.txt")
 
 CSpellbook = setmetatable({ _stAbilityCombos = {} }, { __call = 
 	function(self, hEntity)
-		LogAssert(IsValidExtendedEntity(hEntity), "Type mismatch (expected \"%s\", got %s)", "CExtEntity", type(hEntity))
+		LogAssert(IsValidExtendedEntity(hEntity), LOG_MESSAGE_ASSERT_TYPE, "CExtEntity", type(hEntity))
 		if hEntity._hSpellbook and hEntity._hSpellbook._bIsSpellbook then
 			return hEntity._hSpellbook
 		end

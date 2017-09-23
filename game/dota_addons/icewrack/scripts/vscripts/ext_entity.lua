@@ -20,6 +20,7 @@ require("mechanics/attributes")
 require("mechanics/skills")
 require("instance")
 require("container")
+require("faction")
 
 stExtEntityUnitClassEnum =
 {  
@@ -88,6 +89,7 @@ stExtEntityFlagEnum =
 	IW_UNIT_FLAG_CAN_REVIVE = 8,
 	IW_UNIT_FLAG_CONSIDERED_DEAD = 16,
 	IW_UNIT_FLAG_REQ_ATTACK_SOURCE = 32,
+	IW_UNIT_FLAG_WEATHER_IMMUNE = 64,	--TODO: When implementing weather, skip units with weather immunity
 }
 
 for k,v in pairs(stExtEntityUnitClassEnum) do _G[k] = v end
@@ -100,6 +102,7 @@ local shItemStaminaModifier = CreateItem("internal_stamina", nil, nil)
 local shItemMoveNoiseModifier = CreateItem("internal_movement_noise", nil, nil)
 local shItemAttributeModifier = CreateItem("internal_attribute_bonus", nil, nil)
 local shItemSkillModifier = CreateItem("internal_skill_bonus", nil, nil)
+local shItemHoldModifier = CreateItem("internal_hold_position", nil, nil)
 
 local stExtEntityData = LoadKeyValues("scripts/npc/npc_units_extended.txt")
 local shDefaultProperties = CInstance({}, 0)
@@ -113,13 +116,13 @@ end
 local tIndexTableList = {} 
 CExtEntity = setmetatable({}, { __call = 
 	function(self, hEntity, nInstanceID)
-		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), "Type mismatch (expected \"%s\", got %s)", "CDOTA_BaseNPC", type(hEntity))
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsExtendedEntity then
 			return hEntity
 		end
 		
 		local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
-		LogAssert(tExtEntityTemplate, "Failed to load template \"%s\" - no data exists for this entry.", hEntity:GetUnitName())
+		LogAssert(tExtEntityTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 		
 		hEntity = CContainer(hEntity, nInstanceID)
 		local tBaseIndexTable = getmetatable(hEntity).__index
@@ -136,6 +139,7 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._nUnitSubtype = GetFlagValue(tExtEntityTemplate.UnitSubtype, stExtEntityUnitSubtypeEnum)
 		hEntity._nUnitFlags   = GetFlagValue(tExtEntityTemplate.UnitFlags, stExtEntityFlagEnum)
 		hEntity._nAlignment   = stExtEntityAlignment[tExtEntityTemplate.Alignment] or IW_ALIGNMENT_TRUE_NEUTRAL
+		hEntity._nFactionMask = 0	--TODO: Implement faction masks 
 		hEntity._fUnitHeight  = tExtEntityTemplate.UnitHeight or 0
 		hEntity._nEquipFlags  = tExtEntityTemplate.EquipFlags or 0
 		hEntity._szLootTable  = tExtEntityTemplate.LootTable		--TODO: Rework the loot mechanic for npcs
@@ -162,6 +166,7 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._tOrderTable = { UnitIndex = hEntity:entindex() }
 		
 		hEntity._bRunMode = true
+		hEntity._bHoldPosition = false
 		hEntity._fStamina = hEntity:GetMaxStamina()
 		hEntity._fStaminaRegenTime = 0.0
 		hEntity._fLastStaminaPercent = 1.0
@@ -171,16 +176,6 @@ CExtEntity = setmetatable({}, { __call =
 		
 		hEntity._fTotalXP = 0
 		hEntity._fLevelXP = 0
-
-		if GameRules:GetMapInfo():IsInside() then
-			local fVisionMultiplier = 1.0 - (1.0 - GameRules:GetMapInfo():GetMapVisionMultiplier()) * (1.0 - hEntity:GetPropertyValueClamped(IW_PROPERTY_NIGHT_VISION, 0.0, 1.0))
-			hEntity:SetDayTimeVisionRange(hEntity:GetDayTimeVisionRange() * fVisionMultiplier)
-			hEntity:SetNightTimeVisionRange(hEntity:GetNightTimeVisionRange() * fVisionMultiplier)
-		else
-			local fVisionMultiplier = 1.0 - 0.5 * (1.0 - hEntity:GetPropertyValueClamped(IW_PROPERTY_NIGHT_VISION, 0.0, 1.0))
-			hEntity:SetDayTimeVisionRange(hEntity:GetDayTimeVisionRange() * fVisionMultiplier)
-			hEntity:SetNightTimeVisionRange(hEntity:GetNightTimeVisionRange() * fVisionMultiplier)
-		end
 		
 		hEntity._tRefreshList = {}
 		hEntity:AddNewModifier(hEntity, shItemAttackModifier, "modifier_internal_attack", {})
@@ -194,7 +189,9 @@ CExtEntity = setmetatable({}, { __call =
 			{
 				attack_source = { Level = 0 },
 				current_action = "",
+				current_actionindex = -1,
 				run_mode = hEntity._bRunMode,
+				hold_position = hEntity._bHoldPosition,
 				stamina = hEntity._fStamina,
 				stamina_max = hEntity:GetMaxStamina(),
 				stamina_time = hEntity._fStaminaRegenTime,
@@ -247,10 +244,6 @@ function CExtEntity:GetEquipFlags()
 	return self._nEquipFlags
 end
 
-function CExtEntity:GetRunMode()
-    return self._bRunMode
-end
-
 function CExtEntity:GetLootTableName()
 	return self._szLootTable
 end
@@ -273,6 +266,10 @@ end
 
 function CExtEntity:GetLastOrderID()
 	return self._nLastOrderID
+end
+
+function CExtEntity:GetFactionMask()
+	return self._nFactionMask
 end
 
 function CExtEntity:IsMassive()
@@ -299,6 +296,27 @@ function CExtEntity:IsAlive()
 	end
 end
 
+function CExtEntity:IsEnemy(hTarget)
+	if IsValidExtendedEntity(hTarget) then
+		local fWeightSum = 0
+		local nSelfMask = self._nFactionMask
+		local nTargetMask = hTarget._nFactionMask
+		if bit32.band(nSelfMask, nTargetMask) ~= 0 then
+			return false
+		end
+		for i=0,31 do
+			if bit32.btest(nSelfMask, bit32.lshift(1, i)) then
+				for j=0,31 do
+					if bit32.btest(nTargetMask, bit32.lshift(1, j)) then
+						fWeightSum = fWeightSum + CFaction:GetFactionWeight(i,j)
+					end
+				end
+			end
+		end
+		return (fWeightSum < 0.0)
+	end
+end
+
 function CExtEntity:IsDualWielding()
 	local bResult = false
 	local nHighestLevel = 0
@@ -312,6 +330,14 @@ function CExtEntity:IsDualWielding()
 		end
 	end
 	return bResult
+end
+
+function CExtEntity:IsRunning()
+    return self._bRunMode
+end
+
+function CExtEntity:IsHoldPosition()
+    return self._bHoldPosition
 end
 
 function CExtEntity:UpdateNetTable(bSkipProperties)
@@ -332,7 +358,7 @@ end
 function CExtEntity:GetCurrentAction()
 	local hActiveAbility = self:GetCurrentActiveAbility()
 	if hActiveAbility then
-		return hActiveAbility:GetAbilityName()
+		return hActiveAbility:GetAbilityName(), hActiveAbility:entindex()
 	elseif not self:IsIdle() then
 		local tOrderTable = self._tOrderTable
 		local nOrderType = tOrderTable.OrderType
@@ -654,6 +680,20 @@ function CExtEntity:RefreshMovementSpeed()
 	self:SetBaseMoveSpeed(math.max(100, fMovementSpeed))
 end
 
+function CExtEntity:RefreshVisionRange()
+	local fBaseVisionRange = self:GetPropertyValue(IW_PROPERTY_VISION_RANGE_FLAT) * (1.0 + self:GetPropertyValue(IW_PROPERTY_VISION_RANGE_PCT)/100.0)
+	if GameRules:GetMapInfo():IsInside() then
+		local fVisionMultiplier = 1.0 - (1.0 - GameRules:GetMapInfo():GetMapVisionMultiplier()) * (1.0 - self:GetPropertyValueClamped(IW_PROPERTY_DARK_SIGHT_PCT, 0, 100)/100.0)
+		self:SetDayTimeVisionRange(fBaseVisionRange * fVisionMultiplier)
+		self:SetNightTimeVisionRange(fBaseVisionRange * fVisionMultiplier)
+	else
+		local fNightVisionFactor = 0.25
+		local fVisionMultiplier = 1.0 - fNightVisionFactor * (1.0 - self:GetPropertyValueClamped(IW_PROPERTY_DARK_SIGHT_PCT, 0, 100)/100.0)
+		self:SetDayTimeVisionRange(fBaseVisionRange)
+		self:SetNightTimeVisionRange(fBaseVisionRange * fVisionMultiplier)
+	end
+end
+
 function CExtEntity:RefreshBaseAttackTime()
 	local hAttackSource = self:GetCurrentAttackSource()
 	if hAttackSource then
@@ -683,6 +723,25 @@ function CExtEntity:ToggleRunMode()
 	self:SetRunMode(not self._bRunMode)
 end
 
+function CExtEntity:SetHoldPosition(bHoldMode)
+	if type(bHoldMode) == "boolean" then
+		self._bHoldPosition = bHoldMode
+		if self._tNetTable then
+			self._tNetTable.hold_position = bHoldMode
+		end
+		if bHoldMode then
+			shItemHoldModifier:ApplyDataDrivenModifier(self, self, "modifier_internal_hold_position", {})
+		else
+			self:RemoveModifierByName("modifier_internal_hold_position")
+		end
+		self:UpdateNetTable(true)
+	end
+end
+
+function CExtEntity:ToggleHoldPosition()
+	self:SetHoldPosition(not self._bHoldPosition)
+end
+
 function CExtEntity:SetStamina(fStamina)
 	self._fStamina = math.max(0, math.min(self:GetMaxStamina(), fStamina))
 end
@@ -696,9 +755,10 @@ end
 
 function CExtEntity:CurrentActionThink()
 	if self._tNetTable then
-		local szCurrentAction = self:GetCurrentAction()
+		local szCurrentAction, nActionIndex = self:GetCurrentAction()
 		if szCurrentAction ~= self._tNetTable.current_action then
 			self._tNetTable.current_action = szCurrentAction
+			self._tNetTable.current_actionindex = nActionIndex
 			self:UpdateNetTable(true)
 		end
 	end
@@ -714,6 +774,7 @@ function CExtEntity:RefreshEntity()
 	self:RefreshHealthRegen()
 	self:RefreshManaRegen()
 	self:RefreshMovementSpeed()
+	self:RefreshVisionRange()
 	self:SetAcquisitionRange(self:GetAttackRange() + 300.0)
 	
 	self:SetPropertyValue(IW_PROPERTY_ATK_SPEED_DUMMY, self:GetIncreasedAttackSpeed() * 100)		--Only used for clientside display, since Panorama truncates to int
@@ -788,6 +849,13 @@ function CExtEntity:OnToggleRun(args)
 	end
 end
 
+function CExtEntity:OnToggleHold(args)
+	local hEntity = EntIndexToHScript(args.entindex)
+	if IsValidExtendedEntity(hEntity) and hEntity:IsControllableByAnyPlayer() then
+		hEntity:ToggleHoldPosition()
+	end
+end
+
 function CExtEntity:Interact(hEntity)
 	if not self:HasModifier("modifier_internal_corpse_state") then
 		return false
@@ -808,6 +876,21 @@ function IsValidExtendedEntity(hEntity)
     return (IsValidInstance(hEntity) and IsValidEntity(hEntity) and hEntity._bIsExtendedEntity == true)
 end
 
+function ExtUnitFilter(hEntity, hTarget, nTargetTeam, nTargetType, nTargetFlags)
+	if IsValidExtendedEntity(hEntity) and IsValidExtendedEntity(hTarget) then
+		local nResult = UnitFilter(hTarget, DOTA_UNIT_TARGET_TEAM_BOTH, nTargetType, nTargetFlags)
+		if nResult == UF_SUCCESS and not hEntity:IsControllableByAnyPlayer() and not hTarget:IsControllableByAnyPlayer() then
+			local bIsEnemy = hEntity:IsEnemy(hTarget)
+			if nTargetTeam == DOTA_UNIT_TARGET_TEAM_FRIENDLY and bIsEnemy then
+				return UF_FAIL_ENEMY
+			elseif nTargetTeam == DOTA_UNIT_TARGET_TEAM_ENEMY and not bIsEnemy then
+				return UF_FAIL_FRIENDLY
+			end
+		end
+		return nResult
+	end
+end
+
 function RemoveEntity(hEntity)
     if IsValidExtendedEntity(hEntity) then
 	    hEntity:RemoveEntity()
@@ -817,5 +900,6 @@ end
 CustomGameEventManager:RegisterListener("iw_character_attributes_confirm", Dynamic_Wrap(CExtEntity, "OnAttributesConfirm"))
 CustomGameEventManager:RegisterListener("iw_character_skills_confirm", Dynamic_Wrap(CExtEntity, "OnSkillsConfirm"))
 CustomGameEventManager:RegisterListener("iw_toggle_run", Dynamic_Wrap(CExtEntity, "OnToggleRun"))
+CustomGameEventManager:RegisterListener("iw_toggle_hold", Dynamic_Wrap(CExtEntity, "OnToggleHold"))
 
 end

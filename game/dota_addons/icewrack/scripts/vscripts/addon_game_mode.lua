@@ -58,9 +58,9 @@ function CIcewrackGameMode:InitGameMode()
 	GameRules.XPTable = tXPValuesTable
 	CustomNetTables:SetTableValue("game", "xp", tXPValuesTable)
 	
-	if not GameRules:GetMapInfo():IsRevealed() then
-		hGameModeEntity:SetUnseenFogOfWarEnabled(true)
-	end
+	--if not GameRules:GetMapInfo():IsRevealed() then
+	--	hGameModeEntity:SetUnseenFogOfWarEnabled(true)
+	--end
     hGameModeEntity:SetUseCustomHeroLevels(true)
 	hGameModeEntity:SetAnnouncerDisabled(true)
     hGameModeEntity:SetBuybackEnabled(false)

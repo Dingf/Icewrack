@@ -26,7 +26,7 @@ end
 --stAbilityAutomatorData = LoadKeyValues("scripts/npc/npc_units_aam.txt")
 CAbilityAutomatorModule = setmetatable({}, { __call = 
 	function(self, hEntity)
-		LogAssert(IsValidExtendedEntity(hEntity), "Type mismatch (expected \"%s\", got %s)", "CExtEntity", type(hEntity))
+		LogAssert(IsValidExtendedEntity(hEntity), LOG_MESSAGE_ASSERT_TYPE, "CExtEntity", type(hEntity))
 		if hEntity._hAutomator and hEntity._hAutomator._bIsAutomator then
 			return hEntity._hAutomator
 		end
@@ -194,6 +194,13 @@ function CAbilityAutomatorModule:CastFilterAbility(szAbilityName, hTarget, vPosi
 		hAbility = szAbilityName
 	end
 	if hAbility and hAbility:IsFullyCastable() then
+		if hEntity:IsHoldPosition() then
+			local fDistance = (hTarget:GetAbsOrigin() - hEntity:GetAbsOrigin()):Length2D()
+			if fDistance > hAbility:GetCastRange() then
+				return false
+			end
+		end
+	
 		local nBehavior = hAbility:GetBehavior()
 		if bit32.btest(nBehavior, DOTA_ABILITY_BEHAVIOR_NO_TARGET) then
 			if hAbility.CastFilterResult and hAbility:CastFilterResult() ~= UF_SUCCESS then

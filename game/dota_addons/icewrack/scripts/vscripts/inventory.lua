@@ -17,7 +17,7 @@ end
 
 CInventory = setmetatable({}, { __call = 
 	function(self, hEntity)
-		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), "Type mismatch (expected \"%s\", got %s)", "CDOTA_BaseNPC", type(hEntity))
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._hInventory and hEntity._hInventory._bIsInventory then
 			return hEntity._hInventory
 		end

@@ -8,7 +8,7 @@ CVModel CVModel_0
 			CVmesh
 			{
 				string m_meshName = "iw_training_dummy"
-				string m_meshFile = "models/props_structures/iw_training_dummy.dmx"
+				string m_meshFile = "models/props_structures/iw_training_dummy/iw_training_dummy.dmx"
 				string m_materialSearchPath = ""
 				bool m_bSkinParentedObjects = true
 				bool m_bLegacySkinParentedTransforms = false
@@ -228,7 +228,7 @@ CVanimGroup CVanimGroup_0
 		CVanim
 		{
 			string m_Animationname = "iw_training_dummy"
-			string m_Filepath = "models/props_structures/iw_training_dummy.dmx"
+			string m_Filepath = "models/props_structures/iw_training_dummy/iw_training_dummy.dmx"
 			int m_nStartframe = 0
 			int m_nEndframe = 0
 			float m_flFps = 30.000000

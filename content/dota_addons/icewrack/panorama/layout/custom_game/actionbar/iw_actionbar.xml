@@ -7,6 +7,7 @@
 		<include src="file://{resources}/scripts/custom_game/constants/iw_instance.js" />
 		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
 		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_buff_icon.js" />
+		<include src="file://{resources}/scripts/custom_game/actionbar/iw_actionbar_channel.js" />
 		<include src="file://{resources}/scripts/custom_game/actionbar/iw_actionbar_icon.js" />
 		<include src="file://{resources}/scripts/custom_game/actionbar/iw_actionbar.js" />
 	</scripts>
@@ -14,6 +15,7 @@
 	<Panel hittest="false" class="ActionBarRoot">
 		<Panel hittest="false" id="ActionBar">
 			<Panel hittest="false" class="ActionBarXPContainer" id="XPContainer"/>
+			<Panel hittest="false" class="ActionBarChannelContainer" id="ChannelContainer" />
 			<Panel hittest="false" class="ActionBarBuffContainer" id="BuffContainer"/>
 			<Panel hittest="false" class="ActionBarWindow">
 				<Panel hittest="false" class="ActionBarBindContainer" id="BindContainer"/>

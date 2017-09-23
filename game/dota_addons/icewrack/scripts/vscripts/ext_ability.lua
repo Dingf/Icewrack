@@ -14,7 +14,7 @@ local stExtAbilityData = LoadKeyValues("scripts/npc/npc_abilities_extended.txt")
 local tIndexTableList = {}
 CExtAbility = setmetatable({ _tIndexTableList = {} }, { __call = 
 	function(self, hAbility, nInstanceID)
-		LogAssert(IsInstanceOf(hAbility, CDOTABaseAbility), "Type mismatch (expected \"%s\", got %s)", "CDOTABaseAbility", type(hAbility))
+		LogAssert(IsInstanceOf(hAbility, CDOTABaseAbility), LOG_MESSAGE_ASSERT_TYPE, "CDOTABaseAbility", type(hAbility))
 		if hAbility._bIsExtendedAbility then
 			return hAbility
 		end
@@ -135,6 +135,19 @@ function IsValidExtendedAbility(hAbility)
     return (IsValidInstance(hAbility) and IsValidEntity(hAbility) and hAbility._bIsExtendedAbility)
 end
 
+local function ParseAbilitySpecialValues(tBaseTemplate)
+	local tAbilitySpecialValues = {}
+	for k,v in pairs(tBaseTemplate.AbilitySpecial or {}) do
+		for k2,v2 in pairs(v) do
+			if k2 ~= "var_type" then
+				tAbilitySpecialValues[k2] = v2
+				break
+			end
+		end
+	end
+	return tAbilitySpecialValues
+end
+
 local stAbilityNetTable = {}
 for k,v in pairs(stExtAbilityData) do
 	local tBaseAbilityTemplate = stBaseAbilityData[k]
@@ -150,12 +163,15 @@ for k,v in pairs(stExtAbilityData) do
 				stamina_upkeep = v.StaminaUpkeep or 0,
 				extflags = GetFlagValue(v.AbilityFlags, stExtAbilityFlagEnum),
 				castrange = tBaseAbilityTemplate.AbilityCastRange or 0,
+				radius = tBaseAbilityTemplate.AbilityAOERadius or 0,
+				cooldown = tBaseAbilityTemplate.AbilityCooldown or 0,
 				texture = tBaseAbilityTemplate.AbilityTextureName or k,
 				behavior = GetFlagValue(tBaseAbilityTemplate.AbilityBehavior, DOTA_ABILITY_BEHAVIOR),
 				targetflag = GetFlagValue(tBaseAbilityTemplate.AbilityUnitTargetFlags, DOTA_UNIT_TARGET_FLAGS),
 				targettype = GetFlagValue(tBaseAbilityTemplate.AbilityUnitTargetType, DOTA_UNIT_TARGET_TYPE),
 				targetteam = DOTA_UNIT_TARGET_TEAM[tBaseAbilityTemplate.AbilityUnitTargetTeam] or DOTA_UNIT_TARGET_TEAM_NONE,
-				channeltime = tBaseAbilityTemplate.AbilityChannelTime or 0
+				channeltime = tBaseAbilityTemplate.AbilityChannelTime or 0,
+				special = ParseAbilitySpecialValues(tBaseAbilityTemplate),
 			}
 			CustomNetTables:SetTableValue("abilities", k, stAbilityNetTable[k])
 		end

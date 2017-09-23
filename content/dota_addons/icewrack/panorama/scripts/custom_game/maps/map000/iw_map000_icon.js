@@ -8,7 +8,8 @@ function OnMouseOverThink()
 		var nAbilityIndex = $.GetContextPanel().GetAttributeInt("abilityindex", -1);
 		if (nAbilityIndex !== -1)
 		{
-			var szTooltipArgs = "abilityindex=" + nAbilityIndex + "&entindex=" + nEntityIndex;
+			
+			var szTooltipArgs = "abilityname=" + Abilities.GetAbilityName(nAbilityIndex) + "&entindex=" + nEntityIndex;
 			$.DispatchEvent("UIShowCustomLayoutParametersTooltip", "AbilityTooltip", "file://{resources}/layout/custom_game/tooltip/iw_tooltip_ability.xml", szTooltipArgs );
 		}
 		$.Schedule(0.03, OnMouseOverThink);

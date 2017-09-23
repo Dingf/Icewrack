@@ -74,7 +74,7 @@ local stHeroResponseTable =
 }
 
 --Prevents characters from spending stamina while running back and forth in the pick screen
-local shItemStaminaBuffModifier = CreateItem("map000_stamina_buff", nil, nil)
+local shItemMap000BuffModifier = CreateItem("map000_buff", nil, nil)
 
 if CIcewrack_Map0_00 == nil then
 	CIcewrack_Map0_00 = class({})
@@ -186,7 +186,7 @@ function CIcewrack_Map0_00:OnGameRulesStateChange(keys)
 			if IsValidExtendedEntity(hEntity) and hEntity:IsHero() then
 				hEntity._vOriginalPosition = hEntity:GetAbsOrigin()
 				hEntity._vReturnPosition = hEntity:GetAbsOrigin() - (hEntity:GetForwardVector() * 32.0)
-				hEntity:AddNewModifier(hEntity, shItemStaminaBuffModifier, "modifier_map000_stamina_buff", {})
+				hEntity:AddNewModifier(hEntity, shItemMap000BuffModifier, "modifier_map000_buff", {})
 				
 				local hSpellbook = hEntity:GetSpellbook()
 				if hSpellbook then
@@ -201,8 +201,6 @@ function CIcewrack_Map0_00:OnGameRulesStateChange(keys)
 						end
 					end
 				end
-				hEntity:SetDayTimeVisionRange(0.0)
-				hEntity:SetNightTimeVisionRange(0.0)
 				hEntity:Hold()
 			end
 			hEntity = Entities:Next(hEntity)

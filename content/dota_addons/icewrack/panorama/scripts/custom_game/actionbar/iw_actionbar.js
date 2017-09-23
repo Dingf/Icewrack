@@ -1,19 +1,10 @@
 "use strict";
 
-var NUM_ACTIONBAR_ICONS = 10;
-
-var bUpdateFlag = false;
-
-var tActionBarBinds = {};
-var tTooltipIcons = [];
-var tBuffIcons = [];
-
 function OnTooltipMouseOver()
 {
 	$("#Tooltip").AddClass("ActionBarTooltipVisible");
 	$("#Tooltip").RemoveClass("ActionBarTooltipFadeOut");
 }
-
 
 function OnTooltipMouseOut()
 {
@@ -21,10 +12,11 @@ function OnTooltipMouseOut()
 	$("#Tooltip").AddClass("ActionBarTooltipFadeOut");
 }
 
-function OnAbilityBind(hContextPanel, tArgs)
+function OnActionBarAbilityBind(hContextPanel, tArgs)
 {
 	var nEntityIndex = tArgs.entindex;
 	var nAbilityIndex = tArgs.ability;
+	var tActionBarBinds = hContextPanel._tActionBarBinds;
 	if (nAbilityIndex !== 0)
 	{
 		if (!tActionBarBinds[tArgs.entindex])
@@ -32,7 +24,6 @@ function OnAbilityBind(hContextPanel, tArgs)
 			tActionBarBinds[tArgs.entindex] = []
 		}
 		tActionBarBinds[tArgs.entindex][tArgs.slot-1] = nAbilityIndex;
-		SetEntityBinds(tArgs.entindex);
 		GameEvents.SendCustomGameEventToServer("iw_actionbar_bind", { slot:tArgs.slot, entindex:nEntityIndex, ability:nAbilityIndex });
 	}
 	else
@@ -40,20 +31,17 @@ function OnAbilityBind(hContextPanel, tArgs)
 		delete tActionBarBinds[tArgs.entindex][tArgs.slot-1];
 		GameEvents.SendCustomGameEventToServer("iw_actionbar_bind", { slot:tArgs.slot, entindex:nEntityIndex, ability:-1 });
 	}
-	bUpdateFlag = true;
+	
+	DispatchCustomEvent(hContextPanel, "ActionBarBindUpdate", { entindex:nEntityIndex });
+	DispatchCustomEvent(hContextPanel.FindChildTraverse("Tooltip"), "ActionBarTooltipHide");
 	return true;
 }
 
-function OnActionBarHotkey(tArgs)
-{
-	DispatchCustomEvent($("#Icon" + tArgs.value), "ActionBarIconActivate");
-}
-
-function OnActionBarTooltipUpdate(hContext, tArgs)
+function OnActionBarRefresh(hContextPanel, tArgs)
 {
 	var nEntityIndex = tArgs.entindex;
 	var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
-	if (tEntitySpellbook)
+	if (tEntitySpellbook && !Entities.IsEnemy(nEntityIndex))
 	{
 		var tEntitySpellList = tEntitySpellbook.Spells;
 		var nEntitySpellCount = 0;
@@ -62,6 +50,7 @@ function OnActionBarTooltipUpdate(hContext, tArgs)
 		
 		var hTooltip = $("#Tooltip");
 		var hTooltipIconContainer = $("#Tooltip").FindChildTraverse("TooltipContainer");
+		var tTooltipIcons = hContextPanel._tTooltipIcons;
 		if (nEntitySpellCount >= tTooltipIcons.length)
 		{
 			for (var i = tTooltipIcons.length; i <= nEntitySpellCount; i++)
@@ -101,7 +90,25 @@ function OnActionBarTooltipUpdate(hContext, tArgs)
 		hTooltip.style["width"] = Math.min(8 + (nNumTooltipIcons * 68), 280) + "px";
 		hTooltip.style["height"] = (28 + (68 * Math.ceil(nNumTooltipIcons/4))) + "px";
 	}
+	
+	var hXPBar = hContextPanel.FindChildTraverse("XPBar");
+	hXPBar.SetAttributeInt("caster", Entities.IsEnemy(nEntityIndex) ? -1 : nEntityIndex);
+	
+	DispatchCustomEvent(hContextPanel, "ActionBarBindUpdate", { entindex:nEntityIndex });
 	return true;
+}
+
+function OnActionBarTooltipHide(hContextPanel, tArgs)
+{
+	hContextPanel.RemoveClass("ActionBarTooltipFadeIn");
+	hContextPanel.RemoveClass("ActionBarTooltipFadeOut");
+	hContextPanel.RemoveClass("ActionBarTooltipVisible");
+	return true;
+}
+
+function OnActionBarHotkey(tArgs)
+{
+	DispatchCustomEvent($("#Icon" + tArgs.value), "ActionBarIconActivate");
 }
 
 function OnSpellbookUpdate(szTableName, szKey)
@@ -109,13 +116,14 @@ function OnSpellbookUpdate(szTableName, szKey)
 	var nLastEntityIndex = $.GetContextPanel().GetAttributeInt("last_entindex", -1);
 	if (parseInt(szKey) === nLastEntityIndex)
 	{
-		DispatchCustomEvent($.GetContextPanel(), "ActionBarTooltipUpdate", { entindex:nLastEntityIndex });
-		bUpdateFlag = true;
+		DispatchCustomEvent($.GetContextPanel(), "ActionBarRefresh", { entindex:nLastEntityIndex });
 	}
 }
 
-function SetEntityBinds(nEntityIndex)
+function OnActionBarBindUpdate(hContextPanel, tArgs)
 {
+	var nEntityIndex = tArgs.entindex;
+	var tActionBarBinds = hContextPanel._tActionBarBinds;
 	if (!(nEntityIndex in tActionBarBinds))
 	{
 		tActionBarBinds[nEntityIndex] = [];
@@ -132,7 +140,7 @@ function SetEntityBinds(nEntityIndex)
 	}
 	
 	var bIsEnemy = Entities.IsEnemy(nEntityIndex);
-	for (var i = 0; i < NUM_ACTIONBAR_ICONS; i++)
+	for (var i = 0; i < 10; i++)
 	{
 		var hIcon = $("#Icon" + (i + 1));
 		var nAbilityIndex = tActionBarBinds[nEntityIndex][i];
@@ -149,14 +157,16 @@ function SetEntityBinds(nEntityIndex)
 		hIcon.SetAttributeInt("caster", nEntityIndex);
 		DispatchCustomEvent(hIcon, "ActionBarIconRefresh");
 	}
+	return true;
 }
 
-function OnActionBarBindUpdate(hContextPanel, tArgs)
+function OnActionBarKeyUpdate(hContextPanel, tArgs)
 {
 	var tBindInfo = CustomNetTables.GetTableValue("game", "binds");
 	for (var i = 1; i <= 10; i++)
 	{
-		$("#Bind" + i).text = tBindInfo["iw_actionbar_" + i];
+		var hBindLabel = hContextPanel.FindChildTraverse("Bind" + i);
+		hBindLabel.text = tBindInfo["iw_actionbar_" + i];
 	}
 	return true;
 }
@@ -165,7 +175,7 @@ function OnBindUpdate(szTableName, szKey)
 {
 	if (szKey === "binds")
 	{
-		DispatchCustomEvent($.GetContextPanel(), "ActionBarBindUpdate");
+		DispatchCustomEvent($.GetContextPanel(), "ActionBarBindKeyUpdate");
 	}
 }
 
@@ -173,6 +183,11 @@ function UpdateActionBarBuffs(nEntityIndex)
 {
 	var nBuffCount = 0;
 	var hContainer = $("#BuffContainer");
+	
+	var tBuffIcons = $.GetContextPanel()._tBuffIcons;
+	for (var j = 0; j < tBuffIcons.length; j++)
+		$("#BuffIcon" + (j + 1)).visible = false;
+	
 	for (var i = 0; i < Entities.GetNumBuffs(nEntityIndex); i++)
 	{
 		var nBuffIndex = Entities.GetBuff(nEntityIndex, i);
@@ -182,6 +197,7 @@ function UpdateActionBarBuffs(nEntityIndex)
 		var szModifierName = Buffs.GetName(nEntityIndex, nBuffIndex);
 		if (szModifierName == "modifier_elder_titan_echo_stomp")	//TODO: Remove me when we figure out a better way to do attack-move immunity
 			continue;
+			
 		if (nBuffCount >= tBuffIcons.length)
 		{
 			var hIcon = CreateBuffIcon(hContainer, "BuffIcon" + (nBuffCount + 1), nEntityIndex, nBuffIndex);
@@ -200,55 +216,36 @@ function UpdateActionBarBuffs(nEntityIndex)
 function UpdateActionBar()
 {
 	var tSelectedEntities = Players.GetSelectedEntities(Players.GetLocalPlayer());
-	if (typeof tSelectedEntities === "undefined")
+	if (tSelectedEntities)
 	{
-		$.Schedule(0.1, UpdateActionBar);
-		return;
-	}
-	
-	var nEntityIndex = tSelectedEntities[0];
-	if ((typeof nEntityIndex === "undefined") || !Entities.IsAlive(nEntityIndex))
-		nEntityIndex = -1;
-	
-	var nLastEntityIndex = $.GetContextPanel().GetAttributeInt("last_entindex", -1);
-	if ((nEntityIndex !== nLastEntityIndex) || (bUpdateFlag))
-	{
-		$("#XPBar").SetAttributeInt("caster", -1);
-		if (!bUpdateFlag)
+		var nEntityIndex = tSelectedEntities[0];
+		var nLastEntityIndex = $.GetContextPanel().GetAttributeInt("last_entindex", -1);
+		if (nEntityIndex !== nLastEntityIndex)
 		{
-			$("#Tooltip").RemoveClass("ActionBarTooltipFadeIn");
-			$("#Tooltip").RemoveClass("ActionBarTooltipFadeOut");
-			$("#Tooltip").RemoveClass("ActionBarTooltipVisible");
-			DispatchCustomEvent($.GetContextPanel(), "ActionBarTooltipUpdate", { entindex:nEntityIndex });
+			DispatchCustomEvent($("#Tooltip"), "ActionBarTooltipHide");
+			DispatchCustomEvent($.GetContextPanel(), "ActionBarRefresh", { entindex:nEntityIndex });
+			DispatchCustomEvent($("#ChannelBar"), "ActionBarChannelRefresh", { entindex:nEntityIndex });
+			$.GetContextPanel().SetAttributeInt("last_entindex", nEntityIndex);
 		}
-
-		SetEntityBinds(nEntityIndex);
-		if (!Entities.IsEnemy(nEntityIndex))
-		{
-			$("#XPBar").SetAttributeInt("caster", nEntityIndex);			
-		}
-		$.GetContextPanel().SetAttributeInt("last_entindex", nEntityIndex);
-		bUpdateFlag = false;
+		UpdateActionBarBuffs(nEntityIndex);
 	}
-	
-	for (var j = 0; j < tBuffIcons.length; j++)
-		$("#BuffIcon" + (j + 1)).visible = false;
-	
-	if ((nEntityIndex === -1) || (Entities.IsEnemy(nEntityIndex)))
-	{
-		$.Schedule(0.1, UpdateActionBar);
-		return;
-	}
-	
-	UpdateActionBarBuffs(nEntityIndex);
 	$.Schedule(0.1, UpdateActionBar);
 }
 
 (function()
 {
+	$.GetContextPanel()._tActionBarBinds = {};
+	$.GetContextPanel()._tTooltipIcons = [];
+	$.GetContextPanel()._tBuffIcons = [];
+	$.GetContextPanel().SetAttributeInt("last_entindex", -1);
+	
 	var hXPContainer = $("#XPContainer");
 	var hXPBar = $.CreatePanel("Panel", hXPContainer, "XPBar");
 	hXPBar.BLoadLayout("file://{resources}/layout/custom_game/actionbar/iw_actionbar_xp.xml", false, false);
+	
+	var hChannelContainer = $("#ChannelContainer");
+	var hChannelBar = $.CreatePanel("Panel", hChannelContainer, "ChannelBar");
+	hChannelBar.BLoadLayout("file://{resources}/layout/custom_game/actionbar/iw_actionbar_channel.xml", false, false);
 	
 	var hBindContainer = $("#BindContainer");
 	var hIconContainer = $("#IconContainer");
@@ -268,13 +265,13 @@ function UpdateActionBar()
 		hIcon._hActionBar = $.GetContextPanel();
 	}
 	
-	$.GetContextPanel().SetAttributeInt("last_entindex", -1);
-	
 	GameEvents.Subscribe("iw_actionbar_ability", OnActionBarHotkey);
 	
+	RegisterCustomEventHandler($.GetContextPanel(), "ActionBarKeyUpdate", OnActionBarKeyUpdate);
 	RegisterCustomEventHandler($.GetContextPanel(), "ActionBarBindUpdate", OnActionBarBindUpdate);
-	RegisterCustomEventHandler($.GetContextPanel(), "ActionBarTooltipUpdate", OnActionBarTooltipUpdate);
-	RegisterCustomEventHandler($.GetContextPanel(), "ActionBarTooltipIconBind", OnAbilityBind);
+	RegisterCustomEventHandler($.GetContextPanel(), "ActionBarTooltipIconBind", OnActionBarAbilityBind);
+	RegisterCustomEventHandler($.GetContextPanel(), "ActionBarRefresh", OnActionBarRefresh);
+	RegisterCustomEventHandler($("#Tooltip"), "ActionBarTooltipHide", OnActionBarTooltipHide);
 	
 	CustomNetTables.SubscribeNetTableListener("game", OnBindUpdate);
 	CustomNetTables.SubscribeNetTableListener("spellbook", OnSpellbookUpdate);
@@ -282,6 +279,7 @@ function UpdateActionBar()
 	GameUI.SetRenderBottomInsetOverride(0);
 	GameUI.SetRenderTopInsetOverride(0);
 	
+	DispatchCustomEvent($.GetContextPanel(), "ActionBarKeyUpdate");
+	
 	$.Schedule(0.1, UpdateActionBar);
-	$.Schedule(0.1, DispatchCustomEvent.bind(this, $.GetContextPanel(), "ActionBarBindUpdate"));
 })();

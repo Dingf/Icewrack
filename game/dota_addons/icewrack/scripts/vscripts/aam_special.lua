@@ -39,6 +39,10 @@ end
 
 function MoveAwayFromTarget(hEntity, hAutomator, hTarget)
     if IsValidExtendedEntity(hEntity) and hAutomator and hTarget then
+		if hEntity:IsHoldPosition() then
+			return false
+		end
+	
 		local vEntityPosition = hEntity:GetAbsOrigin()
 		local vTargetPosition = hTarget:GetAbsOrigin()
         local vTargetVector = vEntityPosition - vTargetPosition
@@ -96,6 +100,10 @@ end
 
 function MoveTowardsTarget(hEntity, hAutomator, hTarget)
     if IsValidExtendedEntity(hEntity) and hAutomator and hTarget then
+		if hEntity:IsHoldPosition() then
+			return false
+		end
+		
         local vDirection = hTarget:GetAbsOrigin() - hEntity:GetAbsOrigin()
         local vPosition = hEntity:GetAbsOrigin() + (vDirection:Normalized() * 100.0)
 		local fDistance = CalcDistanceBetweenEntityOBB(hTarget, hEntity)
@@ -110,6 +118,13 @@ end
 
 function AttackTarget(hEntity, hAutomator, hTarget)
     if IsValidExtendedEntity(hEntity) and hAutomator and hTarget then
+		if hEntity:IsHoldPosition() then
+			local fDistance = (hTarget:GetAbsOrigin() - hEntity:GetAbsOrigin()):Length2D()
+			if fDistance > hEntity:GetAttackRange() then
+				return false
+			end
+		end
+		
 		if hEntity:IsAttackingEntity(hTarget) then
 			return true
         else
@@ -136,6 +151,6 @@ stAAMSpecialActionTable =
 	["aam_do_nothing"]        = DoNothing,
     ["aam_move_away_from"]    = MoveAwayFromTarget,
     ["aam_move_towards"]      = MoveTowardsTarget,
-    ["aam_attack_target"]     = AttackTarget,
+    ["aam_attack"]            = AttackTarget,
 	["aam_skip_to_condition"] = SkipToCondition,
 }

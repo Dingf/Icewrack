@@ -31,7 +31,7 @@ function OnIntervalThink(self, keys)
 	if not self._fDamageInterval then
 		local fDamageInterval = keys.Interval
 		if type(fDamageInterval) ~= "number" then
-			LogMessage("Failed to parse interval \"" .. keys.Interval .. "\" for modifier \"" .. self:GetName() .. "\"", LOG_SEVERITY_WARNING)
+			LogMessage("Failed to parse think interval \"" .. keys.Interval .. "\" for modifier \"" .. self:GetName() .. "\"", LOG_SEVERITY_WARNING)
 			return
 		end
 		self._fDamageInterval = fDamageInterval

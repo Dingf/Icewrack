@@ -72,7 +72,10 @@ end
 function iw_axe_counter_helix:OnChannelThink(fThinkRate)
 	local hEntity = self:GetCaster()
 	local fBaseAttackInterval = self:GetSpecialValueFor("attack_interval")
-	local fRealAttackInterval = fBaseAttackInterval/self._fAttackRate
+	local fAttackRate = (1.0 + hEntity:GetIncreasedAttackSpeed()) * (0.5/fBaseAttackInterval)
+	local fRealAttackInterval = fBaseAttackInterval/fAttackRate
+	
+	self._fAttackRate = fAttackRate
 	
 	local fCurrentTime = GameRules:GetGameTime()
 	if fCurrentTime - self._fLastChannelTime >= fRealAttackInterval then

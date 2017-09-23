@@ -10,7 +10,7 @@ local function CreateDialogueNode(nDialogueID)
 	local hDialogueNode = CDialogueEntity._tDialogueNodeList[nDialogueID]
 	if not hDialogueNode then
 		local tDialogueNodeTemplate = stDialogueNodeData[tostring(nDialogueID)]
-		LogAssert(tDialogueNodeTemplate, "Failed to load template \"%d\" - no data exists for this entry.", nDialogueID)
+		LogAssert(tDialogueNodeTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, nDialogueID)
 		
 		hDialogueNode = {}
 		hDialogueNode._nDialogueID = nDialogueID
@@ -39,7 +39,7 @@ stDialogueNodeData = LoadKeyValues("scripts/npc/iw_dialogue_nodes.txt")
 stDialogueData = LoadKeyValues("scripts/npc/iw_dialogue_list.txt")
 CDialogueEntity = setmetatable({ _tDialogueNodeList = {} }, { __call =
 	function(self, hEntity)
-		LogAssert(IsValidExtendedEntity(hEntity), "Type mismatch (expected \"%s\", got %s)", "CExtEntity", type(hEntity))
+		LogAssert(IsValidExtendedEntity(hEntity), LOG_MESSAGE_ASSERT_TYPE, "CExtEntity", type(hEntity))
 		if hEntity._bIsDialogueEntity then
 			return hEntity
 		end

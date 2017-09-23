@@ -1,0 +1,31 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/actionbar/iw_actionbar_channel.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/actionbar/iw_actionbar_channel.js" />
+	</scripts>
+	
+	<Panel class="ActionBarChannelRoot"  onload="OnActionBarChannelLoad()">
+		<Image hittest="false" class="ActionBarChannelIcon" id="Icon"/>
+		<Panel hittest="false" class="ActionBarChannelFillGroup">
+			<Panel hittest="false" class="ActionBarChannelFillContainer" id="FillContainer">
+				<Panel hittest="false" class="ActionBarChannelFill" id="Fill">
+					<Image hittest="false" src="file://{images}/custom_game/actionbar/iw_actionbar_channel_fill.tga" />
+					<Panel hittest="false" class="ActionBarChannelFillTip" />
+				</Panel>
+			</Panel>
+		</Panel>
+		<Image hittest="false" class="ActionBarChannelOverlay" src="file://{images}/custom_game/actionbar/iw_actionbar_channel.tga" />
+		<Panel hittest="false" class="ActionBarChannelLabelGroup">
+			<Panel hittest="false" class="ActionBarChannelLabel">
+				<Label hittest="false" class="ActionBarChannelName" id="Name"/>
+				<Label hittest="false" class="ActionBarChannelSpacer" text="►" id="SpacerRight"/>
+				<Label hittest="false" class="ActionBarChannelSpacer" text="◄" id="SpacerLeft"/>
+				<Label hittest="false" class="ActionBarChannelDuration" id="Duration"/>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

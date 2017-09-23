@@ -531,9 +531,9 @@
 		}
 	}
 
-	"map000_stamina_buff"
+	"map000_buff"
 	{
-		"modifier_map000_stamina_buff"
+		"modifier_map000_buff"
 		{
 			"IsHidden"			"1"
 
@@ -541,6 +541,7 @@
 			{
 				"IW_PROPERTY_ATTACK_SP_PCT"	"-1000"
 				"IW_PROPERTY_RUN_SP_PCT"	"-1000"
+				"IW_PROPERTY_VISION_RANGE_PCT"	"-100"
 			}
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
 			"DatadrivenStates"		{}
@@ -556,7 +557,6 @@
 			"ScriptFile"			"scripts/vscripts/abilities/axe/modifier_iw_axe_battle_hunger.lua"
 
 			"Texture"			"axe_battle_hunger"
-			"Duration"			"%duration"
 
 			"VisualEffect"			"particles/units/heroes/hero_axe/axe_battle_hunger.vpcf"
 			"VisualAttachType"		"PATTACH_OVERHEAD_FOLLOW"
@@ -944,8 +944,6 @@
 
 		"modifier_iw_bounty_hunter_track_reveal"
 		{
-			"ScriptFile"			"scripts/vscripts/abilities/bounty_hunter/modifier_iw_bounty_hunter_track_reveal.lua"
-
 			"IsHidden"			"1"
 
 			"Duration"			"0.5"
@@ -961,6 +959,32 @@
 			"DatadrivenProperties"
 			{
 				"MODIFIER_PROPERTY_PROVIDES_FOW_POSITION"	"1"
+			}
+			"DatadrivenEvents" 	{}
+		}
+	}
+
+	"iw_lina_inner_fire"
+	{
+		"modifier_iw_lina_inner_fire"
+		{
+			"Duration"			"%duration"
+			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
+
+			"Texture"			"default"
+			"VisualEffect"			"particles/units/heroes/hero_lina/lina_inner_fire.vpcf"
+
+			"Properties"
+			{
+				"IW_PROPERTY_SP_REGEN_FLAT"	"%stamina_regen"
+				"IW_PROPERTY_SP_REGEN_PCT"	"%stamina_regen_pct"
+			}
+
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"%attack_speed"
 			}
 			"DatadrivenEvents" 	{}
 		}

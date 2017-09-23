@@ -7,7 +7,7 @@ function OnIntervalThink(self, keys)
 	local hEntity = self:GetParent()
 	if hEntity:IsControllableByAnyPlayer() and hEntity:IsMoving() and not GameRules:IsGamePaused() then
 		local fNoiseValue = math.max(0, hEntity:GetPropertyValue(IW_PROPERTY_MOVE_NOISE_FLAT) * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_MOVE_NOISE_PCT)/100.0))
-		if not hEntity:GetRunMode() then
+		if not hEntity:IsRunning() then
 			fNoiseValue = fNoiseValue * 0.25
 		end
 		if fNoiseValue > 0 then

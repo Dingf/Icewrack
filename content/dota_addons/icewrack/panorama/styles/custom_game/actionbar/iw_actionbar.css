@@ -150,6 +150,13 @@
 	opacity: 0.75;
 }
 
+.ActionBarChannelContainer
+{
+	horizontal-align: center;
+	vertical-align: bottom;
+	margin-bottom: 128px;
+}
+
 #TooltipArrow
 {
 	margin-left: 20px;

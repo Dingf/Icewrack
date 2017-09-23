@@ -1,12 +1,4 @@
 modifier_iw_axe_battle_hunger = class({})
-
-function modifier_iw_axe_battle_hunger:DeclareExtEvents()
-	local funcs =
-	{
-		[IW_MODIFIER_EVENT_ON_KILL] = 1,
-	}
-	return funcs
-end
 	
 function modifier_iw_axe_battle_hunger:OnCreated(args)
 	if IsServer() then
@@ -14,21 +6,6 @@ function modifier_iw_axe_battle_hunger:OnCreated(args)
 		self._fDuration = args.duration
 		self:StartIntervalThink(self._fThinkRate)
 	end
-end
-
-function modifier_iw_axe_battle_hunger:OnDestroy(args)
-	if IsServer() then
-		local hAbility = self:GetAbility()
-		if hAbility:GetToggleState() then
-			hAbility:ToggleAbility()
-		end
-	end
-end
-
-function modifier_iw_axe_battle_hunger:OnKill(args)
-	self:ForceRefresh()
-	self:SetDuration(self._fDuration, true)
-	EmitSoundOn("Hero_Axe.Battle_Hunger", args.attacker)
 end
 
 function modifier_iw_axe_battle_hunger:OnIntervalThink()

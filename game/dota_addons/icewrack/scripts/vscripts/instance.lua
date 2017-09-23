@@ -68,9 +68,9 @@ stIcewrackPropertyEnum =
 	IW_PROPERTY_SKILL_SURVIVAL = 161,    IW_PROPERTY_SKILL_PERCEPTION = 162,  IW_PROPERTY_SKILL_LORE = 163,        IW_PROPERTY_SKILL_SPEECH = 164,
 	IW_PROPERTY_SKILL_STEALTH = 165,     IW_PROPERTY_SKILL_THIEVERY = 166,    IW_PROPERTY_ATTRIBUTE_POINTS = 167,  IW_PROPERTY_SKILL_POINTS = 168,
 	IW_PROPERTY_MOVE_NOISE_FLAT = 169,   IW_PROPERTY_MOVE_NOISE_PCT = 170,    IW_PROPERTY_CAST_NOISE_FLAT = 171,   IW_PROPERTY_CAST_NOISE_PCT = 172,
-	IW_PROPERTY_NIGHT_VISION = 173,      IW_PROPERTY_VISIBILITY_FLAT = 174,   IW_PROPERTY_VISIBILITY_PCT = 175,    IW_PROPERTY_BEHAVIOR_AGGRO = 176,
+	IW_PROPERTY_DARK_SIGHT_PCT = 173,    IW_PROPERTY_VISIBILITY_FLAT = 174,   IW_PROPERTY_VISIBILITY_PCT = 175,    IW_PROPERTY_BEHAVIOR_AGGRO = 176,
 	IW_PROPERTY_BEHAVIOR_COOP = 177,     IW_PROPERTY_BEHAVIOR_SAFETY = 178,   IW_PROPERTY_CORPSE_TIME = 179,       IW_PROPERTY_ATK_SPEED_DUMMY = 180,
-	IW_PROPERTY_SP_REGEN_TIME_PCT = 181, IW_PROPERTY_THREAT_MULTI = 182,
+	IW_PROPERTY_SP_REGEN_TIME_PCT = 181, IW_PROPERTY_THREAT_MULTI = 182,      IW_PROPERTY_VISION_RANGE_FLAT = 183, IW_PROPERTY_VISION_RANGE_PCT = 184,
 }
 
 for k,v in pairs(stInstanceTypeEnum) do _G[k] = v end
@@ -121,9 +121,9 @@ stIcewrackPropertiesName =
 	SkillSurvival = 161,               SkillPerception = 162,             SkillLore = 163,                   SkillSpeech = 164,
 	SkillStealth = 165,                SkillThievery = 166,               AttributePoints = 167,             SkillPoints = 168,
 	MovementNoiseFlat = 169,           MovementNoisePercent = 170,        CastNoiseFlat = 171,               CastNoisePercent = 172,
-	NightVision = 173,                 VisibilityFlat = 174,              VisibilityPercent = 175,           BehaviorAggressiveness = 176,
+	DarkSightPercent = 173,            VisibilityFlat = 174,              VisibilityPercent = 175,           BehaviorAggressiveness = 176,
 	BehaviorCooperativeness = 177,     BehaviorSafety = 178,              CorpseTime = 179,                  AttackSpeedDummy = 180,
-	StaminaRegenTimePercent = 181,     ThreatMultiplier = 182,
+	StaminaRegenTimePercent = 181,     ThreatMultiplier = 182,            VisionRangeFlat = 183,             VisionRangePercent = 184,
 }
 
 stIcewrackPropertyValues = {}
@@ -151,7 +151,7 @@ CInstance =
 CInstance = setmetatable(CInstance, { __call = 
 	function(self, hInstance, nInstanceID)
 		if nInstanceID then
-			LogAssert(type(nInstanceID) == "number", "Type mismatch (expected \"%s\", got %s)", "number", type(nInstanceID))
+			LogAssert(type(nInstanceID) == "number", LOG_MESSAGE_ASSERT_TYPE, "number", type(nInstanceID))
 		end
 		if hInstance._bIsInstance or (not CInstance._bAllowDynamicInstances and not hInstance) then
 			LogMessage("Failed to create instance \"" .. nInstanceID .. "\" - dynamic instances are currently disabled", LOG_SEVERITY_WARNING)

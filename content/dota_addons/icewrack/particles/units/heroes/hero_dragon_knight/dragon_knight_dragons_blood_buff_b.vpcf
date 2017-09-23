@@ -19,19 +19,20 @@
 	m_Operators = 
 	[
 		{
-			_class = "C_OP_Decay"
-		},
-		{
 			_class = "C_OP_OscillateScalar"
 			m_RateMin = 200.0
 			m_RateMax = 200.0
 			m_nField = 3
 			m_flEndTime_min = 1000000.0
 			m_flEndTime_max = 1000000.0
-			m_flOscMult = 10.0
+			m_flOscMult = 3.0
 		},
 		{
 			_class = "C_OP_LockToBone"
+		},
+		{
+			_class = "C_OP_FadeAndKill"
+			m_flEndAlpha = 0.5
 		},
 	]
 	m_Initializers = 
@@ -53,8 +54,8 @@
 		},
 		{
 			_class = "C_INIT_RandomLifeTime"
-			m_fLifetimeMin = 5.0
-			m_fLifetimeMax = 5.0
+			m_fLifetimeMin = 1.0
+			m_fLifetimeMax = 1.0
 		},
 	]
 	m_Emitters = 

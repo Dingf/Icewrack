@@ -32,7 +32,6 @@ require("npc")
 local stDamageInfoTable = {}
 
 local function ApplyDamageEffect(hVictim, hAttacker, nDamageType, fDamage, fEffectBonus)
-print(fEffectBonus)
 	local fEffectiveDamage = fDamage * (1.0 + fEffectBonus)
 	local fDamagePercentHP = math.min(1.0, (math.max(fEffectiveDamage/hVictim:GetMaxHealth(), 0)))
 	if nDamageType == IW_DAMAGE_TYPE_CRUSH then
@@ -91,7 +90,7 @@ function DealPrimaryDamage(self, keys)
 					local fDamageResistMax = hVictim:GetMaxResistance(nDamageType)
 					local fDamageResist = hVictim:GetResistance(nDamageType)
 					fDamageResist = math.min(1.0, fDamageResist, fDamageResistMax)
-					fDamageAmount =  math.max(0, fDamageAmount * (1.0 - fDamageResist))
+					fDamageAmount = math.max(0, fDamageAmount * (1.0 - fDamageResist))
 				end
 			end
 			if hAttacker:GetTeamNumber() == hVictim:GetTeamNumber() then

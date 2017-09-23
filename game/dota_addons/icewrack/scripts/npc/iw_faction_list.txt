@@ -1,0 +1,52 @@
+"IcewrackFactionTable"
+{
+
+	"1"
+	{
+		"Name"			"Player Faction"
+		"WeightDefault"		"-100"
+		"WeightOverride"
+		{
+			"2"	"50"
+		}
+	}
+
+	"2"
+	{
+		"Name"			"The Expedition"
+		"WeightDefault"		"-100"
+		"WeightOverride"
+		{
+			"1"	"50"
+			"3"	"0"
+		}
+	}
+
+	"3"
+	{
+		"Name"			"Animal Faction Passive"
+		"WeightDefault"		"0"
+		"WeightOverride"	{ }
+	}
+
+	"4"
+	{
+		"Name"			"Animal Faction Aggressive"
+		"WeightDefault"		"-100"
+		"WeightOverride"	{ }
+	}
+
+	"5"
+	{
+		"Name"			"Frostbitten"
+		"WeightDefault"		"-100"
+		"WeightOverride"	{ }
+	}
+
+	"6"
+	{
+		"Name"			"Undead Faction"
+		"WeightDefault"		"-100"
+		"WeightOverride"	{ }
+	}
+}

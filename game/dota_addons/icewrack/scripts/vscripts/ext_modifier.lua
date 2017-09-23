@@ -30,7 +30,7 @@ CExtModifier = setmetatable({}, { __call =
 		
 		local tExtAbilityTemplate = stExtModifierData[szAbilityName] or {}
 		local tExtModifierTemplate = tExtAbilityTemplate[szModifierName]
-		LogAssert(tExtModifierTemplate, "Failed to load template \"%d\" - no data exists for this entry.", szModifierName)
+		LogAssert(tExtModifierTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, szModifierName)
 		
 		hModifier._bIsExtendedModifier = true
 		hModifier._bIsLuaModifier = hModifier.OnCreated and true or false

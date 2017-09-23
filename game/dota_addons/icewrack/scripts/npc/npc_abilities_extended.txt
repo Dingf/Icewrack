@@ -222,19 +222,27 @@
 		"ManaCost"		"10"
 	}
 
-	"iw_lina_pyrotheosis"
+	"iw_lina_inner_fire"
 	{
-		"ScriptFile"		"scripts/vscripts/abilities/lina/iw_lina_pyrotheosis.lua"
+		"ScriptFile"		"scripts/vscripts/abilities/lina/iw_lina_inner_fire.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_SINGLE"
 
-		"ManaCost"		"50"
+		"ManaCost"		"35"
 
 		"AbilityCastAnimation"
 		{
 			"npc_dota_hero_lina"
 			{
-				"ACT_DOTA_VICTORY"	"1.0"
+				"ACT_DOTA_CAST_ABILITY_3"	"1.0"
 			}
 		}
+	}
+
+	"iw_lina_pyrotheosis"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/lina/iw_lina_pyrotheosis.lua"
+
+		"ManaCost"		"80"
 	}
 
 	"iw_warmth"

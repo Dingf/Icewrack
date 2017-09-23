@@ -10,7 +10,7 @@ local stInteractableData = LoadKeyValues("scripts/npc/npc_interactables_extended
 local tIndexTableList = {}
 CContainer = setmetatable({}, { __call =
 	function(self, hEntity, nInstanceID, bGenerateLootTable)
-		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), "Type mismatch (expected \"%s\", got %s)", "CDOTA_BaseNPC", type(hEntity))
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsContainer then
 			return hEntity
 		end

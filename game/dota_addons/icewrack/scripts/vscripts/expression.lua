@@ -86,7 +86,7 @@ end
 
 CExpression = setmetatable({}, { __call = 
 	function(self, szExpression)
-		LogAssert(type(szExpression) == "string", "Type mismatch (expected \"%s\", got %s)", "string", type(szExpression))
+		LogAssert(type(szExpression) == "string", LOG_MESSAGE_ASSERT_TYPE, "string", type(szExpression))
 		self = setmetatable({}, {__index = CExpression})
 		
 		local tGroupList = {}

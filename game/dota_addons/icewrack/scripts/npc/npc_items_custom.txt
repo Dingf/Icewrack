@@ -66,6 +66,26 @@
 		}
 	}
 
+	"internal_hold_position"
+	{
+		"BaseClass"				"item_datadriven"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+		"Modifiers"
+		{
+			"modifier_internal_hold_position"
+			{
+				"Passive"						"1"
+				"IsHidden"						"1"
+				"States"
+				{
+					"MODIFIER_STATE_ROOTED"			"MODIFIER_STATE_VALUE_ENABLED"
+				}
+			}
+			
+		}
+	}
+
 	"internal_corpse"
 	{
 		"BaseClass"				"item_datadriven"
@@ -268,7 +288,7 @@
 		}
 	}
 
-	"map000_stamina_buff"
+	"map000_buff"
 	{
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"
@@ -277,7 +297,7 @@
 
 		"Modifiers"
 		{
-			"modifier_map000_stamina_buff"		"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_map000_buff"		"LUA_MODIFIER_NO_TRIGGER"
 		}
 	}
 }

@@ -10,14 +10,14 @@ local tIndexTableList = {}
 local stWorldObjectScriptData = {}
 CWorldObject = setmetatable({}, { __call =
 	function(self, hEntity, nInstanceID)
-		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), "Type mismatch (expected \"%s\", got %s)", "CDOTA_BaseNPC", type(hEntity))
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsWorldObject then
 			return hEntity
 		end
 		
 		local szEntityName = hEntity:GetUnitName()
 		local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()]
-		LogAssert(tInteractableTemplate, "Failed to load template \"%d\" - no data exists for this entry.", hEntity:GetUnitName())
+		LogAssert(tInteractableTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 		
 		hEntity = CInteractable(hEntity, nInstanceID)
 		local tBaseIndexTable = getmetatable(hEntity).__index

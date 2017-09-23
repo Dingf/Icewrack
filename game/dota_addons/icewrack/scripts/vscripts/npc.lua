@@ -90,14 +90,14 @@ end
 local tIndexTableList = {}
 CIcewrackNPCEntity = setmetatable({}, { __call = 
 	function(self, hEntity)
-		LogAssert(IsValidExtendedEntity(hEntity), "Type mismatch (expected \"%s\", got %s)", "CDOTA_BaseNPC", type(hEntity))
+		LogAssert(IsValidExtendedEntity(hEntity), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsNPCEntity then
 			return hEntity
 		end
 		
 		if not hEntity:IsRealHero() then
 			local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
-			LogAssert(tExtEntityTemplate, "Failed to load template \"%d\" - no data exists for this entry.", hEntity:GetUnitName())
+			LogAssert(tExtEntityTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 			
 			local tBaseIndexTable = getmetatable(hEntity).__index
 			local tExtIndexTable = tIndexTableList[tBaseIndexTable]
@@ -672,7 +672,7 @@ local function EvaluateNPCDetect(self)
 				local vTargetVector = hEntity:GetAbsOrigin() - self:GetAbsOrigin()
 				local fVisionValue = hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_FLAT) * nVisionRange/math.max(IW_NPC_VISION_DISTANCE_MIN, vTargetVector:Length2D())
 				local fVisionMultiplier = math.max(0.0, 1.0 + hEntity:GetPropertyValue(IW_PROPERTY_VISIBILITY_PCT)/100.0)
-				if hEntity:IsMoving() and hEntity:GetRunMode() then
+				if hEntity:IsMoving() and hEntity:IsRunning() then
 					fVisionMultiplier = fVisionMultiplier * 2.0
 				end
 				fVisionValue = fVisionValue * fVisionMultiplier

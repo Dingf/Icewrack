@@ -1,0 +1,146 @@
+.ActionBarChannelRoot
+{
+	visibility: collapse;
+}
+
+.ActionBarChannelIcon
+{
+	opacity-mask: url("file://{images}/custom_game/actionbar/iw_actionbar_channel_icon_mask.tga");
+	background-color: #000000;
+	width: 72px;
+	height: 72px;
+	x: 34px;
+	y: 28px;
+}
+
+.ActionBarChannelFillGroup
+{
+	x: 120px;
+	y: 48px;
+	width: 360px;
+	opacity-mask: url("file://{images}/custom_game/actionbar/iw_actionbar_channel_fill_mask.tga");
+	overflow: clip;
+}
+
+.ActionBarChannelFillContainer
+{
+	width: 720px;
+}
+
+.ActionBarChannelFill
+{
+	width: 360px;
+	height: 30px;
+	overflow: clip;
+	blur: gaussian(2.5);
+}
+
+.ActionBarChannelFillTip
+{
+	width: 4px;
+	height: 100%;
+	horizontal-align: right;
+	background-color: gradient(linear, 0% 0%, 100% 100%, from(#80ff8000), to(#ffffffff));
+}
+
+.ActionBarChannelOverlay
+{
+	height: 128px;
+	width: 512px;
+}
+
+.ActionBarChannelLabelGroup
+{
+	width: 360px;
+	margin-top: 52px;
+	margin-left: 124px;
+}
+
+.ActionBarChannelLabel
+{
+	horizontal-align: center;
+	flow-children: right;
+}
+
+.ActionBarChannelName
+{
+	margin-top: 2px;
+	color: #ffffffc0;
+	font-size: 18px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	text-shadow: 0px 0px 3px 3.0 #000000ff;
+	padding-left: 32px;
+}
+
+.ActionBarChannelSpacer
+{
+	margin-top: 3px;
+	color: #ffffffc0;
+	font-size: 18px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	text-shadow: 0px 0px 3px 3.0 #000000ff;
+	padding-right: 2px;
+}
+
+.ActionBarChannelDuration
+{
+	width: 64px;
+	color: #ffffffc0;
+	font-size: 20px;
+	font-weight: bold;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	text-shadow: 0px 0px 3px 3.0 #000000ff;
+	text-align: left;
+}
+
+.ActionBarChannelUpAnim
+{
+	animation-name: ChannelUpAnim;
+	animation-duration: 0.1s;
+	animation-timing-function: linear;
+	animation-iteration-count: 1;
+}
+
+@keyframes 'ChannelUpAnim'
+{
+	0%
+	{
+	   x: -0px;
+	}
+
+	50%
+	{
+	    x: 180px;
+	}
+	
+	100%
+	{
+	    x: 360px;
+	}
+}
+
+.ActionBarChannelDownAnim
+{
+	animation-name: ChannelDownAnim;
+	animation-duration: 0.1s;
+	animation-timing-function: linear;
+	animation-iteration-count: 1;
+}
+
+@keyframes 'ChannelDownAnim'
+{
+	0%
+	{
+	   x: 0px;
+	}
+
+	50%
+	{
+	    x: -180px;
+	}
+	
+	100%
+	{
+	    x: -360px;
+	}
+}

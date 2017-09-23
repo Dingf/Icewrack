@@ -175,7 +175,7 @@ function OnPartybarIndicatorActivate(hContextPanel, tArgs)
 		}
 		else if (szPanelID === "HoldIndicator")
 		{
-			//TODO: Implement me
+			GameEvents.SendCustomGameEventToServer("iw_toggle_hold", { entindex:nEntityIndex });
 		}
 	}
 	return true;
@@ -260,7 +260,13 @@ function UpdatePartyBarMemberValues()
 			DispatchCustomEvent($("#RunIndicator"), "PartybarIndicatorRefresh");
 		}
 		
-		//TODO: Implement the indicator for hold position
+		var nHoldState = bIsEntityAlive ? tEntityData.hold_position : 0;
+		var nPrevHoldState = $("#HoldIndicator").GetAttributeInt("state", 0);
+		if (nPrevHoldState !== nHoldState)
+		{
+			$("#HoldIndicator").SetAttributeInt("state", nHoldState);
+			DispatchCustomEvent($("#HoldIndicator"), "PartybarIndicatorRefresh");
+		}
 	}
 	$.Schedule(0.03, UpdatePartyBarMemberValues);
 }

@@ -46,7 +46,7 @@ end
 
 function modifier_iw_axe_counter_helix:OnExecuteOrder(args)
 	local hDummy = self._hMoveDummy
-	if args.OrderType == DOTA_UNIT_ORDER_MOVE_TO_POSITION then
+	if args.OrderType == DOTA_UNIT_ORDER_MOVE_TO_POSITION or args.OrderType == DOTA_UNIT_ORDER_ATTACK_MOVE then
 		hDummy._target = args.Position
 		return false
 	elseif args.OrderType == DOTA_UNIT_ORDER_MOVE_TO_TARGET or args.OrderType == DOTA_UNIT_ORDER_ATTACK_TARGET then

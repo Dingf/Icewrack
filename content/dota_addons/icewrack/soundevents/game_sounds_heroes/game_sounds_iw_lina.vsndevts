@@ -14,7 +14,7 @@
 					{
 						"value"
 						{
-							"wave0"		"sounds/weapons/hero/clinkz/strafe.vsnd"
+							"wave0"		"sounds/weapons/hero/ember_spirit/flame_guard_cast.vsnd"
 						}
 					}
 					"volume"
@@ -72,7 +72,7 @@
 					}
 					"volume"
 					{
-						"value"		"1.50000"
+						"value"		"0.750000"
 					}
 					"pitch"
 					{
@@ -80,7 +80,7 @@
 					}
 					"soundlevel"
 					{
-						"value"		"50.000000"
+						"value"		"0.000000"
 					}
 					"volume_fade_out"
 					{
@@ -95,6 +95,60 @@
 		}
 	}
 }
+
+"Hero_Lina.InnerFire"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/weapons/hero/clinkz/strafe.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"1.000000"
+					}
+					"pitch_rand_min"
+					{
+						"value"		"-0.10000"
+					}
+					"pitch_rand_max"
+					{
+						"value"		"0.10000"
+					}
+					"pitch"
+					{
+						"value"		"1.000000"
+					}
+					"soundlevel"
+					{
+						"value"		"100.000000"
+					}
+					"distance_max"
+					{
+						"value"		"1800.000000"
+					}
+					"event_type"
+					{
+						"value"		"1.000000"
+					}
+				}
+			}
+		}
+	}
+}
+
 
 "Hero_Lina.Warmth"
 {

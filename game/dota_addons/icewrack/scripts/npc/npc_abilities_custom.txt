@@ -258,12 +258,13 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT"
 		"AbilityTextureName"			"axe_berserkers_call"
 
 		"MaxLevel"				"1"
 		"AbilityCooldown"			"6.0"
 		"AbilityAOERadius"			"300"
+		"AbilityCastPoint"			"0.5"
 
 		"AbilitySpecial"
 		{
@@ -317,11 +318,6 @@
 			{
 				"var_type"			"FIELD_FLOAT"
 				"health_loss"			"2.5"
-			}
-			"05"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"duration"			"5.0"
 			}
 		}
 	}
@@ -389,7 +385,7 @@
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"damage"			"100"
+				"damage"			"1"
 			}
 			"02"
 			{
@@ -413,6 +409,7 @@
 		"AbilityCastPoint"			"0.1"
 		"AbilityCastRange"			"900"
 		"AbilityCooldown"			"13.0"
+		"AbilityAOERadius"			"900"
 
 		"AbilitySpecial"
 		{
@@ -684,7 +681,7 @@
 		"AbilityTextureName"			"drow_ranger_trueshot"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"1.0"
+		"AbilityCooldown"			"0.0"
 		"AbilityAOERadius"			"1800"
 
 		"Modifiers"
@@ -871,7 +868,7 @@
 		"AbilityTextureName"			"bounty_hunter_track"
 
 		"MaxLevel"				"1"
-		"AbilityAOERadius"			"1800"
+		"AbilityAOERadius"			"3000"
 
 		"Modifiers"
 		{
@@ -968,6 +965,61 @@
 		}
 	}
 
+	"iw_lina_inner_fire"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_FRIENDLY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityTextureName"			"default"
+
+		"MaxLevel"				"1"
+		"AbilityCooldown"			"6.0"
+		"AbilityCastPoint"			"0.55"
+		"AbilityCastRange"			"650"
+
+		"Modifiers"
+		{
+			"modifier_iw_lina_inner_fire"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"attack_speed"			"100.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"attack_speed_bonus"		"1.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"stamina_regen_pct"		"100.0"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"stamina_regen_pct_bonus"		"1.0"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"stamina_regen"			"3.0"
+			}
+			"06"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"2.5"
+			}
+		}
+	}
+
 	"iw_lina_pyrotheosis"
 	{
 		"BaseClass"				"ability_lua"
@@ -1000,7 +1052,7 @@
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"duration"			"10.0"
+				"duration"			"12.0"
 			}
 			"04"
 			{

@@ -58,7 +58,7 @@ local stExtItemData = LoadKeyValues("scripts/npc/npc_items_extended.txt")
 local tIndexTableList = {}
 CExtItem = setmetatable({}, { __call = 
 	function(self, hItem, nInstanceID)
-		LogAssert(IsInstanceOf(hItem, CDOTA_Item), "Type mismatch (expected \"%s\", got %s)", "CDOTA_Item", type(hItem))
+		LogAssert(IsInstanceOf(hItem, CDOTA_Item), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_Item", type(hItem))
 		if hItem._bIsExtendedItem then
 			return hItem
 		end
@@ -75,8 +75,8 @@ CExtItem = setmetatable({}, { __call =
 		local szItemName = hItem:GetName()
 		local tBaseItemTemplate = stBaseItemData[szItemName]
 		local tExtItemTemplate = stExtItemData[szItemName]
-		LogAssert(tBaseItemTemplate, "Failed to load template \"%d\" - no data exists for this entry.", szItemName)
-		LogAssert(tExtItemTemplate, "Failed to load template \"%d\" - no data exists for this entry.", szItemName)
+		LogAssert(tBaseItemTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, szItemName)
+		LogAssert(tExtItemTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, szItemName)
 		
 		hItem._bIsExtendedItem = true
 		

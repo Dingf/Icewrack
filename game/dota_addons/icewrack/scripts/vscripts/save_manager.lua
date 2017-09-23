@@ -311,7 +311,8 @@ local function SaveEntityData(hInstance)
 	tEntityTable.StaminaTime = hInstance:GetStaminaRegenTime() - GameRules:GetGameTime()
 	tEntityTable.Team = hInstance:GetTeamNumber()
 	tEntityTable.LastMap = GetMapName()
-	tEntityTable.RunMode = hInstance:GetRunMode() and 1 or 0
+	tEntityTable.RunMode = hInstance:IsRunning() and 1 or 0
+	tEntityTable.HoldMode = hInstance:IsHoldPosition() and 1 or 0
 	tEntityTable.State = (hInstance:GetMainControllingPlayer() == 0) and IW_SAVE_STATE_PERSISTENT or IW_SAVE_STATE_ENABLED
 	
 	tEntityTable.Properties = {}
@@ -921,6 +922,9 @@ local function LoadEntityValues()
 				hEntity:SetStamina(tEntityData.Stamina)
 				if tEntityData.RunMode == 1 then
 					hEntity:SetRunMode(true)
+				end
+				if tEntityData.HoldMode == 1 then
+					hEntity:SetHoldPosition(true)
 				end
 				hEntity._fStaminaRegenTime = GameRules:GetGameTime() + tEntityData.StaminaTime
 				

@@ -42,6 +42,8 @@
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"275"
 
+		"VisionRangeFlat"		"1000"
+
 		"AccuracyFlat"			"60"
 		"DodgeFlat"			"0"
 
@@ -81,6 +83,7 @@
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"250"
+		"VisionRangeFlat"		"1000"
 
 		"AccuracyFlat"			"65"
 		"DodgeFlat"			"0"
@@ -125,6 +128,8 @@
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"300"
+		"VisionRangeFlat"		"1600"
+		"DarkVisionPercent"		"50"
 
 		"MaxStaminaFlat"		"90"
 		"AttackCostStaminaFlat"	"4"
@@ -179,6 +184,8 @@
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"300"
+		"VisionRangeFlat"		"1400"
+		"DarkVisionPercent"		"75"
 
 		"AccuracyFlat"			"70"
 		"DodgeFlat"			"25"
@@ -213,6 +220,10 @@
 		"IsPlayableHero"		"1"
 
 		"SoundEvents"			"soundevents/game_sounds_heroes/game_sounds_iw_lina.vsndevts"
+		"Animation"
+		{
+			"models/heroes/lina/lina.vmdl"		"animation/animation_iw_lina.lua"
+		}
 
 		"EquipFlags"			"58587136"
 
@@ -223,6 +234,7 @@
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"250"
+		"VisionRangeFlat"		"1000"
 
 		"BaseCritChance"		"1.0"
 
@@ -267,6 +279,7 @@
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"275"
+		"VisionRangeFlat"		"1000"
 
 		"AccuracyFlat"			"65"
 		"DodgeFlat"			"0"
@@ -506,6 +519,30 @@
 		"BehaviorAggressiveness"	"3"
 		"BehaviorCooperativeness"	"1"
 	}
+	
+	"npc_iw_frostbitten"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
+		"UnitType"			"IW_UNIT_TYPE_RANGED"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_HUMANOID | IW_UNIT_SUBTYPE_BIOLOGICAL"
+		"UnitFlags"			""
+		"UnitHeight"			"128"
+
+		"BaseAttackTimeFlat"		"1.0"
+		"AttackRange"			"600"
+		"MovementSpeedFlat"		"200"
+		"MaxStaminaFlat"		"50"
+
+		"AccuracyFlat"			"50"
+		"DodgeFlat"			"0"
+
+		"DamageColdBase"		"26"
+		"DamageColdVar"			"11"
+
+		"VisionMask"			"63"
+		"BehaviorAggressiveness"	"3"
+		"BehaviorCooperativeness"	"1"
+	}
 
 	"npc_iw_test_beast"
 	{
@@ -564,7 +601,7 @@
 
 		"AttackRange"			"650"
 		"ManaRegenFlat"			"0.35"
-		"HealthRegenFlat"		"0"
+		"HealthRegenFlat"		"1000000"
 
 		"BaseCritChance"		"1.0"
 		"LifestealPercent"		"100"
