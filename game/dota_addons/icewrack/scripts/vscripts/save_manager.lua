@@ -282,7 +282,7 @@ local function SaveModifierData(hInstance)
 				tModifierTable.StackCount = v:GetStackCount()
 						
 				local hAbility = v:GetAbility()
-				tModifierTable.Source = hAbility and hAbility:GetInstanceID() or 0
+				tModifierTable.Source = IsValidExtendedAbility(hAbility) and hAbility:GetInstanceID() or 0
 				tModifierTable.Caster = v:GetCaster():GetInstanceID() or 0
 				tModifierTable.ModifierArgs = {}
 				for k2,v2 in pairs(v._tModifierArgs) do
@@ -697,26 +697,27 @@ local function LoadStaticInteractables()
 		local hPrecondition = CExpression(v.Precondition or "")
 		if stInstanceData[k] and hPrecondition:EvaluateExpression() then
 			local tInteractableData = tInteractableSaveList[k]
+			local szUnitName = stInstanceData[k].Name
+			local nUnitTeam = stInstanceData[k].Team
+			local hOwner = tInteractableData and GetInstanceByID(tInteractableData.Owner) or nil
+			local vPosition = StringToVector(v.Position)
+			local vForward = StringToVector(v.Forward)
 			if stInstanceData[k].Type == IW_INSTANCE_CONTAINER then
 				if tInteractableData and tInteractableData.State == IW_SAVE_STATE_ENABLED then
-					local szUnitName = stInstanceData[k].Name
-					local nUnitTeam = stInstanceData[k].Team
-					local hOwner = GetInstanceByID(tInteractableData.Owner)
-					local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, hOwner, hOwner, nUnitTeam), nInstanceID, false)
+					local hContainer = CContainer(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID, false)
 					LoadInventoryData(hContainer, tInteractableData.Inventory)
-					hContainer:SetForwardVector(StringToVector(v.Forward))
+					hContainer:SetAbsOrigin(vPosition)
+					hContainer:SetForwardVector(vForward)
 				end
 			elseif stInstanceData[k].Type == IW_INSTANCE_WORLD_OBJECT then
 				local tInteractableData = tInteractableSaveList[k]
 				if not tInteractableData or tInteractableData.State == IW_SAVE_STATE_ENABLED then
-					local szUnitName = stInstanceData[k].Name
-					local nUnitTeam = stInstanceData[k].Team
-					local hOwner = tInteractableData and GetInstanceByID(tInteractableData.Owner) or nil
-					local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, StringToVector(v.Position), false, hOwner, hOwner, nUnitTeam), nInstanceID)
+					local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID)
 					if tInteractableData and tInteractableData.ObjectState then
 						hWorldObject:SetObjectState(tInteractableData.ObjectState)
 					end
-					hWorldObject:SetForwardVector(StringToVector(v.Forward))
+					hWorldObject:SetAbsOrigin(vPosition)
+					hWorldObject:SetForwardVector(vForward)
 				end
 			end
 		end
@@ -733,16 +734,20 @@ local function LoadDynamicInteractables()
 			local szUnitName = v.UnitName
 			local nUnitTeam = v.Team
 			local hOwner = GetInstanceByID(v.Owner)
+			local vPosition = StringToVector(v.Position)
+			local vForward = StringToVector(v.Forward)
 			if v.Type == IW_INSTANCE_CONTAINER then
-				local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, hOwner, hOwner, nUnitTeam), nInstanceID, false)
+				local hContainer = CContainer(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID, false)
 				LoadInventoryData(hContainer, v.Inventory)
-				hContainer:SetForwardVector(StringToVector(v.Forward))
+				hContainer:SetAbsOrigin(vPosition)
+				hContainer:SetForwardVector(vForward)
 			elseif v.Type == IW_INSTANCE_WORLD_OBJECT then
-				local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, StringToVector(v.Position), false, hOwner, hOwner, nUnitTeam), nInstanceID)
+				local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID)
 				if v.ObjectState then
 					hWorldObject:SetObjectState(v.ObjectState)
 				end
-				hWorldObject:SetForwardVector(StringToVector(v.Forward))
+				hWorldObject:SetAbsOrigin(vPosition)
+				hWorldObject:SetForwardVector(vForward)
 			end
 		end
 	end
@@ -842,7 +847,9 @@ local function LoadSavedModifierData(hEntity, tModifierData, nInstanceID)
 	if hSource then
 		hModifier = hEntity:AddNewModifier(hCaster, hSource, szModifierName, tModifierData.ModifierArgs)
 	else
-		LogMessage("Modifier source with instance ID \"" .. tModifierData.Source .. "\" was not found.", LOG_SEVERITY_WARNING)
+		if tModifierData.Source ~= 0 then
+			LogMessage("Modifier source with instance ID \"" .. tModifierData.Source .. "\" was not found.", LOG_SEVERITY_WARNING)
+		end
 		hModifier = AddModifier(szAbilityName, szModifierName, hEntity, hCaster, tModifierData.ModifierArgs)
 	end
 	
@@ -884,7 +891,7 @@ local function LoadEntityPositions()
 					hEntity:SetForwardVector(StringToVector(tEntityData.Forward))
 				else
 					local vPosition = StringToVector(tInstanceData.Position)
-					if tInstanceData.UseAbsolutePosition ~= "1" then
+					if vPosition.z == 0 then
 						vPosition = GetGroundPosition(vPosition, hEntity)
 					end
 					hEntity:SetAbsOrigin(vPosition)
@@ -980,8 +987,14 @@ local function LoadMapContainers()
 			if not tContainerData then
 				local szUnitName = stInstanceData[k].Name
 				local nUnitTeam = stInstanceData[k].Team
-				local hContainer = CContainer(CreateUnitByName(szUnitName, StringToVector(v.Position), false, nil, nil, nUnitTeam), nInstanceID, true)
-				hContainer:SetForwardVector(StringToVector(v.Forward))
+				local vForward = StringToVector(v.Forward)
+				local vPosition = StringToVector(v.Position)
+				if vPosition.z == 0 then
+					vPosition = GetGroundPosition(vPosition, hEntity)
+				end
+				local hContainer = CContainer(CreateUnitByName(szUnitName, vPosition, false, nil, nil, nUnitTeam), nInstanceID, true)
+				hContainer:SetAbsOrigin(vPosition)
+				hContainer:SetForwardVector(vForward)
 			end
 		end
 	end

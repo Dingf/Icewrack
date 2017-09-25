@@ -832,6 +832,7 @@ stExtModifierEventValues =
 	IW_MODIFIER_EVENT_ON_EXECUTE_ORDER = 15,
 	IW_MODIFIER_EVENT_ON_KILL = 16,
 	IW_MODIFIER_EVENT_ON_DEATH = 17,
+	IW_MODIFIER_EVENT_ON_HEAL = 18,
 }
 
 for k,v in pairs(stExtModifierEventValues) do _G[k] = v end
@@ -855,6 +856,7 @@ stExtModifierEventAliases =
 	[IW_MODIFIER_EVENT_ON_EXECUTE_ORDER] = "OnExecuteOrder",
 	[IW_MODIFIER_EVENT_ON_KILL] = "OnKill",
 	[IW_MODIFIER_EVENT_ON_DEATH] = "OnDeath",
+	[IW_MODIFIER_EVENT_ON_HEAL] = "OnHealingReceived",
 }
 
 for k,v in pairs(TraceContents_t) do _G[k] = v end

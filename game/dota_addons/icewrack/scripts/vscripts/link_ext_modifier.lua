@@ -5,7 +5,6 @@ require("ext_modifier")
 require("link_functions")
 end
 
-
 if not CExtModifierLinker then CExtModifierLinker = {}
 
 local stLuaModifierIgnoredArgs =

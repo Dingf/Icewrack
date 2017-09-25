@@ -3,6 +3,7 @@
 	//Default non-zero property values. These can be overriden by individual units.
 	"default"
 	{
+		"EffectiveHealth"		"100"
 		"ManaRegenFlat"			"0.25"
 		"BaseAttackTimeFlat"		"1.7"
 		"BaseCritChance"		"0.05"
@@ -34,16 +35,16 @@
 
 		"EquipFlags"			"58719839"
 
+		"BaseAttackTimeFlat"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"275"
+		"EffectiveHealth"		"300"
+
 		"MaxStaminaFlat"		"90"
 		"AttackCostStaminaFlat"		"5"
 		"RunCostStaminaFlat"		"3"
 
-		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
-		"MovementSpeedFlat"		"275"
-
 		"VisionRangeFlat"		"1000"
-
 		"AccuracyFlat"			"60"
 		"DodgeFlat"			"0"
 
@@ -76,15 +77,16 @@
 
 		"EquipFlags"			"58719773"
 
+		"BaseAttackTimeFlat"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"250"
+		"EffectiveHealth"		"350"
+
 		"MaxStaminaFlat"		"110"
 		"AttackCostStaminaFlat"	"5"
 		"RunCostStaminaFlat"		"3"
 
-		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
-		"MovementSpeedFlat"		"250"
 		"VisionRangeFlat"		"1000"
-
 		"AccuracyFlat"			"65"
 		"DodgeFlat"			"0"
 
@@ -94,8 +96,6 @@
 		"CunningFlat"			"15"
 		"IntelligenceFlat"		"19"
 		"WisdomFlat"			"33"
-
-		"ResistFire"			"50"
 
 		"SkillFire"			"2"
 		"SkillOneHanded"		"3"
@@ -128,13 +128,14 @@
 		"BaseAttackTimeFlat"		"1.7"
 		"AttackRange"			"100"
 		"MovementSpeedFlat"		"300"
-		"VisionRangeFlat"		"1600"
-		"DarkVisionPercent"		"50"
+		"EffectiveHealth"		"150"
 
 		"MaxStaminaFlat"		"90"
 		"AttackCostStaminaFlat"	"4"
 		"RunCostStaminaFlat"		"2"
 
+		"VisionRangeFlat"		"1600"
+		"DarkVisionPercent"		"50"
 		"AccuracyFlat"			"80"
 		"DodgeFlat"			"30"
 
@@ -145,7 +146,7 @@
 		"IntelligenceFlat"		"15"
 		"WisdomFlat"			"16"
 
-		"ResistCold"			"50"
+		"ResistCold"			"25"
 
 		"SkillMarksmanship"		"4"
 		"SkillCombat"			"2"
@@ -177,16 +178,17 @@
 
 		"EquipFlags"			"58588197"
 
+		"BaseAttackTimeFlat"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"300"
+		"EffectiveHealth"		"150"
+
 		"MaxStaminaFlat"		"100"
 		"AttackCostStaminaFlat"	"3"
 		"RunCostStaminaFlat"		"2"
 
-		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
-		"MovementSpeedFlat"		"300"
 		"VisionRangeFlat"		"1400"
 		"DarkVisionPercent"		"75"
-
 		"AccuracyFlat"			"70"
 		"DodgeFlat"			"25"
 
@@ -227,17 +229,16 @@
 
 		"EquipFlags"			"58587136"
 
+		"BaseAttackTimeFlat"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"250"
+		"EffectiveHealth"		"100"
+
 		"MaxStaminaFlat"		"50"
 		"AttackCostStaminaFlat"	"5"
 		"RunCostStaminaFlat"		"0"
 
-		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
-		"MovementSpeedFlat"		"250"
 		"VisionRangeFlat"		"1000"
-
-		"BaseCritChance"		"1.0"
-
 		"AccuracyFlat"			"50"
 		"DodgeFlat"			"0"
 
@@ -272,15 +273,16 @@
 
 		"EquipFlags"			"58588686"
 
+		"BaseAttackTimeFlat"		"1.7"
+		"AttackRange"			"100"
+		"MovementSpeedFlat"		"275"
+		"EffectiveHealth"		"250"
+
 		"MaxStaminaFlat"		"80"
 		"AttackCostStaminaFlat"	"5"
 		"RunCostStaminaFlat"		"3"
 
-		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
-		"MovementSpeedFlat"		"275"
 		"VisionRangeFlat"		"1000"
-
 		"AccuracyFlat"			"65"
 		"DodgeFlat"			"0"
 
@@ -519,6 +521,15 @@
 		"BehaviorAggressiveness"	"3"
 		"BehaviorCooperativeness"	"1"
 	}
+
+	"npc_iw_campfire_dummy"
+	{
+		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
+		"UnitType"			"IW_UNIT_TYPE_NONE"
+		"UnitSubtype"			"IW_UNIT_SUBTYPE_NONE"
+		"UnitFlags"			"IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE"
+		"UnitHeight"			"16"
+	}
 	
 	"npc_iw_frostbitten"
 	{
@@ -625,8 +636,8 @@
 		"IntelligenceFlat"		"49"
 		"WisdomFlat"			"33"
 
-		"DamageFireBase"		"9"
-		"DamageFireVar"			"6"
+		"DamageDeathBase"		"9"
+		"DamageDeathVar"		"6"
 
 		"MovementNoiseFlat"		"10"
 

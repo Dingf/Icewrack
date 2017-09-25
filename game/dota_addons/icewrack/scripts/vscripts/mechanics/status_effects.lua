@@ -22,8 +22,9 @@
 	PACIFY
 	    *Prevents the affected unit from attacking or casting spells
 		
-	WEAKENED
-	    *Increases target's incoming damage.
+	DECAY
+	    *Affected unit has reduced maximum health for the duration (effectively increasing damage taken). All healing received
+		 is dealt as secondary Death damage instead.
 		 
 	SLEEP
 	    *Prevents all actions from the affected unit. Can be dispelled upon taking damage.
@@ -42,14 +43,15 @@
 		
 	FREEZE
 	    *Prevents all actions from the affected unit, but reduces Physical and Fire damage taken. If the unit receives Physical
-		 damage that is a critical strike and deals more than 10% of its max. HP, it will shatter.
+		 damage that is a critical strike and deals more than 10% of its max. HP, it will shatter. Frozen units have a dodge
+		 score of 0.
 		
 	CHILL
 	    *Reduces at least one of the following: movement speed, attack speed, and/or cast speed.
 		
 	WET
 	    *Greatly reduces Cold and Lightning resistance, but increases Fire resistance. Immune to burning, but also causes the
-		 next Chill effect received to Freeze instead (this consumes the Wet debuff). Dispels Burning when applied.
+		 next Chill effect received to Freeze instead (this consumes the Wet debuff). Dispels Burning and Warm when applied.
 		
 	BURNING
 	    *Deals secondary Fire damage over time.
@@ -65,7 +67,22 @@
 		
 	PETRIFY
 	    *Prevents all actions from the affected unit, but reduces non-Physical damage taken. If the unit receives Physical
-		 damage that is a critical strike and deals more than 10% of its max. HP, it will shatter.
+		 damage that is a critical strike and deals more than 10% of its max. HP, it will shatter. Petrified units have a
+		 dodge score of 0.
+	
+--TODO: The following...	
+	WEAKEN
+		*Affected unit deals reduced damage.
+		 
+	WARM
+		*Increases Cold resistance, stamina regeneration, and mana regeneration. The next instance of Chilled has no effect
+		(this consumes the Warm effect).
+	
+	INVISIBLE
+		*Affected unit cannot be seen by ordinary means.
+	
+	HASTE
+		*Affected unit has increased speed.
 ]]
 stIcewrackStatusEffectEnum =
 {
@@ -76,7 +93,7 @@ stIcewrackStatusEffectEnum =
 	IW_STATUS_EFFECT_ROOT = 4,
 	IW_STATUS_EFFECT_DISARM = 5,
 	IW_STATUS_EFFECT_PACIFY = 6,
-	IW_STATUS_EFFECT_WEAKEN = 7,
+	IW_STATUS_EFFECT_DECAY = 7,
 	IW_STATUS_EFFECT_SLEEP = 8,
 	IW_STATUS_EFFECT_FEAR = 9,
 	IW_STATUS_EFFECT_CHARM = 10,
@@ -101,7 +118,7 @@ stIcewrackStatusMaskEnum =
 	IW_STATUS_MASK_ROOT = 8,
 	IW_STATUS_MASK_DISARM = 16,
 	IW_STATUS_MASK_PACIFY = 32,
-	IW_STATUS_MASK_WEAKEN = 64,
+	IW_STATUS_MASK_DECAY = 64,
 	IW_STATUS_MASK_SLEEP = 128,
 	IW_STATUS_MASK_FEAR = 256,
 	IW_STATUS_MASK_CHARM = 512,
@@ -127,7 +144,7 @@ stIcewrackStatusEffectValues =
 	[IW_STATUS_EFFECT_ROOT] = true,
 	[IW_STATUS_EFFECT_DISARM] = true,
 	[IW_STATUS_EFFECT_PACIFY] = true,
-	[IW_STATUS_EFFECT_WEAKEN] = true,
+	[IW_STATUS_EFFECT_DECAY] = true,
 	[IW_STATUS_EFFECT_SLEEP] = true,
 	[IW_STATUS_EFFECT_FEAR] = true,
 	[IW_STATUS_EFFECT_CHARM] = true,

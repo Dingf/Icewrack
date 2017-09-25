@@ -20,14 +20,14 @@
 				<Panel hittest="false" class="DialogueSpeakerContainer">
 					<Panel hittest="false" class="DialoguePortraitContainer">
 						<Image hittest="false" class="DialoguePortrait" id="Portrait" src="file://{images}/portraits/default.png" />
-						<Image hittest="false" class="DialoguePortrait" src="file://{images}/custom_game/dialogue/iw_dialogue_portrait_shadow.tga" />
 					</Panel>
 				</Panel>
 				<Panel hittest="false" class="DialogueTextContainer">
 					<Label hittest="false" class="DialogueName" id="Name" text="" />
+					<Panel hittest="false" class="DialogueTextDivider" />
 					<Label hittest="false" class="DialogueText" id="Text" text="" />
 				</Panel>
-				<Image hittest="false" class="DialogueDivider" src="file://{images}/custom_game/dialogue/iw_dialogue_divider.tga" />
+				<Image hittest="false" class="DialogueSelector" src="file://{images}/custom_game/dialogue/iw_dialogue_selector.tga" />
 				<Panel hittest="false" class="DialogueOptionContainer">
 					<Panel hittest="false" class="DialogueOptionScrollContainer" id="ScrollContainer">
 						<Panel hittest="false" class="DialogueOptionTextContainer" id="TextContainer"/>

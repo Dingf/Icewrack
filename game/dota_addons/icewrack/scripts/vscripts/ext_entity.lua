@@ -83,13 +83,14 @@ stExtEntityAlignment =
 stExtEntityFlagEnum =
 {
     IW_UNIT_FLAG_NONE = 0,
-	IW_UNIT_FLAG_MASSIVE = 1,
-	IW_UNIT_FLAG_FLYING = 2,
-	IW_UNIT_FLAG_NO_CORPSE = 4,
-	IW_UNIT_FLAG_CAN_REVIVE = 8,
-	IW_UNIT_FLAG_CONSIDERED_DEAD = 16,
-	IW_UNIT_FLAG_REQ_ATTACK_SOURCE = 32,
-	IW_UNIT_FLAG_WEATHER_IMMUNE = 64,	--TODO: When implementing weather, skip units with weather immunity
+	IW_UNIT_FLAG_MASSIVE = 1,					-- Unit is large and can't be affected by some abilities that only affect smaller units
+	IW_UNIT_FLAG_FLYING = 2,					-- Unit is flying and can't be affected by ground-based abilities
+	IW_UNIT_FLAG_NO_CORPSE = 4,					-- Unit does not provide a corpse when it dies
+	IW_UNIT_FLAG_CAN_REVIVE = 8,				-- Unit is revivable (TODO: rework the revive mechanic)
+	IW_UNIT_FLAG_CONSIDERED_DEAD = 16,			-- Unit is considered dead and can be targeted by abilities that target corpses
+	IW_UNIT_FLAG_REQ_ATTACK_SOURCE = 32,		-- Unit requires an attack source before it can attack
+	IW_UNIT_FLAG_WEATHER_IMMUNE = 64,			-- Unit is immune to all weather effects (TODO: When implementing weather, skip units with weather immunity)
+	IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE = 128,		-- Unit does not receive health loss from damage (all calculations and on-damage effects are still applied)
 }
 
 for k,v in pairs(stExtEntityUnitClassEnum) do _G[k] = v end

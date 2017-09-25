@@ -1,0 +1,93 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "multiblend.vfx"
+
+	//---- Normal Maps ----
+	F_NORMAL_MAP 1
+
+	//---- Specular ----
+	F_SPECULAR 1
+
+	//---- World Space UVs ----
+	F_WORLDSPACE_UVS 1
+
+	//---- Global ----
+	g_flSpecularBloom "0.000"
+	g_flSpecularIntensity "1.000"
+
+	//---- Layer 0 ----
+	g_flTexCoordRotate0 "0.000"
+	g_flTexCoordScale0 "4.500"
+	g_vColorTint0 "[0.560784 0.698039 0.752941 1.000000]"
+	g_vTexCoordOffset0 "[0.000 0.000]"
+	g_vTexCoordScroll0 "[0.000 0.000]"
+	TextureBloom0 "[0.510000 0.510000 0.510000 0.000000]"
+	TextureColor0 "materials/blends/river_mud001_ice_color.tga"
+	TextureNormal0 "materials/default/default_normal.tga"
+	TextureReflectance0 "materials/blends/river_mud001_refl.tga"
+	TextureSelfIllumMask0 "[0.000000 0.000000 0.000000 0.000000]"
+
+	//---- Layer 1 ----
+	g_flTexCoordRotate1 "0.000"
+	g_flTexCoordScale1 "3.000"
+	g_vColorTint1 "[0.560784 0.682353 0.752941 1.000000]"
+	g_vTexCoordOffset1 "[0.000 0.000]"
+	g_vTexCoordScroll1 "[0.000 0.000]"
+	TextureBloom1 "[0.509804 0.509804 0.509804 0.000000]"
+	TextureColor1 "materials/blends/river_rock001_ice_color.tga"
+	TextureNormal1 "materials/default/default_normal.tga"
+	TextureReflectance1 "materials/blends/river_rock001_refl.tga"
+	TextureRevealMask1 "materials/blends/river_rock001_ice_color_a.tga"
+	TextureSelfIllumMask1 "[0.000000 0.000000 0.000000 0.000000]"
+
+	//---- Layer 2 ----
+	g_flTexCoordRotate2 "0.000"
+	g_flTexCoordScale2 "6.000"
+	g_vColorTint2 "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset2 "[0.000 0.000]"
+	g_vTexCoordScroll2 "[0.000 0.000]"
+	TextureBloom2 "[0.509804 0.509804 0.509804 0.000000]"
+	TextureColor2 "materials/blends/snow_directional_00_color.tga"
+	TextureNormal2 "materials/blends/snow_normal.tga"
+	TextureReflectance2 "materials/blends/snow_directional_00_refl.tga"
+	TextureRevealMask2 "materials/blends/snow_directional_00_color_a.tga"
+	TextureSelfIllumMask2 "[0.000000 0.000000 0.000000 0.000000]"
+
+	//---- Layer 3 ----
+	g_flTexCoordRotate3 "0.000"
+	g_flTexCoordScale3 "6.000"
+	g_vColorTint3 "[0.749020 0.905882 1.000000 1.000000]"
+	g_vTexCoordOffset3 "[0.000 0.000]"
+	g_vTexCoordScroll3 "[0.000 0.000]"
+	TextureBloom3 "materials/default/default_bloom.tga"
+	TextureColor3 "materials/blends/cliff_tintable_01.tga"
+	TextureNormal3 "materials/blends/stone_normal.tga"
+	TextureReflectance3 "materials/blends/cliff_rock_000_blend.tga"
+	TextureRevealMask3 "materials/blends/cliff_tintable_01_a.tga"
+	TextureSelfIllumMask3 "materials/default/default_selfillum.tga"
+
+	//---- Normal Map ----
+	g_flBumpStrength "1.000"
+
+	Attributes
+	{
+		dota.nav.walkable "1"
+		dota.tile_path.opacity "1"
+		dota.tile_path.width "150"
+		dota.tile_path.layer2_opacity "1"
+		RepresentativeTextureWidth "1024"
+		RepresentativeTextureHeight "1024"
+		dota.nav.walkable "1.000000"
+		dota.tile_path.falloff "0.750000"
+		dota.tile_path.opacity "1.000000"
+		dota.tile_path.width "150.000000"
+		dota.tile_path.layer1_opacity "1.000000"
+		dota.tile_path.layer1_sharpness "0.400000"
+		dota.tile_path.layer2_opacity "1.000000"
+		dota.tile_path.layer2_sharpness "0.200000"
+		dota.tile_path.layer3_opacity "2.000000"
+		dota.tile_path.layer3_sharpness "0.750000"
+	}
+}

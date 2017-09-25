@@ -20,7 +20,7 @@ require("mechanics/effect_bleed")
 require("mechanics/effect_burning")
 require("mechanics/effect_chill")
 require("mechanics/effect_shock")
-require("mechanics/effect_weaken")
+require("mechanics/effect_decay")
 require("mechanics/effect_lifesteal")
 require("mechanics/effect_manashield")
 require("mechanics/effect_secondwind")
@@ -33,7 +33,7 @@ local stDamageInfoTable = {}
 
 local function ApplyDamageEffect(hVictim, hAttacker, nDamageType, fDamage, fEffectBonus)
 	local fEffectiveDamage = fDamage * (1.0 + fEffectBonus)
-	local fDamagePercentHP = math.min(1.0, (math.max(fEffectiveDamage/hVictim:GetMaxHealth(), 0)))
+	local fDamagePercentHP = math.min(1.0, (math.max(fEffectiveDamage/hVictim:GetPropertyValue(IW_PROPERTY_EFFECTIVE_HP), 0)))
 	if nDamageType == IW_DAMAGE_TYPE_CRUSH then
 		ApplyBash(hVictim, hAttacker, fDamagePercentHP)
 	elseif nDamageType == IW_DAMAGE_TYPE_SLASH then
@@ -41,13 +41,13 @@ local function ApplyDamageEffect(hVictim, hAttacker, nDamageType, fDamage, fEffe
 	elseif nDamageType == IW_DAMAGE_TYPE_PIERCE then
 		ApplyBleed(hVictim, hAttacker, fEffectiveDamage)
 	elseif nDamageType == IW_DAMAGE_TYPE_FIRE then
-		ApplyBurning(hVictim, hAttacker)
+		ApplyBurning(hVictim, hAttacker, fDamagePercentHP)
 	elseif nDamageType == IW_DAMAGE_TYPE_COLD then
 		ApplyChill(hVictim, hAttacker, fDamagePercentHP)
 	elseif nDamageType == IW_DAMAGE_TYPE_LIGHTNING then
-		ApplyShock(hVictim, hAttacker)
+		ApplyShock(hVictim, hAttacker, fDamagePercentHP)
 	elseif nDamageType == IW_DAMAGE_TYPE_DEATH then
-		ApplyWeaken(hVictim, hAttacker, fDamagePercentHP)
+		ApplyDecay(hVictim, hAttacker, fDamagePercentHP)
 	end
 end
 
@@ -140,19 +140,21 @@ function DealPrimaryDamage(self, keys)
 					hVictim:DetectEntity(hAttacker, IW_COMBAT_LINGER_TIME)
 					hVictim:AddThreat(hAttacker, fDamageAmount * fThreatMultiplier, true)
 				end
-				CreateDamageVisuals(hVictim, nDamageType, bIsCrit)
 				
-				if hVictim:GetHealth() > 0 then
-					hVictim:ModifyHealth(math.max(0, hVictim:GetHealth() - fDamageAmount), hAttacker, true, 0)
-					hVictim:SpendStamina(0)
-					if hVictim:GetHealth() <= 0 then
-						local tKillInfoTable = 
-						{
-							attacker = hAttacker,
-							victim = hVictim,
-						}
-						hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_KILL, tKillInfoTable)
-						hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DEATH, tKillInfoTable)
+				if not bit32.btest(hVictim:GetUnitFlags(), IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE) then
+					CreateDamageVisuals(hVictim, nDamageType, bIsCrit)
+					if hVictim:GetHealth() > 0 then 
+						hVictim:ModifyHealth(math.max(0, hVictim:GetHealth() - fDamageAmount), hAttacker, true, 0)
+						hVictim:SpendStamina(0)
+						if hVictim:GetHealth() <= 0 then
+							local tKillInfoTable = 
+							{
+								attacker = hAttacker,
+								victim = hVictim,
+							}
+							hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_KILL, tKillInfoTable)
+							hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DEATH, tKillInfoTable)
+						end
 					end
 				end
 				

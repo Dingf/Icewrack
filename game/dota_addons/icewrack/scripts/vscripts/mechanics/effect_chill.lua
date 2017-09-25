@@ -1,8 +1,8 @@
 require("mechanics/effect_freeze")
 
 function ApplyChill(hVictim, hAttacker, fDamagePercentHP)
-	local fBaseDuration = 20.0 * fDamagePercentHP
-	if fDamagePercentHP > 0.05 then
+	local fBaseDuration = 10.0 * fDamagePercentHP
+	if fDamagePercentHP > 0.1 then
 		local hWetModifier = hVictim:FindModifierByName("modifier_status_wet")
 		if hWetModifier then
 			ApplyFreeze(hVictim, hAttacker, fDamagePercentHP)

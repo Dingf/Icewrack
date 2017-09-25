@@ -14,19 +14,19 @@
 
 	"3"
 	{
-		"Position"		"2750 0 512"
+		"Position"		"2750 0 0"
 		"Forward"		"-1 -1 0"
 	}
 
 	"4"
 	{
-		"Position"		"2720 -2784 512"
+		"Position"		"2720 -2784 0"
 		"Forward"		"-1 0.5 0"
 	}
 
 	"5"
 	{
-		"Position"		"3400 -2100 512"
+		"Position"		"3400 -2100 0"
 		"Forward"		"0 -1 0"
 	}
 
@@ -57,6 +57,69 @@
 	{
 		"Position"		"1120 2080 0"
 		"Forward"		"1 -1 0"
+	}
+
+	"100"
+	{
+		"Position"		"1088 -1184 1024"
+		"Forward"		"1 -1 0"
+	}
+
+	"101"
+	{
+		"Position"		"1000 -1152 1024"
+		"Forward"		"1 -1 0"
+	}
+
+	"102"
+	{
+		"Position"		"832 -1084 1024"
+		"Forward"		"0.4 1 0"
+	}
+
+	"103"
+	{
+		"Position"		"-784 416 1000"
+		"Forward"		"1 0.15 -0.3"
+	}
+
+	"104"
+	{
+		"Position"		"-1744 1104 984"
+		"Forward"		"1 0.8 0.3"
+	}
+
+	"105"
+	{
+		"Position"		"1392 98 956"
+		"Forward"		"1 0 0"
+
+		"Modifiers"
+		{
+			"iw_campfire_dummy_buff:modifier_iw_campfire_dummy_buff_burning"	{}
+		}
+	}
+
+	"106"
+	{
+		"Position"		"-64 640 956"
+		"Forward"		"1 0 0"
+
+		"Modifiers"
+		{
+			"iw_campfire_dummy_buff:modifier_iw_campfire_dummy_buff_burning"	{}
+		}
+	}
+
+	"107"
+	{
+		"Position"		"2435 -1848 980"
+		"Forward"		"1 0 0"
+
+		"Modifiers"
+		{
+			"iw_campfire_dummy_buff:modifier_iw_campfire_dummy_buff_burning"	{}
+		}
 	}
 
 

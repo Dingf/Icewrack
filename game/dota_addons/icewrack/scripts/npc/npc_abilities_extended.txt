@@ -7,7 +7,7 @@
 	"status_burning"	{}
 	"status_chill"		{}
 	"status_frozen"		{}
-	"status_weaken"		{}
+	"status_decay"		{}
 	"status_wet"		{}
 
 
@@ -244,6 +244,11 @@
 
 		"ManaCost"		"80"
 	}
+
+	"iw_campfire_dummy_buff"	{}
+
+
+
 
 	"iw_warmth"
 	{

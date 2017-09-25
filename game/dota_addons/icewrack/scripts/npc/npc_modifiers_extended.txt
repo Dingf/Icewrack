@@ -415,73 +415,28 @@
 		}
 	}
 
-	"status_weaken"
+	"status_decay"
 	{
-		"modifier_status_weaken"
+		"modifier_status_decay"
 		{
+			"ScriptFile"			"scripts/vscripts/mechanics/effect_decay.lua"
+
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
 			"Duration"			"10.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_WEAKEN"
+			"StatusEffect"			"IW_STATUS_EFFECT_DECAY"
 
-			"VisualStatus"			"particles/status_fx/status_effect_iw_weaken.vpcf"
+			"VisualStatus"			"particles/status_fx/status_effect_iw_decay.vpcf"
 
 			"Properties"
 			{
-				"IW_PROPERTY_DAMAGE_MULTI"	"50"
-				"IW_PROPERTY_HEAL_MULTI"	"-50"
+				"IW_PROPERTY_HEAL_MULTI"			"%heal_effectiveness"
 			}
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"
 			{
-				"MODIFIER_PROPERTY_TOOLTIP"	"50"
-			}
-			"DatadrivenEvents"		{}
-		}
-
-		"modifier_status_weaken_elite"
-		{
-			"IsDebuff"			"1"
-			"IsDispellable"			"1"
-			"Duration"			"10.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_WEAKEN"
-
-			"VisualStatus"			"particles/status_fx/status_effect_iw_weaken.vpcf"
-
-			"Properties"
-			{
-				"IW_PROPERTY_DAMAGE_MULTI"	"20"
-				"IW_PROPERTY_HEAL_MULTI"	"-20"
-			}
-			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_TOOLTIP"	"20"
-			}
-			"DatadrivenEvents"		{}
-		}
-
-		"modifier_status_weaken_boss"
-		{
-			"IsDebuff"			"1"
-			"IsDispellable"			"1"
-			"Duration"			"10.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_WEAKEN"
-
-			"VisualStatus"			"particles/status_fx/status_effect_iw_weaken.vpcf"
-
-			"Properties"
-			{
-				"IW_PROPERTY_DAMAGE_MULTI"	"10"
-				"IW_PROPERTY_HEAL_MULTI"	"-10"
-			}
-			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_TOOLTIP"	"10"
+				"MODIFIER_PROPERTY_EXTRA_HEALTH_PERCENTAGE"	"%health_percent"
 			}
 			"DatadrivenEvents"		{}
 		}
@@ -1027,6 +982,56 @@
 			"DatadrivenEvents" 	{}
 		}
 	}
+
+	"iw_campfire_dummy_buff"
+	{
+		"modifier_iw_campfire_dummy_buff"
+		{
+			"IsHidden"			"1"
+			"ScriptFile"			"scripts/vscripts/abilities/misc/modifier_iw_campfire_dummy_buff.lua"
+
+			"Properties"
+			{
+				"IW_PROPERTY_AVOID_BASH"	"100"
+				"IW_PROPERTY_AVOID_MAIM"	"100"
+				"IW_PROPERTY_AVOID_BLEED"	"100"
+				"IW_PROPERTY_AVOID_BURN"	"100"
+				"IW_PROPERTY_AVOID_CHILL"	"100"
+				"IW_PROPERTY_AVOID_SHOCK"	"100"
+				"IW_PROPERTY_AVOID_WEAKEN"	"100"
+				"IW_PROPERTY_AVOID_CRIT"	"100"
+			}
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_ATTACK_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_NO_UNIT_COLLISION"		"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_PROVIDES_VISION"		"MODIFIER_STATE_VALUE_DISABLED"
+			}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 		{}
+		}
+
+		"modifier_iw_campfire_dummy_buff_burning"
+		{
+			"ScriptFile"			"scripts/vscripts/abilities/misc/modifier_iw_campfire_dummy_buff_burning.lua"
+
+			"StatusEffect"			"IW_STATUS_EFFECT_BURNING"
+
+			"VisualEffect"			"particles/world_environmental_fx/fire_camp_02.vpcf"
+			"VisualAttachType"		"PATTACH_ABSORIGIN_FOLLOW"
+			"SoundEffect"			"Icewrack.BurningLoop"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"		{}
+			"DatadrivenEvents" 		{}
+		}
+	}
+
+
 
 	"iw_warmth"
 	{

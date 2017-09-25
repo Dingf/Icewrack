@@ -28,10 +28,10 @@ stIcewrackPropertyEnum =
 	IW_PROPERTY_ATTR_STR_FLAT = 1,       IW_PROPERTY_ATTR_END_FLAT = 2,       IW_PROPERTY_ATTR_AGI_FLAT = 3,       IW_PROPERTY_ATTR_CUN_FLAT = 4,
 	IW_PROPERTY_ATTR_INT_FLAT = 5,       IW_PROPERTY_ATTR_WIS_FLAT = 6,       IW_PROPERTY_ATTR_STR_PCT = 7,        IW_PROPERTY_ATTR_END_PCT = 8,
 	IW_PROPERTY_ATTR_AGI_PCT = 9,        IW_PROPERTY_ATTR_CUN_PCT = 10,       IW_PROPERTY_ATTR_INT_PCT = 11,       IW_PROPERTY_ATTR_WIS_PCT = 12,
-	IW_PROPERTY_MAX_HP_PCT = 13,         IW_PROPERTY_MAX_MP_PCT = 14,         IW_PROPERTY_MAX_SP_FLAT = 15,        IW_PROPERTY_MAX_SP_PCT = 16,
-	IW_PROPERTY_SP_REGEN_FLAT = 17,      IW_PROPERTY_SP_REGEN_PCT = 18,       IW_PROPERTY_MAX_SP_REGEN = 19,       IW_PROPERTY_HP_REGEN_FLAT = 20,
-	IW_PROPERTY_HP_REGEN_PCT = 21,       IW_PROPERTY_MAX_HP_REGEN = 22,       IW_PROPERTY_MP_REGEN_FLAT = 23,      IW_PROPERTY_MP_REGEN_PCT = 24,
-	IW_PROPERTY_MAX_MP_REGEN = 25,       IW_PROPERTY_ATTACK_RANGE = 26,       IW_PROPERTY_BASE_ATTACK_FLAT = 27,   IW_PROPERTY_BASE_ATTACK_PCT = 28,
+	IW_PROPERTY_MAX_SP_FLAT = 13,        IW_PROPERTY_SP_REGEN_FLAT = 14,      IW_PROPERTY_SP_REGEN_PCT = 15,       IW_PROPERTY_MAX_SP_REGEN = 16,
+	IW_PROPERTY_HP_REGEN_FLAT = 17,      IW_PROPERTY_HP_REGEN_PCT = 18,       IW_PROPERTY_MAX_HP_REGEN = 19,       IW_PROPERTY_MP_REGEN_FLAT = 20,
+	IW_PROPERTY_MP_REGEN_PCT = 21,       IW_PROPERTY_MAX_MP_REGEN = 22,       IW_PROPERTY_VISION_RANGE_FLAT = 23,  IW_PROPERTY_VISION_RANGE_PCT = 24,
+	IW_PROPERTY_EFFECTIVE_HP = 25,       IW_PROPERTY_ATTACK_RANGE = 26,       IW_PROPERTY_BASE_ATTACK_FLAT = 27,   IW_PROPERTY_BASE_ATTACK_PCT = 28,
 	IW_PROPERTY_ATTACK_HP_FLAT = 29,     IW_PROPERTY_ATTACK_HP_PCT = 30,      IW_PROPERTY_ATTACK_MP_FLAT = 31,     IW_PROPERTY_ATTACK_MP_PCT = 32,
 	IW_PROPERTY_ATTACK_SP_FLAT = 33,     IW_PROPERTY_ATTACK_SP_PCT = 34,      IW_PROPERTY_RUN_SP_FLAT = 35,        IW_PROPERTY_RUN_SP_PCT = 36,         
 	IW_PROPERTY_MOVE_SPEED_FLAT = 37,    IW_PROPERTY_MOVE_SPEED_PCT = 38,     IW_PROPERTY_CAST_SPEED = 39,         IW_PROPERTY_SPELLPOWER = 40,
@@ -45,15 +45,15 @@ stIcewrackPropertyEnum =
 	IW_PROPERTY_BUFF_SELF = 69,          IW_PROPERTY_DEBUFF_SELF = 70,        IW_PROPERTY_BUFF_OTHER = 71,         IW_PROPERTY_DEBUFF_OTHER = 72,
 	IW_PROPERTY_HEAL_MULTI = 73,         IW_PROPERTY_DAMAGE_MULTI = 74,       IW_PROPERTY_FATIGUE_MULTI = 75,      IW_PROPERTY_DRAIN_MULTI = 76,
 	IW_PROPERTY_STATUS_STUN = 77,        IW_PROPERTY_STATUS_SLOW = 78,        IW_PROPERTY_STATUS_SILENCE = 79,     IW_PROPERTY_STATUS_ROOT = 80,
-	IW_PROPERTY_STATUS_DISARM = 81,      IW_PROPERTY_STATUS_PACIFY = 82,      IW_PROPERTY_STATUS_WEAKEN = 83,      IW_PROPERTY_STATUS_SLEEP = 84,
+	IW_PROPERTY_STATUS_DISARM = 81,      IW_PROPERTY_STATUS_PACIFY = 82,      IW_PROPERTY_STATUS_DECAY = 83,       IW_PROPERTY_STATUS_SLEEP = 84,
 	IW_PROPERTY_STATUS_FEAR = 85,        IW_PROPERTY_STATUS_CHARM = 86,       IW_PROPERTY_STATUS_ENRAGE = 87,      IW_PROPERTY_STATUS_EXHAUST = 88,
 	IW_PROPERTY_STATUS_FREEZE = 89,      IW_PROPERTY_STATUS_CHILL = 90,       IW_PROPERTY_STATUS_WET = 91,         IW_PROPERTY_STATUS_BURNING = 92,
 	IW_PROPERTY_STATUS_POISON = 93,      IW_PROPERTY_STATUS_BLEED = 94,       IW_PROPERTY_STATUS_BLIND = 95,       IW_PROPERTY_STATUS_PETRIFY = 96,
 	IW_PROPERTY_DEFENSE_PHYS = 97,       IW_PROPERTY_DEFENSE_MAGIC = 98,      IW_PROPERTY_AVOID_BASH = 99,         IW_PROPERTY_AVOID_MAIM = 100,
 	IW_PROPERTY_AVOID_BLEED = 101,       IW_PROPERTY_AVOID_BURN = 102,        IW_PROPERTY_AVOID_CHILL = 103,       IW_PROPERTY_AVOID_SHOCK = 104,
-	IW_PROPERTY_AVOID_WEAKEN = 105,      IW_PROPERTY_AVOID_CRIT = 106,        IW_PROPERTY_CHANCE_BASH = 107,       IW_PROPERTY_CHANCE_MAIM = 108,
+	IW_PROPERTY_AVOID_DECAY = 105,       IW_PROPERTY_AVOID_CRIT = 106,        IW_PROPERTY_CHANCE_BASH = 107,       IW_PROPERTY_CHANCE_MAIM = 108,
 	IW_PROPERTY_CHANCE_BLEED = 109,      IW_PROPERTY_CHANCE_BURN = 110,       IW_PROPERTY_CHANCE_CHILL = 111,      IW_PROPERTY_CHANCE_SHOCK = 112,
-	IW_PROPERTY_CHANCE_WEAKEN = 113,     IW_PROPERTY_DMG_PURE_BASE = 114,     IW_PROPERTY_DMG_CRUSH_BASE = 115,    IW_PROPERTY_DMG_SLASH_BASE = 116,
+	IW_PROPERTY_CHANCE_DECAY = 113,      IW_PROPERTY_DMG_PURE_BASE = 114,     IW_PROPERTY_DMG_CRUSH_BASE = 115,    IW_PROPERTY_DMG_SLASH_BASE = 116,
 	IW_PROPERTY_DMG_PIERCE_BASE = 117,   IW_PROPERTY_DMG_FIRE_BASE = 118,     IW_PROPERTY_DMG_COLD_BASE = 119,     IW_PROPERTY_DMG_LIGHT_BASE = 120,
 	IW_PROPERTY_DMG_DEATH_BASE = 121,    IW_PROPERTY_DMG_PURE_VAR = 122,      IW_PROPERTY_DMG_CRUSH_VAR = 123,     IW_PROPERTY_DMG_SLASH_VAR = 124,
 	IW_PROPERTY_DMG_PIERCE_VAR = 125,    IW_PROPERTY_DMG_FIRE_VAR = 126,      IW_PROPERTY_DMG_COLD_VAR = 127,      IW_PROPERTY_DMG_LIGHT_VAR = 128,
@@ -70,7 +70,7 @@ stIcewrackPropertyEnum =
 	IW_PROPERTY_MOVE_NOISE_FLAT = 169,   IW_PROPERTY_MOVE_NOISE_PCT = 170,    IW_PROPERTY_CAST_NOISE_FLAT = 171,   IW_PROPERTY_CAST_NOISE_PCT = 172,
 	IW_PROPERTY_DARK_SIGHT_PCT = 173,    IW_PROPERTY_VISIBILITY_FLAT = 174,   IW_PROPERTY_VISIBILITY_PCT = 175,    IW_PROPERTY_BEHAVIOR_AGGRO = 176,
 	IW_PROPERTY_BEHAVIOR_COOP = 177,     IW_PROPERTY_BEHAVIOR_SAFETY = 178,   IW_PROPERTY_CORPSE_TIME = 179,       IW_PROPERTY_ATK_SPEED_DUMMY = 180,
-	IW_PROPERTY_SP_REGEN_TIME_PCT = 181, IW_PROPERTY_THREAT_MULTI = 182,      IW_PROPERTY_VISION_RANGE_FLAT = 183, IW_PROPERTY_VISION_RANGE_PCT = 184,
+	IW_PROPERTY_SP_REGEN_TIME_PCT = 181, IW_PROPERTY_THREAT_MULTI = 182,      
 }
 
 for k,v in pairs(stInstanceTypeEnum) do _G[k] = v end
@@ -81,10 +81,10 @@ stIcewrackPropertiesName =
 	StrengthFlat = 1,                  EnduranceFlat = 2,                 AgilityFlat = 3,                   CunningFlat = 4,
 	IntelligenceFlat = 5,              WisdomFlat = 6,                    StrengthPercent = 7,               EndurancePercent = 8,
 	AgilityPercent = 9,                CunningPercent = 10,               IntelligencePercent = 11,          WisdomPercent = 12,
-	MaxHealthPercent = 13,             MaxManaPercent = 14,               MaxStaminaFlat = 15,               MaxStaminaPercent = 16,
-	StaminaRegenFlat = 17,             StaminaRegenPercent = 18,          MaxStaminaPercentRegen = 19,       HealthRegenFlat = 20,
-	HealthRegenPercent = 21,           MaxHealthPercentRegen = 22,        ManaRegenFlat = 23,                ManaRegenPercent = 24,
-	MaxManaPercentRegen = 25,          AttackRange = 26,                  BaseAttackTimeFlat = 27,           BaseAttackTimePercent = 28,
+	MaxStaminaFlat = 13,               StaminaRegenFlat = 14,             StaminaRegenPercent = 15,          MaxStaminaPercentRegen = 16,
+	HealthRegenFlat = 17,              HealthRegenPercent = 18,           MaxHealthPercentRegen = 19,        ManaRegenFlat = 20,
+	ManaRegenPercent = 21,             MaxManaPercentRegen = 22,          VisionRangeFlat = 23,              VisionRangePercent = 24,
+	EffectiveHealth = 25,              AttackRange = 26,                  BaseAttackTimeFlat = 27,           BaseAttackTimePercent = 28,
 	AttackCostHealthFlat = 29,         AttackCostHealthPercent = 30,      AttackCostManaPercent = 31,        AttackCostManaPercent = 32,
 	AttackCostStaminaFlat = 33,        AttackCostStaminaPercent = 34,     RunCostStaminaFlat = 35,           RunCostStaminaPercent = 36,
 	MovementSpeedFlat = 37,            MovementSpeedPercent = 38,         CastSpeed = 39,                    Spellpower = 40,
@@ -98,15 +98,15 @@ stIcewrackPropertiesName =
 	BuffDurationSelf = 69,             DebuffDurationSelf = 70,           BuffDurationOther = 71,            DebuffDurationOther = 72,
 	HealMultiplier = 73,               DamageMultiplier = 74,             FatigueMultiplier = 75,            DrainMultiplier = 76,
 	EffectDurationStun = 77,           EffectDurationSlow = 78,           EffectDurationSilence = 79,        EffectDurationRoot = 80,
-	EffectDurationDisarm = 81,         EffectDurationPacify = 82,         EffectDurationWeaken = 83,         EffectDurationSleep = 84,
+	EffectDurationDisarm = 81,         EffectDurationPacify = 82,         EffectDurationDecay = 83,          EffectDurationSleep = 84,
 	EffectDurationFear = 85,           EffectDurationCharm = 86,          EffectDurationEnrage = 87,         EffectDurationExhaustion = 88,
 	EffectDurationFreeze = 89,         EffectDurationChill = 90,          EffectDurationWet = 91,            EffectDurationBurning = 92,
 	EffectDurationPoison = 93,         EffectDurationBleed = 94,          EffectDurationBlind = 95,          EffectDurationPetrify = 96,
 	EffectDefensePhysical = 97,        EffectDefenseMagic = 98,           EffectAvoidBash = 99,              EffectAvoidMaim = 100,
 	EffectAvoidBleed = 101,            EffectAvoidBurn = 102,             EffectAvoidChill = 103,            EffectAvoidShock = 104,
-	EffectAvoidWeaken = 105,           EffectAvoidCrit = 106,             EffectChanceBash = 107,            EffectChanceMaim = 108,
+	EffectAvoidDecay = 105,            EffectAvoidCrit = 106,             EffectChanceBash = 107,            EffectChanceMaim = 108,
 	EffectChanceBleed = 109,           EffectChanceBurn = 110,            EffectChanceChill = 111,           EffectChanceShock = 112,
-	EffectChanceWeaken = 113,          DamagePureBase = 114,              DamageCrushBase = 115,             DamageSlashBase = 116,
+	EffectChanceDecay = 113,           DamagePureBase = 114,              DamageCrushBase = 115,             DamageSlashBase = 116,
 	DamagePierceBase = 117,            DamageFireBase = 118,              DamageColdBase = 119,              DamageLightningBase = 120,
 	DamageDeathBase = 121,             DamagePureVar = 122,               DamageCrushVar = 123,              DamageSlashVar = 124,
 	DamagePierceVar = 125,             DamageFireVar = 126,               DamageColdVar = 127,               DamageLightningVar = 128,
@@ -123,7 +123,7 @@ stIcewrackPropertiesName =
 	MovementNoiseFlat = 169,           MovementNoisePercent = 170,        CastNoiseFlat = 171,               CastNoisePercent = 172,
 	DarkSightPercent = 173,            VisibilityFlat = 174,              VisibilityPercent = 175,           BehaviorAggressiveness = 176,
 	BehaviorCooperativeness = 177,     BehaviorSafety = 178,              CorpseTime = 179,                  AttackSpeedDummy = 180,
-	StaminaRegenTimePercent = 181,     ThreatMultiplier = 182,            VisionRangeFlat = 183,             VisionRangePercent = 184,
+	StaminaRegenTimePercent = 181,     ThreatMultiplier = 182,            
 }
 
 stIcewrackPropertyValues = {}
@@ -305,7 +305,7 @@ function CInstance:GetBaseAttackTime()
 end
 
 function CInstance:GetMaxStamina()
-    return (self:GetPropertyValue(IW_PROPERTY_MAX_SP_FLAT) + (self:GetAttributeValue(IW_ATTRIBUTE_ENDURANCE) * 1.0)) * (1.0 + self:GetPropertyValue(IW_PROPERTY_MAX_SP_PCT)/100.0)
+    return (self:GetPropertyValue(IW_PROPERTY_MAX_SP_FLAT) + (self:GetAttributeValue(IW_ATTRIBUTE_ENDURANCE) * 1.0))
 end
 
 function CInstance:GetStaminaRegen()

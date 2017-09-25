@@ -417,9 +417,9 @@ function CInventory:OnUse(args)
 		local hItem = EntIndexToHScript(args.itemindex)
 		local hInventoryUnit = hInventory._tItemList[hItem]
 		if hItem and hInventoryUnit then
-			if not hEntity:HasItemInInventory(hItem:GetAbilityName()) then
+			--[[if not hEntity:HasItemInInventory(hItem:GetAbilityName()) then
 				hEntity:AddItem(hItem)
-			end
+			end]]
 			CustomGameEventManager:Send_ServerToAllClients("iw_inventory_use_item", args)
 		end
 	end
@@ -432,7 +432,7 @@ function CInventory:OnUseFinish(args)
 	if IsValidExtendedEntity(hEntity) and hInventory then
 		local hItem = EntIndexToHScript(args.itemindex)
 		if hItem and hInventory._tItemList[hItem] then
-			if hEntity:GetCurrentAction() == hItem:GetAbilityName() then
+			--[[if hEntity:GetCurrentAction() == hItem:GetAbilityName() then
 				hEntity:SetThink(function()
 					if not hItem or hItem:IsNull() then return nil
 					elseif bit32.btest(hItem:GetItemFlags(), IW_ITEM_FLAG_QUEST) then
@@ -451,7 +451,7 @@ function CInventory:OnUseFinish(args)
 				hEntity:DropItemAtPositionImmediate(hItem, hEntity:GetAbsOrigin())
 				local hContainer = hItem:GetContainer()
 				hContainer:RemoveSelf()
-			end
+			end]]
 		end
 	end
 end
@@ -486,7 +486,6 @@ function CInventory:OnEntityLoad(args)
 		LogMessage("Failed to retrieve entity with enindex \"" .. args.entindex .. "\"", LOG_SEVERITY_ERROR)
 	end
 end
-
 
 CustomGameEventManager:RegisterListener("iw_inventory_equip_item", Dynamic_Wrap(CInventory, "OnEquip"))
 CustomGameEventManager:RegisterListener("iw_inventory_drop_item", Dynamic_Wrap(CInventory, "OnDrop"))

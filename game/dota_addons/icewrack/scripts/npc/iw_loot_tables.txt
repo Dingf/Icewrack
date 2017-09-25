@@ -9,6 +9,13 @@
 			"Max"		"1"
 		}
 
+		"item_test_potion"
+		{
+			"Weight"	"10"
+			"Min"		"1"
+			"Max"		"1"
+		}
+
 		"item_test2"
 		{
 			"Weight"	"0"

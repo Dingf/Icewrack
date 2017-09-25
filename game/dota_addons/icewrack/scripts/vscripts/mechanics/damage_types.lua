@@ -44,7 +44,7 @@
     
     DEATH:
 		*Medium damage, as well as damage over time
-        *Critical strikes apply Weaken, increasing incoming damage by 50/25/10%.
+        *Critical strikes apply Decay, temporarily reducing maximum health and causing all healing effects to deal secondary Death damage instead.
 		*Poison abilities deal secondary Death damage
 ]]
 
@@ -70,7 +70,7 @@ stIcewrackDamageEffectEnum =
 	IW_DAMAGE_EFFECT_BURN = 4,
 	IW_DAMAGE_EFFECT_CHILL = 5,
 	IW_DAMAGE_EFFECT_SHOCK = 6,
-	IW_DAMAGE_EFFECT_WEAKEN = 7,
+	IW_DAMAGE_EFFECT_DECAY = 7,
 }
 
 for k,v in pairs(stIcewrackDamageTypeEnum) do _G[k] = v end
@@ -95,5 +95,5 @@ stIcewrackDamageEffectValues =
 	[IW_DAMAGE_EFFECT_BURN] = true,
 	[IW_DAMAGE_EFFECT_CHILL] = true,
 	[IW_DAMAGE_EFFECT_SHOCK] = true,
-	[IW_DAMAGE_EFFECT_WEAKEN] = true,
+	[IW_DAMAGE_EFFECT_DECAY] = true,
 }

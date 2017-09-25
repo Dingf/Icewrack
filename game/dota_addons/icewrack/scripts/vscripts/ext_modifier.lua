@@ -25,11 +25,26 @@ CExtModifier = setmetatable({}, { __call =
 		end
 		setmetatable(hModifier, tExtIndexTable)
 		
-		local szAbilityName = hModifier:GetAbility():GetName()
 		local szModifierName = hModifier:GetName()
+		local szAbilityName = nil
+		local hAbility = hModifier:GetAbility()
+		local tExtModifierTemplate = nil
+		if hAbility then
+			szAbilityName = hModifier:GetAbility():GetName()
+			local tExtAbilityTemplate = stExtModifierData[szAbilityName] or {}
+			tExtModifierTemplate = tExtAbilityTemplate[szModifierName]
+		else
+			for k,v in pairs(stExtModifierData) do
+				for k2,v2 in pairs(v) do
+					if k2 == szModifierName then
+						szAbilityName = k
+						tExtModifierTemplate = v2
+						break
+					end
+				end
+			end
+		end
 		
-		local tExtAbilityTemplate = stExtModifierData[szAbilityName] or {}
-		local tExtModifierTemplate = tExtAbilityTemplate[szModifierName]
 		LogAssert(tExtModifierTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, szModifierName)
 		
 		hModifier._bIsExtendedModifier = true

@@ -2,7 +2,7 @@ require("mechanics/effect_shatter")
 
 function ApplyBash(hVictim, hAttacker, fDamagePercentHP)
 	local fBaseDuration = 5.0 * fDamagePercentHP
-	if fDamagePercentHP > 0.05 then
+	if fDamagePercentHP > 0.1 then
 		local hModifier = hVictim:FindModifierByName("modifier_status_bash")
 		if hModifier then
 			local fRealDuration = fBaseDuration * hModifier:GetRealDurationMultiplier(hVictim)

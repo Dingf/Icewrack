@@ -33,52 +33,52 @@
 .DialogueBackground
 {
 	width: 100%;
-	height: 232px;
+	height: 256px;
 	background-color: #000000;
 }
 
 .DialogueContentContainer
 {
 	width: 100%;
-	height: 22%;
+	height: 25%;
 	vertical-align: bottom;
 	flow-children: right;
 }
 
 .DialogueSpeakerContainer
 {
-	width: 240px;
-	vertical-align: center;
-	margin-bottom: 16px;
+	width: 192px;
+	margin-top: 32px;
 }
 
 .DialoguePortraitContainer
 {
 	height: fit-children;
 	width: fit-children;
-	horizontal-align: center;
+	horizontal-align: right;
 	vertical-align: center;
 }
 
 .DialoguePortrait
 {
-	width: 160px;
-	height: 160px;
+	width: 144px;
+	height: 192px;
 }
 
 .DialogueName
 {
 	color: #ffffffff;
-	font-size: 36;
+	font-size: 30;
 	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
-	margin-bottom: 12px;
-	margin-left: 16px;
+	margin-bottom: 8px;
+	margin-left: 32px;
+	margin-right: 16px;
 }
 
 .DialogueTextContainer
 {
 	width: fill-parent-flow(1.0);
-	height: 85%;
+	height: 224px;
 	vertical-align: center;
 	margin-top: 16px;
 	flow-children: down;
@@ -87,14 +87,25 @@
 .DialogueText
 {
 	color: #ffffff80;
-	font-size: 24;
+	font-size: 22;
 	font-family: Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
 	height: 100%;
-	margin-left: 16px;
+	margin-left: 32px;
 	margin-right: 16px;
 }
 
-.DialogueDivider
+.DialogueTextDivider
+{
+	background-color: gradient(linear, 0% 0%, 100% 0%, from(#ffffffff), to(#ffffff00));
+	width: 100%;
+	height: 3px;
+	opacity: 0.75;
+	margin-left: 32px;
+	margin-bottom: 8px;
+	margin-right: 16px;
+}
+
+.DialogueSelector
 {
 	vertical-align: center;
 	margin-top: 8px;
@@ -104,9 +115,8 @@
 
 .DialogueOptionContainer
 {
-	width: 25%;
+	width: 30%;
 	height: 90%;
-	background-color: #000000;
 	vertical-align: center;
 	margin-top: 8px;
 }
@@ -132,7 +142,7 @@
 .DialogueOptionScrollContainer
 {
 	width: 100%;
-	height: 192px;
+	height: 224px;
 	vertical-align: center;
 	background-color: #000000;
 	overflow: clip;

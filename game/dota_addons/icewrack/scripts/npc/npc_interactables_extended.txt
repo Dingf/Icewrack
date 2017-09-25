@@ -11,6 +11,77 @@
 		"ScriptFile"		"scripts/vscripts/units/npc_iw_bounty_hunter_trapjaw.lua"
 	}
 
+	"prop_iw_snowy_crate_01"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_CONTAINER"
+		"InteractRange"		"64"
+
+		"LootList"		"test"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+
+	"prop_iw_snowy_crate_02"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_CONTAINER"
+		"InteractRange"		"64"
+
+		"LootList"		"test"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+
+	"prop_iw_snowy_crate_03"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_CONTAINER"
+		"InteractRange"		"64"
+
+		"LootList"		"test"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+
+	"prop_iw_snowy_barrel_01"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_CONTAINER"
+		"InteractRange"		"64"
+
+		"LootList"		"test"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+
+	"prop_iw_snowy_barrel_02"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_CONTAINER"
+		"InteractRange"		"64"
+
+		"LootList"		"test"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+
+	"prop_iw_warlock_crate"
+	{
+		"Type"			"IW_INTERACTABLE_TYPE_CONTAINER"
+		"InteractRange"		"64"
+
+		"LootList"		"test"
+
+		"Precondition"		""
+		"Postcondition"		""
+	}
+
+
+
+
+
+
 	"prop_iw_anvil"
 	{
 		"Type"			"IW_INTERACTABLE_TYPE_WORLD_OBJECT"

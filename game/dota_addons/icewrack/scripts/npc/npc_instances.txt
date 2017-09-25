@@ -91,7 +91,62 @@
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
-	
+	"100"
+	{
+		"Name"			"prop_iw_snowy_barrel_01"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_CONTAINER"
+	}
+
+	"101"
+	{
+		"Name"			"prop_iw_snowy_barrel_01"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_CONTAINER"
+	}
+
+	"102"
+	{
+		"Name"			"prop_iw_snowy_barrel_02"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_CONTAINER"
+	}
+
+	"103"
+	{
+		"Name"			"prop_iw_snowy_crate_03"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_CONTAINER"
+	}
+
+	"104"
+	{
+		"Name"			"prop_iw_warlock_crate"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_CONTAINER"
+	}
+
+	"105"
+	{
+		"Name"			"npc_iw_campfire_dummy"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"106"
+	{
+		"Name"			"npc_iw_campfire_dummy"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
+	"107"
+	{
+		"Name"			"npc_iw_campfire_dummy"
+		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Type"			"IW_INSTANCE_EXT_ENTITY"
+	}
+
 
 	
 

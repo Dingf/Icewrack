@@ -159,7 +159,7 @@
 		}
 	}
 
-	"status_weaken"
+	"status_decay"
 	{
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
@@ -168,9 +168,7 @@
 
 		"Modifiers"
 		{
-			"modifier_status_weaken"			"IW_MODIFIER_NO_TRIGGER"
-			"modifier_status_weaken_elite"			"IW_MODIFIER_NO_TRIGGER"
-			"modifier_status_weaken_boss"			"IW_MODIFIER_NO_TRIGGER"
+			"modifier_status_decay"			"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
@@ -1062,6 +1060,20 @@
 		}
 	}
 
+	"iw_campfire_dummy_buff"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_iw_campfire_dummy_buff"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_campfire_dummy_buff_burning"		"IW_MODIFIER_NO_TRIGGER"
+		}
+	}
+
 	"iw_warmth"
 	{
 		"BaseClass"				"ability_lua"
@@ -1111,6 +1123,9 @@
 			
 		}
 	}
+
+
+
 
 	"iw_combo_shatter"
 	{

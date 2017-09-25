@@ -1,6 +1,6 @@
 function ApplyMaim(hVictim, hAttacker, fDamagePercentHP)
 	local fBaseDuration = 10.0 * fDamagePercentHP
-	if fDamagePercentHP > 0.05 then
+	if fDamagePercentHP > 0.1 then
 		local hModifier = hVictim:FindModifierByName("modifier_status_maim")
 		if hModifier then
 			local fRealDuration = fBaseDuration * hModifier:GetRealDurationMultiplier(hVictim)

@@ -1,6 +1,6 @@
 function ApplyFreeze(hVictim, hAttacker, fDamagePercentHP)
 	local fBaseDuration = 10.0 * fDamagePercentHP
-	if fDamagePercentHP > 0.05 then
+	if fDamagePercentHP > 0.1 then
 		hVictim:RemoveModifierByName("modifier_status_wet")
 		local hModifier = hVictim:FindModifierByName("modifier_status_frozen")
 		if hModifier then

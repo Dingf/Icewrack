@@ -41,7 +41,9 @@ function DealSecondaryDamage(self, keys)
 				end
 				fDamageAmount = math.max(0, math.floor(fDamageAmount))
 				if fDamageAmount > 0 then
-					hVictim:ModifyHealth(hVictim:GetHealth() - fDamageAmount, hAttacker, true, 0)
+					if not bit32.btest(hVictim:GetUnitFlags(), IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE) then
+						hVictim:ModifyHealth(hVictim:GetHealth() - fDamageAmount, hAttacker, true, 0)
+					end
 					bDamageResult = true
 				end
 			end

@@ -12,7 +12,7 @@ function OnDialogueOptionMouseOver()
 		else
 			fHeight += tSiblings[i].actuallayoutheight;
 	}
-	var fOffset = (68 - (fHeight + $.GetContextPanel().actuallayoutheight/2)) * GameUI.GetScaleRatio();
+	var fOffset = (78 - (fHeight + $.GetContextPanel().actuallayoutheight/2)) * GameUI.GetScaleRatio();
 	DispatchCustomEvent(hParent, "DialogueOptionScroll", { value:fOffset, immediate:false });
 }
 
@@ -42,7 +42,7 @@ function CreateDialogueOption(hParent, szName, nValue, szText)
 	{
 		$.Schedule(0.03, function()
 		{
-			var fOffset = (64 - (hPanel.actuallayoutheight/2)) * GameUI.GetScaleRatio();
+			var fOffset = (76 - (hPanel.actuallayoutheight/2)) * GameUI.GetScaleRatio();
 			DispatchCustomEvent(hParent, "DialogueOptionScroll", { value:fOffset, immediate:true });
 		});
 	}
