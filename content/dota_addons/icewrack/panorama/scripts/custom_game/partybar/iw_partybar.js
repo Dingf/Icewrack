@@ -90,6 +90,11 @@ function OnPartyInfoUpdate(szTableName, szKey, tData)
 	}
 }
 
+function Test()
+{
+	$.Msg("zzzz wtoiwjaerpoi");
+}
+
 (function()
 {
 	var hMemberContainer = $("#MemberContainer");
