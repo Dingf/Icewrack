@@ -63,10 +63,6 @@ function GlobalMouseCallback(szEventName, nValue)
 		hRoot = hRoot.GetParent();
 	}
 	
-	GameUI.SetCameraPitchMin(60);
-	GameUI.SetCameraPitchMax(60);
-	GameUI.SetCameraDistance(1600.0);
-	
 	var hWindowRoot = $.GetContextPanel().FindChildTraverse("WindowSpace");
 	var hMenuRoot = $.GetContextPanel().FindChildTraverse("MenuSpace");
 	GameUI.GetRoot = function() { return hRoot; };

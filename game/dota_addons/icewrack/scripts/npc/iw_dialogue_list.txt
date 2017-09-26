@@ -1,13 +1,4 @@
 "IcewrackDialogueDefinitions"
 {
-	"7"
-	{
-		"Nodes"			"1"
-	}
 
-	"13"
-	{
-		"InteractZone"		"dialogue_trigger_01"
-		"Nodes"			"1"
-	}
 }

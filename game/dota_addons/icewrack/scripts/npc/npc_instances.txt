@@ -3,147 +3,112 @@
 	"1"
 	{
 		"Name"			"npc_dota_hero_axe"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
 	"2"
 	{
 		"Name"			"npc_dota_hero_dragon_knight"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
 	"3"
 	{
 		"Name"			"npc_dota_hero_drow_ranger"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
 	"4"
 	{
 		"Name"			"npc_dota_hero_bounty_hunter"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 	
 	"5"
 	{
 		"Name"			"npc_dota_hero_lina"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
 	"6"
 	{
 		"Name"			"npc_dota_hero_omniknight"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
 	"7"
 	{
 		"Name"			"npc_dota_hero_legion_commander"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
 	"8"
 	{
-		"Name"			"npc_dota_hero_kunkka"
-		"Team"			"DOTA_TEAM_GOODGUYS"
-		"Type"			"IW_INSTANCE_EXT_ENTITY"
-	}
-
-	"9"
-	{
-		"Name"			"npc_dota_hero_warlock"
-		"Team"			"DOTA_TEAM_GOODGUYS"
-		"Type"			"IW_INSTANCE_EXT_ENTITY"
-	}
-
-	"10"
-	{
-		"Name"			"npc_dota_hero_crystal_maiden"
-		"Team"			"DOTA_TEAM_GOODGUYS"
-		"Type"			"IW_INSTANCE_EXT_ENTITY"
-	}
-
-	"11"
-	{
-		"Name"			"npc_dota_hero_tusk"
-		"Team"			"DOTA_TEAM_GOODGUYS"
-		"Type"			"IW_INSTANCE_EXT_ENTITY"
-	}
-
-	"12"
-	{
-		"Name"			"npc_dota_hero_alchemist"
-		"Team"			"DOTA_TEAM_GOODGUYS"
-		"Type"			"IW_INSTANCE_EXT_ENTITY"
-	}
-
-	"13"
-	{
 		"Name"			"npc_iw_blacksmith"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
 	"100"
 	{
 		"Name"			"prop_iw_snowy_barrel_01"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_CONTAINER"
 	}
 
 	"101"
 	{
 		"Name"			"prop_iw_snowy_barrel_01"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_CONTAINER"
 	}
 
 	"102"
 	{
 		"Name"			"prop_iw_snowy_barrel_02"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_CONTAINER"
 	}
 
 	"103"
 	{
 		"Name"			"prop_iw_snowy_crate_03"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_CONTAINER"
 	}
 
 	"104"
 	{
 		"Name"			"prop_iw_warlock_crate"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_CONTAINER"
 	}
 
 	"105"
 	{
 		"Name"			"npc_iw_campfire_dummy"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
 	"106"
 	{
 		"Name"			"npc_iw_campfire_dummy"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 
 	"107"
 	{
 		"Name"			"npc_iw_campfire_dummy"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"FactionMask"		"2"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 

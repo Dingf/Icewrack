@@ -1,14 +1,19 @@
 require("timer")
 require("mechanics/status_effects")
 
-
 function ApplyWet(hVictim, hAttacker)
 	hVictim:DispelModifiers(IW_STATUS_MASK_BURNING)
 	local hModifier = hVictim:FindModifierByName("modifier_status_wet")
 	if hModifier then
 		hModifier:ForceRefresh()
 	else
-		AddModifier("status_wet", "modifier_status_wet", hVictim, hAttacker, {})
+		local tModifierArgs = 
+		{
+			fire_resist = 25,
+			cold_resist = -25,
+			lightning_resist = -25,
+		}
+		AddModifier("status_wet", "modifier_status_wet", hVictim, hAttacker, tModifierArgs)
 	end
 end
 

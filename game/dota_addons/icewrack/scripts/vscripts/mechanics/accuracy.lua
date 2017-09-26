@@ -8,6 +8,8 @@ ACCURACY_PENALTY_MIN = 256		--Minimum range at which accuracy penalty is applied
 ACCURACY_PENALTY_MAX = 1800		--Maximum range at which accuracy penalty is applied; values further than this range do not receive additional penalty
 ACCURACY_PENALTY_DIFF = ACCURACY_PENALTY_MAX - ACCURACY_PENALTY_MIN
 
+--TODO: Make dodge have a multiplier based on the victim's movement speed (i.e. a 50% move speed is a 50% reduction in dodge)
+
 function PerformAccuracyCheck(hVictim, hAttacker, fBonusAccuracy)
 	local fDistance = (hVictim:GetAbsOrigin() - hAttacker:GetAbsOrigin()):Length2D()
 	local fAccuracyMultiplier = 1.0 - math.min(math.max(fDistance - ACCURACY_PENALTY_MIN, 0), ACCURACY_PENALTY_DIFF)/(ACCURACY_PENALTY_DIFF * 2)

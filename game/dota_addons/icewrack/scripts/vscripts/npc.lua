@@ -95,10 +95,10 @@ CIcewrackNPCEntity = setmetatable({}, { __call =
 			return hEntity
 		end
 		
-		if not hEntity:IsRealHero() then
-			local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
-			LogAssert(tExtEntityTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
-			
+		local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
+		LogAssert(tExtEntityTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
+		
+		if not hEntity:IsRealHero() and (not tExtEntityTemplate.NoNPC or tExtEntityTemplate.NoNPC == 0) then
 			local tBaseIndexTable = getmetatable(hEntity).__index
 			local tExtIndexTable = tIndexTableList[tBaseIndexTable]
 			if not tExtIndexTable then

@@ -18,7 +18,7 @@
 		SLASH:
 			*Physical damage sub-type
 			*Critical strikes apply Maim, which slows the target's movement speed for up to 10 seconds, based on the percentage of max.
-			HP dealt as damage
+			HP dealt as damage. Moving while Maimed causes the target to suffer additional secondary Slash damage.
 			 
 		PIERCE:
 			*Physical damage sub-type

@@ -1,5 +1,6 @@
 "use strict";
 
+//TODO: Implement back to dashboard with <Button onactivate="DOTAHUDShowDashboard() "/> etc.
 
 var MAX_PARTY_MEMBERS = 4;
 

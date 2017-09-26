@@ -64,6 +64,7 @@ function CIcewrackGameMode:InitGameMode()
     hGameModeEntity:SetUseCustomHeroLevels(true)
 	hGameModeEntity:SetAnnouncerDisabled(true)
     hGameModeEntity:SetBuybackEnabled(false)
+	hGameModeEntity:SetWeatherEffectsDisabled(true)
 	
 	hGameModeEntity:SetExecuteOrderFilter(Dynamic_Wrap(CIcewrackGameMode, "ExecuteOrderFilter"), self)
 	hGameModeEntity:SetItemAddedToInventoryFilter(Dynamic_Wrap(CIcewrackGameMode, "ItemAddedToInventoryFilter"), self)

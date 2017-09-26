@@ -44,7 +44,10 @@
 
 			"Properties"			{}
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
-			"DatadrivenStates"		{}
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_SPECIALLY_DENIABLE"	"MODIFIER_STATE_VALUE_ENABLED"
+			}
 			"DatadrivenProperties"
 			{
 				"MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE_ILLUSION"		"-100"
@@ -155,6 +158,8 @@
 	{
 		"modifier_status_maim"
 		{
+			"ScriptFile"			"scripts/vscripts/mechanics/effect_maim.lua"
+			
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
 			"Duration"			"10.0"
@@ -167,57 +172,11 @@
 			"SoundEffect"			"Icewrack.Maim"
 
 			"Properties"			{}
-			"DatadrivenAttributes"		""
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"
 			{
-				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-50"
-			}
-			"DatadrivenEvents"		{}
-		}
-
-		"modifier_status_maim_elite"
-		{
-			"IsDebuff"			"1"
-			"IsDispellable"			"1"
-			"Duration"			"10.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_SLOW"
-			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
-
-			"VisualEffect"			"particles/generic_gameplay/effect_maim.vpcf"
-			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
-			"VisualStatus"			"particles/status_fx/status_effect_iw_maim.vpcf"
-			"SoundEffect"			"Icewrack.Maim"
-
-			"Properties"			{}
-			"DatadrivenAttributes"		""
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-20"
-			}
-			"DatadrivenEvents"		{}
-		}
-
-		"modifier_status_maim_boss"
-		{
-			"IsDebuff"			"1"
-			"IsDispellable"			"1"
-			"Duration"			"10.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_SLOW"
-			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
-
-			"VisualEffect"			"particles/generic_gameplay/effect_maim.vpcf"
-			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
-			"VisualStatus"			"particles/status_fx/status_effect_iw_maim.vpcf"
-			"SoundEffect"			"Icewrack.Maim"
-
-			"Properties"			{}
-			"DatadrivenAttributes"		""
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-10"
+				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"%move_speed"
 			}
 			"DatadrivenEvents"		{}
 		}
@@ -297,8 +256,6 @@
 				}
 			}
 		}
-
-		
 	}
 
 	"status_chill"
@@ -317,72 +274,15 @@
 
 			"Properties"
 			{
-				"IW_PROPERTY_CAST_SPEED"	"-100"
+				"IW_PROPERTY_CAST_SPEED"	"%cast_speed"
 			}
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"
 			{
-				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-50"
-				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"-100"
-				"MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE"		"-50"
-				"MODIFIER_PROPERTY_TOOLTIP"				"-100"
-			}
-			"DatadrivenEvents"		{}
-		}
-
-		"modifier_status_chill_elite"
-		{
-			"IsDebuff"			"1"
-			"IsDispellable"			"1"
-			"Duration"			"10.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_CHILL"
-
-			"VisualEffect"			"particles/units/heroes/hero_lich/lich_slowed_cold.vpcf"
-			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
-			"VisualStatus"			"particles/status_fx/status_effect_iceblast.vpcf"
-			"SoundEffect"			"Icewrack.Chill"
-
-			"Properties"
-			{
-				"IW_PROPERTY_CAST_SPEED"	"-50"
-			}
-			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-25"
-				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"-50"
-				"MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE"		"-25"
-				"MODIFIER_PROPERTY_TOOLTIP"				"-50"
-			}
-			"DatadrivenEvents"		{}
-		}
-
-		"modifier_status_chill_boss"
-		{
-			"IsDebuff"			"1"
-			"IsDispellable"			"1"
-			"Duration"			"10.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_CHILL"
-
-			"VisualEffect"			"particles/generic_gameplay/generic_slowed_cold.vpcf"
-			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
-			"VisualStatus"			"particles/status_fx/status_effect_iceblast.vpcf"
-			"SoundEffect"			"Icewrack.Chill"
-
-			"Properties"
-			{
-				"IW_PROPERTY_CAST_SPEED"	"-20"
-			}
-			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"-10"
-				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"-20"
-				"MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE"		"-10"
-				"MODIFIER_PROPERTY_TOOLTIP"				"-20"
+				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"%move_speed"
+				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"%attack_speed"
+				"MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE"		"%turn_rate"
 			}
 			"DatadrivenEvents"		{}
 		}
@@ -448,7 +348,7 @@
 		{
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
-			"Duration"			"30.0"
+			"Duration"			"20.0"
 			"StatusEffect"			"IW_STATUS_EFFECT_WET"
 
 			"VisualEffect"			"particles/generic_gameplay/effect_wet.vpcf"
@@ -458,16 +358,13 @@
 
 			"Properties"
 			{
-				"IW_PROPERTY_RESIST_FIRE"	"50"
-				"IW_PROPERTY_RESIST_COLD"	"-50"
-				"IW_PROPERTY_RESIST_LIGHT"	"-50"
+				"IW_PROPERTY_RESIST_FIRE"	"%fire_resist"
+				"IW_PROPERTY_RESIST_COLD"	"%cold_resist"
+				"IW_PROPERTY_RESIST_LIGHT"	"%lightning_resist"
 			}
 			"DatadrivenAttributes"		""
 			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_TOOLTIP"	"50"
-			}
+			"DatadrivenProperties"	{}
 			"DatadrivenEvents"		{}
 		}
 	}

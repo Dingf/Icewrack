@@ -78,7 +78,7 @@
 		"EquipFlags"			"58719773"
 
 		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
+		"AttackRange"			"150"
 		"MovementSpeedFlat"		"250"
 		"EffectiveHealth"		"350"
 
@@ -126,7 +126,7 @@
 		"EquipFlags"			"58588579"
 
 		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
+		"AttackRange"			"150"
 		"MovementSpeedFlat"		"300"
 		"EffectiveHealth"		"150"
 
@@ -179,7 +179,7 @@
 		"EquipFlags"			"58588197"
 
 		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
+		"AttackRange"			"150"
 		"MovementSpeedFlat"		"300"
 		"EffectiveHealth"		"150"
 
@@ -230,7 +230,7 @@
 		"EquipFlags"			"58587136"
 
 		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
+		"AttackRange"			"150"
 		"MovementSpeedFlat"		"250"
 		"EffectiveHealth"		"100"
 
@@ -274,7 +274,7 @@
 		"EquipFlags"			"58588686"
 
 		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
+		"AttackRange"			"150"
 		"MovementSpeedFlat"		"275"
 		"EffectiveHealth"		"250"
 
@@ -321,7 +321,7 @@
 		"RunCostStaminaFlat"		"3"
 
 		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
+		"AttackRange"			"150"
 		"MovementSpeedFlat"		"275"
 
 		"AccuracyFlat"			"0"
@@ -347,7 +347,7 @@
 		"IsPlayableHero"		"1"
 
 		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
+		"AttackRange"			"150"
 		"MovementSpeedFlat"		"250"
 		"MaxStaminaFlat"		"50"
 
@@ -376,7 +376,7 @@
 		"IsPlayableHero"		"1"
 
 		"BaseAttackTimeFlat"		"1.7"
-		"AttackRange"			"100"
+		"AttackRange"			"150"
 		"MovementSpeedFlat"		"250"
 		"MaxStaminaFlat"		"50"
 		"ManaRegenFlat"			"0.4"
@@ -529,6 +529,8 @@
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_NONE"
 		"UnitFlags"			"IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE"
 		"UnitHeight"			"16"
+
+		"DontCreateNPC"			"1"
 	}
 	
 	"npc_iw_frostbitten"

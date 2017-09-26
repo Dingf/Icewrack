@@ -141,8 +141,6 @@
 		"Modifiers"
 		{
 			"modifier_status_chill"				"IW_MODIFIER_NO_TRIGGER"
-			"modifier_status_chill_elite"			"IW_MODIFIER_NO_TRIGGER"
-			"modifier_status_chill_boss"			"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
 
