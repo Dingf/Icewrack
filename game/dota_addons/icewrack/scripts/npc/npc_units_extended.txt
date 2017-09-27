@@ -530,7 +530,7 @@
 		"UnitFlags"			"IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE"
 		"UnitHeight"			"16"
 
-		"DontCreateNPC"			"1"
+		"NoNPC"			"1"
 	}
 	
 	"npc_iw_frostbitten"

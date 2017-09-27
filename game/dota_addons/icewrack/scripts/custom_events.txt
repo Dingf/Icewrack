@@ -42,6 +42,8 @@
 		"entindex"	"int"
 	}
 
+	"iw_load_finish"	{}
+
 	"iw_sfs_save_start"
 	{
 		"filename"	"string"

@@ -93,6 +93,11 @@ function OnCameraMouseEvent(hContextPanel, tArgs)
 	return false;
 }
 
+function ResetCameraTarget()
+{
+	GameUI.SetCameraTarget(-1);
+}
+
 (function()
 {
 	var tMapInfo = CustomNetTables.GetTableValue("game", "map");
@@ -116,5 +121,14 @@ function OnCameraMouseEvent(hContextPanel, tArgs)
 		GameUI.SetCameraDistance(1400.0);
 		
 		RegisterCustomEventHandler(hCamera, "MouseEvent", OnCameraMouseEvent);
+		
+		//Set focus on player hero when we spawn
+		var tPartyMembers = CustomNetTables.GetTableValue("party", "Members");
+		if (tPartyMembers[1])
+		{
+			var nEntityIndex = parseInt(tPartyMembers[1]);
+			GameUI.SetCameraTarget(nEntityIndex);
+			$.Schedule(0.03, ResetCameraTarget);
+		}
 	}
 })();

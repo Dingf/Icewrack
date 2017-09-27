@@ -28,7 +28,7 @@ shCombatTimer = CTimer(0.03, function()
 		ParticleManager:DestroyParticle(nCombatParticleID, true)
 		nCombatParticleID = nil
 	elseif not nCombatParticleID and GameRules.CombatState then
-		nCombatParticleID = ParticleManager:CreateParticle("particles/generic_gameplay/screen_combat.vpcf", PATTACH_EYES_FOLLOW, GameRules:GetPlayerHero())
+		--nCombatParticleID = ParticleManager:CreateParticle("particles/generic_gameplay/screen_combat.vpcf", PATTACH_EYES_FOLLOW, GameRules:GetPlayerHero())
 	end
 	
 	stCombatNetTable.State = GameRules.CombatState

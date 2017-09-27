@@ -213,8 +213,8 @@ function CIcewrack_Map0_00:OnGameRulesStateChange(keys)
 		local hCharacterSelectDummy = CreateDummyUnit(Vector(64, 288, 0), nil, DOTA_TEAM_GOODGUYS)
 		local hDifficultyDummy = CreateDummyUnit(Vector(-224, -3400, 0), nil, DOTA_TEAM_GOODGUYS)
 		
-		GameRules:GetPlayerHero():SetDayTimeVisionRange(200.0)
-		GameRules:GetPlayerHero():SetNightTimeVisionRange(200.0)
+		--GameRules:GetPlayerHero():SetDayTimeVisionRange(200.0)
+		--GameRules:GetPlayerHero():SetNightTimeVisionRange(200.0)
 		
 		local nParticleID = ParticleManager:CreateParticle("particles/rain_fx/econ_snow_light.vpcf", PATTACH_EYES_FOLLOW, hCharacterSelectDummy)
 		ParticleManager:ReleaseParticleIndex(nParticleID)

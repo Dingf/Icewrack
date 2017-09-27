@@ -74,8 +74,10 @@ function CIcewrackGameMode:OnGameRulesStateChange(keys)
 		CSaveManager._tSaveSpecial.Loading = nil
 		CSaveManager:CreateSaveList(self, keys)
 		CSaveManager:CreateBindList(self, keys)
-		
 		if CSaveManager:GetPlayerHeroName() then
+			PlayerResource:SetOverrideSelectionEntity(0, GameRules:GetPlayerHero())
+			CTimer(1.0, function() PlayerResource:SetOverrideSelectionEntity(0, nil) SendToConsole("dota_select_all_others") end)
+			--TODO: Debug code; remove me
 			CTimer(0.03, function() GameRules:GetPlayerHero():AddExperience(100) return 0.03 end)
 		end
 	end
@@ -426,6 +428,16 @@ function CIcewrackGameMode:OnPartySelect(keys)
 	local hEntity = EntIndexToHScript(keys.value)
 	if hEntity and not GameRules:GetMapInfo():IsOverride() then
 		PlayerResource:SetCameraTarget(0, hEntity)
-		CTimer(0.1, PlayerResource.SetCameraTarget, PlayerResource, 0, {})
+		CTimer(0.03, PlayerResource.SetCameraTarget, PlayerResource, 0, {})
 	end
+end
+
+function CIcewrackGameMode:OnLoadFinished(keys)
+	print("got a load finish")
+	PlayerResource:SetCameraTarget(0, nil)
+	PlayerResource:SetOverrideSelectionEntity(0, nil)
+	print("we are no longer selecting that shit")
+	FireGameEvent("iw_load_finish", {})
+	CIcewrackGameMode._bIsLoadFinished = true
+	CustomGameEventManager:UnregisterListener(CIcewrackGameMode._nLoadListener)
 end

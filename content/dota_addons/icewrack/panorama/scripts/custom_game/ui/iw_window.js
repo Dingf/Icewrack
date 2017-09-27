@@ -207,7 +207,6 @@ function OnWindowButtonActivate(hContextPanel, tArgs)
 
 function OnWindowMenuOption(args)
 {
-	$.Msg("DEBUG: received request for window ", args.name);
 	if (!GameUI.IsHidden())
 	{
 		if (args.name === $.GetContextPanel()._szInternalName)
