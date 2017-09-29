@@ -1,3 +1,8 @@
-function ApplyBleed(hVictim, hAttacker, fDamage)
-	AddModifier("status_bleed", "modifier_status_bleed", hVictim, hAttacker, { bleed_damage=fDamage/4.0 })
+function ApplyBleed(hTarget, hEntity, fDamage)
+	local tModifierArgs =
+	{
+		bleed_damage = fDamage/8.0,
+		duration = 4.0,
+	}
+	AddModifier("status_bleed", "modifier_status_bleed", hTarget, hEntity, tModifierArgs)
 end

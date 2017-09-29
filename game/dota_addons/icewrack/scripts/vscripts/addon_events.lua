@@ -150,7 +150,7 @@ end
 local function OnAttackTargetVisionThink(hEntity, hTarget, nOrderID)
 	if hEntity:GetLastOrderID() == nOrderID then
 		local fAttackRange = hEntity:GetAttackRange()
-		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
+		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D() - hEntity:GetHullRadius() - hTarget:GetHullRadius()
 		if hEntity:IsTargetInLOS(hTarget) and hEntity:CanEntityBeSeenByMyTeam(hTarget) and fDistance <= fAttackRange then
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
@@ -187,7 +187,7 @@ local function OnAttackTarget(hEntity, hTarget, bIsManualOrder)
 		end
 		
 		local fAttackRange = hEntity:GetAttackRange()
-		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
+		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D() - hEntity:GetHullRadius() - hTarget:GetHullRadius()
 		if not hEntity:IsTargetInLOS(hTarget) or fDistance > fAttackRange then
 			if bIsManualOrder or not hEntity:IsHoldPosition() then
 				hEntity:SetHoldPosition(false)
@@ -213,7 +213,7 @@ end
 local function OnCastPositionVisionThink(hAbility, hEntity, vPosition, nOrderID)
 	if hEntity:GetLastOrderID() == nOrderID then
 		local fCastRange = hAbility:GetCastRange()
-		local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D()
+		local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D() - hEntity:GetHullRadius()
 		if hEntity:IsTargetInLOS(vPosition) and fDistance <= fCastRange then
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_POSITION, nil, hAbility, vPosition, false)
@@ -227,7 +227,7 @@ local function OnCastPosition(hEntity, hAbility, vPosition, bIsManualOrder)
 	if IsValidExtendedAbility(hAbility) then
 		if not bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_DOES_NOT_REQ_VISION) and vPosition then
 			local fCastRange = hAbility:GetCastRange()
-			local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D()
+			local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D() - hEntity:GetHullRadius()
 			if not hEntity:IsTargetInLOS(vPosition) or fDistance > fCastRange then
 				if bIsManualOrder or not hEntity:IsHoldPosition() then
 					hEntity:Stop()
@@ -245,7 +245,7 @@ end
 local function OnCastTargetVisionThink(hAbility, hEntity, hTarget, nOrderID)
 	if hEntity:GetLastOrderID() == nOrderID then
 		local fCastRange = hAbility:GetCastRange()
-		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
+		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D() - hEntity:GetHullRadius() - hTarget:GetHullRadius()
 		if hEntity:IsTargetInLOS(hTarget) and fDistance <= fCastRange then
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, hAbility, nil, false)
@@ -267,7 +267,7 @@ local function OnCastTarget(hEntity, hAbility, hTarget, bIsManualOrder)
 	local nAbilityBehavior = hAbility:GetBehavior()
 	if IsValidExtendedAbility(hAbility) then
 		local fCastRange = hAbility:GetCastRange()
-		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D()
+		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D() - hEntity:GetHullRadius() - hTarget:GetHullRadius()
 		local bIsTargetVisible = bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_DOES_NOT_REQ_VISION) or hEntity:IsTargetInLOS(hTarget)
 		if not bIsTargetVisible or fDistance > fCastRange then
 			if bIsManualOrder or not hEntity:IsHoldPosition() then
@@ -430,14 +430,4 @@ function CIcewrackGameMode:OnPartySelect(keys)
 		PlayerResource:SetCameraTarget(0, hEntity)
 		CTimer(0.03, PlayerResource.SetCameraTarget, PlayerResource, 0, {})
 	end
-end
-
-function CIcewrackGameMode:OnLoadFinished(keys)
-	print("got a load finish")
-	PlayerResource:SetCameraTarget(0, nil)
-	PlayerResource:SetOverrideSelectionEntity(0, nil)
-	print("we are no longer selecting that shit")
-	FireGameEvent("iw_load_finish", {})
-	CIcewrackGameMode._bIsLoadFinished = true
-	CustomGameEventManager:UnregisterListener(CIcewrackGameMode._nLoadListener)
 end

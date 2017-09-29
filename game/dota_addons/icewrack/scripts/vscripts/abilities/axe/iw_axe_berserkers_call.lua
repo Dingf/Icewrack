@@ -3,14 +3,14 @@ iw_axe_berserkers_call = class({})
 function iw_axe_berserkers_call:OnSpellStart()
 	local hEntity = self:GetCaster()
 	
-	hEntity:DispelModifiers(IW_STATUS_MASK_STUN +
-	                        IW_STATUS_MASK_SLOW +
-							IW_STATUS_MASK_ROOT +
-							IW_STATUS_MASK_DISARM +
-							IW_STATUS_MASK_PACIFY +
-							IW_STATUS_MASK_SLEEP +
-							IW_STATUS_MASK_FEAR + 
-							IW_STATUS_MASK_CHARM)
+	hEntity:DispelStatusEffects(IW_STATUS_MASK_STUN +
+	                            IW_STATUS_MASK_SLOW +
+							    IW_STATUS_MASK_ROOT +
+							    IW_STATUS_MASK_DISARM +
+							    IW_STATUS_MASK_PACIFY +
+							    IW_STATUS_MASK_SLEEP +
+							    IW_STATUS_MASK_FEAR + 
+							    IW_STATUS_MASK_CHARM)
 	
 	local fRadius = self:GetAOERadius()
 	local fThreatAmount = self:GetSpecialValueFor("threat") + self:GetSpecialValueFor("threat_bonus") * hEntity:GetSpellpower()

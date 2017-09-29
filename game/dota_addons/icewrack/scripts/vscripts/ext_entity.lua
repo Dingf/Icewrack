@@ -641,7 +641,19 @@ function CExtEntity:RemoveFromRefreshList(hEntity)
 	end
 end
 
-function CExtEntity:DispelModifiers(nStatusEffectMask)
+function CExtEntity:HasStatusEffect(nStatusEffectMask)
+	for k,v in pairs(self:FindAllModifiers()) do
+		if IsValidExtendedModifier(v) then
+			local nStatusEffect = bit32.lshift(1, v:GetStatusEffect() - 1)
+			if bit32.btest(nStatusEffect, nStatusEffectMask) then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function CExtEntity:DispelStatusEffects(nStatusEffectMask)
 	local tDispelledModifiers = {}
 	for k,v in pairs(self:FindAllModifiers()) do
 		if IsValidExtendedModifier(v) then

@@ -58,7 +58,7 @@ function LogAssert(v, szMessage, ...)
 end
 
 LOG_MESSAGE_ASSERT_TYPE = "Type mismatch (expected \"%s\", got %s)"
-LOG_MESSAGE_ASSERT_TEMPLATE = "Failed to load template \"%d\" - no data exists for this entry."
+LOG_MESSAGE_ASSERT_TEMPLATE = "Failed to load template \"%s\" - no data exists for this entry."
 
 return getfenv()
 

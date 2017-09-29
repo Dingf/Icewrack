@@ -33,10 +33,10 @@ end
 
 else
 
-function ApplyDecay(hVictim, hAttacker, fDamagePercentHP)
+function ApplyDecay(hTarget, hEntity, fDamagePercentHP)
 	if fDamagePercentHP > 0.1 then
 		local fBaseDuration = 10.0 * fDamagePercentHP
-		local nUnitClass = hVictim:GetUnitClass()
+		local nUnitClass = hTarget:GetUnitClass()
 		local fHealthPercent = -25.0
 		local fHealEffectiveness = -100.0
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
@@ -44,16 +44,21 @@ function ApplyDecay(hVictim, hAttacker, fDamagePercentHP)
 		elseif nUnitClass == IW_UNIT_CLASS_BOSS or nUnitClass == IW_UNIT_CLASS_ACT_BOSS then
 			fHealthPercent = -5.0
 		end
-		local hModifier = hVictim:FindModifierByName("modifier_status_decay")
+		local hModifier = hTarget:FindModifierByName("modifier_status_decay")
 		if hModifier then
-			local fRealDuration = fBaseDuration * hVictim:GetSelfDebuffDuration() * hAttacker:GetOtherDebuffDuration() * hVictim:GetStatusEffectDurationMultiplier(IW_STATUS_EFFECT_DECAY)
+			local fRealDuration = fBaseDuration * hModifier:GetRealDurationMultiplier(hTarget)
 			if (hModifier:GetDuration() - hModifier:GetElapsedTime()) < fRealDuration then
 				hModifier:ForceRefresh()
 				hModifier:SetDuration(fBaseDuration, true)
 			end
 		else
-			hModifier = AddModifier("status_decay", "modifier_status_decay", hVictim, hAttacker, { health_percent=fHealthPercent/100.0, heal_effectiveness=fHealEffectiveness })
-			if hModifier then hModifier:SetDuration(fBaseDuration, true) end
+			local tModifierArgs =
+			{
+				health_percent = fHealthPercent/100.0,
+				heal_effectiveness = fHealEffectiveness,
+				duration = fBaseDuration,
+			}
+			AddModifier("status_decay", "modifier_status_decay", hTarget, hEntity, tModifierArgs)
 		end
 	end
 end

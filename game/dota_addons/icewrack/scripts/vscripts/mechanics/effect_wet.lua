@@ -1,19 +1,25 @@
 require("timer")
 require("mechanics/status_effects")
 
-function ApplyWet(hVictim, hAttacker)
-	hVictim:DispelModifiers(IW_STATUS_MASK_BURNING)
-	local hModifier = hVictim:FindModifierByName("modifier_status_wet")
+function ApplyWet(hTarget, hEntity)
+	hTarget:DispelStatusEffects(IW_STATUS_MASK_WARM + IW_STATUS_MASK_BURNING)
+	local hModifier = hTarget:FindModifierByName("modifier_status_wet")
+	local fBaseDuration = 30.0
 	if hModifier then
-		hModifier:ForceRefresh()
+		local fRealDuration = fBaseDuration * hModifier:GetRealDurationMultiplier(hTarget)
+		if (hModifier:GetDuration() - hModifier:GetElapsedTime()) < fRealDuration then
+			hModifier:ForceRefresh()
+			hModifier:SetDuration(fBaseDuration, true)
+		end
 	else
 		local tModifierArgs = 
 		{
 			fire_resist = 25,
 			cold_resist = -25,
 			lightning_resist = -25,
+			duration = fBaseDuration,
 		}
-		AddModifier("status_wet", "modifier_status_wet", hVictim, hAttacker, tModifierArgs)
+		AddModifier("status_wet", "modifier_status_wet", hTarget, hEntity, tModifierArgs)
 	end
 end
 

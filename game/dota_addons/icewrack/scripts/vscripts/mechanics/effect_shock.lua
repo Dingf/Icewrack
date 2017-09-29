@@ -1,12 +1,13 @@
 require("mechanics/damage_types")
 require("mechanics/damage_secondary")
 
-if not stShockDamageTable then
-	stShockDamageTable = 
+local stShockDamageTable = 
+{
+	damage =
 	{
-		damage = {},
-	}
-end
+		[IW_DAMAGE_TYPE_LIGHTNING] = {}
+	},
+}
 
 function ApplyShock(hVictim, hAttacker, fDamagePercentHP)
 	if fDamagePercentHP > 0.1 then
@@ -20,11 +21,9 @@ function ApplyShock(hVictim, hAttacker, fDamagePercentHP)
 			fShockMultiplier = 0.02 + (0.03 * fDamagePercentHP)
 		end
 		
-		stShockDamageTable.damage[IW_DAMAGE_TYPE_LIGHTNING] =
-		{
-			min = hVictim:GetHealth() * fShockMultiplier,
-			max = hVictim:GetHealth() * fShockMultiplier
-		}
+		stShockDamageTable.damage[IW_DAMAGE_TYPE_LIGHTNING].min = hVictim:GetHealth() * fShockMultiplier
+		stShockDamageTable.damage[IW_DAMAGE_TYPE_LIGHTNING].max = hVictim:GetHealth() * fShockMultiplier
+
 		DealSecondaryDamage(nil, stShockDamageTable)
 		local nParticleIndex = ParticleManager:CreateParticle("particles/generic_gameplay/generic_hit_lightning.vpcf", PATTACH_ABSORIGIN_FOLLOW, hVictim)
 		ParticleManager:ReleaseParticleIndex(nParticleIndex)

@@ -132,7 +132,7 @@
 		{
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
-			"Duration"			"5.0"
+			"Duration"			"%duration"
 			"StatusEffect"			"IW_STATUS_EFFECT_STUN"
 			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
@@ -162,8 +162,8 @@
 			
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
-			"Duration"			"10.0"
-			"StatusEffect"			"IW_STATUS_EFFECT_SLOW"
+			"Duration"			"%duration"
+			"StatusEffect"			"IW_STATUS_EFFECT_MAIM"
 			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
 			"VisualEffect"			"particles/generic_gameplay/effect_maim.vpcf"
@@ -189,7 +189,7 @@
 			"IsHidden"			"0"
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
-			"Duration"			"4.0"
+			"Duration"			"%duration"
 			"StatusEffect"			"IW_STATUS_EFFECT_BLEED"
 			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
@@ -200,10 +200,7 @@
 			"Properties"			{}
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT MODIFIER_ATTRIBUTE_MULTIPLE"
 			"DatadrivenStates"		{}
-			"DatadrivenProperties"
-			{
-				"MODIFIER_PROPERTY_TOOLTIP"	"%bleed_damage"
-			}
+			"DatadrivenProperties"	{}
 			"DatadrivenEvents"
 			{
 				"MODIFIER_EVENT_ON_INTERVAL_THINK"
@@ -228,7 +225,7 @@
 		{
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
-			"Duration"			"5.0"
+			"Duration"			"%duration"
 			"StatusEffect"			"IW_STATUS_EFFECT_BURNING"
 
 			"VisualEffect"			"particles/generic_gameplay/generic_burning_debuff.vpcf"
@@ -264,7 +261,7 @@
 		{
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
-			"Duration"			"10.0"
+			"Duration"			"%duration"
 			"StatusEffect"			"IW_STATUS_EFFECT_CHILL"
 
 			"VisualEffect"			"particles/units/heroes/hero_lich/lich_slowed_cold.vpcf"
@@ -294,8 +291,10 @@
 		{
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
-			"Duration"			"10.0"
+			"Duration"			"%duration"
 			"StatusEffect"			"IW_STATUS_EFFECT_FREEZE"
+			
+			"ModifierEntityFlags"		"IW_UNIT_FLAG_NO_CORPSE"
 
 			"VisualEffect"			"particles/generic_gameplay/generic_slowed_cold.vpcf"
 			"VisualAttachType"		"PATTACH_ROOTBONE_FOLLOW"
@@ -303,7 +302,10 @@
 			"VisualStatusPriority"		"2"
 			"SoundEffect"			"Icewrack.Freeze"
 
-			"Properties"			{}
+			"Properties"
+			{
+				"IW_PROPERTY_DODGE_PCT"		"-1000.0"
+			}
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
 			"DatadrivenStates"
 			{
@@ -323,7 +325,7 @@
 
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
-			"Duration"			"10.0"
+			"Duration"			"%duration"
 			"StatusEffect"			"IW_STATUS_EFFECT_DECAY"
 
 			"VisualStatus"			"particles/status_fx/status_effect_iw_decay.vpcf"
@@ -348,7 +350,7 @@
 		{
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
-			"Duration"			"20.0"
+			"Duration"			"%duration"
 			"StatusEffect"			"IW_STATUS_EFFECT_WET"
 
 			"VisualEffect"			"particles/generic_gameplay/effect_wet.vpcf"
@@ -361,6 +363,29 @@
 				"IW_PROPERTY_RESIST_FIRE"	"%fire_resist"
 				"IW_PROPERTY_RESIST_COLD"	"%cold_resist"
 				"IW_PROPERTY_RESIST_LIGHT"	"%lightning_resist"
+				"IW_PROPERTY_STATUS_BURNING"	"-1000.0"
+			}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"	{}
+			"DatadrivenEvents"		{}
+		}
+	}
+
+	"status_warm"
+	{
+		"modifier_status_wet"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"%duration"
+			"StatusEffect"			"IW_STATUS_EFFECT_WARM"
+
+			"Properties"
+			{
+				"IW_PROPERTY_RESIST_COLD"	"%cold_resist"
+				"IW_PROPERTY_MP_REGEN_PCT"	"%mana_regen"
+				"IW_PROPERTY_SP_REGEN_PCT"	"%stamina_regen"
 			}
 			"DatadrivenAttributes"		""
 			"DatadrivenStates"		{}
@@ -499,28 +524,12 @@
 	{
 		"modifier_iw_dragon_knight_dragons_blood"
 		{
-			"Duration"			"%duration"
-			"Texture"			"dragon_knight_dragon_blood"
-			"VisualEffect"			"particles/units/heroes/hero_dragon_knight/dragon_knight_dragons_blood_buff.vpcf"
-
-			"Properties"
-			{
-				"IW_PROPERTY_HP_REGEN_FLAT"	"%health_regen"
-			}
-
-			"DatadrivenAttributes"		""
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"		{}
-			"DatadrivenEvents" {}
-		}
-
-		"modifier_iw_dragon_knight_dragons_blood_passive"
-		{
 			"Texture"			"dragon_knight_dragon_blood"
 
 			"Properties"
 			{
 				"IW_PROPERTY_HP_REGEN_FLAT"	"%health_regen"
+				"IW_PROPERTY_RESIST_PHYS"	"%phys_resist"
 			}
 
 			"DatadrivenAttributes"		""
@@ -925,57 +934,6 @@
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"		{}
 			"DatadrivenEvents" 		{}
-		}
-	}
-
-
-
-	"iw_warmth"
-	{
-		"modifier_iw_warmth_caster"
-		{
-			"Duration"			"%duration"
-			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
-
-			"ScriptFile"			"scripts/vscripts/abilities/modifier_iw_warmth_caster.lua"
-
-			"Texture"			"default"
-			"SoundEffect"			"Hero_Lina.Warmth.Loop"
-			
-			"Properties"
-			{
-				"IW_PROPERTY_MP_REGEN_PCT"	"%mana_regen"
-				"IW_PROPERTY_RESIST_COLD"	"%cold_resist"
-				"IW_PROPERTY_STATUS_FREEZE"	"-100000"
-				"IW_PROPERTY_STATUS_CHILL"	"-100000"
-				"IW_PROPERTY_STATUS_WET"	"-100000"
-			}
-
-			"DatadrivenAttributes"		""
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"		{}
-			"DatadrivenEvents" 	{}
-		}
-
-		"modifier_iw_warmth"
-		{
-			"ModifierClass"			"IW_MODIFIER_CLASS_MAGICAL"
-
-			"ScriptFile"			"scripts/vscripts/abilities/modifier_iw_warmth.lua"
-
-			"Texture"			"default"
-			
-			"Properties"
-			{
-				"IW_PROPERTY_STATUS_FREEZE"	"-100000"
-				"IW_PROPERTY_STATUS_CHILL"	"-100000"
-				"IW_PROPERTY_STATUS_WET"	"-100000"
-			}
-
-			"DatadrivenAttributes"		""
-			"DatadrivenStates"		{}
-			"DatadrivenProperties"		{}
-			"DatadrivenEvents" 	{}
 		}
 	}
 

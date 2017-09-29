@@ -221,7 +221,7 @@ function DealAttackDamage(self, keys)
 		
 		local bDamageResult = DealPrimaryDamage(self, keys)
 		keys.result = bDamageResult
-		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DEAL_ATTACK_DAMAGE, keys)
+		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_ATTACK_DAMAGE, keys)
 		hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_TAKE_ATTACK_DAMAGE, keys)
 		return bDamageResult
 	end

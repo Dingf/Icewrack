@@ -614,7 +614,6 @@
 
 		"AttackRange"			"650"
 		"ManaRegenFlat"			"0.35"
-		"HealthRegenFlat"		"1000000"
 
 		"BaseCritChance"		"1.0"
 		"LifestealPercent"		"100"

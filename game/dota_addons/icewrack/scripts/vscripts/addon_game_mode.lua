@@ -88,7 +88,5 @@ function CIcewrackGameMode:InitGameMode()
 	CustomGameEventManager:RegisterListener("iw_change_level", Dynamic_Wrap(CIcewrackGameMode, "OnChangeLevel"))
 	CustomGameEventManager:RegisterListener("iw_party_select", Dynamic_Wrap(CIcewrackGameMode, "OnPartySelect"))
 	
-	CIcewrackGameMode._nLoadListener = CustomGameEventManager:RegisterListener("iw_load_finish", Dynamic_Wrap(CIcewrackGameMode, "OnLoadFinished"))
-	
 	LogMessage("Icewrack mod loaded.")
 end

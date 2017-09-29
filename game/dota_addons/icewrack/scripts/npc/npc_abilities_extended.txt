@@ -9,6 +9,7 @@
 	"status_frozen"		{}
 	"status_decay"		{}
 	"status_wet"		{}
+	"status_warm"		{}
 
 
 	"iw_axe_berserkers_call"
@@ -219,7 +220,7 @@
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_AUTOCAST_ATTACK"
 		"AbilitySkill"		"9"
 
-		"ManaCost"		"10"
+		"ManaCost"		"5"
 	}
 
 	"iw_lina_inner_fire"

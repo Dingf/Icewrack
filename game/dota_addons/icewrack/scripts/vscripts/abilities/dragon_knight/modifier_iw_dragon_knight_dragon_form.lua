@@ -51,7 +51,7 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 		hEntity:SetRangedProjectileName("particles/units/heroes/hero_dragon_knight/dragon_knight_dragon_form_attack.vpcf")
 		CTimer(0.03, function() hEntity:SetMaterialGroup("1") end)
 		
-		local hSpellbook = hEntity:GetSpellbook()
+		--[[local hSpellbook = hEntity:GetSpellbook()
 		local hDragonsBloodAbility = hSpellbook:GetAbility("iw_dragon_knight_dragons_blood")
 		local tModifierArgs =
 		{
@@ -59,7 +59,7 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 		}
 		hEntity:RemoveModifierByName("modifier_iw_dragon_knight_dragons_blood")
 		self._hDragonsBloodBuff = hEntity:AddNewModifier(hEntity, hDragonsBloodAbility, "modifier_iw_dragon_knight_dragons_blood_passive", tModifierArgs)
-		
+		]]
 		hEntity:StartGesture(ACT_DOTA_CAST_ABILITY_4)
 		self:StartIntervalThink(0.8)
 	end
@@ -90,7 +90,7 @@ function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
 		ParticleManager:SetParticleControl(nParticleID, 0, hEntity:GetAbsOrigin())
 		ParticleManager:ReleaseParticleIndex(nParticleID)
 		
-		self._hDragonsBloodBuff:Destroy()
+		--self._hDragonsBloodBuff:Destroy()
 	end
 end
 

@@ -182,6 +182,19 @@
 			"modifier_status_wet"				"IW_MODIFIER_NO_TRIGGER"
 		}
 	}
+	
+	"status_warm"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+
+		"Modifiers"
+		{
+			"modifier_status_warm"				"IW_MODIFIER_NO_TRIGGER"
+		}
+	}
 
 	"aam_do_nothing"
 	{
@@ -380,13 +393,18 @@
 		{
 			"01"
 			{
-				"var_type"			"FIELD_INTEGER"
-				"damage"			"1"
+				"var_type"			"FIELD_FLOAT"
+				"threshold"		"25.0"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"threshold"		"25.0"
+				"threshold_elite"		"10.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"threshold_boss"		"5.0"
 			}
 		}
 	}
@@ -497,35 +515,27 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"AbilityTextureName"			"dragon_knight_dragon_blood"
 
 		"Modifiers"
 		{
-			"modifier_iw_dragon_knight_dragons_blood"		"IW_MODIFIER_NO_TRIGGER"
-			"modifier_iw_dragon_knight_dragons_blood_passive"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_dragon_knight_dragons_blood"		"IW_MODIFIER_ON_ACQUIRE"
 		}
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"24.0"
-		"AbilityCastPoint"			"0.3"
 
 		"AbilitySpecial"
 		{
 			"01"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"health_regen"			"30.0"
+				"health_regen"			"3.0"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"health_regen_bonus"			"0.2"
-			}
-			"04"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"duration"			"7.5"
+				"phys_resist"			"25.0"
 			}
 		}
 	}
@@ -607,7 +617,7 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_TOGGLED"	
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_TOGGLE"	
 		"AbilityTextureName"			"drow_ranger_frost_arrows"
 
 		"MaxLevel"				"1"
@@ -673,7 +683,7 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_TOGGLED"	
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_TOGGLE"	
 		"AbilityTextureName"			"drow_ranger_trueshot"
 
 		"MaxLevel"				"1"
@@ -891,12 +901,12 @@
 			"01"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_min"			"4.0"
+				"damage_min"			"5.0"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_max"			"13.0"
+				"damage_max"			"8.0"
 			}
 			"03"
 			{

@@ -50,18 +50,18 @@
 	FREEZE
 	    *Prevents all actions from the affected unit, but reduces Physical and Fire damage taken. If the unit receives Physical
 		 damage that is a critical strike and deals more than 10% of its max. HP, it will shatter. Frozen units have a dodge
-		 score of 0.
+		 score of 0. Dispels Burning and Warm when applied.
 		
 	CHILL
-	    *Reduces at least one of the following: movement speed, attack speed, and/or cast speed.
+	    *Reduces at least one of the following: movement speed, attack speed, and/or cast speed. Dispels Burning and Warm when
+		 applied.
 		
 	WET
 	    *Reduces Cold and Lightning resistance, but increases Fire resistance. Immune to burning, but also causes the next
 		 Chill effect received to Freeze instead (this consumes the Wet effect). Dispels Burning and Warm when applied.
 		 
 	WARM
-		*Increases Cold resistance, stamina regeneration, and mana regeneration. The next instance of Chilled or Frozen has no
-		 effect (this consumes the Warm effect). Dispels Frozen, Wet, and Chilled when applied.
+		*Increases Cold resistance, stamina regeneration, and mana regeneration. Dispels Frozen, Wet, and Chilled when applied.
 		
 	BURNING
 	    *Deals secondary Fire damage over time.

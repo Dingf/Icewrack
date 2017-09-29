@@ -1,23 +1,25 @@
 require("mechanics/effect_freeze")
 
-function ApplyChill(hVictim, hAttacker, fDamagePercentHP)
+function ApplyChill(hTarget, hEntity, fDamagePercentHP)
 	if fDamagePercentHP > 0.1 then
-		if hVictim:FindModifierByName("modifier_status_wet") then
-			ApplyFreeze(hVictim, hAttacker, fDamagePercentHP)
+		if hTarget:HasStatusEffect(IW_STATUS_MASK_WET) then
+			ApplyFreeze(hTarget, hEntity, fDamagePercentHP)
 			return
 		end
+		
+		hTarget:DispelStatusEffects(IW_STATUS_MASK_WARM + IW_STATUS_MASK_BURNING)
 	
 		local fBaseDuration = 10.0 * fDamagePercentHP
-		local nUnitClass = hVictim:GetUnitClass()
+		local nUnitClass = hTarget:GetUnitClass()
 		local fChillFactor = 1.0
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
 			fChillFactor = 0.4
 		elseif nUnitClass == IW_UNIT_CLASS_BOSS or nUnitClass == IW_UNIT_CLASS_ACT_BOSS then
 			fChillFactor = 0.2
 		end
-		local hModifier = hVictim:FindModifierByName("modifier_status_chill")
+		local hModifier = hTarget:FindModifierByName("modifier_status_chill")
 		if hModifier then
-			local fRealDuration = fBaseDuration * hVictim:GetSelfDebuffDuration() * hAttacker:GetOtherDebuffDuration() * hVictim:GetStatusEffectDurationMultiplier(IW_STATUS_EFFECT_CHILL)
+			local fRealDuration = fBaseDuration * hModifier:GetRealDurationMultiplier(hTarget)
 			if (hModifier:GetDuration() - hModifier:GetElapsedTime()) < fRealDuration then
 				hModifier:ForceRefresh()
 				hModifier:SetDuration(fBaseDuration, true)
@@ -29,9 +31,9 @@ function ApplyChill(hVictim, hAttacker, fDamagePercentHP)
 				cast_speed = -100.0 * fChillFactor,
 				attack_speed = -100.0 * fChillFactor,
 				move_speed = -50.0 * fChillFactor,
+				duration = fBaseDuration,
 			}
-			hModifier = AddModifier("status_chill", "modifier_status_chill", hVictim, hAttacker, tModifierArgs)
-			if hModifier then hModifier:SetDuration(fBaseDuration, true) end
+			AddModifier("status_chill", "modifier_status_chill", hTarget, hEntity, tModifierArgs)
 		end
 	end
 end

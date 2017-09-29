@@ -28,7 +28,7 @@ function modifier_status_maim:OnIntervalThink()
 		local vPosition = hTarget:GetAbsOrigin()
 		local fDistance = (vPosition - self._vLastPosition):Length2D()
 		
-		local fDamage = (fDistance * self._fMoveDamage) + self._fDamageRemainder
+		local fDamage = (fDistance * self._fMoveDamage/100.0) + self._fDamageRemainder
 		fDamage = fDamage * (1.0 + self:GetCaster():GetPropertyValue(IW_PROPERTY_DMG_DOT_PCT) / 100.0)
 		if fDamage > 0 then
 			self._tDamageTable.damage[IW_DAMAGE_TYPE_SLASH].min = math.floor(fDamage)
@@ -52,10 +52,10 @@ end
 
 else
 
-function ApplyMaim(hVictim, hAttacker, fDamagePercentHP)
+function ApplyMaim(hTarget, hEntity, fDamagePercentHP)
 	if fDamagePercentHP > 0.1 then
 		local fBaseDuration = 10.0 * fDamagePercentHP
-		local nUnitClass = hVictim:GetUnitClass()
+		local nUnitClass = hTarget:GetUnitClass()
 		local fMovementSpeed = -50.0
 		local fMoveDamagePercent = 10.0
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
@@ -64,9 +64,9 @@ function ApplyMaim(hVictim, hAttacker, fDamagePercentHP)
 			fMovementSpeed = -10.0
 		end
 	
-		local hModifier = hVictim:FindModifierByName("modifier_status_maim")
+		local hModifier = hTarget:FindModifierByName("modifier_status_maim")
 		if hModifier then
-			local fRealDuration = fBaseDuration * hModifier:GetRealDurationMultiplier(hVictim)
+			local fRealDuration = fBaseDuration * hModifier:GetRealDurationMultiplier(hTarget)
 			if (hModifier:GetDuration() - hModifier:GetElapsedTime()) < fRealDuration then
 				hModifier:ForceRefresh()
 				hModifier:SetDuration(fBaseDuration, true)
@@ -74,11 +74,11 @@ function ApplyMaim(hVictim, hAttacker, fDamagePercentHP)
 		else
 			local tModifierArgs =
 			{
-				move_speed = fMovementSlow,
-				move_damage = fMoveDamagePercent/100.0,
+				move_speed = fMovementSpeed,
+				move_damage = fMoveDamagePercent,
+				duration = fBaseDuration,
 			}
-			hModifier = AddModifier("status_maim", "modifier_status_maim", hVictim, hAttacker, tModifierArgs)
-			if hModifier then hModifier:SetDuration(fBaseDuration, true) end
+			AddModifier("status_maim", "modifier_status_maim", hTarget, hEntity, tModifierArgs)
 		end
 	end
 end

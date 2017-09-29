@@ -41,16 +41,35 @@ function modifier_iw_axe_counter_helix:OnDestroy()
 		local hEntity = self:GetParent()
 		hEntity:Stop()
 		self._hMoveDummy:RemoveSelf()
+		
+		local tLastOrder = self._tLastOrder
+		if tLastOrder then
+			hEntity:IssueOrder(tLastOrder.OrderType, tLastOrder.Target, nil, tLastOrder.Position, false)
+		end
 	end
 end
 
 function modifier_iw_axe_counter_helix:OnExecuteOrder(args)
 	local hDummy = self._hMoveDummy
+	local tLastOrder = self._tLastOrder
 	if args.OrderType == DOTA_UNIT_ORDER_MOVE_TO_POSITION or args.OrderType == DOTA_UNIT_ORDER_ATTACK_MOVE then
+		self._tLastOrder =
+		{
+			OrderType = args.OrderType,
+			Position = args.Position,
+		}
 		hDummy._target = args.Position
 		return false
 	elseif args.OrderType == DOTA_UNIT_ORDER_MOVE_TO_TARGET or args.OrderType == DOTA_UNIT_ORDER_ATTACK_TARGET then
-		hDummy._target = EntIndexToHScript(args.TargetIndex)
+		local hTarget = EntIndexToHScript(args.TargetIndex)
+		self._tLastOrder =
+		{
+			OrderType = args.OrderType,
+			Target = hTarget,
+		}
+		hDummy._target = hTarget
 		return false
+	else
+		self._tLastOrder = nil
 	end
 end
