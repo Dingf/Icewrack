@@ -656,7 +656,7 @@ function CExtAbilityLinker:OnSpellStart()
 	end
 	
 	self:ApplyModifiers(IW_MODIFIER_ON_USE)
-	local hCursorTarget = hEntity:GetCursorCastTarget()
+	local hCursorTarget = self:GetCursorTarget()
 	if hCursorTarget and hCursorTarget:GetTeamNumber() ~= hEntity:GetTeamNumber() then
 		hEntity:SetAttacking(hCursorTarget)
 	end

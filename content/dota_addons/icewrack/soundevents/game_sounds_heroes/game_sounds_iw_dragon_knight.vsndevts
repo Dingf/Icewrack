@@ -19,7 +19,7 @@
 					}
 					"volume"
 					{
-						"value"		"3.000000"
+						"value"		"2.500000"
 					}
 					"pitch"
 					{
@@ -27,7 +27,7 @@
 					}
 					"soundlevel"
 					{
-						"value"		"75.000000"
+						"value"		"90.000000"
 					}
 					"event_type"
 					{
@@ -149,6 +149,55 @@
 					"soundlevel"
 					{
 						"value"		"75.000000"
+					}
+					"event_type"
+					{
+						"value"		"3.000000"
+					}
+				}
+			}
+		}
+	}
+}
+
+"Hero_DragonKnight.DeafeningRoar"
+{
+	"operator_stacks"
+	{
+		"update_stack"
+		{
+			"reference_operator"
+			{
+				"operator"		"sos_reference_stack"
+				"reference_stack"		"dota_src1_3d"
+				"operator_variables"
+				{
+					"vsnd_files"
+					{
+						"value"
+						{
+							"wave0"		"sounds/weapons/hero/dragon_knight/dragontail_cast_kindred.vsnd"
+						}
+					}
+					"volume"
+					{
+						"value"		"4.000000"
+					}
+					"pitch"
+					{
+						"value"		"0.90000"
+					}
+					"pitch_rand_min"
+					{
+						"value"		"-0.10000"
+					}
+					"pitch_rand_max"
+					{
+						"value"		"0.10000"
+					}
+					"soundlevel"
+					{
+						"value"		"90.000000"
 					}
 					"event_type"
 					{

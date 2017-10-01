@@ -267,13 +267,13 @@
 		"BaseClass"				"ability_lua"
 		"ScriptFile"				"ext_ability"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
 		"AbilityTextureName"			"axe_berserkers_call"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"6.0"
+		"AbilityCooldown"			"12.0"
 		"AbilityAOERadius"			"300"
-		"AbilityCastPoint"			"0.5"
+		"AbilityCastPoint"			"0.0"
 
 		"AbilitySpecial"
 		{
@@ -409,6 +409,50 @@
 		}
 	}
 
+	"iw_dragon_knight_deafening_roar"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_NO_TARGET"	
+		"AbilityTextureName"			"default"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.25"
+		"AbilityCooldown"			"24.0"
+		"AbilityAOERadius"			"450"
+
+		"Modifiers"
+		{
+			"modifier_iw_dragon_knight_deafening_roar"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_dragon_knight_deafening_roar_stun"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"stun_duration"		"1.5"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"buff_duration"		"8.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"move_speed"		"-75.0"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"attack_speed"		"-75.0"
+			}
+		}
+	}
+
 	"iw_dragon_knight_breathe_fire"
 	{
 		"BaseClass"				"ability_lua"
@@ -450,22 +494,22 @@
 			"05"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"damage_min"			"75"
+				"damage_min"			"44"
 			}
 			"06"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"damage_max"			"90"
+				"damage_max"			"62"
 			}
 			"07"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_min_bonus"		"0.5"
+				"damage_min_bonus"		"0.75"
 			}
 			"08"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_max_bonus"		"0.5"
+				"damage_max_bonus"		"0.75"
 			}
 		}
 	}

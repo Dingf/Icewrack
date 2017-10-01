@@ -180,7 +180,7 @@ function OnOverviewEntityUpdate(szTableName, szKey, tData)
 	var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
 	if (parseInt(szKey) === nEntityIndex)
 	{
-		DispatchCustomEvent($.GetContextPanel(), "OverviewUpdate");
+		$.Schedule(0.03, DispatchCustomEvent.bind(this, $.GetContextPanel(), "OverviewUpdate"));
 	}
 }
 

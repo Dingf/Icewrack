@@ -337,11 +337,13 @@ function CIcewrackGameMode:ExecuteOrderFilter(keys)
 	
 	local tOrderTable = hEntity._tOrderTable
 	if keys.queue == 0 and tOrderTable then
+		local bIsManualOrder = (debug.getinfo(2) == nil)
 		tOrderTable.OrderType = nOrderType
 		tOrderTable.TargetIndex = keys.entindex_target
 		tOrderTable.AbilityIndex = keys.entindex_ability
 		tOrderTable.Position = vPosition
 		tOrderTable.Queue = false
+		tOrderTable.IsManualOrder = bIsManualOrder
 		hEntity._nLastOrderID = hEntity._nLastOrderID + 1
 		
 		local bEventResult = hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_EXECUTE_ORDER, tOrderTable)
@@ -349,7 +351,6 @@ function CIcewrackGameMode:ExecuteOrderFilter(keys)
 			return false
 		end
 		
-		local bIsManualOrder = (debug.getinfo(2) == nil)
 		if nOrderType == DOTA_UNIT_ORDER_MOVE_TO_POSITION then
 			return OnMoveToPosition(hEntity, vPosition, bIsManualOrder)
 		elseif nOrderType == DOTA_UNIT_ORDER_MOVE_TO_TARGET then

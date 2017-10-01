@@ -2,11 +2,11 @@ function ApplyBurning(hTarget, hEntity, fDamagePercentHP)
 	if fDamagePercentHP > 0.1 then
 		local fBaseDuration = 5.0 * fDamagePercentHP
 		local nUnitClass = hTarget:GetUnitClass()
-		local fBurnPercent = 5.0
+		local fBurnPercent = 2.5
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
-			fBurnPercent = 2.0
-		elseif nUnitClass == IW_UNIT_CLASS_BOSS or nUnitClass == IW_UNIT_CLASS_ACT_BOSS then
 			fBurnPercent = 1.0
+		elseif nUnitClass == IW_UNIT_CLASS_BOSS or nUnitClass == IW_UNIT_CLASS_ACT_BOSS then
+			fBurnPercent = 0.5
 		end
 		local hModifier = hTarget:FindModifierByName("modifier_status_burning")
 		if hModifier then

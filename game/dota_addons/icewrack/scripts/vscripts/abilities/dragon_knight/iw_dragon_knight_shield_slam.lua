@@ -67,7 +67,7 @@ function iw_dragon_knight_shield_slam:OnSpellStart()
 	}
 	DealPrimaryDamage(self, tDamageTable)
 	
-	local nParticleID = ParticleManager:CreateParticle("particles/econ/items/dragon_knight/dk_immortal_dragon/dragon_knight_dragon_tail_iron_dragon.vpcf", PATTACH_CUSTOMORIGIN, hEntity)
+	local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_dragon_knight/dragon_knight_shield_slam.vpcf", PATTACH_CUSTOMORIGIN, hEntity)
 	ParticleManager:SetParticleControlEnt(nParticleID, 2, hEntity, PATTACH_POINT_FOLLOW, "attach_attack2", hEntity:GetAbsOrigin(), true)
 	ParticleManager:SetParticleControlEnt(nParticleID, 3, hTarget, PATTACH_POINT_FOLLOW, "attach_hitloc", hTarget:GetAbsOrigin(), true)
 	ParticleManager:SetParticleControlEnt(nParticleID, 4, hTarget, PATTACH_POINT_FOLLOW, "attach_hitloc", hTarget:GetAbsOrigin(), true)

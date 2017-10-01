@@ -272,12 +272,12 @@
 			"Properties"
 			{
 				"IW_PROPERTY_CAST_SPEED"	"%cast_speed"
+				"IW_PROPERTY_MOVE_SPEED_PCT"	"%move_speed"
 			}
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"
 			{
-				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"%move_speed"
 				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"%attack_speed"
 				"MODIFIER_PROPERTY_TURN_RATE_PERCENTAGE"		"%turn_rate"
 			}
@@ -447,9 +447,6 @@
 
 			"DatadrivenAttributes"		""
 			"DatadrivenStates"		{}
-			"DatadrivenProperties" {}
-			"DatadrivenEvents" {}
-			"DatadrivenStates"		{}
 			"DatadrivenProperties"
 			{
 				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"%attack_speed"
@@ -517,6 +514,57 @@
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"		{}
 			"DatadrivenEvents" 	{}
+		}
+	}
+
+	"iw_dragon_knight_deafening_roar"
+	{
+		"modifier_iw_dragon_knight_deafening_roar"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"%duration"
+
+			"StatusEffect"			"IW_STATUS_EFFECT_DEAF"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
+			
+			"VisualEffect"			"particles/units/heroes/hero_dragon_knight/dragon_knight_deafening_roar_slow.vpcf"
+			"VisualAttachType"		"PATTACH_OVERHEAD_FOLLOW"
+
+			"Texture"			"default"
+
+			"Properties"
+			{
+				"IW_PROPERTY_MOVE_SPEED_PCT"	"%move_speed"
+			}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"		{}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"%attack_speed"
+			}
+			"DatadrivenEvents" {}
+		}
+
+		"modifier_iw_dragon_knight_deafening_roar_stun"
+		{
+			"IsDebuff"			"1"
+			"IsDispellable"			"1"
+			"Duration"			"%duration"
+			"StatusEffect"			"IW_STATUS_EFFECT_STUN"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
+
+			"Properties"			{}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_STUNNED"	"MODIFIER_STATE_VALUE_ENABLED"
+			}
+			"DatadrivenProperties"
+			{
+				"MODIFIER_PROPERTY_OVERRIDE_ANIMATION"		"ACT_DOTA_DISABLED"
+			}
+			"DatadrivenEvents"		{}
 		}
 	}
 
@@ -904,7 +952,7 @@
 				"IW_PROPERTY_AVOID_BURN"	"100"
 				"IW_PROPERTY_AVOID_CHILL"	"100"
 				"IW_PROPERTY_AVOID_SHOCK"	"100"
-				"IW_PROPERTY_AVOID_WEAKEN"	"100"
+				"IW_PROPERTY_AVOID_DECAY"	"100"
 				"IW_PROPERTY_AVOID_CRIT"	"100"
 			}
 			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"

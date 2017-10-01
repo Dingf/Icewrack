@@ -42,6 +42,24 @@
 		"AbilitySkill"		"116"
 	}
 
+	"iw_dragon_knight_deafening_roar"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_deafening_roar.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_AOE"
+		"AbilitySkill"		"10"
+
+		"ManaCost"		"20"
+		"StaminaCost"		"20"
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_dragon_knight"
+			{
+				"ACT_DOTA_CAST_ABILITY_1"	"1.0"
+			}
+		}
+	}
+
 	"iw_dragon_knight_breathe_fire"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_breathe_fire.lua"

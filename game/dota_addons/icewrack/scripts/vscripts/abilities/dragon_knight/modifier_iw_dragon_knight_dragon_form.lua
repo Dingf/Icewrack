@@ -98,8 +98,7 @@ function modifier_iw_dragon_knight_dragon_form:OnAttack(args)
 	local hEntity = self:GetParent()
 	if args.attacker == hEntity then
 		local hTarget = args.target
-		local hSpellbook = hEntity:GetSpellbook()
-		local hBreatheFireAbility = hSpellbook:GetAbility("iw_dragon_knight_breathe_fire")
+		local hBreatheFireAbility = hEntity:FindAbilityByName("iw_dragon_knight_breathe_fire")
 		if hBreatheFireAbility then
 			local vDirection = hTarget:GetAbsOrigin() - hEntity:GetOrigin()
 			vDirection.z = 0.0

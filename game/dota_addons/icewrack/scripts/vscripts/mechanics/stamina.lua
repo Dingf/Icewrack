@@ -12,25 +12,25 @@ function modifier_internal_stamina:GetModifierAttackSpeedBonus_Constant(args)
 	local fStaminaPercent = hEntity:GetStamina()/hEntity:GetMaxStamina()
 	if fStaminaPercent < 0.1 then
 		if IsServer() and self._nLastStaminaLevel ~= 3 then
-			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -150)
-			self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT, -50)
-			hEntity:RefreshEntity()
+			--self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -150)
+			--self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT, -50)
+			--hEntity:RefreshEntity()
 			self._nLastStaminaLevel = 3
 		end
 		return -150
 	elseif fStaminaPercent < 0.25 then
 		if IsServer() and self._nLastStaminaLevel ~= 2 then
-			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -50)
-			self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT, -25)
-			hEntity:RefreshEntity()
+			--self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, -50)
+			--self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT, -25)
+			--hEntity:RefreshEntity()
 			self._nLastStaminaLevel = 2
 		end
 		return -50
 	else
 		if IsServer() and self._nLastStaminaLevel ~= 1 then
-			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, 0)
-			self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT, 0)
-			hEntity:RefreshEntity()
+			--self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, 0)
+			--self:SetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT, 0)
+			--hEntity:RefreshEntity()
 			self._nLastStaminaLevel = 1
 		end
 		return 0

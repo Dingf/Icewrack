@@ -469,7 +469,7 @@ local function ParseDatadrivenEvents(hLuaModifier, tLinkLuaModifierTemplate)
 						if szEventAlias == "OnModifierCreated" then
 							table.insert(hLuaModifier._tOnCreatedList, hWrappedEventFunction)
 						elseif szEventAlias == "OnModifierDestroy" then
-							table.insert(hLuaModifier._tOnDestroyList, hWrappedEventFunction)
+							table.insert(hLuaModifier._tOnDestroyList, 1, hWrappedEventFunction)
 						elseif szEventAlias == "OnIntervalThink" then
 							if v.ThinkInterval then
 								table.insert(hLuaModifier._tOnCreatedList, function(self, params)
@@ -623,7 +623,7 @@ for k,v in pairs(stExtModifierData) do
 						local hEntity = self:GetParent()
 						EmitSoundOn(hLuaModifier._szSoundName, hEntity)
 					end)
-				table.insert(hLuaModifier._tOnDestroyList,
+				table.insert(hLuaModifier._tOnDestroyList, 1,
 					function(self, params)
 						local hEntity = self:GetParent()
 						if hEntity and not hEntity:IsNull() and not hEntity:HasModifier(self:GetName()) then
@@ -647,7 +647,7 @@ for k,v in pairs(stExtModifierData) do
 		hLuaModifier._bIsHidden = (tLinkLuaModifierTemplate.IsHidden == 1)
 		
 		if tBaseFunctions.OnCreated then table.insert(hLuaModifier._tOnCreatedList, tBaseFunctions.OnCreated) end
-		if tBaseFunctions.OnDestroy then table.insert(hLuaModifier._tOnDestroyList, tBaseFunctions.OnDestroy) end
+		if tBaseFunctions.OnDestroy then table.insert(hLuaModifier._tOnDestroyList, 1, tBaseFunctions.OnDestroy) end
 		if tBaseFunctions.OnRefresh then table.insert(hLuaModifier._tOnRefreshList, tBaseFunctions.OnRefresh) end
 		
 		if hLuaModifier.CheckState then
