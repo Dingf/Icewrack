@@ -283,7 +283,7 @@ local function ClearNoisePoint(self, nIndex)
 end
 
 function CIcewrackNPCEntity:AddNoiseEvent(hEntity, vNoiseOrigin, fNoiseValue, bNoDetect)
-	if self:GetTeamNumber() ~= hEntity:GetTeamNumber() then
+	if self:GetTeamNumber() ~= hEntity:GetTeamNumber() and not self:HasStatusEffect(IW_STATUS_MASK_DEAF) then
 		local fNoiseThreshold = self._fNoiseThreshold
 		local fNoiseDetect = self._fNoiseDetect
 		local fNoiseValue = fNoiseValue/math.pow(math.max(1, (vNoiseOrigin - self:GetAbsOrigin()):Length2D()/100), 2)

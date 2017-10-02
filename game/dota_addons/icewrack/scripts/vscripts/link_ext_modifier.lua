@@ -186,6 +186,27 @@ function CExtModifierLinker:RecordModifierArgs(keys)
 	end
 end
 
+function CExtModifierLinker:BuildTextureArgsString()
+	local tModifierStringBuilder = {}
+	for k,v in pairs(self._tModifierArgs) do
+		if k ~= "texture" then
+			table.insert(tModifierStringBuilder, k)
+			table.insert(tModifierStringBuilder, "=")
+			table.insert(tModifierStringBuilder, v)
+			table.insert(tModifierStringBuilder, " ")
+		end
+	end
+	table.insert(tModifierStringBuilder, "modifier_class=")
+	table.insert(tModifierStringBuilder, self:GetModifierClass())
+	table.insert(tModifierStringBuilder, " ")
+	table.insert(tModifierStringBuilder, "status_effect=")
+	table.insert(tModifierStringBuilder, self:GetStatusEffect())
+	table.insert(tModifierStringBuilder, " ")
+	table.insert(tModifierStringBuilder, "texture=")
+	table.insert(tModifierStringBuilder, self._szTextureName)
+	self._szTextureArgsString = table.concat(tModifierStringBuilder, "")
+end
+
 function CExtModifierLinker:OnModifierCreatedDefault(keys)
 	self._tModifierArgs = {}
 	if not keys then keys = {} end
@@ -204,25 +225,9 @@ function CExtModifierLinker:OnModifierCreatedDefault(keys)
 			keys = tModifierArgsTable[tostring(self:RetrieveModifierID())]
 			if keys then
 				self:RecordModifierArgs(keys)
-				for k,v in pairs(keys) do
-					if k ~= "texture" and type(v) ~= "table" then
-						table.insert(tModifierStringBuilder, k)
-						table.insert(tModifierStringBuilder, "=")
-						table.insert(tModifierStringBuilder, v)
-						table.insert(tModifierStringBuilder, " ")
-					end
-				end
 			end
 		end
-		table.insert(tModifierStringBuilder, "modifier_class=")
-		table.insert(tModifierStringBuilder, self:GetModifierClass())
-		table.insert(tModifierStringBuilder, " ")
-		table.insert(tModifierStringBuilder, "status_effect=")
-		table.insert(tModifierStringBuilder, self:GetStatusEffect())
-		table.insert(tModifierStringBuilder, " ")
-		table.insert(tModifierStringBuilder, "texture=")
-		table.insert(tModifierStringBuilder, self._szTextureName)
-		self._szTextureArgsString = table.concat(tModifierStringBuilder, "")
+		self:BuildTextureArgsString()
 	elseif IsServer() and IsValidInstance(hTarget) then
 		self = CExtModifier(CInstance(self))
 		hTarget:AddChild(self)
@@ -577,8 +582,6 @@ for k,v in pairs(stExtModifierData) do
 				end
 				hLuaModifier._nVisualAttachType = _G[tLinkLuaModifierTemplate.VisualAttachType] or PATTACH_ABSORIGIN
 			end
-			
-			hLuaModifier._szTextureName = tLinkLuaModifierTemplate.Texture or k
 		else
 			hLuaModifier._fDuration = tLinkLuaModifierTemplate.Duration or -1
 			hLuaModifier._nMaxStacks = tLinkLuaModifierTemplate.MaxStacks or 0
@@ -645,6 +648,8 @@ for k,v in pairs(stExtModifierData) do
 		
 		hLuaModifier._bIsDebuff = (tLinkLuaModifierTemplate.IsDebuff == 1)
 		hLuaModifier._bIsHidden = (tLinkLuaModifierTemplate.IsHidden == 1)
+		
+		hLuaModifier._szTextureName = tLinkLuaModifierTemplate.Texture or k
 		
 		if tBaseFunctions.OnCreated then table.insert(hLuaModifier._tOnCreatedList, tBaseFunctions.OnCreated) end
 		if tBaseFunctions.OnDestroy then table.insert(hLuaModifier._tOnDestroyList, 1, tBaseFunctions.OnDestroy) end

@@ -124,13 +124,13 @@
 	"10001"
 	{
 		"Name"			"prop_iw_test_treasure_chest"
-		"Team"			"DOTA_TEAM_GOODGUYS"
+		"Team"			"2"
 		"Type"			"IW_INSTANCE_CONTAINER"
 	}
 	"10002"
 	{
 		"Name"			"npc_iw_test_beast"
-		"Team"			"DOTA_TEAM_BADGUYS"
+		"Team"			"8"
 		"Type"			"IW_INSTANCE_EXT_ENTITY"
 	}
 }

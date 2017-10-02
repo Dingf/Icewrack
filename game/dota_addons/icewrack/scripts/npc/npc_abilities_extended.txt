@@ -190,6 +190,22 @@
 		}
 	}
 
+	"iw_bounty_hunter_ensnare"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/bounty_hunter/iw_bounty_hunter_ensnare.lua"
+		"AbilityFlags"		""
+
+		"Properties"	{}
+
+		"AbilityCastAnimation"
+		{
+			"npc_dota_hero_bounty_hunter"
+			{
+				"ACT_DOTA_CAST_ABILITY_4"	"1.0"
+			}
+		}
+	}
+
 	"iw_bounty_hunter_trapjaw"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/bounty_hunter/iw_bounty_hunter_trapjaw.lua"

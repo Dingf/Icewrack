@@ -12,7 +12,7 @@
 	    *Reduces at least one of the following: movement speed, attack speed, and/or cast speed
 		
 	SILENCE
-	    *Prevents the affected unit from casting spells
+	    *Prevents the affected unit from casting spells and sets its dodge score to 0.
 		
 	ROOT
 	    *Prevents the affected unit from moving or dodging.
@@ -73,10 +73,10 @@
 	    *Deals secondary Physical damage over time.
 		
 	BLIND
-	    *Reduces line of sight to 0. Greatly reduced accuracy rating. Immune to abilities which require vision.
+	    *Reduces line of sight to 0 and accuracy to 0. Immune to abilities which require vision.
 		
 	DEAF
-		*Affected unit cannot detect sounds and has greatly reduced dodge rating. Immune to abilities which require sound.
+		*Affected unit cannot detect sounds. Immune to abilities which require sound.
 		
 	PETRIFY
 	    *Prevents all actions from the affected unit, but reduces non-Physical damage taken. If the unit receives Physical

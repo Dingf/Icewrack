@@ -140,7 +140,7 @@ CExtEntity = setmetatable({}, { __call =
 		hEntity._nUnitSubtype = GetFlagValue(tExtEntityTemplate.UnitSubtype, stExtEntityUnitSubtypeEnum)
 		hEntity._nUnitFlags   = GetFlagValue(tExtEntityTemplate.UnitFlags, stExtEntityFlagEnum)
 		hEntity._nAlignment   = stExtEntityAlignment[tExtEntityTemplate.Alignment] or IW_ALIGNMENT_TRUE_NEUTRAL
-		hEntity._nFactionMask = 0	--TODO: Implement faction masks 
+		hEntity._nFactionMask = 0
 		hEntity._fUnitHeight  = tExtEntityTemplate.UnitHeight or 0
 		hEntity._nEquipFlags  = tExtEntityTemplate.EquipFlags or 0
 		hEntity._szLootTable  = tExtEntityTemplate.LootTable		--TODO: Rework the loot mechanic for npcs
@@ -227,6 +227,10 @@ function CExtEntity:GetAlignment()
 	return self._nAlignment
 end
 
+function CExtEntity:GetFactionMask()
+	return self._nFactionMask
+end
+
 function CExtEntity:GetUnitFlags()
 	local nFlags = self._nUnitFlags
 	for k,v in pairs(self:GetChildren()) do
@@ -269,10 +273,6 @@ function CExtEntity:GetLastOrderID()
 	return self._nLastOrderID
 end
 
-function CExtEntity:GetFactionMask()
-	return self._nFactionMask
-end
-
 function CExtEntity:IsMassive()
 	return bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_MASSIVE)
 end
@@ -294,27 +294,6 @@ function CExtEntity:IsAlive()
 		return false
 	else
 		return CBaseEntity.IsAlive(self)
-	end
-end
-
-function CExtEntity:IsEnemy(hTarget)
-	if IsValidExtendedEntity(hTarget) then
-		local fWeightSum = 0
-		local nSelfMask = self._nFactionMask
-		local nTargetMask = hTarget._nFactionMask
-		if bit32.band(nSelfMask, nTargetMask) ~= 0 then
-			return false
-		end
-		for i=0,31 do
-			if bit32.btest(nSelfMask, bit32.lshift(1, i)) then
-				for j=0,31 do
-					if bit32.btest(nTargetMask, bit32.lshift(1, j)) then
-						fWeightSum = fWeightSum + CFaction:GetFactionWeight(i,j)
-					end
-				end
-			end
-		end
-		return (fWeightSum < 0.0)
 	end
 end
 

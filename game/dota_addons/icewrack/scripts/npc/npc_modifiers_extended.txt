@@ -521,6 +521,8 @@
 	{
 		"modifier_iw_dragon_knight_deafening_roar"
 		{
+			"ScriptFile"			"scripts/vscripts/abilities/dragon_knight/modifier_iw_dragon_knight_deafening_roar.lua"
+
 			"IsDebuff"			"1"
 			"IsDispellable"			"1"
 			"Duration"			"%duration"
@@ -528,8 +530,7 @@
 			"StatusEffect"			"IW_STATUS_EFFECT_DEAF"
 			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 			
-			"VisualEffect"			"particles/units/heroes/hero_dragon_knight/dragon_knight_deafening_roar_slow.vpcf"
-			"VisualAttachType"		"PATTACH_OVERHEAD_FOLLOW"
+			"VisualStatus"			"particles/units/heroes/hero_dragon_knight/status_effect_dragon_knight_deafening_roar.vpcf"
 
 			"Texture"			"default"
 
@@ -709,6 +710,33 @@
 			"DatadrivenStates"		{}
 			"DatadrivenProperties"		{}
 			"DatadrivenEvents" {}
+		}
+	}
+
+	"iw_bounty_hunter_ensnare"
+	{
+		"modifier_iw_bounty_hunter_ensnare"
+		{
+			"IsDebuff"			"1"
+			"Duration"			"%duration"
+			"StatusEffect"			"IW_STATUS_EFFECT_ROOT"
+			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
+
+			"Texture"			"default"
+
+			"VisualEffect"			"particles/units/heroes/hero_bounty_hunter/bounty_hunter_ensnare.vpcf"
+			"VisualAttachType"		"PATTACH_ABSORIGIN_FOLLOW"
+
+			"Properties"	{}
+			"DatadrivenAttributes"		""
+			"DatadrivenStates"
+			{
+				"MODIFIER_STATE_ROOTED"			"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_DISARMED"		"MODIFIER_STATE_VALUE_ENABLED"
+				"MODIFIER_STATE_INVISIBLE" 			"MODIFIER_STATE_VALUE_DISABLED"
+			}
+			"DatadrivenProperties"	{}
+			"DatadrivenEvents" 	{}
 		}
 	}
 

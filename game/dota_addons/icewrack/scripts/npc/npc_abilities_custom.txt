@@ -425,6 +425,7 @@
 		"Modifiers"
 		{
 			"modifier_iw_dragon_knight_deafening_roar"		"IW_MODIFIER_NO_TRIGGER"
+			"modifier_iw_dragon_knight_deafening_roar_hidden"	"IW_MODIFIER_NO_TRIGGER"
 			"modifier_iw_dragon_knight_deafening_roar_stun"		"IW_MODIFIER_NO_TRIGGER"
 		}
 
@@ -443,12 +444,17 @@
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"move_speed"		"-75.0"
+				"move_speed"		"-90.0"
 			}
 			"04"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"attack_speed"		"-75.0"
+				"attack_speed"		"-90.0"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"effect_bonus"		"10.0"		
 			}
 		}
 	}
@@ -779,6 +785,40 @@
 			{
 				"var_type"			"FIELD_INTEGER"
 				"armor_penetration"		"100"
+			}
+		}
+	}
+
+	"iw_bounty_hunter_ensnare"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityTextureName"			"default"
+
+		"MaxLevel"				"1"
+		"AbilityCastPoint"			"0.35"
+		"AbilityCastRange"			"500"
+
+		"Modifiers"
+		{
+			"modifier_iw_bounty_hunter_ensnare"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"duration"			"8.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"proj_speed"			"1200"
 			}
 		}
 	}
