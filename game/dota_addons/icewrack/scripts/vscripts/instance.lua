@@ -143,13 +143,12 @@ local function GetInstanceID(hInstance)
 	return hInstance._nInstanceID
 end
 
-local tIndexTableList = {}
-CInstance = 
-{
+CInstance = ext_class({
 	_bAllowDynamicInstances = true,
 	_nNextDynamicID = IW_INSTANCE_DYNAMIC_BASE,
 	_tInstanceList = {},
-}
+})
+
 CInstance = setmetatable(CInstance, { __call = 
 	function(self, hInstance, nInstanceID)
 		if nInstanceID then
@@ -162,15 +161,8 @@ CInstance = setmetatable(CInstance, { __call =
 			LogMessage("Failed to create instance \"" .. nInstanceID .. "\" - another instance with this ID already exists", LOG_SEVERITY_WARNING)
 		end
 		
-		local tBaseIndexTable = getmetatable(hInstance) and getmetatable(hInstance).__index or {}
-		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
-		if not tExtIndexTable then
-			tExtIndexTable = ExtendIndexTable(hInstance, CInstance)
-			tIndexTableList[tBaseIndexTable] = tExtIndexTable
-		end
-		setmetatable(hInstance, tExtIndexTable)
+		ExtendIndexTable(hInstance, CInstance)
 
-		hInstance._bIsInstance = true
 		hInstance._tPropertyValues = setmetatable({}, stPropertyMetatable)
 		hInstance._tChildrenInstances = {}
 		
@@ -447,7 +439,7 @@ function GetInstanceByID(nInstanceID)
 end
 
 function IsValidInstance(hInstance)
-    return (hInstance ~= nil and type(hInstance) == "table" and not (hInstance.IsNull and hInstance:IsNull()) and hInstance._bIsInstance == true)
+    return (hInstance ~= nil and type(hInstance) == "table" and not (hInstance.IsNull and hInstance:IsNull()) and IsInstanceOf(hInstance, CInstance))
 end
 
 end

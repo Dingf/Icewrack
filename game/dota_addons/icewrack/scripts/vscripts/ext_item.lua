@@ -55,8 +55,7 @@ for k,v in pairs(stExtItemFlagEnum) do _G[k] = v end
 local stBaseItemData = LoadKeyValues("scripts/npc/npc_items_custom.txt")
 local stExtItemData = LoadKeyValues("scripts/npc/npc_items_extended.txt")
 
-local tIndexTableList = {}
-CExtItem = setmetatable({}, { __call = 
+CExtItem = setmetatable(ext_class({}), { __call = 
 	function(self, hItem, nInstanceID)
 		LogAssert(IsInstanceOf(hItem, CDOTA_Item), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_Item", type(hItem))
 		if hItem._bIsExtendedItem then
@@ -64,13 +63,7 @@ CExtItem = setmetatable({}, { __call =
 		end
 		
 		hItem = CInstance(hItem, nInstanceID)
-		local tBaseIndexTable = getmetatable(hItem).__index
-		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
-		if not tExtIndexTable then
-			tExtIndexTable = ExtendIndexTable(hItem, CExtAbilityLinker, CExtItem)
-			tIndexTableList[tBaseIndexTable] = tExtIndexTable
-		end
-		setmetatable(hItem, tExtIndexTable)
+		ExtendIndexTable(hItem, CExtItem, CExtAbilityLinker)
 		
 		local szItemName = hItem:GetName()
 		local tBaseItemTemplate = stBaseItemData[szItemName]
@@ -314,7 +307,7 @@ function CExtItem:RemoveSelf()
 end
 
 function IsValidExtendedItem(hItem)
-    return (IsValidInstance(hItem) and IsValidEntity(hItem) and hItem._bIsExtendedItem)
+    return (IsValidEntity(hItem) and IsInstanceOf(hItem, CExtItem))
 end
 
 for k,v in pairs(stBaseItemData) do

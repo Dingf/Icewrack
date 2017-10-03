@@ -15,7 +15,7 @@
 		{
 			_class = "C_OP_MoveToHitbox"
 			m_flLifeTimeLerpEnd = 0.25
-			m_HitboxSetName = "head"
+			m_bUseBones = true
 		},
 		{
 			_class = "C_OP_SetSingleControlPointPosition"

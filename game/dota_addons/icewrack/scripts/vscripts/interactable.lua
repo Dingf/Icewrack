@@ -13,8 +13,7 @@ for k,v in pairs(stInteractableResultEnum) do _G[k] = v end
 
 local stInteractableData = LoadKeyValues("scripts/npc/npc_interactables_extended.txt")
 
-local tIndexTableList = {}
-CInteractable = setmetatable({}, { __call =
+CInteractable = setmetatable(ext_class({}), { __call =
 	function(self, hEntity, nInstanceID)
 		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsInteractable then
@@ -25,19 +24,12 @@ CInteractable = setmetatable({}, { __call =
 			hEntity = CInstance(hEntity, nInstanceID)
 		end
 		
+		ExtendIndexTable(hEntity, CInteractable)
+		
 		local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()] or {}
 		hEntity._fInteractRange = tInteractableTemplate.InteractRange or DEFAULT_INTERACT_RANGE
 		hEntity._szInteractZone = tInteractableTemplate.InteractZone
 		
-		local tBaseIndexTable = getmetatable(hEntity).__index
-		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
-		if not tExtIndexTable then
-			tExtIndexTable = ExtendIndexTable(hEntity, CInteractable)
-			tIndexTableList[tBaseIndexTable] = tExtIndexTable
-		end
-		setmetatable(hEntity, tExtIndexTable)
-		
-		hEntity._bIsInteractable = true
 		return hEntity
 	end})
 
@@ -126,7 +118,7 @@ function CInteractable:OnGetCustomInteractError(hEntity)
 end
 
 function IsValidInteractable(hEntity)
-    return (hEntity ~= nil and type(hEntity) == "table" and not (hEntity.IsNull and hEntity:IsNull()) and IsValidEntity(hEntity) and hEntity._bIsInteractable == true)
+    return (hEntity ~= nil and type(hEntity) == "table" and not (hEntity.IsNull and hEntity:IsNull()) and IsValidEntity(hEntity) and IsInstanceOf(hEntity, CInteractable))
 end
 
 end

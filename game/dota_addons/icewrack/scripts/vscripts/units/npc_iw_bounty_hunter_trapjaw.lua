@@ -102,7 +102,7 @@ function npc_iw_bounty_hunter_trapjaw:OnInteractFilterInclude(hEntity)
 end
 
 function Spawn(args)
-	if not IsValidWorldObject(thisEntity) then
+	--[[if not IsValidWorldObject(thisEntity) then
 		local hParent = thisEntity:GetOwner()
 		local hAbility = hParent:FindAbilityByName("iw_bounty_hunter_trapjaw")
 		thisEntity:AddNewModifier(hParent, hAbility, "modifier_iw_bounty_hunter_trapjaw_buff", {})
@@ -113,5 +113,5 @@ function Spawn(args)
 		
 		local fRandomAngle = RandomFloat(0, 6.28318530718)
 		thisEntity:SetForwardVector(Vector(math.cos(fRandomAngle), math.sin(fRandomAngle), 0))
-	end
+	end]]
 end

@@ -614,7 +614,7 @@
 			"Duration"			"%duration"
 			"Texture"			"dragon_knight_elder_dragon_form"
 
-			"ModifierEntityFlags"		"IW_UNIT_FLAG_FLYING | IW_UNIT_FLAG_MASSIVE"
+			"ModifierAddFlags"		"IW_UNIT_FLAG_FLYING | IW_UNIT_FLAG_MASSIVE"
 
 			"Properties"
 			{
@@ -664,7 +664,7 @@
 		{
 			"ScriptFile"			"scripts/vscripts/abilities/drow_ranger/modifier_iw_drow_ranger_feral_bond.lua"
 
-			"ModifierEntityFlags"		"IW_UNIT_FLAG_CAN_REVIVE"
+			"ModifierAddFlags"		"IW_UNIT_FLAG_CAN_REVIVE"
 
 			"Texture"			"iw_drow_ranger_feral_bond"
 
@@ -722,18 +722,21 @@
 			"StatusEffect"			"IW_STATUS_EFFECT_ROOT"
 			"ModifierClass"			"IW_MODIFIER_CLASS_PHYSICAL"
 
+			"ModifierRemoveFlags"		"IW_UNIT_FLAG_FLYING"
+
 			"Texture"			"default"
 
 			"VisualEffect"			"particles/units/heroes/hero_bounty_hunter/bounty_hunter_ensnare.vpcf"
 			"VisualAttachType"		"PATTACH_ABSORIGIN_FOLLOW"
 
 			"Properties"	{}
-			"DatadrivenAttributes"		""
+			"DatadrivenAttributes"		"MODIFIER_ATTRIBUTE_PERMANENT"
 			"DatadrivenStates"
 			{
 				"MODIFIER_STATE_ROOTED"			"MODIFIER_STATE_VALUE_ENABLED"
 				"MODIFIER_STATE_DISARMED"		"MODIFIER_STATE_VALUE_ENABLED"
 				"MODIFIER_STATE_INVISIBLE" 			"MODIFIER_STATE_VALUE_DISABLED"
+				"MODIFIER_STATE_FLYING" 			"MODIFIER_STATE_VALUE_DISABLED"
 			}
 			"DatadrivenProperties"	{}
 			"DatadrivenEvents" 	{}

@@ -6,9 +6,8 @@ require("interactable")
 
 local stInteractableData = LoadKeyValues("scripts/npc/npc_interactables_extended.txt")
 
-local tIndexTableList = {}
 local stWorldObjectScriptData = {}
-CWorldObject = setmetatable({}, { __call =
+CWorldObject = setmetatable(ext_class({}), { __call =
 	function(self, hEntity, nInstanceID)
 		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsWorldObject then
@@ -20,13 +19,7 @@ CWorldObject = setmetatable({}, { __call =
 		LogAssert(tInteractableTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 		
 		hEntity = CInteractable(hEntity, nInstanceID)
-		local tBaseIndexTable = getmetatable(hEntity).__index
-		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
-		if not tExtIndexTable then
-			tExtIndexTable = ExtendIndexTable(hEntity, CWorldObject)
-			tIndexTableList[tBaseIndexTable] = tExtIndexTable
-		end
-		setmetatable(hEntity, tExtIndexTable)
+		ExtendIndexTable(hEntity, CWorldObject)
 		
 		hEntity._bIsWorldObject = true
 		hEntity._fObjectState = 0
@@ -121,7 +114,7 @@ function CWorldObject:GetCustomInteractError(hEntity)
 end
 
 function IsValidWorldObject(hEntity)
-    return (IsValidInstance(hEntity) and IsValidEntity(hEntity) and hEntity._bIsWorldObject == true)
+    return (IsValidEntity(hEntity) and IsInstanceOf(hEntity, CWorldObject))
 end
 
 end

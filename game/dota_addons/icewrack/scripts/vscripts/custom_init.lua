@@ -47,20 +47,15 @@ function StringToVector(szString)
 	return nil
 end
 
-function IsInstanceOf(tObject, tClass)
-	local tObjectMetatable = getmetatable(tObject)
-	if type(tObjectMetatable) == "table" and tClass then
-		local tTargetMetatable = getmetatable(tObject).__index
-		while tTargetMetatable do
-			if tTargetMetatable == tClass then return true end
-			tObjectMetatable = getmetatable(tTargetMetatable)
-			tTargetMetatable = tObjectMetatable and tObjectMetatable.__index
-		end
+local tExtClassList = {}
+function ext_class(class)
+	if type(class) == "table" and not tExtClassList[class] then
+		tExtClassList[class] = {}
+		return class
 	end
-	return false
 end
 
-function ExtendIndexTable(tObject, ...)
+local function BuildIndexTable(tObject, ...)
 	local tObjectMetatable = getmetatable(tObject)
 	local tBaseIndexTable = setmetatable({}, { __index = tObjectMetatable and tObjectMetatable.__index or {} } )
 	local tExtendedClasses = {...}
@@ -74,6 +69,42 @@ function ExtendIndexTable(tObject, ...)
 		end
 	end
 	return { __index = tBaseIndexTable }
+end
+
+function ExtendIndexTable(tObject, class, ...)
+	local tClassIndexTableList = tExtClassList[class]
+	if tClassIndexTableList then
+		local tBaseIndexTable = getmetatable(tObject).__index
+		local tExtIndexTable = tClassIndexTableList[tBaseIndexTable]
+		if not tExtIndexTable then
+			tExtIndexTable = BuildIndexTable(tObject, ..., class)
+			tClassIndexTableList[tBaseIndexTable] = tExtIndexTable
+		end
+		setmetatable(tObject, tExtIndexTable)
+		return tExtIndexTable
+	end
+end
+
+function IsInstanceOf(tObject, class)
+	local tObjectMetatable = getmetatable(tObject)
+	if type(tObjectMetatable) == "table" and class then
+		local tTargetMetatable = getmetatable(tObject).__index
+		while tTargetMetatable do
+			local tClassIndexTableList = tExtClassList[class]
+			if tClassIndexTableList then
+				for k,v in pairs(tClassIndexTableList) do
+					if tTargetMetatable == v.__index then
+						return true
+					end
+				end
+			elseif tTargetMetatable == class then
+				return true
+			end
+			tObjectMetatable = getmetatable(tTargetMetatable)
+			tTargetMetatable = tObjectMetatable and tObjectMetatable.__index
+		end
+	end
+	return false
 end
 
 function CreateDummyUnit(vPosition, hOwner, nTeamNumber)

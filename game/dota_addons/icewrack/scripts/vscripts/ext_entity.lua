@@ -20,7 +20,7 @@ require("mechanics/attributes")
 require("mechanics/skills")
 require("instance")
 require("container")
-require("faction")
+--require("faction")
 
 stExtEntityUnitClassEnum =
 {  
@@ -106,7 +106,8 @@ local shItemSkillModifier = CreateItem("internal_skill_bonus", nil, nil)
 local shItemHoldModifier = CreateItem("internal_hold_position", nil, nil)
 
 local stExtEntityData = LoadKeyValues("scripts/npc/npc_units_extended.txt")
-local shDefaultProperties = CInstance({}, 0)
+
+local shDefaultProperties = CInstance(setmetatable({}, { __index = {} }), 0)
 for k,v in pairs(stExtEntityData["default"]) do
 	local nPropertyID = stIcewrackPropertiesName[k]
 	if nPropertyID and type(v) == "number" then
@@ -114,8 +115,7 @@ for k,v in pairs(stExtEntityData["default"]) do
 	end
 end
 
-local tIndexTableList = {} 
-CExtEntity = setmetatable({}, { __call = 
+CExtEntity = setmetatable(ext_class({}), { __call = 
 	function(self, hEntity, nInstanceID)
 		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsExtendedEntity then
@@ -126,14 +126,7 @@ CExtEntity = setmetatable({}, { __call =
 		LogAssert(tExtEntityTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 		
 		hEntity = CContainer(hEntity, nInstanceID)
-		local tBaseIndexTable = getmetatable(hEntity).__index
-		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
-		if not tExtIndexTable then
-			tExtIndexTable = ExtendIndexTable(hEntity, CExtEntity)
-			tExtIndexTable.__index._bIsExtendedEntity = true
-			tIndexTableList[tBaseIndexTable] = tExtIndexTable
-		end
-		setmetatable(hEntity, tExtIndexTable)
+		ExtendIndexTable(hEntity, CExtEntity)
 		
 		hEntity._nUnitClass   = stExtEntityUnitClassEnum[tExtEntityTemplate.UnitClass] or IW_UNIT_CLASS_NORMAL
 		hEntity._nUnitType 	  = stExtEntityUnitTypeEnum[tExtEntityTemplate.UnitType] or 0
@@ -151,6 +144,8 @@ CExtEntity = setmetatable({}, { __call =
 			local nPropertyID = stIcewrackPropertiesName[k]
 			hEntity:SetPropertyValue(nPropertyID, v)
 		end
+		
+		hEntity._nRealUnitFlags = 0
 		
 		hEntity._tAttackingTable = setmetatable({}, stZeroDefaultMetatable)
 		hEntity._tAttackedByTable = setmetatable({}, stZeroDefaultMetatable)
@@ -232,13 +227,7 @@ function CExtEntity:GetFactionMask()
 end
 
 function CExtEntity:GetUnitFlags()
-	local nFlags = self._nUnitFlags
-	for k,v in pairs(self:GetChildren()) do
-		if k.GetUnitFlags and v then
-			nFlags = bit32.bor(nFlags, k:GetUnitFlags())
-		end
-	end
-	return nFlags
+	return self._nRealUnitFlags
 end
 
 function CExtEntity:GetUnitHeight()
@@ -757,11 +746,28 @@ function CExtEntity:CurrentActionThink()
 	return 0.03
 end
 
+function CExtEntity:RefreshUnitFlags()
+	local nFlags = self._nUnitFlags
+	local tChildren = self:GetChildren()
+	for k,v in pairs(tChildren) do
+		if IsValidExtendedModifier(k) then
+			nFlags = bit32.bor(nFlags, k:GetAddFlags())
+		end
+	end
+	for k,v in pairs(tChildren) do
+		if IsValidExtendedModifier(k) then
+			nFlags = bit32.band(nFlags, bit32.bnot(k:GetRemoveFlags()))
+		end
+	end
+	self._nRealUnitFlags = nFlags
+end
+
 function CExtEntity:RefreshEntity()
 	for k,v in ipairs(self._tRefreshList) do
 		v:OnEntityRefresh()
 	end
 	
+	self:RefreshUnitFlags()
 	self:RefreshBaseAttackTime()
 	self:RefreshHealthRegen()
 	self:RefreshManaRegen()
@@ -865,7 +871,7 @@ function CExtEntity:GetCustomInteractError(hEntity)
 end
 
 function IsValidExtendedEntity(hEntity)
-    return (IsValidInstance(hEntity) and IsValidEntity(hEntity) and hEntity._bIsExtendedEntity == true)
+    return (IsValidEntity(hEntity) and IsInstanceOf(hEntity, CExtEntity))
 end
 
 function ExtUnitFilter(hEntity, hTarget, nTargetTeam, nTargetType, nTargetFlags)

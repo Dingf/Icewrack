@@ -11,8 +11,7 @@ require("link_ext_ability")
 local stBaseAbilityData = LoadKeyValues("scripts/npc/npc_abilities_custom.txt")
 local stExtAbilityData = LoadKeyValues("scripts/npc/npc_abilities_extended.txt")
 
-local tIndexTableList = {}
-CExtAbility = setmetatable({ _tIndexTableList = {} }, { __call = 
+CExtAbility = setmetatable(ext_class({}), { __call = 
 	function(self, hAbility, nInstanceID)
 		LogAssert(IsInstanceOf(hAbility, CDOTABaseAbility), LOG_MESSAGE_ASSERT_TYPE, "CDOTABaseAbility", type(hAbility))
 		if hAbility._bIsExtendedAbility then
@@ -28,15 +27,7 @@ CExtAbility = setmetatable({ _tIndexTableList = {} }, { __call =
 		end
 		
 		hAbility = CInstance(hAbility, nInstanceID)
-		local tBaseIndexTable = getmetatable(hAbility).__index
-		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
-		if not tExtIndexTable then
-			tExtIndexTable = ExtendIndexTable(hAbility, CExtAbilityLinker, CExtAbility)
-			tIndexTableList[tBaseIndexTable] = tExtIndexTable
-		end
-		setmetatable(hAbility, tExtIndexTable)
-		
-		hAbility._bIsExtendedAbility = true
+		ExtendIndexTable(hAbility, CExtAbility, CExtAbilityLinker)
 		
 		hAbility._tModifierList = {}
 		hAbility._tActiveModifierList = {}
@@ -132,7 +123,7 @@ function IsLuaAbility(hAbility)
 end
 
 function IsValidExtendedAbility(hAbility)
-    return (IsValidInstance(hAbility) and IsValidEntity(hAbility) and hAbility._bIsExtendedAbility)
+    return (IsValidEntity(hAbility) and IsInstanceOf(hAbility, CExtAbility))
 end
 
 local function ParseAbilitySpecialValues(tBaseTemplate)

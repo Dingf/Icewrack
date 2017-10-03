@@ -87,8 +87,7 @@ for k,v in pairs(stWaypointData) do
 	CIcewrackNPCWaypoints[tonumber(k)] = tWaypoint
 end
 
-local tIndexTableList = {}
-CIcewrackNPCEntity = setmetatable({}, { __call = 
+CIcewrackNPCEntity = setmetatable(ext_class({}), { __call = 
 	function(self, hEntity)
 		LogAssert(IsValidExtendedEntity(hEntity), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsNPCEntity then
@@ -99,15 +98,8 @@ CIcewrackNPCEntity = setmetatable({}, { __call =
 		LogAssert(tExtEntityTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 		
 		if not hEntity:IsRealHero() and (not tExtEntityTemplate.NoNPC or tExtEntityTemplate.NoNPC == 0) then
-			local tBaseIndexTable = getmetatable(hEntity).__index
-			local tExtIndexTable = tIndexTableList[tBaseIndexTable]
-			if not tExtIndexTable then
-				tExtIndexTable = ExtendIndexTable(hEntity, CIcewrackNPCEntity)
-				tIndexTableList[tBaseIndexTable] = tExtIndexTable
-			end
-			setmetatable(hEntity, tExtIndexTable)
+			ExtendIndexTable(hEntity, CIcewrackNPCEntity)
 			
-			hEntity._bIsNPCEntity    = true
 			hEntity._fNoiseDetect    = tExtEntityTemplate.NoiseDetect or 1.0
 			hEntity._fNoiseThreshold = tExtEntityTemplate.NoiseThreshold or 0.25
 			hEntity._fVisionDetect   = tExtEntityTemplate.VisionDetect or 1.0
@@ -722,10 +714,6 @@ function CIcewrackNPCEntity:OnNPCThink()
 	end
 end
 
-function IsValidNPCEntity(hEntity)
-    return (IsValidExtendedEntity(hEntity) and hEntity._bIsNPCEntity == true)
-end
-
 function CIcewrackNPCEntity:OnEntityLoad(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	if hEntity then
@@ -734,6 +722,11 @@ function CIcewrackNPCEntity:OnEntityLoad(args)
 		LogMessage("Failed to retrieve entity with enindex \"" .. args.entindex .. "\"", LOG_SEVERITY_ERROR)
 	end
 end
+
+function IsValidNPCEntity(hEntity)
+    return (IsValidEntity(hEntity) and IsInstanceOf(hEntity, CIcewrackNPCEntity))
+end
+
 	
 ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CIcewrackNPCEntity, "OnEntityLoad"), CIcewrackNPCEntity)
 

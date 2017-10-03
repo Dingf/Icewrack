@@ -11,6 +11,8 @@ GameRules.IsInCombat = function() return GameRules.CombatState end
 local stCombatNetTable = {}
 local nCombatParticleID = nil
 
+--TODO: Rework the combat timer so that whenever a player controlled unit attacks, it adds 5s or whatever
+--the linger time is to the timer rather than cycling through all entities every 0.1s
 shCombatTimer = CTimer(0.03, function()
 	GameRules.CombatState = false
 	local hEntity = Entities:First()

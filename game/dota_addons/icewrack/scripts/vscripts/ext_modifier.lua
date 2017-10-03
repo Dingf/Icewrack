@@ -8,8 +8,7 @@ if not CExtModifier then
 
 local stExtModifierData = LoadKeyValues("scripts/npc/npc_modifiers_extended.txt")
 
-local tIndexTableList = {}
-CExtModifier = setmetatable({}, { __call = 
+CExtModifier = setmetatable(ext_class({}), { __call = 
 	function(self, hModifier)
 		if not IsInstanceOf(hModifier, CDOTA_Buff) then
 			error("[CExtModifier]: Tried to create an extended modifier from non-modifier data", LOG_SEVERITY_ERROR)
@@ -17,13 +16,7 @@ CExtModifier = setmetatable({}, { __call =
 			return hModifier
 		end
 		
-		local tBaseIndexTable = getmetatable(hModifier).__index
-		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
-		if not tExtIndexTable then
-			tExtIndexTable = ExtendIndexTable(hModifier, CExtModifier)
-			tIndexTableList[tBaseIndexTable] = tExtIndexTable
-		end
-		setmetatable(hModifier, tExtIndexTable)
+		ExtendIndexTable(hModifier, CExtModifier)
 		
 		local szModifierName = hModifier:GetName()
 		local szAbilityName = nil
@@ -51,7 +44,8 @@ CExtModifier = setmetatable({}, { __call =
 		hModifier._bIsLuaModifier = hModifier.OnCreated and true or false
 		hModifier._szAbilityName = szAbilityName
 		
-		hModifier._nModifierEntityFlags = GetFlagValue(tExtModifierTemplate.ModifierEntityFlags, stExtEntityFlagEnum)
+		hModifier._nModifierAddFlags = GetFlagValue(tExtModifierTemplate.ModifierAddFlags, stExtEntityFlagEnum)
+		hModifier._nModifierRemoveFlags = GetFlagValue(tExtModifierTemplate.ModifierRemoveFlags, stExtEntityFlagEnum)
 		hModifier._bIsDispellable = tExtModifierTemplate.IsDispellable == 1
 		hModifier._bIsStrict =  tExtModifierTemplate.IsStrict == 1
 		
@@ -72,8 +66,12 @@ function CExtModifier:GetAbilityName()
 	return self._szAbilityName
 end
 
-function CExtModifier:GetUnitFlags()
-	return self._nModifierEntityFlags
+function CExtModifier:GetAddFlags()
+	return self._nModifierAddFlags
+end
+
+function CExtModifier:GetRemoveFlags()
+	return self._nModifierRemoveFlags
 end
 
 function CExtModifier:IsDispellable()
@@ -135,7 +133,7 @@ function CExtModifier:OnEntityRefresh()
 end
 
 function IsValidExtendedModifier(hModifier)
-    return (IsValidInstance(hModifier) and hModifier._bIsExtendedModifier)
+    return IsInstanceOf(hModifier, CExtModifier)
 end
 
 local function RemoveBuffDummy(hDummy)

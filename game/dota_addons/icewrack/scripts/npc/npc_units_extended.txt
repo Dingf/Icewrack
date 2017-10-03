@@ -562,7 +562,7 @@
 		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
 		"UnitType"			"IW_UNIT_TYPE_MELEE"
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_BEAST | IW_UNIT_SUBTYPE_BIOLOGICAL"
-		"UnitFlags"			""
+		"UnitFlags"			"IW_UNIT_FLAG_FLYING"
 		"UnitHeight"			"64"
 
 		"BaseAttackTimeFlat"		"1.75"

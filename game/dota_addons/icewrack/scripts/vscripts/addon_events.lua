@@ -273,7 +273,7 @@ local function OnCastTarget(hEntity, hAbility, hTarget, bIsManualOrder)
 			if bIsManualOrder or not hEntity:IsHoldPosition() then
 				hEntity:Stop()
 				hEntity:SetHoldPosition(false)
-				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, hTarget:GetAbsOrigin(), false)
+				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
 				CTimer(0.03, OnCastTargetVisionThink, hAbility, hEntity, hTarget, hEntity:GetLastOrderID())
 			end
 			return false

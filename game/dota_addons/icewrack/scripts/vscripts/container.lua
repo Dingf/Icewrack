@@ -7,8 +7,7 @@ require("loot_list")
 
 local stInteractableData = LoadKeyValues("scripts/npc/npc_interactables_extended.txt")
 
-local tIndexTableList = {}
-CContainer = setmetatable({}, { __call =
+CContainer = setmetatable(ext_class({}), { __call =
 	function(self, hEntity, nInstanceID, bGenerateLootTable)
 		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._bIsContainer then
@@ -17,17 +16,7 @@ CContainer = setmetatable({}, { __call =
 		
 		local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()] or {}
 		hEntity = CInteractable(hEntity, nInstanceID)
-		
-		local tBaseIndexTable = getmetatable(hEntity).__index
-		local tExtIndexTable = tIndexTableList[tBaseIndexTable]
-		if not tExtIndexTable then
-			tExtIndexTable = ExtendIndexTable(hEntity, CContainer)
-			tExtIndexTable.__index._bIsContainer = true
-			tIndexTableList[tBaseIndexTable] = tExtIndexTable
-		end
-		setmetatable(hEntity, tExtIndexTable)
-		
-		hEntity._bIsContainer = true
+		ExtendIndexTable(hEntity, CContainer)
 		
 		local hInventory = CInventory(hEntity)
 		local hLootList = CLootList(tInteractableTemplate.LootList)
@@ -57,7 +46,7 @@ function CContainer:GetCustomInteractError(hEntity)
 end
 
 function IsValidContainer(hEntity)
-    return (IsValidInstance(hEntity) and IsValidEntity(hEntity) and hEntity._bIsContainer == true)
+    return (IsValidEntity(hEntity) and IsInstanceOf(hEntity, CContainer))
 end
 
 end
