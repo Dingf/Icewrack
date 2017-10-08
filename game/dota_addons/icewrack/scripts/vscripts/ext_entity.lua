@@ -20,6 +20,8 @@ require("mechanics/attributes")
 require("mechanics/skills")
 require("instance")
 require("container")
+require("spellbook")
+require("aam")
 --require("faction")
 
 stExtEntityUnitClassEnum =
@@ -118,14 +120,16 @@ end
 CExtEntity = setmetatable(ext_class({}), { __call = 
 	function(self, hEntity, nInstanceID)
 		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
-		if hEntity._bIsExtendedEntity then
+		if IsInstanceOf(hEntity, CExtEntity) then
+			LogMessage("Tried to create a CExtEntity from \"" .. hEntity:GetUnitName() .."\", which is already a CExtEntity", LOG_SEVERITY_WARNING)
 			return hEntity
 		end
 		
 		local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
 		LogAssert(tExtEntityTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 		
-		hEntity = CContainer(hEntity, nInstanceID)
+		hEntity = CContainerEntity(hEntity, nInstanceID)
+		--hEntity = CFactionEntity(hEntity, tExtEntityTemplate.FactionMask or 0)
 		ExtendIndexTable(hEntity, CExtEntity)
 		
 		hEntity._nUnitClass   = stExtEntityUnitClassEnum[tExtEntityTemplate.UnitClass] or IW_UNIT_CLASS_NORMAL
@@ -133,9 +137,7 @@ CExtEntity = setmetatable(ext_class({}), { __call =
 		hEntity._nUnitSubtype = GetFlagValue(tExtEntityTemplate.UnitSubtype, stExtEntityUnitSubtypeEnum)
 		hEntity._nUnitFlags   = GetFlagValue(tExtEntityTemplate.UnitFlags, stExtEntityFlagEnum)
 		hEntity._nAlignment   = stExtEntityAlignment[tExtEntityTemplate.Alignment] or IW_ALIGNMENT_TRUE_NEUTRAL
-		hEntity._nFactionMask = 0
 		hEntity._fUnitHeight  = tExtEntityTemplate.UnitHeight or 0
-		hEntity._nEquipFlags  = tExtEntityTemplate.EquipFlags or 0
 		hEntity._szLootTable  = tExtEntityTemplate.LootTable		--TODO: Rework the loot mechanic for npcs
 		
 		hEntity:AddChild(shDefaultProperties)
@@ -144,6 +146,8 @@ CExtEntity = setmetatable(ext_class({}), { __call =
 			local nPropertyID = stIcewrackPropertiesName[k]
 			hEntity:SetPropertyValue(nPropertyID, v)
 		end
+		
+		hEntity:SetEquipFlags(tExtEntityTemplate.EquipFlags)
 		
 		hEntity._nRealUnitFlags = 0
 		
@@ -173,7 +177,13 @@ CExtEntity = setmetatable(ext_class({}), { __call =
 		hEntity._fTotalXP = 0
 		hEntity._fLevelXP = 0
 		
-		hEntity._tRefreshList = {}
+		hEntity._hSpellbook = CSpellbook(hEntity)
+		hEntity._hAutomator = CAbilityAutomatorModule(hEntity)
+		
+		hEntity:AddToRefreshList(hEntity._hSpellbook)
+		hEntity:AddToRefreshList(hEntity._hAutomator)
+		
+		--hEntity._tRefreshList = {}
 		hEntity:AddNewModifier(hEntity, shItemAttackModifier, "modifier_internal_attack", {})
 		hEntity:AddNewModifier(hEntity, shItemStaminaModifier, "modifier_internal_stamina", {})
 		hEntity:AddNewModifier(hEntity, shItemAttributeModifier, "modifier_internal_attribute_bonus", {})
@@ -197,8 +207,6 @@ CExtEntity = setmetatable(ext_class({}), { __call =
 			}
 			hEntity:SetThink("CurrentActionThink", hEntity, "CurrentAction", 0.03)
 		end
-		
-		FireGameEventLocal("iw_ext_entity_load", { entindex = hEntity:entindex() })
 		
 		if hEntity.OnSpawn then hEntity:OnSpawn() end
 		
@@ -234,10 +242,6 @@ function CExtEntity:GetUnitHeight()
 	return self._fUnitHeight
 end
 
-function CExtEntity:GetEquipFlags()
-	return self._nEquipFlags
-end
-
 function CExtEntity:GetLootTableName()
 	return self._szLootTable
 end
@@ -260,6 +264,14 @@ end
 
 function CExtEntity:GetLastOrderID()
 	return self._nLastOrderID
+end
+
+function CExtEntity:GetSpellbook()
+	return self._hSpellbook
+end
+
+function CExtEntity:GetAbilityAutomator()
+	return self._hAutomator
 end
 
 function CExtEntity:IsMassive()
@@ -309,7 +321,7 @@ function CExtEntity:IsHoldPosition()
     return self._bHoldPosition
 end
 
-function CExtEntity:UpdateNetTable(bSkipProperties)
+function CExtEntity:UpdateEntityNetTable(bSkipProperties)
 	if self._tNetTable then
 		if not bSkipProperties then
 			local tPropertiesBase = self._tNetTable.properties_base
@@ -350,7 +362,7 @@ function CExtEntity:IsTargetInLOS(target)
 	--Offset the endpos slightly to prevent automatic collision with the ground
 	if type(target) == "userdata" then
 		tTraceArgs.endpos = target + Vector(0, 0, 32)
-	elseif IsInstanceOf(target, CBaseEntity) then
+	elseif IsInstanceOf(target, CEntityBase) then
 		tTraceArgs.endpos = target:GetAbsOrigin() + Vector(0, 0, 32)
 		if IsValidExtendedEntity(target) then
 			tTraceArgs.endpos = tTraceArgs.endpos + Vector(0, 0, target:GetUnitHeight())
@@ -364,6 +376,14 @@ function CExtEntity:IsTargetInLOS(target)
 		end
 	end
 	return false
+end
+
+function CExtEntity:FindAbilityByName(szAbilityName)
+	local hSpellbook = self:GetSpellbook()
+	if hSpellbook then
+		return hSpellbook:FindAbilityByName(szAbilityName)
+	end
+	return CDOTA_BaseNPC.FindAbilityByName(self, szAbilityName)
 end
 
 function CExtEntity:IssueOrder(nOrder, hTarget, hAbility, vPosition, bQueue, bRepeatOnly)
@@ -423,9 +443,8 @@ function CExtEntity:CreateCorpse()
 	--This is a dumb hack but Valve hasn't exposed a method for making targets unattackable with attack-move
 	AddModifier("elder_titan_echo_stomp", "modifier_elder_titan_echo_stomp", self, self, { duration=99999999 })
 	
-	if not self:IsRevivable() then
-		local hInventory = self:GetInventory()		
-		if hInventory:IsEmpty() then
+	if not self:IsRevivable() then	
+		if self:IsInventoryEmpty() then
 			self._hCorpseItem:ApplyDataDrivenModifier(self, self, "modifier_internal_corpse_unselectable", {})
 		else
 			self._nCorpseListener = CustomGameEventManager:RegisterListener("iw_lootable_interact", function(_, args) self:OnCorpseLootableInteract(args) end)
@@ -435,8 +454,7 @@ end
 
 function CExtEntity:OnCorpseLootableInteract(args)
 	if args.lootable == self:entindex() then
-		local hInventory = self:GetInventory()
-		if hInventory:IsEmpty() then
+		if self:IsInventoryEmpty() then
 			self._hCorpseItem:ApplyDataDrivenModifier(self, self, "modifier_internal_corpse_unselectable", {})
 			CustomGameEventManager:UnregisterListener(self._nCorpseListener)
 		end
@@ -463,6 +481,9 @@ function CExtEntity:SetAttacking(hEntity)
 		self._tAttackingTable[nEntityIndex] = self._tAttackingTable[nEntityIndex] + 1
 		hEntity._tAttackedByTable[nSelfIndex] = hEntity._tAttackedByTable[nSelfIndex] + 1
 		
+		if hEntity:IsControllableByAnyPlayer() then
+			TriggerCombatEvent()
+		end
 		CTimer(IW_COMBAT_LINGER_TIME, function()
 			self._tAttackingTable[nEntityIndex] = self._tAttackingTable[nEntityIndex] - 1
 			if self._tAttackingTable[nEntityIndex] == 0 then
@@ -518,7 +539,7 @@ function CExtEntity:AddAttackSource(hSource, nLevel)
 				tAttackSourceNetTable.Level = nLevel
 			end
 			table.insert(self._tNetTable.attack_source[nLevel], hSource:entindex())
-			self:UpdateNetTable(true)
+			self:UpdateEntityNetTable(true)
 		end
 	end
 end
@@ -567,7 +588,7 @@ function CExtEntity:RemoveAttackSource(hSource, nLevel)
 						tAttackSourceNetTable.Level = nHighestLevel
 					end
 					table.remove(tAttackSourceNetTable[nLevel], k)
-					self:UpdateNetTable(true)
+					self:UpdateEntityNetTable(true)
 				end
 				return true
 			end
@@ -596,7 +617,7 @@ function CExtEntity:TriggerExtendedEvent(nEventID, args)
 	end
 end
 
-function CExtEntity:AddToRefreshList(hEntity)
+--[[function CExtEntity:AddToRefreshList(hEntity)
 	table.insert(self._tRefreshList, 1, hEntity)
 end
 
@@ -607,7 +628,7 @@ function CExtEntity:RemoveFromRefreshList(hEntity)
 			break
 		end
 	end
-end
+end]]
 
 function CExtEntity:HasStatusEffect(nStatusEffectMask)
 	for k,v in pairs(self:FindAllModifiers()) do
@@ -696,7 +717,7 @@ function CExtEntity:SetRunMode(bRunMode)
 			self._tNetTable.run_mode = bRunMode
 		end
 		self:RefreshMovementSpeed()
-		self:UpdateNetTable(true)
+		self:UpdateEntityNetTable(true)
 	end
 end
 
@@ -715,7 +736,7 @@ function CExtEntity:SetHoldPosition(bHoldMode)
 		else
 			self:RemoveModifierByName("modifier_internal_hold_position")
 		end
-		self:UpdateNetTable(true)
+		self:UpdateEntityNetTable(true)
 	end
 end
 
@@ -740,7 +761,7 @@ function CExtEntity:CurrentActionThink()
 		if szCurrentAction ~= self._tNetTable.current_action then
 			self._tNetTable.current_action = szCurrentAction
 			self._tNetTable.current_actionindex = nActionIndex
-			self:UpdateNetTable(true)
+			self:UpdateEntityNetTable(true)
 		end
 	end
 	return 0.03
@@ -762,11 +783,7 @@ function CExtEntity:RefreshUnitFlags()
 	self._nRealUnitFlags = nFlags
 end
 
-function CExtEntity:RefreshEntity()
-	for k,v in ipairs(self._tRefreshList) do
-		v:OnEntityRefresh()
-	end
-	
+function CExtEntity:OnEntityRefresh()
 	self:RefreshUnitFlags()
 	self:RefreshBaseAttackTime()
 	self:RefreshHealthRegen()
@@ -778,19 +795,23 @@ function CExtEntity:RefreshEntity()
 	self:SetPropertyValue(IW_PROPERTY_ATK_SPEED_DUMMY, self:GetIncreasedAttackSpeed() * 100)		--Only used for clientside display, since Panorama truncates to int
 	self:SetBaseMagicalResistanceValue(self:GetFatigueMultiplier())		--Hack to get fatigue multiplier on client side lua without nettables
 	
-	self:UpdateNetTable()
+	self:UpdateEntityNetTable()
+end
+
+function CExtEntity:OnEquip(hItem, nSlot)
+	if hItem:IsAttackSource() then
+		self:AddAttackSource(hItem, 1)
+	end
+end
+
+function CExtEntity:OnUnequip(hItem)
+	if hItem:IsAttackSource() then
+		hEntity:RemoveAttackSource(hItem, 1)
+	end
 end
 
 function CExtEntity:RemoveEntity()
 	self:RemoveSelf()
-end
-
-function CExtEntity:GetAutomator()
-	return nil
-end
-
-function CExtEntity:GetSpellbook()
-	return nil
 end
 
 function CExtEntity:RefreshLoadout()
@@ -799,10 +820,6 @@ end
 
 function CExtEntity:IsTargetDetected(hEntity)
 	return true
-end
-
-function CExtEntity:OnEntityRefresh()
-	self:RefreshEntity()
 end
 
 function CExtEntity:OnAttributesConfirm(args)

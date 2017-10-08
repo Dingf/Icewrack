@@ -1,6 +1,6 @@
 if IsServer() then
 require("timer")
-require("instance")
+require("entity_base")
 require("ext_modifier")
 require("link_functions")
 end
@@ -103,8 +103,8 @@ function CExtModifierLinker:RetrieveModifierID()
 	return self._nModifierID
 end
 
-function CExtModifierLinker:ApplyPropertyValues()
-	local hTarget = self:GetParent()
+--[[function CExtModifierLinker:ApplyPropertyValues()
+local hTarget = self:GetParent()
 	if IsValidInstance(hTarget) then
 		hTarget:UpdateNetTable()
 	end
@@ -115,10 +115,9 @@ function CExtModifierLinker:RemovePropertyValues()
 	if IsValidInstance(hTarget) then
 		hTarget:UpdateNetTable()
 	end
-end
+end]]
 
 function CExtModifierLinker:RefreshModifier(bRerollRandom)
-	self:RemovePropertyValues()
 	for k,v in pairs(self._tPropertyList or {}) do
 		local szPropertyType = type(v)
 		if szPropertyType == "table" and (bRerollRandom or not rawget(self._tPropertyValues, k)) then
@@ -136,7 +135,7 @@ function CExtModifierLinker:RefreshModifier(bRerollRandom)
 		end
 	end
 	self:OnRefresh()
-	self:ApplyPropertyValues()
+	--self:ApplyPropertyValues()
 end
 
 function CExtModifierLinker:CullModifierStacks()
@@ -228,7 +227,7 @@ function CExtModifierLinker:OnModifierCreatedDefault(keys)
 			end
 		end
 		self:BuildTextureArgsString()
-	elseif IsServer() and IsValidInstance(hTarget) then
+	elseif IsServer() and IsInstanceOf(hTarget, CEntityBase) then
 		self = CExtModifier(CInstance(self))
 		hTarget:AddChild(self)
 		self:RecordModifierArgs(keys)
@@ -293,8 +292,7 @@ end
 
 function CExtModifierLinker:OnModifierDestroyDefault()
 	local hTarget = self:GetParent()
-	if IsServer() and IsValidInstance(hTarget) then
-		self:RemovePropertyValues()
+	if IsServer() and IsInstanceOf(hTarget, CEntityBase) then
 		hTarget:RemoveChild(self)
 		if IsValidExtendedEntity(hTarget) then
 			local tExtModifierEvents = self:DeclareExtEvents()

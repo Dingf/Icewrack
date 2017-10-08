@@ -86,7 +86,7 @@ function modifier_internal_stamina:OnIntervalThink()
 					tNetTable.stamina = fStamina
 					tNetTable.stamina_max = fMaxStamina
 					tNetTable.stamina_time = fStaminaRegenTime
-					hEntity:UpdateNetTable(true)
+					hEntity:UpdateEntityNetTable(true)
 				end
 			end
 		end

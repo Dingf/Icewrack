@@ -2,7 +2,7 @@ if IsServer() and not modifier_internal_attack then
 
 require("ext_entity")
 require("ext_item")
-require("interactable")
+--require("interactable")
 require("npc")
 require("mechanics/accuracy")
 

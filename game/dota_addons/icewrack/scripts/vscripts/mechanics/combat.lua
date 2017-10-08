@@ -1,41 +1,36 @@
 if not GameRules.CombatState then
 
 require("timer")
-require("ext_entity")
 
 IW_COMBAT_LINGER_TIME = 5.0
 
 GameRules.CombatState = false
 GameRules.IsInCombat = function() return GameRules.CombatState end
 
+local nCombatEventID = 0
+local stCombatEventTable = {}
 local stCombatNetTable = {}
 local nCombatParticleID = nil
 
---TODO: Rework the combat timer so that whenever a player controlled unit attacks, it adds 5s or whatever
---the linger time is to the timer rather than cycling through all entities every 0.1s
-shCombatTimer = CTimer(0.03, function()
-	GameRules.CombatState = false
-	local hEntity = Entities:First()
-	while hEntity do
-		if IsValidExtendedEntity(hEntity) and hEntity:GetMainControllingPlayer() == 0 then
-			if next(hEntity._tAttackingTable) or next(hEntity._tAttackedByTable) then
-				GameRules.CombatState = true
-				break
-			end
-		end
-		hEntity = Entities:Next(hEntity)
+local function ClearCombatEvent(nEventID)
+	stCombatEventTable[nEventID] = nil
+	GameRules.CombatState = (next(stCombatEventTable) ~= nil)
+	if not GameRules.CombatState then
+		stCombatNetTable.State = GameRules.CombatState
+		CustomNetTables:SetTableValue("game", "Combat", stCombatNetTable)
 	end
-	
-	if nCombatParticleID and not GameRules.CombatState then
-		ParticleManager:DestroyParticle(nCombatParticleID, true)
-		nCombatParticleID = nil
-	elseif not nCombatParticleID and GameRules.CombatState then
-		--nCombatParticleID = ParticleManager:CreateParticle("particles/generic_gameplay/screen_combat.vpcf", PATTACH_EYES_FOLLOW, GameRules:GetPlayerHero())
+end
+
+function TriggerCombatEvent(fDuration)
+	if not fDuration then fDuration = IW_COMBAT_LINGER_TIME end
+	if not GameRules.CombatState then
+		GameRules.CombatState = true
+		stCombatNetTable.State = GameRules.CombatState
+		CustomNetTables:SetTableValue("game", "Combat", stCombatNetTable)
 	end
-	
-	stCombatNetTable.State = GameRules.CombatState
-	CustomNetTables:SetTableValue("game", "Combat", stCombatNetTable)
-	return 0.1
-end)
+	stCombatEventTable[nCombatEventID] = true
+	CTimer(fDuration, ClearCombatEvent, nCombatEventID)
+	nCombatEventID = nCombatEventID + 1
+end
 
 end

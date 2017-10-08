@@ -12,8 +12,8 @@ require("ext_item")
 require("ext_entity")
 require("ext_modifier")
 require("party")
-require("interactable")
-require("inventory")
+--require("interactable")
+--require("inventory")
 
 --TODO: Remove the trace() statements from the SFS
 
@@ -134,7 +134,7 @@ local function OnMoveToTarget(hEntity, hTarget, bIsManualOrder)
 	if IsValidExtendedEntity(hEntity) then
 		hEntity:SetHoldPosition(false)
 	end
-	if IsValidInteractable(hTarget) and OnInteractableActivate(hEntity, hTarget) ~= IW_INTERACTABLE_RESULT_FAIL then
+	if IsInstanceOf(hTarget, CEntityBase) and OnInteractableActivate(hEntity, hTarget) ~= IW_INTERACTABLE_RESULT_FAIL then
 		return true
 	end
 	return true
@@ -174,7 +174,7 @@ end
 
 local function OnAttackTarget(hEntity, hTarget, bIsManualOrder)
 	if IsValidExtendedEntity(hEntity) then
-		if IsValidInteractable(hTarget) then
+		--[[if IsValidInteractable(hTarget) then
 			local nResult = OnInteractableActivate(hEntity, hTarget)
 			if nResult == IW_INTERACTABLE_RESULT_EN_ROUTE then
 				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
@@ -184,7 +184,7 @@ local function OnAttackTarget(hEntity, hTarget, bIsManualOrder)
 				hEntity:SetHoldPosition(false)
 				return false
 			end
-		end
+		end]]
 		
 		local fAttackRange = hEntity:GetAttackRange()
 		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D() - hEntity:GetHullRadius() - hTarget:GetHullRadius()
@@ -383,12 +383,9 @@ function CIcewrackGameMode:ItemAddedToInventoryFilter(keys)
 			hItem = CExtItem(hItem)
 		end
 		if IsValidExtendedEntity(hEntity) then
-			local hInventory = hEntity:GetInventory()
-			if hInventory then
-				if not hInventory:AddItemToInventory(hItem) then
-					CTimer(0.03, CExtEntity.IssueOrder, hEntity, DOTA_UNIT_ORDER_DROP_ITEM, hEntity, hItem, hEntity:GetAbsOrigin(), false)
-					return true
-				end
+			if not hEntity:AddItemToInventory(hItem) then
+				CTimer(0.03, CExtEntity.IssueOrder, hEntity, DOTA_UNIT_ORDER_DROP_ITEM, hEntity, hItem, hEntity:GetAbsOrigin(), false)
+				return true
 			end
 		end
 	end

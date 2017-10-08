@@ -1,8 +1,9 @@
 if not CWorldObject then
 
 require("instance")
+require("entity_base")
 require("expression")
-require("interactable")
+--require("interactable")
 
 local stInteractableData = LoadKeyValues("scripts/npc/npc_interactables_extended.txt")
 
@@ -10,7 +11,8 @@ local stWorldObjectScriptData = {}
 CWorldObject = setmetatable(ext_class({}), { __call =
 	function(self, hEntity, nInstanceID)
 		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
-		if hEntity._bIsWorldObject then
+		if IsInstanceOf(hEntity, CWorldObject) then
+			LogMessage("Tried to create a CWorldObject from \"" .. hEntity:GetUnitName() .."\", which is already a CWorldObject", LOG_SEVERITY_WARNING)
 			return hEntity
 		end
 		
@@ -18,10 +20,10 @@ CWorldObject = setmetatable(ext_class({}), { __call =
 		local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()]
 		LogAssert(tInteractableTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 		
-		hEntity = CInteractable(hEntity, nInstanceID)
+		hEntity = CEntityBase(hEntity, nInstanceID)
+		--hEntity = CInteractable(hEntity, nInstanceID)
 		ExtendIndexTable(hEntity, CWorldObject)
 		
-		hEntity._bIsWorldObject = true
 		hEntity._fObjectState = 0
 		hEntity._hPrecondition = CExpression(tInteractableTemplate.Precondition or "")
 		hEntity._hPostcondition = CExpression(tInteractableTemplate.Postcondition or "")

@@ -42,9 +42,9 @@ if _VERSION < "Lua 5.2" then
     bit32 = bit.bit32
 end
 
-require("ext_entity")
+--require("ext_entity")
 require("ext_ability")
-require("party")
+--require("party")
 
 local stAAMConditionTeamEnum = 
 {
@@ -559,7 +559,6 @@ CAutomatorCondition = setmetatable({}, { __call =
 	function(self, hEntity, szActionName, nFlags1, nFlags2, nInverseMask)
 		self = setmetatable({}, {__index = CAutomatorCondition})
 		
-		self._bIsAAMCondition = true
 		self._hEntity = hEntity
 		self._szActionName = (type(szActionName) == "table") and szActionName:GetAbilityName() or szActionName
 		self._nFlags1 = nFlags1 or 0

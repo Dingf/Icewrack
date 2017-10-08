@@ -3,7 +3,7 @@
 ]]
 
 require("timer")
-require("ext_entity")
+--require("ext_entity")
 
 local tPathingNodes = {}
 local tPositionTracker = {}

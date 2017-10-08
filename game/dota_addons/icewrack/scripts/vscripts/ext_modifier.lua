@@ -2,17 +2,17 @@
     Icewrack Extended Modifier
 ]]
 
-require("mechanics/status_effects")
-
 if not CExtModifier then
+
+require("mechanics/status_effects")
 
 local stExtModifierData = LoadKeyValues("scripts/npc/npc_modifiers_extended.txt")
 
 CExtModifier = setmetatable(ext_class({}), { __call = 
 	function(self, hModifier)
-		if not IsInstanceOf(hModifier, CDOTA_Buff) then
-			error("[CExtModifier]: Tried to create an extended modifier from non-modifier data", LOG_SEVERITY_ERROR)
-		elseif hModifier._bIsExtendedModifier then
+		LogAssert(IsInstanceOf(hModifier, CDOTA_Buff), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_Buff", type(hModifier))
+		if IsInstanceOf(hModifier, CExtModifier) then
+			LogMessage("Tried to create a CExtItem from \"" .. hModifier:GetName() .."\", which is already a CExtItem", LOG_SEVERITY_WARNING)
 			return hModifier
 		end
 		
@@ -40,7 +40,6 @@ CExtModifier = setmetatable(ext_class({}), { __call =
 		
 		LogAssert(tExtModifierTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, szModifierName)
 		
-		hModifier._bIsExtendedModifier = true
 		hModifier._bIsLuaModifier = hModifier.OnCreated and true or false
 		hModifier._szAbilityName = szAbilityName
 		

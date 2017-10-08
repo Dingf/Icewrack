@@ -14,7 +14,8 @@ local stExtAbilityData = LoadKeyValues("scripts/npc/npc_abilities_extended.txt")
 CExtAbility = setmetatable(ext_class({}), { __call = 
 	function(self, hAbility, nInstanceID)
 		LogAssert(IsInstanceOf(hAbility, CDOTABaseAbility), LOG_MESSAGE_ASSERT_TYPE, "CDOTABaseAbility", type(hAbility))
-		if hAbility._bIsExtendedAbility then
+		if IsInstanceOf(hAbility, CExtAbility) then
+			LogMessage("Tried to create a CExtAbility from \"" .. hAbility:GetAbilityName() .."\", which is already a CExtAbility", LOG_SEVERITY_WARNING)
 			return hAbility
 		end
 		

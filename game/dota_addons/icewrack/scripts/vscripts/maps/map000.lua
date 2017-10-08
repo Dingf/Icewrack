@@ -136,7 +136,7 @@ function CIcewrack_Map0_00:OnCharacterSelectStart(keys)
 		CGameState:SetGameStateValue("game.hero_selection", hEntity:GetInstanceID())
 		CParty:AddToParty(hEntity)
 		hEntity:SetControllableByPlayer(0, true)
-		hEntity:GetInventory():SetGoldAmount(CGameState:GetGameStateValue("game.start_gold_" .. keys.difficulty))
+		hEntity:SetGoldAmount(CGameState:GetGameStateValue("game.start_gold_" .. keys.difficulty))
 		FireGameEventLocal("iw_map_transition", { map = "map101" })
 	end
 end

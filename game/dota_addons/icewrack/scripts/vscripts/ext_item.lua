@@ -58,7 +58,8 @@ local stExtItemData = LoadKeyValues("scripts/npc/npc_items_extended.txt")
 CExtItem = setmetatable(ext_class({}), { __call = 
 	function(self, hItem, nInstanceID)
 		LogAssert(IsInstanceOf(hItem, CDOTA_Item), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_Item", type(hItem))
-		if hItem._bIsExtendedItem then
+		if IsInstanceOf(hItem, CExtItem) then
+			LogMessage("Tried to create a CExtItem from \"" .. hItem:GetAbilityName() .."\", which is already a CExtItem", LOG_SEVERITY_WARNING)
 			return hItem
 		end
 		
@@ -70,8 +71,6 @@ CExtItem = setmetatable(ext_class({}), { __call =
 		local tExtItemTemplate = stExtItemData[szItemName]
 		LogAssert(tBaseItemTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, szItemName)
 		LogAssert(tExtItemTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, szItemName)
-		
-		hItem._bIsExtendedItem = true
 		
 		hItem._nItemType  = GetBitshiftedFlagValue(tExtItemTemplate.ItemType, stExtItemTypeEnum)
 		hItem._nItemSlots = GetBitshiftedFlagValue(tExtItemTemplate.ItemSlots, stExtItemSlotEnum)

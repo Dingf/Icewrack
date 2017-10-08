@@ -154,7 +154,7 @@ CInstance = setmetatable(CInstance, { __call =
 		if nInstanceID then
 			LogAssert(type(nInstanceID) == "number", LOG_MESSAGE_ASSERT_TYPE, "number", type(nInstanceID))
 		end
-		if hInstance._bIsInstance or (not CInstance._bAllowDynamicInstances and not hInstance) then
+		if IsInstanceOf(hInstance, CInstance) or (not CInstance._bAllowDynamicInstances and not hInstance) then
 			LogMessage("Failed to create instance \"" .. nInstanceID .. "\" - dynamic instances are currently disabled", LOG_SEVERITY_WARNING)
 			return hInstance
 		elseif nInstanceID and CInstance._tInstanceList[nInstanceID] then

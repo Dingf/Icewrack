@@ -15,13 +15,13 @@ require("game_states")
 require("ext_ability")
 require("ext_item")
 require("ext_entity")
-require("interactable")
+--require("interactable")
 require("container")
 require("world_object")
 require("npc")
 require("dialogue")
 require("spellbook")
-require("inventory")
+--require("inventory")
 require("aam")
 require("expression")
 require("party")
@@ -226,15 +226,14 @@ function CSaveManager:OnMapTransition(keys)
 end
 
 local function SaveInventoryData(hInstance)
-	local hInventory = hInstance:GetInventory()
-	if hInventory then
+	if IsValidContainer(hInstance) then
 		local tInventoryTable = {}
-		tInventoryTable.Gold = hInventory:GetGoldAmount()
+		tInventoryTable.Gold = hInstance:GetGoldAmount()
 		tInventoryTable.Equipped = {}
-		for k,v in pairs(hInventory._tEquippedItems) do
+		for k,v in pairs(hInstance._tEquippedItems) do
 			tInventoryTable.Equipped[k] = v:GetInstanceID()
 		end
-		for k,v in pairs(hInventory._tItemList) do
+		for k,v in pairs(hInstance._tItemList) do
 			table.insert(tInventoryTable, k:GetInstanceID())
 		end
 		return tInventoryTable
@@ -458,11 +457,11 @@ function CSaveManager:SaveGame(szSaveName)
 			if nInstanceID < IW_INSTANCE_DYNAMIC_BASE then
 				tSaveValue = { State = IW_SAVE_STATE_DISABLED }
 			end
-			if hInstance._bIsExtendedEntity then
+			if IsInstanceOf(hEntity, CExtEntity) then
 				tSaveData.Entities[szInstanceName] = tSaveValue
-			elseif hInstance._bIsExtendedItem then
+			elseif IsInstanceOf(hEntity, CExtItem) then
 				tSaveData.Items[szInstanceName] = tSaveValue
-			elseif hInstance._bIsInteractable then
+			elseif IsInstanceOf(hEntity, CInteractable) then
 				tSaveData.Interactables[szInstanceName] = tSaveValue
 			end
 		elseif IsValidExtendedEntity(hInstance) then
@@ -471,7 +470,7 @@ function CSaveManager:SaveGame(szSaveName)
 			if not bit32.btest(hInstance:GetItemFlags(), IW_ITEM_FLAG_DONT_SAVE) then
 				tSaveData.Items[szInstanceName] = SaveItemData(hInstance)
 			end
-		elseif IsValidInteractable(hInstance) then
+		elseif IsValidContainer(hInstance) or IsValidWorldObject(hInstance) then
 			tSaveData.Interactables[szInstanceName] = SaveInteractableData(hInstance)
 		elseif IsValidExtendedAbility(hInstance) then
 			--Do nothing; ability data is saved in the per-unit spellbook
@@ -602,27 +601,28 @@ local function LoadPhysicalItems()
 end
 
 local function LoadInventoryData(hEntity, tInventoryData)
-	local hInventory = hEntity:GetInventory()
-	local tItemSaveList = CSaveManager._tSaveData.Items or {}
-	hInventory:SetGoldAmount(tInventoryData.Gold)
-	for k,v in pairs(tInventoryData) do
-		if k ~= "Equipped" and k ~= "Gold" then
-			local hItem = LoadItemData(v, tItemSaveList[v])
-			if hItem then
-				hInventory:AddItemToInventory(hItem)
+	if IsValidContainer(hEntity) then
+		local tItemSaveList = CSaveManager._tSaveData.Items or {}
+		hEntity:SetGoldAmount(tInventoryData.Gold)
+		for k,v in pairs(tInventoryData) do
+			if k ~= "Equipped" and k ~= "Gold" then
+				local hItem = LoadItemData(v, tItemSaveList[v])
+				if hItem then
+					hEntity:AddItemToInventory(hItem)
+				end
 			end
 		end
-	end
-	for i = 1,IW_MAX_INVENTORY_SLOT-1 do
-		hInventory:UnequipItem(i)
-	end
-	for k,v in pairs(tInventoryData.Equipped or {}) do
-		local hItem = GetInstanceByID(tonumber(v))
-		if hItem then
-			hInventory:EquipItem(hItem, tonumber(k))
+		for i = 1,IW_MAX_INVENTORY_SLOT-1 do
+			hEntity:UnequipItem(i)
 		end
+		for k,v in pairs(tInventoryData.Equipped or {}) do
+			local hItem = GetInstanceByID(tonumber(v))
+			if hItem then
+				hEntity:EquipItem(hItem, tonumber(k))
+			end
+		end
+		hEntity:RefreshInventory()
 	end
-	hInventory:OnEntityRefresh()
 end
 
 local function LoadEntityData(hEntity, tEntityData)
@@ -704,7 +704,7 @@ local function LoadStaticInteractables()
 			local vForward = StringToVector(v.Forward)
 			if stInstanceData[k].Type == IW_INSTANCE_CONTAINER then
 				if tInteractableData and tInteractableData.State == IW_SAVE_STATE_ENABLED then
-					local hContainer = CContainer(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID, false)
+					local hContainer = CContainerEntity(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID)
 					LoadInventoryData(hContainer, tInteractableData.Inventory)
 					hContainer:SetAbsOrigin(vPosition)
 					hContainer:SetForwardVector(vForward)
@@ -737,7 +737,7 @@ local function LoadDynamicInteractables()
 			local vPosition = StringToVector(v.Position)
 			local vForward = StringToVector(v.Forward)
 			if v.Type == IW_INSTANCE_CONTAINER then
-				local hContainer = CContainer(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID, false)
+				local hContainer = CContainerEntity(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID)
 				LoadInventoryData(hContainer, v.Inventory)
 				hContainer:SetAbsOrigin(vPosition)
 				hContainer:SetForwardVector(vForward)
@@ -992,7 +992,8 @@ local function LoadMapContainers()
 				if vPosition.z == 0 then
 					vPosition = GetGroundPosition(vPosition, hEntity)
 				end
-				local hContainer = CContainer(CreateUnitByName(szUnitName, vPosition, false, nil, nil, nUnitTeam), nInstanceID, true)
+				local hContainer = CContainerEntity(CreateUnitByName(szUnitName, vPosition, false, nil, nil, nUnitTeam), nInstanceID)
+				hContainer:GenerateLootList(stInstanceData.LootList)
 				hContainer:SetAbsOrigin(vPosition)
 				hContainer:SetForwardVector(vForward)
 			end

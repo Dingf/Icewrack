@@ -11,10 +11,6 @@ require("mechanics/modifier_triggers")
 require("ext_item")
 require("ext_modifier")
 
-local function GetInventory(self)
-	return self._hInventory
-end
-
 CInventory = setmetatable({}, { __call = 
 	function(self, hEntity)
 		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
@@ -23,12 +19,6 @@ CInventory = setmetatable({}, { __call =
 		end
 			
 		self = setmetatable({ _bIsInventory = true }, {__index = CInventory})
-		
-		hEntity._hInventory = self
-		hEntity.GetInventory = GetInventory
-		if IsValidExtendedEntity(hEntity) then
-			hEntity:AddToRefreshList(self)
-		end
 		
 		self._bIsInventory = true
 		self._hEntity = hEntity
@@ -478,22 +468,11 @@ function CInventory:OnStore(args)
 	end
 end
 
-function CInventory:OnEntityLoad(args)
-	local hEntity = EntIndexToHScript(args.entindex)
-	if hEntity then
-		return CInventory(EntIndexToHScript(args.entindex))
-	else
-		LogMessage("Failed to retrieve entity with enindex \"" .. args.entindex .. "\"", LOG_SEVERITY_ERROR)
-	end
-end
-
 CustomGameEventManager:RegisterListener("iw_inventory_equip_item", Dynamic_Wrap(CInventory, "OnEquip"))
 CustomGameEventManager:RegisterListener("iw_inventory_drop_item", Dynamic_Wrap(CInventory, "OnDrop"))
 CustomGameEventManager:RegisterListener("iw_inventory_use_item", Dynamic_Wrap(CInventory, "OnUse"))
 CustomGameEventManager:RegisterListener("iw_inventory_use_finish", Dynamic_Wrap(CInventory, "OnUseFinish"))
 CustomGameEventManager:RegisterListener("iw_lootable_take_item", Dynamic_Wrap(CInventory, "OnTake"))
 CustomGameEventManager:RegisterListener("iw_lootable_store_item", Dynamic_Wrap(CInventory, "OnStore"))
-
-ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CInventory, "OnEntityLoad"), CInventory)
 
 end

@@ -86,7 +86,7 @@ function CParty:UpdateNetTable()
 	CustomNetTables:SetTableValue("party", "GridStates", tGridStatesTable)
 end
 
-local function PartySetGoldAmount(self, nAmount)
+--[[local function PartySetGoldAmount(self, nAmount)
 	for k,v in pairs(CParty._tMembers) do
 		local hEntity = GetInstanceByID(v)
 		if hEntity then
@@ -104,16 +104,16 @@ local function PartyAddGoldAmount(self, nAmount)
 			CInventory.AddGoldAmount(hInventory, nAmount)
 		end
 	end
-end
+end]]
 
 local function InitPartyEntity(hEntity, nSlot)
-	local hInventory = hEntity:GetInventory()
-	local hPlayerHero = GameRules:GetPlayerHero()
-	if IsValidExtendedEntity(hPlayerHero) then
-		hInventory:SetGoldAmount(hPlayerHero:GetInventory():GetGoldAmount())
-	end
-	hInventory.SetGoldAmount = PartySetGoldAmount
-	hInventory.AddGoldAmount = PartyAddGoldAmount
+	--local hInventory = hEntity:GetInventory()
+	--local hPlayerHero = GameRules:GetPlayerHero()
+	--if IsValidExtendedEntity(hPlayerHero) then
+	--	hInventory:SetGoldAmount(hPlayerHero:GetInventory():GetGoldAmount())
+	--end
+	--hInventory.SetGoldAmount = PartySetGoldAmount
+	--hInventory.AddGoldAmount = PartyAddGoldAmount
 	CParty._tMembers[nSlot] = hEntity:GetInstanceID()
 	CParty:SetPartyMemberFormation(hEntity)
 	CParty:UpdateNetTable()

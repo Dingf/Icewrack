@@ -1,7 +1,7 @@
 if not CDialogueEntity then
 
+require("entity_base")
 require("expression")
-require("interactable")
 require("ext_entity")
 
 --TODO: Silence the player hero or do something to stop them from using abilities/items during dialogue
@@ -49,7 +49,7 @@ CDialogueEntity = setmetatable({ _tDialogueNodeList = {} }, { __call =
 			return hEntity
 		end
 		
-		hEntity = CInteractable(hEntity)
+		hEntity = CEntityBase(hEntity)
 		
 		local tEntityMetatable = setmetatable({}, { __index = getmetatable(hEntity).__index } )
 		for k,v in pairs(CDialogueEntity) do if type(v) == "function" then tEntityMetatable[k] = v end end

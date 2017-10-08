@@ -5,7 +5,7 @@
 if not CAbilityAutomatorModule then
 
 require("mechanics/difficulty")
-require("ext_entity")
+--require("ext_entity")
 require("aam_special")
 require("aam_condition")
 
@@ -17,10 +17,6 @@ local stAAMStateEnum =
 }
 
 for k,v in pairs(stAAMStateEnum) do _G[k] = v end
-
-local function GetAbilityAutomator(self)
-	return self._hAutomator
-end
 
 --TODO: Load default AAM data from a kv file
 --stAbilityAutomatorData = LoadKeyValues("scripts/npc/npc_units_aam.txt")
@@ -38,9 +34,6 @@ CAbilityAutomatorModule = setmetatable({}, { __call =
 				return CAbilityAutomatorModule[k] or nil
 			end})
 		
-		hEntity._hAutomator = self
-		hEntity.GetAbilityAutomator = GetAbilityAutomator
-		hEntity:AddToRefreshList(self)
 		
 		self._bIsAutomator = true
 		self._bIsEnabled = false
@@ -365,15 +358,6 @@ function CAbilityAutomatorModule:OnDeleteAutomator(args)
 	end
 end
 
-function CAbilityAutomatorModule:OnEntityLoad(args)
-	local hEntity = EntIndexToHScript(args.entindex)
-	if hEntity then
-		return CAbilityAutomatorModule(EntIndexToHScript(args.entindex))
-	else
-		LogMessage("Failed to retrieve entity with enindex \"" .. args.entindex .. "\"", LOG_SEVERITY_ERROR)
-	end
-end
-
 CustomGameEventManager:RegisterListener("iw_aam_change_state", Dynamic_Wrap(CAbilityAutomatorModule, "OnChangeState"))
 CustomGameEventManager:RegisterListener("iw_aam_update_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnUpdate"))
 CustomGameEventManager:RegisterListener("iw_aam_move_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnMove"))
@@ -381,7 +365,5 @@ CustomGameEventManager:RegisterListener("iw_aam_delete_condition", Dynamic_Wrap(
 CustomGameEventManager:RegisterListener("iw_aam_save", Dynamic_Wrap(CAbilityAutomatorModule, "OnSave"))
 CustomGameEventManager:RegisterListener("iw_aam_load", Dynamic_Wrap(CAbilityAutomatorModule, "OnLoad"))
 CustomGameEventManager:RegisterListener("iw_aam_delete_automator", Dynamic_Wrap(CAbilityAutomatorModule, "OnDeleteAutomator"))
-
-ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CAbilityAutomatorModule, "OnEntityLoad"), CAbilityAutomatorModule)
 
 end

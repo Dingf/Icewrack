@@ -87,10 +87,12 @@ for k,v in pairs(stWaypointData) do
 	CIcewrackNPCWaypoints[tonumber(k)] = tWaypoint
 end
 
+--TODO: Figure out a way to make npcs work again now that we don't use ext_entity_load
 CIcewrackNPCEntity = setmetatable(ext_class({}), { __call = 
 	function(self, hEntity)
 		LogAssert(IsValidExtendedEntity(hEntity), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
-		if hEntity._bIsNPCEntity then
+		if IsInstanceOf(hEntity, CIcewrackNPCEntity) then
+			LogMessage("Tried to create a CIcewrackNPCEntity from \"" .. hEntity:GetUnitName() .."\", which is already a CIcewrackNPCEntity", LOG_SEVERITY_WARNING)
 			return hEntity
 		end
 		

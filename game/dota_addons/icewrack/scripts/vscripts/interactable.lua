@@ -16,12 +16,9 @@ local stInteractableData = LoadKeyValues("scripts/npc/npc_interactables_extended
 CInteractable = setmetatable(ext_class({}), { __call =
 	function(self, hEntity, nInstanceID)
 		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
-		if hEntity._bIsInteractable then
+		if IsInstanceOf(hEntity, CInteractable) then
+			LogMessage("Tried to create a CInteractable from \"" .. hEntity:GetUnitName() .."\", which is already a CInteractable", LOG_SEVERITY_WARNING)
 			return hEntity
-		end
-		
-		if not IsValidInstance(hEntity) then
-			hEntity = CInstance(hEntity, nInstanceID)
 		end
 		
 		ExtendIndexTable(hEntity, CInteractable)

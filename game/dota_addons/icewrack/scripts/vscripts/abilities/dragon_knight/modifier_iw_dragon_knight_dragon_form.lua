@@ -44,7 +44,7 @@ function modifier_iw_dragon_knight_dragon_form:OnCreated(args)
 		local hAttackSource = self:GetAbility()._hAttackSource
 		hAttackSource:AddChild(hEntity)
 		hEntity:AddAttackSource(hAttackSource, 2)
-		hEntity:GetInventory():AddItemToInventory(hAttackSource)
+		hEntity:AddItemToInventory(hAttackSource)
 		
 		hEntity:SetModelScale(2.0)
 		hEntity:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK)
@@ -79,7 +79,7 @@ function modifier_iw_dragon_knight_dragon_form:OnDestroy(args)
 		local hAttackSource = self:GetAbility()._hAttackSource
 		hAttackSource:RemoveChild(hEntity)
 		hEntity:RemoveAttackSource(hAttackSource, 2)
-		hEntity:GetInventory():RemoveItem(hAttackSource)
+		hEntity:RemoveItem(hAttackSource)
 		
 		hEntity:SetModelScale(self._fBaseModelScale)
 		hEntity:SetAttackCapability(self._szBaseAttackCap)

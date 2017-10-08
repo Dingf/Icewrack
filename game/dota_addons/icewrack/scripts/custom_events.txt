@@ -37,11 +37,6 @@
 		"map"		"string"
 	}
 
-	"iw_ext_entity_load"
-	{
-		"entindex"	"int"
-	}
-
 	"iw_sfs_save_start"
 	{
 		"filename"	"string"

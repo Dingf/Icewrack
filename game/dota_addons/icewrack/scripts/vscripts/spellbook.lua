@@ -4,23 +4,17 @@
 
 if not CSpellbook then
 
-require("timer")
 require("mechanics/combat")
-require("ext_entity")
 require("ext_ability")
 require("ext_modifier")
 
 IW_SPELLBOOK_BIND_SLOTS = 10
 
-local function GetSpellbook(self)
-	return self._hSpellbook
-end
-
 stAbilityComboData = LoadKeyValues("scripts/npc/npc_abilities_combo.txt")
 
 CSpellbook = setmetatable({ _stAbilityCombos = {} }, { __call = 
 	function(self, hEntity)
-		LogAssert(IsValidExtendedEntity(hEntity), LOG_MESSAGE_ASSERT_TYPE, "CExtEntity", type(hEntity))
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
 		if hEntity._hSpellbook and hEntity._hSpellbook._bIsSpellbook then
 			return hEntity._hSpellbook
 		end
@@ -29,11 +23,6 @@ CSpellbook = setmetatable({ _stAbilityCombos = {} }, { __call =
 		function(self, k)
 			return CSpellbook[k] or nil
 		end})
-		
-		hEntity._hSpellbook = self
-		hEntity.GetSpellbook = GetSpellbook
-		hEntity.FindAbilityByName = Dynamic_Wrap(CSpellbook, "FindAbilityByName")
-		hEntity:AddToRefreshList(self)
 		
 		self._bIsSpellbook = true
 		self._hEntity = hEntity
@@ -63,12 +52,11 @@ function CSpellbook:GetKnownAbilities()
 end
 
 function CSpellbook:FindAbilityByName(szAbilityName)
-	local hEntity = IsValidExtendedEntity(self) and self or self._hEntity
-	local hSpellUnit = hEntity._hSpellbook._tSpellList[szAbilityName]
+	local hSpellUnit = self._tSpellList[szAbilityName]
 	if hSpellUnit then
 		return hSpellUnit:FindAbilityByName(szAbilityName)
 	end
-	return CDOTA_BaseNPC.FindAbilityByName(hEntity, szAbilityName)
+	return CDOTA_BaseNPC.FindAbilityByName(self._hEntity, szAbilityName)
 end
 
 function CSpellbook:GetAbility(szAbilityName)
@@ -189,7 +177,7 @@ end
 function CSpellbook:OnAbilityBind(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	local hSpellbook = hEntity:GetSpellbook()
-	if IsValidExtendedEntity(hEntity) and hSpellbook and not GameRules:IsInCombat() then
+	if hSpellbook and not GameRules:IsInCombat() then
 		local hAbility = EntIndexToHScript(args.ability)
 		local szAbilityName = hAbility and hAbility:GetAbilityName() or ""
 		local hSpellUnit = hSpellbook._tSpellList[szAbilityName]
@@ -238,18 +226,8 @@ function CSpellbook:OnAbilityCombo(args)
 	end
 end
 
-function CSpellbook:OnEntityLoad(args)
-	local hEntity = EntIndexToHScript(args.entindex)
-	if hEntity then
-		return CSpellbook(EntIndexToHScript(args.entindex))
-	else
-		LogMessage("Failed to retrieve entity with enindex \"" .. args.entindex .. "\"", LOG_SEVERITY_ERROR)
-	end
-end
-
 ListenToGameEvent("iw_ability_combo", Dynamic_Wrap(CSpellbook, "OnAbilityCombo"), CSpellbook)
 ListenToGameEvent("iw_actionbar_bind", Dynamic_Wrap(CSpellbook, "OnAbilityBind"), CSpellbook)
-ListenToGameEvent("iw_ext_entity_load", Dynamic_Wrap(CSpellbook, "OnEntityLoad"), CSpellbook)
 CustomGameEventManager:RegisterListener("iw_actionbar_bind", Dynamic_Wrap(CSpellbook, "OnAbilityBind"))
 
 end
