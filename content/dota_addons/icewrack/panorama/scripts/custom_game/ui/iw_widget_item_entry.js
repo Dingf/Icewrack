@@ -104,18 +104,34 @@ function OnItemEntryDragEnd(hPanel, hDraggedPanel)
 	return true;
 }
 
+function OnItemEntryMouseOverThink()
+{
+	if ($.GetContextPanel()._bMouseOver)
+	{
+		var nItemIndex = $.GetContextPanel().GetAttributeInt("itemindex", -1);
+		if (nItemIndex !== -1)
+		{
+			var szTooltipArgs = "itemindex=" + nItemIndex;
+			$.DispatchEvent("UIShowCustomLayoutParametersTooltip", "ItemTooltip", "file://{resources}/layout/custom_game/tooltip/iw_tooltip_item.xml", szTooltipArgs);
+		}
+		$.Schedule(0.03, OnItemEntryMouseOverThink);
+	}
+	else
+	{
+		$.DispatchEvent("UIHideCustomLayoutTooltip", "ItemTooltip");
+	}
+	return 0.03
+}
+
 function OnItemEntryMouseOver()
 {
-	var hContextPanel = $.GetContextPanel();
-	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
-	$.DispatchEvent("DOTAShowAbilityTooltipForEntityIndex", hContextPanel, hContextPanel._tPanelData.name, nEntityIndex);
-	//hPanel.SetAttributeInt("tooltip_active", 1);
+	$.GetContextPanel()._bMouseOver = true;
+	OnItemEntryMouseOverThink();
 }
 
 function OnItemEntryMouseOut()
 {
-	//$.GetContextPanel().SetAttributeInt("tooltip_active", 0);
-	$.DispatchEvent("DOTAHideAbilityTooltip", $.GetContextPanel());
+	$.GetContextPanel()._bMouseOver = false;
 }
 
 function OnItemEntryActivate()

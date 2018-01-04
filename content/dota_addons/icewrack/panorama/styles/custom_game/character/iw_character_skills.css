@@ -17,7 +17,7 @@
 {
 	width: 100%;
 	height: 28px;
-	margin-bottom: 2px;
+	margin-bottom: 12px;
 	flow-children: right;
 }
 
@@ -53,7 +53,7 @@
 
 .SkillEntryTitleLabel
 {
-	width: 160px;
+	width: 144px;
 	color: #ffffff40;
 	font-size: 18px;
 	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
@@ -62,7 +62,7 @@
 
 .SkillEntryLevelContainer
 {
-	width: 40px;
+	width: 48px;
 	height: 100%;
 }
 
@@ -92,7 +92,7 @@
 
 .SkillEntryCostLabel
 {
-	width: 48px;
+	width: 56px;
 	color: #ffffff40;
 	font-size: 20px;
 	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;

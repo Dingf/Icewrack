@@ -1,6 +1,15 @@
 "IcewrackExtendedItemDefinitions"
 {
-	"iw_dragon_knight_dragon_form_source"
+	"item_internal_attack"	{}
+	"item_internal_attribute_bonus"	{}
+	"item_internal_skill_bonus"	{}
+	"item_internal_stamina"	{}
+	"item_internal_deniable"	{}
+	"item_internal_carry_weight"	{}
+	"item_internal_dialogue"	{}
+	"item_internal_corpse"	{}
+	
+	"item_iw_dragon_knight_dragon_form_source"
 	{
 		"ItemFlags"		"IW_ITEM_FLAG_ATTACK_SOURCE | IW_ITEM_FLAG_HIDDEN | IW_ITEM_FLAG_DONT_SAVE | IW_ITEM_FLAG_NO_DAMAGE"
 
@@ -16,7 +25,7 @@
 		}
 	}
 
-	"iw_lina_lesser_fireball_source"
+	"item_iw_lina_lesser_fireball_source"
 	{
 		"ItemFlags"		"IW_ITEM_FLAG_ATTACK_SOURCE | IW_ITEM_FLAG_HIDDEN | IW_ITEM_FLAG_DONT_SAVE | IW_ITEM_FLAG_NO_DAMAGE"
 
@@ -26,11 +35,14 @@
 		{
 			"IW_PROPERTY_ATTACK_RANGE"			"800"
 			"IW_PROPERTY_BASE_ATTACK_FLAT"			"2.4"
-			"IW_PROPERTY_ATTACK_MP_FLAT"			"10"
+			"IW_PROPERTY_ACCURACY_FLAT"			"100"
 			"IW_PROPERTY_CRIT_CHANCE_FLAT"			"0.05"
 			"IW_PROPERTY_CRIT_MULTI_FLAT"			"0.5"
 		}
 	}
+
+	"item_map000_buff"	{}
+
 
 	"item_test_component"
 	{
@@ -177,21 +189,19 @@
 
 	"item_test_potion"
 	{
-		"ItemType"		"IW_ITEM_TYPE_CONSUMABLE_POTION"
+		"ItemType"		"IW_ITEM_TYPE_USEABLE_POTION"
 		"ItemFlags"		"IW_ITEM_FLAG_CAN_ACTIVATE"
 		"ItemWeight"		"0.1"
 		"ItemValue"		"1000"
 
-		"DatadrivenEvents"
-		{
-			"ABILITY_EVENT_ON_SPELL_START"
-			{
-				"HealHP"
-				{
-					"Amount"	"50"
-				}
-			}
-		}
+	}
+
+	"item_test_potion2"
+	{
+		"ItemType"		"IW_ITEM_TYPE_USEABLE_POTION"
+		"ItemFlags"		"IW_ITEM_FLAG_CAN_ACTIVATE"
+		"ItemWeight"		"0.1"
+		"ItemValue"		"1000"
 
 	}
 }

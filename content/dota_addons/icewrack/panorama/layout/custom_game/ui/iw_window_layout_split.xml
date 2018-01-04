@@ -1,0 +1,11 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_window.css" />
+	</styles>
+	
+	<Panel hittest="false" class="WindowSplitLayoutRoot">
+		<Image hittest="false" class="WindowDivider" src="file://{images}/custom_game/ui/iw_window_divider.tga" />
+		<Panel hittest="false" class="WindowHalfContent" id="WindowLeftContent" />
+		<Panel hittest="false" class="WindowHalfContent" id="WindowRightContent" />
+	</Panel>
+</root>

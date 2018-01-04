@@ -2,6 +2,8 @@
 
 var tComparatorList =
 [
+	function(hPanel1, hPanel2) { return hPanel1._tPanelData.type <= hPanel2._tPanelData.type; },
+	function(hPanel1, hPanel2) { return hPanel1._tPanelData.type >= hPanel2._tPanelData.type; },
 	function(hPanel1, hPanel2) { return $.Localize("DOTA_Tooltip_Ability_" + hPanel1._tPanelData.name) <= $.Localize("DOTA_Tooltip_Ability_" + hPanel2._tPanelData.name); },
 	function(hPanel1, hPanel2) { return $.Localize("DOTA_Tooltip_Ability_" + hPanel1._tPanelData.name) >= $.Localize("DOTA_Tooltip_Ability_" + hPanel2._tPanelData.name); },
 	function(hPanel1, hPanel2) { return hPanel1._tPanelData.value <= hPanel2._tPanelData.value; },
@@ -87,7 +89,7 @@ function OnItemListUpdate(hContextPanel, tArgs)
 {
 	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
 	var tInventoryData = CustomNetTables.GetTableValue("inventory", nEntityIndex);
-	 
+	
 	if (typeof(tInventoryData) === "undefined")
 		return;
 	
@@ -186,6 +188,12 @@ function OnWindowTabActivate(hContextPanel, tArgs)
 	return true;
 }
 
+function OnItemListTypeSort()
+{
+	$("#TypeCategory").SetAttributeInt("sort_state", 1 - $("#TypeCategory").GetAttributeInt("sort_state", 0));
+	DispatchCustomEvent($.GetContextPanel(), "ItemListSort", { panel:$("#TypeCategory") });
+}
+
 function OnItemListNameSort()
 {
 	$("#NameCategory").SetAttributeInt("sort_state", 1 - $("#NameCategory").GetAttributeInt("sort_state", 0));
@@ -227,7 +235,7 @@ function OnItemListLoad()
 	
 	CreateVerticalScrollbar($("#ListContainer"), "ItemListScrollbar", $("#ListBody"));
 	
-	$.GetContextPanel()._tSortCategories = [ $("#NameCategory"), $("#ValueCategory"), $("#WeightCategory") ];
+	$.GetContextPanel()._tSortCategories = [ $("#TypeCategory"), $("#NameCategory"), $("#ValueCategory"), $("#WeightCategory") ];
 	for (var i = 0; i < $.GetContextPanel()._tSortCategories.length; i++)
 	{
 		$.GetContextPanel()._tSortCategories[i].SetAttributeInt("category", i);

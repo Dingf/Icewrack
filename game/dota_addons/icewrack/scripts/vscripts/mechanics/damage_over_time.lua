@@ -52,7 +52,7 @@ function OnIntervalThink(self, keys)
 			if fResistance < 1.0 then
 				self._fDamageRemainder = self._fDamageRemainder / (1.0 - fResistance)
 			end
-			self._fDamageRemainder = self._fDamageRemainder / keys.target:GetDamageEffectiveness()
+			self._fDamageRemainder = self._fDamageRemainder / keys.target:GetDamageTakenMultiplier()
 			self._fDamageRemainder = self._fDamageRemainder / self:GetCaster():GetDamageModifier(self._nDamageType)
 		else
 			self._fDamageRemainder = fDamage

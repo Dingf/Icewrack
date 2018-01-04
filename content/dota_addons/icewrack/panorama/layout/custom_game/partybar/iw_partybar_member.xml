@@ -31,9 +31,9 @@
 			<Image hittest="false" class="PartyBarActionImage" id="ActionImage" src="file://{images}/spellicons/default.png" />
 			<Label hittest="false" class="PartyBarActionLabel" id="ActionLabel" text="" />
 		</Panel>
-		<Panel onactivate="OnSelectPortraitUnit()" ondblclick="OnCenterPortraitUnit()" class="PartyBarPortraitContainer" id="PortraitContainer">
+		<Panel onactivate="OnActivatePortraitUnit()" ondblclick="OnDoubleClickPortraitUnit()" class="PartyBarPortraitContainer" id="PortraitContainer">
 			<Image hittest="false" class="PartyBarPortrait" id="Portrait" src="file://{images}/portraits/default.png" />
-			<Image hittest="false" class="PartyBarDeathPortrait" id="DeathPortrait" src="file://{images}/portraits/death_overlay.png" />
+			<Image hittest="false" class="PartyBarDeathPortrait" id="DeathPortrait" />
 		</Panel>
 		<Image hittest="false" class="PartyBarOverlay" />
 		<Image hittest="false" class="PartyBarSecondarySelectOverlay" id="SecondarySelectOverlay"/>

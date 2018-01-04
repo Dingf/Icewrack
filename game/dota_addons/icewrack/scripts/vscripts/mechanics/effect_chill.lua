@@ -7,10 +7,10 @@ function ApplyChill(hTarget, hEntity, fDamagePercentHP)
 			return
 		end
 		
-		hTarget:DispelStatusEffects(IW_STATUS_MASK_WARM + IW_STATUS_MASK_BURNING)
+		hTarget:DispelStatusEffects(IW_STATUS_MASK_WARM)
 	
 		local fBaseDuration = 10.0 * fDamagePercentHP
-		local nUnitClass = hTarget:GetUnitClass()
+		local nUnitClass = IsValidExtendedEntity(hTarget) and hTarget:GetUnitClass() or IW_UNIT_CLASS_NORMAL
 		local fChillFactor = 1.0
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
 			fChillFactor = 0.4

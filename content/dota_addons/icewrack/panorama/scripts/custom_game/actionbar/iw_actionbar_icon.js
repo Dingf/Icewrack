@@ -14,14 +14,14 @@ function OnActionBarIconActivateEvent(hContextPanel, tArgs)
 			for (var i = 0; i < 4; i++)
 			{
 				var nSkill = (nSkillMask >>> (i << 3)) & 0xFF;
-				if ((nSkill !== 0) && (nSkill <= 26))
+				if ((nSkill !== 0) && (nSkill <= 24))
 				{
 					if (bIsFirstSkill)
 						bIsFirstSkill = false;
 					else
 						szErrorMessage += ", ";
 					
-					var szSkillName = $.Localize("#iw_ui_character_skills_" + Math.floor((nSkill - 1)/13) + "_" + (nSkill - 1) % 13);
+					var szSkillName = $.Localize("#iw_ui_character_skills_" + Math.floor((nSkill - 1)/12) + "_" + (nSkill - 1) % 12);
 					szErrorMessage += szSkillName;
 				}
 			}
@@ -62,14 +62,14 @@ function OnActionBarIconDoubleClickEvent(hContextPanel, tArgs)
 			for (var i = 0; i < 4; i++)
 			{
 				var nSkill = (nSkillMask >>> (i << 3)) & 0xFF;
-				if ((nSkill !== 0) && (nSkill <= 26))
+				if ((nSkill !== 0) && (nSkill <= 24))
 				{
 					if (bIsFirstSkill)
 						bIsFirstSkill = false;
 					else
 						szErrorMessage += ", ";
 					
-					var szSkillName = $.Localize("#iw_ui_character_skills_" + Math.floor((nSkill - 1)/13) + "_" + (nSkill - 1) % 13);
+					var szSkillName = $.Localize("#iw_ui_character_skills_" + Math.floor((nSkill - 1)/12) + "_" + (nSkill - 1) % 12);
 					szErrorMessage += szSkillName;
 				}
 			}
@@ -153,7 +153,6 @@ function OnActionBarIconMouseOverThink()
 	}
 	else
 	{
-		$.GetContextPanel()._bTooltipVisible = false;
 		$.DispatchEvent("UIHideCustomLayoutTooltip", "AbilityTooltip");
 	}
 	return 0.03
@@ -161,7 +160,6 @@ function OnActionBarIconMouseOverThink()
 
 function OnActionBarIconMouseOver()
 {
-	$.GetContextPanel()._bTooltipVisible = false;
 	$.GetContextPanel()._bMouseOver = true;
 	OnActionBarIconMouseOverThink();
 }
@@ -378,14 +376,13 @@ function OnActionBarIconRefresh(hContextPanel, tArgs)
 	if ((nAbilityIndex !== -1) && (nEntityIndex !== -1))
 	{
 		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-		var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
-		var tSpellData = tEntitySpellbook.Spells[nAbilityIndex];
+		var tAbilityData = CustomNetTables.GetTableValue("abilities", nAbilityIndex);
 				
 		var szAbilityTextureName = Abilities.GetAbilityTextureName(nAbilityIndex);
 		hContextPanel.FindChildTraverse("AbilityTexture").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
 		
 		var bIsSkillRequirementMet = true;
-		var nSkillMask = tSpellData ? tSpellData.skill : 0;
+		var nSkillMask = tAbilityData.skill;
 		var nMissingMask = 0;
 		for (var i = 0; i < 4; i++)
 		{
@@ -407,22 +404,23 @@ function OnActionBarIconRefresh(hContextPanel, tArgs)
 		var bIsAbilityActivated = Abilities.IsActivated(nAbilityIndex);
 		if ((nCurrentLevel > 0) && bIsSkillRequirementMet && bIsAbilityActivated)
 		{
-			var nManaCost = Abilities.GetManaCost(nAbilityIndex);
+			var nManaCost = tAbilityData.mana;
 			if (nManaCost > 0)
 			{
 				hContextPanel.FindChildTraverse("ManaIndicator").visible = true;
 				hContextPanel.FindChildTraverse("ManaLabel").visible = true;
 				hContextPanel.FindChildTraverse("ManaLabel").text = "" + nManaCost;
 			}
+			hContextPanel.SetAttributeInt("mana_cost", nManaCost);
 			
-			var nStaminaCost = tSpellData.stamina;
+			var nStaminaCost = tAbilityData.stamina;
 			if (nStaminaCost > 0)
 			{
 				hContextPanel.FindChildTraverse("StaminaIndicator").visible = true;
 				hContextPanel.FindChildTraverse("StaminaLabel").visible = true;
 				hContextPanel.FindChildTraverse("StaminaLabel").text = "" + nStaminaCost.toFixed(0);
-				hContextPanel.SetAttributeInt("stamina_cost", nStaminaCost);
 			}
+			hContextPanel.SetAttributeInt("stamina_cost", nStaminaCost);
 			
 			UpdateActionBarIconCooldown(hContextPanel);
 		}
@@ -456,12 +454,13 @@ function UpdateActionBarIcon()
 		var szAbilityName = Abilities.GetAbilityName(nAbilityIndex);
 		var tEntityData = CustomNetTables.GetTableValue("entities", nCasterIndex);
 		
+		var nManaCost = $.GetContextPanel().GetAttributeInt("mana_cost", 0);
 		var nStaminaCost = $.GetContextPanel().GetAttributeInt("stamina_cost", 0);
-		var nStamina = tEntityData ? tEntityData.stamina : 0;
+		var nStamina = Entities.GetStamina(nCasterIndex);
 
 		var bLevelFlag = ((nLevel === 0) || !Abilities.IsActivated(nAbilityIndex));
 		var bSkillFlag = (!bLevelFlag && ($.GetContextPanel().GetAttributeInt("skill_mask", 0) !== 0));
-		var bManaFlag = (!bLevelFlag && !bSkillFlag && (Entities.GetMana(nCasterIndex) < Abilities.GetManaCost(nAbilityIndex)));
+		var bManaFlag = (!bLevelFlag && !bSkillFlag && (Entities.GetMana(nCasterIndex) < nManaCost));
 		var bStaminaFlag = (!bLevelFlag && !bSkillFlag && !bManaFlag && (nStamina < nStaminaCost) && (nStaminaCost > 0));
 		var bActiveFlag = (nAbilityIndex === Abilities.GetLocalPlayerActiveAbility());
 		var bToggleFlag = Abilities.GetToggleState(nAbilityIndex);
@@ -509,6 +508,6 @@ function OnActionBarIconLoad()
 	
 	DispatchCustomEvent($.GetContextPanel(), "ActionBarIconRefresh");
 	CustomNetTables.SubscribeNetTableListener("entities", OnActionBarIconUpdate);
-	CustomNetTables.SubscribeNetTableListener("spellbook", OnActionBarIconUpdate);
+	//CustomNetTables.SubscribeNetTableListener("spellbook", OnActionBarIconUpdate);
 	UpdateActionBarIcon();
 };

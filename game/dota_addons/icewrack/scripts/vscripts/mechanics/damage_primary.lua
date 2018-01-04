@@ -27,7 +27,6 @@ require("mechanics/effect_secondwind")
 require("visuals/msg_fx")
 require("visuals/damage_visuals")
 require("ext_entity")
-require("npc")
 
 local stDamageInfoTable = {}
 
@@ -55,7 +54,7 @@ function DealPrimaryDamage(self, keys)
 	local hVictim = keys.target
 	local hAttacker = keys.attacker
 	local hSource = keys.source or hAttacker
-	if IsValidExtendedEntity(hVictim) and IsValidExtendedEntity(hAttacker) and hVictim:IsAlive() and not hVictim:IsInvulnerable() then
+	if IsInstanceOf(hVictim, CEntityBase) and IsValidExtendedEntity(hAttacker) and not hVictim:IsInvulnerable() then
 		local bIsCrit = false
 		local bDamageResult = false
 		local fCritChance = hSource:GetCriticalStrikeChance()
@@ -79,7 +78,7 @@ function DealPrimaryDamage(self, keys)
 			if keys.damage and keys.damage[nDamageType] then
 				fDamageAmount = RandomFloat(keys.damage[nDamageType].min, keys.damage[nDamageType].max)
 				fDamageAmount = fDamageAmount * hSource:GetDamageModifier(nDamageType)
-				fDamageAmount = fDamageAmount * hVictim:GetDamageEffectiveness()
+				fDamageAmount = fDamageAmount * hVictim:GetDamageTakenMultiplier()
 				
 				if nDamageType >= IW_DAMAGE_TYPE_CRUSH and nDamageType <= IW_DAMAGE_TYPE_PIERCE then
 					local fArmor = hVictim:GetArmor(nDamageType)
@@ -93,8 +92,8 @@ function DealPrimaryDamage(self, keys)
 					fDamageAmount = math.max(0, fDamageAmount * (1.0 - fDamageResist))
 				end
 			end
-			if hAttacker:GetTeamNumber() == hVictim:GetTeamNumber() then
-				fDamageAmount = fDamageAmount * stFriendlyFireMultipliers[GameRules:GetCustomGameDifficulty()]
+			if hAttacker:GetFactionID() == hVictim:GetFactionID() then
+				fDamageAmount = fDamageAmount * GameRules:GetFriendlyFireMultiplier()
 			end
 			
 			stDamageInfoTable[nDamageType] = fDamageAmount
@@ -132,20 +131,11 @@ function DealPrimaryDamage(self, keys)
 					end
 				end
 				
-				local fThreatMultiplier = keys.ThreatMultiplier or 1.0
-				local hVictimHealth = hVictim:GetHealth()
 				fDamageAmount = math.max(0, math.floor(fDamageAmount))
-				
-				if IsValidNPCEntity(hVictim) then
-					hVictim:DetectEntity(hAttacker, IW_COMBAT_LINGER_TIME)
-					hVictim:AddThreat(hAttacker, fDamageAmount * fThreatMultiplier, true)
-				end
-				
-				if not bit32.btest(hVictim:GetUnitFlags(), IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE) then
+				if fDamageAmount > 0 and not (IsValidExtendedEntity(hVictim) and bit32.btest(hVictim:GetUnitFlags(), IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE)) then
 					CreateDamageVisuals(hVictim, nDamageType, bIsCrit)
 					if hVictim:GetHealth() > 0 then 
 						hVictim:ModifyHealth(math.max(0, hVictim:GetHealth() - fDamageAmount), hAttacker, true, 0)
-						hVictim:SpendStamina(0)
 						if hVictim:GetHealth() <= 0 then
 							local tKillInfoTable = 
 							{
@@ -154,6 +144,9 @@ function DealPrimaryDamage(self, keys)
 							}
 							hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_KILL, tKillInfoTable)
 							hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DEATH, tKillInfoTable)
+						elseif IsValidExtendedEntity(hVictim) then
+							local fThreatMultiplier = keys.ThreatMultiplier or 1.0
+							hVictim:AddThreat(hAttacker, fDamageAmount * fThreatMultiplier, true)
 						end
 					end
 				end
@@ -175,7 +168,7 @@ end
 function DealAttackDamage(self, keys)
 	local hVictim = keys.target
 	local hAttacker = keys.attacker
-	if IsValidExtendedEntity(hVictim) and IsValidExtendedEntity(hAttacker) and hVictim:IsAlive() then
+	if IsInstanceOf(hVictim, CEntityBase) and IsValidExtendedEntity(hAttacker) and not hVictim:IsInvulnerable() then
 		local bIsUnarmed = false
 		local hAttackSource = keys.source or hAttacker:GetCurrentAttackSource()
 		if not hAttackSource then
@@ -205,12 +198,14 @@ function DealAttackDamage(self, keys)
 		end
 		
 		hAttacker:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_PRE_ATTACK_DAMAGE, keys)
+		if IsValidExtendedEntity(hEntity) then
+			hVictim:DetectEntity(hAttacker, GameRules:GetNPCDetectDuration())
+		end
 		
 		if keys.CanDodge then
 			local fBonusAccuracy = keys.BonusAccuracy or 0
 			if not PerformAccuracyCheck(hVictim, hAttacker, fBonusAccuracy) then
-				if IsValidNPCEntity(hVictim) then
-					hVictim:DetectEntity(hAttacker, IW_COMBAT_LINGER_TIME)
+				if IsValidExtendedEntity(hVictim) then
 					hVictim:AddThreat(hAttacker, fTotalDamage * 0.25, true)
 				end
 				hVictim:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_DODGE_ATTACK_DAMAGE, keys)

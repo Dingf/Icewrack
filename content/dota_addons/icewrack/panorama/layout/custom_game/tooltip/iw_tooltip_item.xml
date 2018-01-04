@@ -1,0 +1,72 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/tooltip/iw_tooltip_item.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_game/constants/iw_instance.js" />
+		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/tooltip/iw_tooltip_item.js" />
+	</scripts>
+	
+	<Panel hittest="false" class="TooltipItemRoot" ontooltiploaded="OnTooltipItemLoad()">
+		<Panel hittest="false" class="TooltipItemHeader" id="Header">
+			<Image hittest="false" class="TooltipItemIcon" id="Icon" src="file://{images}/spellicons/iw_lina_lesser_fireball.png" />
+			<Panel hittest="false" class="TooltipItemHeaderContent">
+				<Panel hittest="false" class="TooltipItemTitleContainer">
+					<Image hittest="false" class="TooltipItemTypeIcon" id="TypeIcon" src="file://{images}/custom_game/icons/iw_icon_bow.tga" />
+					<Label hittest="false" class="TooltipItemTitle" id="Title" text="Sunstriker" />
+				</Panel>
+				<Panel hittest="false" class="TooltipItemDivider" />
+				<Panel hittest="false" class="TooltipItemSpacer" />
+				<Panel hittest="false" class="TooltipItemTypeContainer">
+					<Label hittest="false" class="TooltipItemTypeLabel" id="TypeLabel" text="Two-Handed Bow"/>
+					<Label hittest="false" class="TooltipItemHeaderLabel" id="RangeLabel" text="18.00m"/>
+				</Panel>
+				<Panel hittest="false" class="TooltipItemDamageContainer">
+					<Label hittest="false" class="TooltipItemHeaderLabel" text="Damage:"/>
+					<Panel hittest="false" class="TooltipItemDamageGroup" id="DamageGroup">
+						<Panel hittest="false" class="TooltipItemDamage">
+							<Label hittest="false" class="TooltipItemHeaderLabel" text="101-133"/>
+							<Image hittest="false" class="TooltipItemHeaderIcon" src="file://{images}/custom_game/icons/iw_icon_dmg_pierce.tga" />
+						</Panel>
+					</Panel>
+					<Label hittest="false" class="TooltipItemHeaderLabel" id="APSLabel" text="x1.55/s"/>
+				</Panel>
+				<Panel hittest="false" class="TooltipItemArmorContainer">
+					<Label hittest="false" class="TooltipItemHeaderLabel" text="Armor:"/>
+					<Panel hittest="false" class="TooltipItemArmorGroup">
+						<Label hittest="false" class="TooltipItemHeaderLabel" text="20"/>
+						<Image hittest="false" class="TooltipItemHeaderIcon" src="file://{images}/custom_game/icons/iw_icon_dmg_crush.tga" />
+						<Label hittest="false" class="TooltipItemHeaderLabel" text="20"/>
+						<Image hittest="false" class="TooltipItemHeaderIcon" src="file://{images}/custom_game/icons/iw_icon_dmg_slash.tga" />
+						<Label hittest="false" class="TooltipItemHeaderLabel" text="20"/>
+						<Image hittest="false" class="TooltipItemHeaderIcon" src="file://{images}/custom_game/icons/iw_icon_dmg_pierce.tga" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</Panel>
+		<Panel hittest="false" class="TooltipItemDivider" />
+		<Panel hittest="false" class="TooltipItemDescriptionContainer">
+			<Label hittest="false" html="true" class="TooltipItemDescriptionLabel" text="+100 Strength" />
+			<Label hittest="false" html="true" class="TooltipItemDescriptionLabel" text="+100 Cast Speed" />
+			<Label hittest="false" html="true" class="TooltipItemDescriptionLabel" text="+100 Movement Speed" />
+			<Label hittest="false" html="true" class="TooltipItemDescriptionLabel" text="25% Chance to Bash" />
+			<Label hittest="false" html="true" class="TooltipItemDescriptionLabel" text="Restore 25.6 Health per second for 10.0s" />
+		</Panel>
+		<Panel hittest="false" class="TooltipItemDivider" id="LoreDivider" />
+		<Panel hittest="false" class="TooltipItemLoreContainer" id="LoreContainer">
+			<Label hittest="false" class="TooltipItemLoreLabel" id="LoreText" text="A strange, fiery bow. The grip is scorching hot to the touch, as if it came straight out of the forge." />
+		</Panel>	
+		<Panel hittest="false" class="TooltipItemMiscContainer">
+			<Panel hittest="false" class="TooltipItemMiscStat" id="GoldStat">
+				<Image hittest="false" class="TooltipItemMiscIcon" id="GoldIcon" src="file://{images}/custom_game/icons/iw_icon_gold.tga" />
+				<Label hittest="false" class="TooltipItemMiscLabel" id="GoldLabel" text="300"/>
+			</Panel>
+			<Panel hittest="false" class="TooltipItemMiscStat" id="WeightStat">
+				<Image hittest="false" class="TooltipItemMiscIcon" id="WeightIcon" src="file://{images}/custom_game/icons/iw_icon_weight.tga" />
+				<Label hittest="false" class="TooltipItemMiscLabel" id="WeightLabel" text="300"/>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

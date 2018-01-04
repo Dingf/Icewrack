@@ -1,7 +1,7 @@
 function ApplyBurning(hTarget, hEntity, fDamagePercentHP)
 	if fDamagePercentHP > 0.1 then
 		local fBaseDuration = 5.0 * fDamagePercentHP
-		local nUnitClass = hTarget:GetUnitClass()
+		local nUnitClass = IsValidExtendedEntity(hTarget) and hTarget:GetUnitClass() or IW_UNIT_CLASS_NORMAL
 		local fBurnPercent = 2.5
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
 			fBurnPercent = 1.0

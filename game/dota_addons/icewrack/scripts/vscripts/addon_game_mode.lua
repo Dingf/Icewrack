@@ -26,6 +26,7 @@ function CIcewrackGameMode:InitGameMode()
 	GameRules.OverridePauseLevel = 0
 	GameRules.PauseState = false
 	
+    Convars:SetInt("cl_init_scaleform", 1)		--Unfortunately, we have to keep doing this until Valve decides to implement Read/WriteKV in Panorama
     Convars:SetInt("dota_hud_healthbars", 0)
     Convars:SetInt("dota_combine_models", 0)
 	
@@ -37,8 +38,8 @@ function CIcewrackGameMode:InitGameMode()
 	Convars:SetInt("dota_allow_invalid_orders", 1)
 	Convars:SetInt("dota_pause_game_pause_silently", 1)
 	
-	local tBindData = CSaveManager:GetBindsForCurrentPlayer()
-	CBindManager:RegisterDefaultBinds(tBindData)
+	--local tBindData = CSaveManager:GetBindsForCurrentPlayer()
+	--CBindManager:RegisterDefaultBinds(tBindData)
 	
 	local hGameModeEntity = GameRules:GetGameModeEntity()
 	local tXPValuesTable = {}
@@ -65,14 +66,21 @@ function CIcewrackGameMode:InitGameMode()
 	hGameModeEntity:SetAnnouncerDisabled(true)
     hGameModeEntity:SetBuybackEnabled(false)
 	hGameModeEntity:SetWeatherEffectsDisabled(true)
+	hGameModeEntity:SetStashPurchasingDisabled(true)
+	
+	hGameModeEntity:SetMinimumAttackSpeed(-90)
+	hGameModeEntity:SetMaximumAttackSpeed(500)
 	
 	hGameModeEntity:SetExecuteOrderFilter(Dynamic_Wrap(CIcewrackGameMode, "ExecuteOrderFilter"), self)
 	hGameModeEntity:SetItemAddedToInventoryFilter(Dynamic_Wrap(CIcewrackGameMode, "ItemAddedToInventoryFilter"), self)
 	hGameModeEntity:SetModifyExperienceFilter(Dynamic_Wrap(CIcewrackGameMode, "ModifyExperienceFilter"), self)
 	
+	
     GameRules:SetGoldTickTime(60.0)
     GameRules:SetGoldPerTick(0)
     GameRules:SetPreGameTime(0.0)
+	GameRules:SetStrategyTime(0.0)
+	GameRules:SetShowcaseTime(0.0)
     GameRules:SetHeroRespawnEnabled(false)
 	
 	ListenToGameEvent("iw_quit", Dynamic_Wrap(CIcewrackGameMode, "OnQuit"), self)
@@ -80,11 +88,15 @@ function CIcewrackGameMode:InitGameMode()
 	ListenToGameEvent("iw_change_level", Dynamic_Wrap(CIcewrackGameMode, "OnChangeLevel"), self)
 	ListenToGameEvent("entity_killed", Dynamic_Wrap(CIcewrackGameMode, "OnEntityKilled"), self)
     ListenToGameEvent("npc_spawned", Dynamic_Wrap(CIcewrackGameMode, "OnEntitySpawned"), self)
+	ListenToGameEvent("player_connect_full", Dynamic_Wrap(CIcewrackGameMode, "OnPlayerConnectFull"), self)
     ListenToGameEvent("game_rules_state_change", Dynamic_Wrap(CIcewrackGameMode, "OnGameRulesStateChange"), self)
 
 	CustomGameEventManager:RegisterListener("iw_quit", Dynamic_Wrap(CIcewrackGameMode, "OnQuit"))
-	CustomGameEventManager:RegisterListener("iw_pause", Dynamic_Wrap(CIcewrackGameMode, "OnPause"))
-	CustomGameEventManager:RegisterListener("iw_unpause", Dynamic_Wrap(CIcewrackGameMode, "OnUnpause"))
+	CustomGameEventManager:RegisterListener("iw_pause_hotkey", Dynamic_Wrap(CIcewrackGameMode, "OnPause"))
+	CustomGameEventManager:RegisterListener("iw_pause_override", Dynamic_Wrap(CIcewrackGameMode, "OnPauseOverride"))
+	CustomGameEventManager:RegisterListener("iw_unpause_override", Dynamic_Wrap(CIcewrackGameMode, "OnUnpauseOverride"))
+	CustomGameEventManager:RegisterListener("iw_quicksave", Dynamic_Wrap(CIcewrackGameMode, "OnQuicksave"))
+	CustomGameEventManager:RegisterListener("iw_quickload", Dynamic_Wrap(CIcewrackGameMode, "OnQuickload"))
 	CustomGameEventManager:RegisterListener("iw_change_level", Dynamic_Wrap(CIcewrackGameMode, "OnChangeLevel"))
 	CustomGameEventManager:RegisterListener("iw_party_select", Dynamic_Wrap(CIcewrackGameMode, "OnPartySelect"))
 	

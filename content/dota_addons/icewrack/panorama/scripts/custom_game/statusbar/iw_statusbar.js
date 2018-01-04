@@ -2,18 +2,21 @@
 
 function UpdateStatusBarEntity(nEntityIndex)
 {
-	var bIsCorpseEntity = Entities.HasItemInInventory(nEntityIndex, "internal_corpse");
+	var bIsTombstoneEntity = Entities.InState(nEntityIndex, modifierstate.MODIFIER_STATE_FAKE_ALLY);
+	var bIsCorpseEntity = Entities.IsCommandRestricted(nEntityIndex);
+	
 	$.GetContextPanel().visible = true;
 	$("#Name").text = $.Localize("#" + Entities.GetUnitName(nEntityIndex));
 	if (bIsCorpseEntity)
 		$("#Name").text += $.Localize("#iw_ui_corpse_suffix");
 	
-	var fHealth = bIsCorpseEntity ? 0 : Entities.GetHealth(nEntityIndex);
+	var fHealth = (bIsTombstoneEntity || bIsCorpseEntity) ? 0 : Entities.GetHealth(nEntityIndex);
 	var fMaxHealth = Entities.GetMaxHealth(nEntityIndex);
 	$("#HPFill").style.width = ((fHealth * 360)/((fMaxHealth === 0) ? 1 : fMaxHealth)) + "px";
 	
 	var nBuffCount = 0;
 	var hContainer = $("#BuffContainer");
+	var tBuffIcons = $.GetContextPanel()._tBuffIcons;
 	for (var j = 0; j < Entities.GetNumBuffs(nEntityIndex); j++)
 	{
 		var nBuffIndex = Entities.GetBuff(nEntityIndex, j);
@@ -24,11 +27,11 @@ function UpdateStatusBarEntity(nEntityIndex)
 		if (szModifierName == "modifier_elder_titan_echo_stomp")	//TODO: Remove me when we figure out a better way to do attack-move immunity
 			continue;
 		var nLastEntityIndex = $.GetContextPanel().GetAttributeInt("last_entindex", -1);
-		if (nBuffCount >= $.GetContextPanel()._tBuffIcons.length)
+		if (nBuffCount >= tBuffIcons.length)
 		{
 			var hIcon = CreateBuffIcon(hContainer, "BuffIcon" + (nBuffCount + 1), nEntityIndex, nBuffIndex);
 			hIcon.AddClass("StatusBarIcon");
-			$.GetContextPanel()._tBuffIcons.push(hIcon);
+			tBuffIcons.push(hIcon);
 		}
 		else if ((nEntityIndex !== nLastEntityIndex) || ($("#BuffIcon" + (nBuffCount + 1)).GetAttributeInt("buffindex", -1) !== nBuffIndex))
 		{
@@ -37,9 +40,9 @@ function UpdateStatusBarEntity(nEntityIndex)
 		$("#BuffIcon" + (nBuffCount + 1)).visible = true;
 		nBuffCount++;
 	}
-	for (var j = nBuffCount; j < $.GetContextPanel()._tBuffIcons.length; j++)
+	for (var j = nBuffCount; j < tBuffIcons.length; j++)
 	{
-		$("#BuffIcon" + (j + 1)).visible = false;
+		DispatchCustomEvent($("#BuffIcon" + (j + 1)), "BuffIconHide");
 	}
 	$.GetContextPanel().SetAttributeInt("last_entindex", nEntityIndex);
 }
@@ -52,7 +55,7 @@ function UpdateStatusBar()
 		var nEntityIndex = -1;
 		for (var i = 0; i < tCursorEntities.length; i++)
 		{
-			if (Entities.GetUnitName(tCursorEntities[i].entityIndex) && !Entities.HasItemInInventory(tCursorEntities[i].entityIndex, "internal_corpse"))
+			if (Entities.GetUnitName(tCursorEntities[i].entityIndex) && !Entities.IsItemPhysical(tCursorEntities[i].entityIndex))
 			{
 				nEntityIndex = tCursorEntities[i].entityIndex;
 				break;
@@ -62,9 +65,14 @@ function UpdateStatusBar()
 		{
 			if (nEntityIndex === -1)
 			{
-				nEntityIndex = tCursorEntities[i].entityIndex;
-				if (!Entities.GetUnitName(nEntityIndex))
+				if (!Entities.GetUnitName(tCursorEntities[i].entityIndex) || Entities.IsItemPhysical(tCursorEntities[i].entityIndex))
+				{
 					continue;
+				}
+				else
+				{
+					nEntityIndex = tCursorEntities[i].entityIndex;
+				}
 			}
 			
 			UpdateStatusBarEntity(nEntityIndex);

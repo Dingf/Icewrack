@@ -1,0 +1,6 @@
+<root>
+    <scripts>
+        <include src="file://{resources}/scripts/custom_game/hotkeys/iw_hotkeys.js" />
+    </scripts>
+    <Panel hittest="false"></Panel>
+</root>

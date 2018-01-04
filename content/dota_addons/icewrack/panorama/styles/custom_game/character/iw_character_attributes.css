@@ -3,14 +3,18 @@
 	width: 100%;
 	height: 100%;
 	overflow: clip clip;
-	flow-children: right;
 }
 
 .AttributeListSpacer
 {
-	background-color: #ff0000;
 	height: 0px;
 	width: 100%;
+}
+
+.AttributeListContainer
+{
+	width: 100%;
+	height: fit-children;
 }
 
 .AttributeList
@@ -101,21 +105,22 @@
 
 .AttributesGraphContainer
 {
-	width: fill-parent-flow(1.0);
+	width: 100%;
 	height: 100%;
 }
 
 .AttributesGraph
 {
+	margin-left: 256px;
 	width: 100%;
 	height: 100%;
 }
 
 .AttributesGraphBG
 {
-	horizontal-align: center;
-	vertical-align: center;
+	x: 38px;
 	y: 8px;
+	vertical-align: center;
 }
 
 .AttributeSectionContainer

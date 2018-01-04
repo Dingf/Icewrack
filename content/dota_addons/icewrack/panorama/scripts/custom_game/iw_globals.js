@@ -71,6 +71,10 @@ function GlobalMouseCallback(szEventName, nValue)
 	GameUI.GetScaleRatio = function() { return 1920.0/Game.GetScreenWidth(); };
 	GameUI.IsHidden = function() { return (nHiddenLevel !== 0); };
 	
+	//Hack to get constantly updated stamina stuff without spamming nettables
+	Entities.GetStamina = Entities.GetPhysicalArmorValue;
+	Entities.GetStaminaRechargeTime = function(nEntityIndex) { return Entities.GetMagicalArmorValue(nEntityIndex) * 100.0 };
+	
 	//Hide some of the new UI stuff
 	hRoot.FindChildTraverse("shop_launcher_block").visible = false;
 	hRoot.FindChildTraverse("scoreboard").visible = false;

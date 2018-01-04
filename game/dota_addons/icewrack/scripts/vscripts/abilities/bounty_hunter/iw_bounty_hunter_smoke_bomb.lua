@@ -4,7 +4,7 @@ function iw_bounty_hunter_smoke_bomb:OnSpellStart()
 	if IsServer() then
 		local hEntity = self:GetCaster()
 		local vTargetPos = self:GetCursorPosition()
-		local hCastDummy = CInstance(CreateDummyUnit(vTargetPos, hEntity:GetOwner(), 0))
+		local hCastDummy = CreateDummyUnit(vTargetPos, hEntity:GetOwner(), hEntity:GetTeamNumber(), true)
 	
 		local tProjectileInfo =
 		{
@@ -28,14 +28,13 @@ function iw_bounty_hunter_smoke_bomb:OnProjectileHit(hTarget, vPosition)
 	local fDuration = self:GetSpecialValueFor("duration") * hEntity:GetOtherDebuffDuration()
 	local tModifierArgs =
 	{
-		accuracy = self:GetSpecialValueFor("accuracy") + self:GetSpecialValueFor("accuracy_bonus") * hEntity:GetSpellpower(),
+		accuracy = self:GetSpecialValueFor("accuracy"),
 		duration = fDuration,
 	}
-	hTarget:AddNewModifier(hTarget, self, "modifier_iw_bounty_hunter_smoke_bomb", tModifierArgs)
-	hTarget:AddNewModifier(hTarget, self, "modifier_iw_bounty_hunter_smoke_bomb_visibility", { visibility = self:GetSpecialValueFor("visibility") })
+	local hBlindModifier = hTarget:AddNewModifier(hTarget, self, "modifier_iw_bounty_hunter_smoke_bomb", tModifierArgs)
 	StopSoundOn("Hero_BountyHunter.SmokeBomb.Launch", hEntity)
 	EmitSoundOn("Hero_BountyHunter.SmokeBomb", hTarget)
 	
-	local fAvoidanceValue = self:GetSpecialValueFor("avoidance")
-	CreateAvoidanceZone(vPosition, self:GetAOERadius() + 64.0, fAvoidanceValue, fDuration)
+	hBlindModifier._hAvoidanceZone = CAvoidanceZone(vPosition, self:GetAOERadius() + 32.0, self:GetSpecialValueFor("avoidance"))
+	hBlindModifier._hBlockerZone = CLOSBlockerZone(vPosition, self:GetAOERadius() + 32.0)
 end

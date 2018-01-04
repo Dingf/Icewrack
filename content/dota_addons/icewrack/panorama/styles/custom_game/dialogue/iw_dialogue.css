@@ -2,16 +2,18 @@
 {
 	width: 100%;
 	height: 100%;
+	overflow: clip;
 }
 
 #Dialogue
 {
-	width: 100%;
+	width: 1920px;
 	height: 100%;
 	opacity: 0.0;
+	horizontal-align: center;
 }
 
-.DialogueFill
+.DialogueFiller
 {
 	width: 100%;
 	height: 100%;
@@ -19,148 +21,226 @@
 
 .DialogueBackgroundContainer
 {
-	width: 100%;
-	height: fit-children;
-	vertical-align: bottom;
-	flow-children: down;
-}
-
-.DialogueBlurEdge
-{
-	width: 100%;
+	width: 960px;
+	height: 100%;
+	horizontal-align: center;
+	blur: gaussian(5.0);
 }
 
 .DialogueBackground
 {
+	background-color: #080808;
 	width: 100%;
-	height: 256px;
-	background-color: #000000;
-}
-
-.DialogueContentContainer
-{
-	width: 100%;
-	height: 25%;
-	vertical-align: bottom;
-	flow-children: right;
-}
-
-.DialogueSpeakerContainer
-{
-	width: 192px;
-	margin-top: 32px;
-}
-
-.DialoguePortraitContainer
-{
-	height: fit-children;
-	width: fit-children;
-	horizontal-align: right;
-	vertical-align: center;
-}
-
-.DialoguePortrait
-{
-	width: 144px;
-	height: 192px;
-}
-
-.DialogueName
-{
-	color: #ffffffff;
-	font-size: 30;
-	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
-	margin-bottom: 8px;
-	margin-left: 32px;
-	margin-right: 16px;
-}
-
-.DialogueTextContainer
-{
-	width: fill-parent-flow(1.0);
-	height: 224px;
-	vertical-align: center;
-	margin-top: 16px;
-	flow-children: down;
-}
-
-.DialogueText
-{
-	color: #ffffff80;
-	font-size: 22;
-	font-family: Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
-	height: 100%;
-	margin-left: 32px;
-	margin-right: 16px;
-}
-
-.DialogueTextDivider
-{
-	background-color: gradient(linear, 0% 0%, 100% 0%, from(#ffffffff), to(#ffffff00));
-	width: 100%;
-	height: 3px;
-	opacity: 0.75;
-	margin-left: 32px;
-	margin-bottom: 8px;
-	margin-right: 16px;
-}
-
-.DialogueSelector
-{
-	vertical-align: center;
-	margin-top: 8px;
-	margin-right: 8px;
-	opacity: 0.8;
-}
-
-.DialogueOptionContainer
-{
-	width: 30%;
-	height: 90%;
-	vertical-align: center;
-	margin-top: 8px;
-}
-
-.DialogueOptionBlurContainer
-{
-	width: 100%;
-	height: 100%;
-}
-
-.DialogueOptionBlurTop
-{
-	width: 100%;
-	vertical-align: top;
-}
-
-.DialogueOptionBlurBottom
-{
-	width: 100%;
+	height: 288px;
 	vertical-align: bottom;
 }
 
-.DialogueOptionScrollContainer
+.DialogueBody
 {
-	width: 100%;
-	height: 224px;
-	vertical-align: center;
-	background-color: #000000;
+	width: 900px;
+	height: 272px;
+	horizontal-align: center;
+	vertical-align: bottom;
 	overflow: clip;
 }
 
-.DialogueOptionTextContainer
+.DialogueTextGroup
+{
+	width: 860px;
+	height: fit-children;
+	flow-children: up;
+	vertical-align: bottom;
+}
+
+.DialogueScrollBuffer
+{
+	width: 100%;
+}
+
+.DialogueHistoryContainer
 {
 	width: 100%;
 	height: fit-children;
-	background-color: #000000;
-	padding-right: 16px;
 	flow-children: down;
+	vertical-align: bottom;
+	margin-top: 16px;
+}
+
+.DialogueCurrentNodeContainer
+{
+	width: 100%;
+	height: 256px;
+	flow-children: down;
+}
+
+.DialogueTextEntryContainer
+{
+	flow-children: down;
+}
+
+.DialogueOptionsContainer
+{
+	flow-children: down;
+	margin-left: 32px;
+}
+
+.DialogueTextEntry
+{
+	flow-children: right;
+	margin-bottom: 16px;
+}
+
+.DialogueTextSpeakerLabel
+{
+	color: #ffffffc0;
+	font-size: 20;
+	font-weight: bold;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+}
+
+.DialogueTextSeparator
+{
+	color: #ffffffc0;
+	font-size: 20;
+	font-weight: bold;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	margin-right: 4px;
+}
+
+.DialogueTextBodyLabel
+{
+	color: #ffffff40;
+	font-size: 20;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.DialogueOptionEntry
+{
+	flow-children: right;
+}
+
+.DialogueOptionEntrySelectable:hover Label
+{
+	color: #ffffffc0;
+}
+
+.DialogueOptionNumberLabel
+{
+	color: #ffffff20;
+	font-size: 20;
+	font-weight: bold;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+}
+
+.DialogueOptionBodyLabel
+{
+	color: #ffffff20;
+	font-size: 20;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.DialogueBorderContainer
+{
+	width: 100%;
+	height: 100%;
+	blur: gaussian(5.0);
+}
+
+.DialogueBorder
+{
+	background-color: #080808fe;
+	width: 100%;
+	height: 16px;
+}
+
+#LowerBorder
+{
+	vertical-align: bottom;
+}
+
+#UpperBorder
+{
+	vertical-align: top;
+}
+
+.DialogueFrameContainer
+{
+	width: 100%;
+	height: 100%;
+	flow-children: right;
+}
+
+.DialogueFrame
+{
+	width: 25%;
+	vertical-align: bottom;
+}
+
+.DialogueFrameFiller1
+{
+	width: 32px;
+}
+
+.DialogueFrameFiller2
+{
+	width: fill-parent-flow(1.0);
+}
+
+.DialogueFramePortrait
+{
+	background-color: #000000;
+	width: 192px;
+	height: 256px;
+	margin: 32px 32px 0px 32px;
+}
+
+.DialogueFrameTitle
+{
+	y: 284px;
+	width: 192px;
+	height: 32px;
+	color: #ffffffc0;
+	font-size: 24px;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+	font-weight: bold;
+	text-align: center;
+	margin: 0px 34px 0px 34px;
+}
+
+#LeftFrameOverlay
+{
+	horizontal-align: right;
+}
+
+#LeftFramePortrait
+{
+	horizontal-align: right;
+}
+
+#LeftFrameTitle
+{
+	horizontal-align: right;
+}
+
+#RightFrameOverlay
+{
+	horizontal-align: left;
+}
+
+#RightFramePortrait
+{
+	horizontal-align: left;
+}
+
+#RightFrameTitle
+{
+	horizontal-align: left;
 }
 
 .DialogueActive
 {
 	animation-name: DialogueFadeIn;
-	animation-duration: 0.4s;
+	animation-duration: 0.2s;
 	animation-timing-function: ease-in;
 	animation-iteration-count: 1;
 }
@@ -184,7 +264,7 @@
 .DialogueInactive
 {
 	animation-name: DialogueFadeOut;
-	animation-duration: 0.4s;
+	animation-duration: 0.2s;
 	animation-timing-function: ease-in;
 	animation-iteration-count: 1;
 }
@@ -203,4 +283,10 @@
 	{
 	    opacity: 0.0;
 	}
+}
+
+.DialogueTextNarrator Label
+{
+	color: #ffffff20;
+	font-style: italics;
 }

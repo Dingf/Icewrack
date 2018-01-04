@@ -77,6 +77,25 @@
 			
 	}
 
+	"internal_revive"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityTextureName"			"skeleton_king_reincarnation"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_BASIC"
+
+		"AbilityChannelTime"			"8.0"
+		"AbilityCastRange"			"150"
+
+		"Modifiers"
+		{
+			"modifier_internal_revive"			"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
 	"status_bash"
 	{
 		"BaseClass"				"ability_lua"
@@ -199,60 +218,70 @@
 	"aam_do_nothing"
 	{
 		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 	}
 
 	"aam_skip_to_condition"
 	{
 		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 	}
 
 	"aam_skip_remaining"
 	{
 		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 	}
 
 	"aam_attack"
 	{
 		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 	}
 
 	"aam_hold_position"
 	{
 		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_TOGGLE"
-
-		"Modifiers"
-		{
-			"modifier_aam_hold_position"		"IW_MODIFIER_NO_TRIGGER"
-		}
 	}
 
 	"aam_move_away_from"
 	{
 		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 	}
 
 	"aam_move_towards"
 	{
 		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 	}
 
 	"aam_move_in_front_of"
 	{
 		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	}
+
+	"aam_use_quick_item"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 	}
 
 	"aam_move_behind"
 	{
 		"BaseClass"				"ability_lua"
-
+		"ScriptFile"				"ext_ability"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 	}
 
@@ -271,21 +300,21 @@
 		"AbilityTextureName"			"axe_berserkers_call"
 
 		"MaxLevel"				"1"
-		"AbilityCooldown"			"12.0"
+		"AbilityCooldown"			"18.0"
 		"AbilityAOERadius"			"300"
 		"AbilityCastPoint"			"0.0"
+
+		"Modifiers"
+		{
+			"modifier_iw_axe_berserkers_call"		"IW_MODIFIER_NO_TRIGGER"
+		}
 
 		"AbilitySpecial"
 		{
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"threat"			"1000"
-			}
-			"02"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"threat_bonus"			"5.0"
+				"duration"			"4.0"
 			}
 		}
 	}
@@ -425,8 +454,6 @@
 		"Modifiers"
 		{
 			"modifier_iw_dragon_knight_deafening_roar"		"IW_MODIFIER_NO_TRIGGER"
-			"modifier_iw_dragon_knight_deafening_roar_hidden"	"IW_MODIFIER_NO_TRIGGER"
-			"modifier_iw_dragon_knight_deafening_roar_stun"		"IW_MODIFIER_NO_TRIGGER"
 		}
 
 		"AbilitySpecial"
@@ -434,27 +461,17 @@
 			"01"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"stun_duration"		"1.5"
+				"duration"		"5.0"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"buff_duration"		"8.0"
+				"move_speed"		"-75.0"
 			}
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"move_speed"		"-90.0"
-			}
-			"04"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"attack_speed"		"-90.0"
-			}
-			"05"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"effect_bonus"		"10.0"		
+				"attack_speed"		"-75.0"
 			}
 		}
 	}
@@ -556,6 +573,43 @@
 			{
 				"var_type"			"FIELD_INTEGER"
 				"damage_effect"			"400"
+			}
+		}
+	}
+
+	"iw_dragon_knight_endurance_aura"
+	{
+		"BaseClass"				"ability_lua"
+		"ScriptFile"				"ext_ability"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_TOGGLE"
+		"AbilityTextureName"			"dragon_knight_dragon_blood"
+
+		"MaxLevel"				"1"
+		"AbilityCooldown"			"0.0"
+		"AbilityAOERadius"			"900"
+
+		"Modifiers"
+		{
+			"modifier_iw_dragon_knight_endurance_aura"		"IW_MODIFIER_NO_TRIGGER"
+		}
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"health_regen"			"3.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"stamina_regen"			"1.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"phys_resist"		"25.0"
 			}
 		}
 	}
@@ -738,7 +792,7 @@
 
 		"MaxLevel"				"1"
 		"AbilityCooldown"			"0.0"
-		"AbilityAOERadius"			"1800"
+		"AbilityAOERadius"			"900"
 
 		"Modifiers"
 		{
@@ -813,7 +867,7 @@
 			"01"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"duration"			"8.0"
+				"duration"			"10.0"
 			}
 			"02"
 			{
@@ -918,14 +972,9 @@
 			"04"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"accuracy_bonus"		"-1.0"
-			}
-			"05"
-			{
-				"var_type"			"FIELD_FLOAT"
 				"duration"			"20.0"
 			}
-			"06"
+			"05"
 			{
 				"var_type"			"FIELD_INTEGER"
 				"avoidance"			"250"
@@ -958,11 +1007,12 @@
 		"AbilityTextureName"			"bounty_hunter_track"
 
 		"MaxLevel"				"1"
-		"AbilityAOERadius"			"3000"
+		"AbilityAOERadius"			"4000"
 
 		"Modifiers"
 		{
 			"modifier_iw_bounty_hunter_track"		"IW_MODIFIER_ON_ACQUIRE"
+			"modifier_iw_bounty_hunter_track_target"	"IW_MODIFIER_NO_TRIGGER"
 			"modifier_iw_bounty_hunter_track_reveal"	"IW_MODIFIER_NO_TRIGGER"
 		}
 	}

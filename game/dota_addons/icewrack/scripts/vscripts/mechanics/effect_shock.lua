@@ -13,7 +13,7 @@ function ApplyShock(hVictim, hAttacker, fDamagePercentHP)
 	if fDamagePercentHP > 0.1 then
 		stShockDamageTable.target = hVictim
 		stShockDamageTable.attacker = hAttacker
-		local nUnitClass = hVictim:GetUnitClass()
+		local nUnitClass = IsValidExtendedEntity(hTarget) and hTarget:GetUnitClass() or IW_UNIT_CLASS_NORMAL
 		local fShockMultiplier = 0.1 + (0.15 * fDamagePercentHP)
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
 			fShockMultiplier = 0.04 + (0.06 * fDamagePercentHP)

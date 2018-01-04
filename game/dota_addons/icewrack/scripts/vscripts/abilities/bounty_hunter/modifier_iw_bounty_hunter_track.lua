@@ -5,7 +5,7 @@ function modifier_iw_bounty_hunter_track:IsAura()
 end
 
 function modifier_iw_bounty_hunter_track:GetModifierAura()
-	return "modifier_iw_bounty_hunter_track_reveal"
+	return "modifier_iw_bounty_hunter_track_target"
 end
 
 function modifier_iw_bounty_hunter_track:GetAuraSearchTeam()
@@ -21,7 +21,8 @@ function modifier_iw_bounty_hunter_track:GetAuraRadius()
 end
 
 function modifier_iw_bounty_hunter_track:GetAuraEntityReject(hEntity)
-	return not hEntity:IsAlive()
+	local hCaster = self:GetCaster()
+	return not hEntity:IsAlive() or hCaster:CanEntityBeSeenByMyTeam(hEntity)
 end
 
 function modifier_iw_bounty_hunter_track:IsAuraActiveOnDeath()

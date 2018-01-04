@@ -2,6 +2,7 @@
 	Icewrack Save Manager
 ]]
 
+--TODO: Save NPC/ext_entity stuff like threat, detected entities, noise points, etc.
 if not CSaveManager then
 
 if _VERSION < "Lua 5.2" then
@@ -12,18 +13,15 @@ end
 require("instance")
 require("bind_manager")
 require("game_states")
+require("container")
 require("ext_ability")
 require("ext_item")
 require("ext_entity")
---require("interactable")
-require("container")
+require("ext_hero")
 require("world_object")
-require("npc")
 require("dialogue")
 require("spellbook")
---require("inventory")
 require("aam")
-require("expression")
 require("party")
 
 IW_SAVE_VERSION = 900
@@ -197,14 +195,6 @@ function CSaveManager:CreateSaveList(keys)
 	OutputToScaleform("iw_savelist.txt", TableToSaveString(tSaveData))
 end
 
-function CSaveManager:CreateBindList(keys)
-	local tBindData = {}
-	for k,v in pairs(CBindManager._tBindTable) do
-		tBindData[v] = k
-	end
-	OutputToScaleform("iw_bindlist.txt", TableToSaveString(tBindData))
-end
-
 function CSaveManager:OnSaveGame(keys)
 	if keys.mode == IW_SAVE_MODE_NORMAL then
 		CSaveManager:SaveGame(keys.filename)
@@ -220,7 +210,6 @@ function CSaveManager:OnMapTransition(keys)
 	if szSaveName then
 		CSaveManager._tSaveSpecial.Loading = szSaveName
 		CSaveManager:CreateSaveList()
-		CSaveManager:CreateBindList()
 		CTimer(0.1, FireGameEventLocal, "iw_change_level", { map = keys.map })
 	end
 end
@@ -241,17 +230,9 @@ local function SaveInventoryData(hInstance)
 end
 
 local function SaveSpellbookData(hInstance)
-	local hSpellbook = hInstance:GetSpellbook()
-	if hSpellbook then
+	if IsInstanceOf(hInstance, CSpellbook) then
 		local tSpellbookTable = {}
-		tSpellbookTable.Binds = {}
-		for k,v in pairs(hSpellbook._tBindTable) do
-			local hAbility = EntIndexToHScript(v)
-			if hAbility then
-				tSpellbookTable.Binds[k] = hAbility:GetAbilityName()
-			end
-		end
-		for k,v in pairs(hSpellbook._tSpellList) do
+		for k,v in pairs(hInstance._tSpellList) do
 			local hSpellUnit = v
 			local hAbility = v:FindAbilityByName(k)
 			if hAbility then
@@ -303,23 +284,31 @@ local function SaveEntityData(hInstance)
 	tEntityTable.UnitName = hInstance:GetUnitName()
 	tEntityTable.Position = hInstance:GetAbsOrigin()
 	tEntityTable.Forward = hInstance:GetForwardVector()
-	tEntityTable.Experience = hInstance:GetTotalExperience()
 	tEntityTable.Health = hInstance:IsAlive() and hInstance:GetHealth() or 0
 	tEntityTable.Mana = hInstance:IsAlive() and hInstance:GetMana() or 0
 	tEntityTable.Stamina = hInstance:IsAlive() and hInstance:GetStamina() or 0
 	tEntityTable.StaminaTime = hInstance:GetStaminaRegenTime() - GameRules:GetGameTime()
-	tEntityTable.Team = hInstance:GetTeamNumber()
+	tEntityTable.FactionID = hInstance:GetFactionID()
 	tEntityTable.LastMap = GetMapName()
 	tEntityTable.RunMode = hInstance:IsRunning() and 1 or 0
-	tEntityTable.HoldMode = hInstance:IsHoldPosition() and 1 or 0
-	tEntityTable.State = (hInstance:GetMainControllingPlayer() == 0) and IW_SAVE_STATE_PERSISTENT or IW_SAVE_STATE_ENABLED
+	tEntityTable.HoldMode = hInstance:IsHoldingPosition() and 1 or 0
+	tEntityTable.State = (hInstance:IsControllableByAnyPlayer()) and IW_SAVE_STATE_PERSISTENT or IW_SAVE_STATE_ENABLED
+	
+	if IsValidExtendedHero(hInstance) then
+		tEntityTable.Experience = hInstance:GetTotalExperience()
+	end
 	
 	tEntityTable.Properties = {}
 	for k,v in pairs(stIcewrackPropertyEnum) do
 		tEntityTable.Properties[v] = rawget(hInstance._tPropertyValues, v)
 	end
 	
-	if IsValidNPCEntity(hInstance) then
+	tEntityTable.FactionWeights = {}
+	for k,v in pairs(hInstance._tFactionWeights) do
+		tEntityTable.FactionWeights[k] = v
+	end
+	
+	if IsValidExtendedEntity(hInstance) then
 		tEntityTable.InitialPos = hInstance._vInitialPos
 		tEntityTable.ThreatTable = {}
 		for k,v in pairs(hInstance._tThreatTable) do
@@ -338,18 +327,7 @@ local function SaveEntityData(hInstance)
 				tEntityTable.DetectTable[nInstanceID] = v - fCurrentTime
 			end
 		end
-		tEntityTable.NoiseTable = {}
-		for k,v in pairs(hInstance._tNoiseTable) do
-			local tNoiseData =
-			{
-				value    = v.value,
-				origin   = v.origin,
-				speed    = v.speed,
-				time     = v.time - fCurrentTime,
-				duration = v.duration
-			}
-			table.insert(tEntityTable.NoiseTable, tNoiseData)
-		end
+		tEntityTable.NoiseTable = hInstance._tNoiseTable
 		tEntityTable.LastWaypoint = hInstance._nLastWaypoint
 		tEntityTable.NextWaypoint = hInstance._nNextWaypoint
 	end
@@ -369,7 +347,7 @@ local function SaveItemData(hInstance)
 
 	local hContainer = hInstance:GetContainer()
 	if hContainer then
-		tItemTable.Position = hInstance:GetAbsOrigin()
+		tItemTable.Position = hContainer:GetAbsOrigin()
 	end
 	
 	tItemTable.ModifierSeeds = {}
@@ -399,7 +377,7 @@ local function SaveInteractableData(hInstance)
 	tInteractableData.Position = hInstance:GetAbsOrigin()
 	tInteractableData.Forward = hInstance:GetForwardVector()
 	tInteractableData.LastMap = GetMapName()
-	tInteractableData.Team = hInstance:GetTeamNumber()
+	tInteractableData.FactionID = hInstance:GetFactionID()
 	tInteractableData.State = IW_SAVE_STATE_ENABLED
 	
 	local hOwner = hInstance:GetOwner()
@@ -408,6 +386,7 @@ local function SaveInteractableData(hInstance)
 	end
 	if IsValidContainer(hInstance) then
 		tInteractableData.Type = IW_INSTANCE_CONTAINER
+		tInteractableData.LockLevel = hInstance:GetLockLevel()
 		tInteractableData.Inventory = SaveInventoryData(hInstance)
 		return tInteractableData
 	elseif IsValidWorldObject(hInstance) then
@@ -433,6 +412,7 @@ function CSaveManager:SaveGame(szSaveName)
 	if not tSaveData.Interactables then tSaveData.Interactables = {} end
 	if not tSaveData.Items then tSaveData.Items = {} end
 	if not tSaveData.Party then tSaveData.Party = {} end
+	if not tSaveData.Binds then tSaveData.Binds = {} end
 	
 	tSaveData["Version"] = IW_SAVE_VERSION
 	tSaveData["SaveDate"] = GetSystemDate()
@@ -443,7 +423,7 @@ function CSaveManager:SaveGame(szSaveName)
 	tSaveData["TimePlayed"] = Time() + CSaveManager._nTimePlayed 
 	tSaveData["NextInstanceID"] = CInstance._nNextDynamicID
 	
-	for k,v in pairs(CGameState._tChangedValues) do
+	for k,v in pairs(GameRules:GetModifiedGameStates()) do
 		tSaveData.GameStates[k] = v
 	end
 	
@@ -452,16 +432,16 @@ function CSaveManager:SaveGame(szSaveName)
 		local szInstanceName = tostring(nInstanceID)
 		if nInstanceID == 0 then
 			--Do nothing; this is the "default" property instance used by CExtEntity
-		elseif hInstance:IsNull() or not IsValidEntity(hInstance) then
+		elseif hInstance:IsNull() or not IsValidEntity(hInstance) or not hInstance:GetInstanceState() then
 			local tSaveValue = nil
 			if nInstanceID < IW_INSTANCE_DYNAMIC_BASE then
 				tSaveValue = { State = IW_SAVE_STATE_DISABLED }
 			end
-			if IsInstanceOf(hEntity, CExtEntity) then
+			if IsInstanceOf(hInstance, CExtEntity) then
 				tSaveData.Entities[szInstanceName] = tSaveValue
-			elseif IsInstanceOf(hEntity, CExtItem) then
+			elseif IsInstanceOf(hInstance, CExtItem) then
 				tSaveData.Items[szInstanceName] = tSaveValue
-			elseif IsInstanceOf(hEntity, CInteractable) then
+			elseif IsInstanceOf(hInstance, CContainer) or IsInstanceOf(hInstance, CWorldObject) then
 				tSaveData.Interactables[szInstanceName] = tSaveValue
 			end
 		elseif IsValidExtendedEntity(hInstance) then
@@ -479,28 +459,36 @@ function CSaveManager:SaveGame(szSaveName)
 		end
 	end
 	
+	for k,v in pairs(CBindManager._tActionBinds) do
+		local hEntity = EntIndexToHScript(k)
+		if IsValidExtendedEntity(hEntity) and hEntity:IsControllableByAnyPlayer() then
+			local tEntityBindTable = {}
+			for k2,v2 in pairs(v) do
+				tEntityBindTable[k2] = v2
+			end
+			tSaveData.Binds[tostring(hEntity:GetInstanceID())] = tEntityBindTable
+		end
+	end
+	
 	if not tSaveData.Party.Members then tSaveData.Party.Members = {} end
 	if not tSaveData.Party.GridStates then tSaveData.Party.GridStates = {} end
 	if not tSaveData.Party.AAM then tSaveData.Party.AAM = {} end
 	for k,v in pairs(CParty._tMembers) do
 		local hInstance = GetInstanceByID(v)
 		if hInstance then
-			tSaveData.Party.Members[k] = v
-			local hAutomator = hInstance:GetAbilityAutomator()
-			if hAutomator then
-				local tAAMData = {}
-				tAAMData.ActiveAutomator = hAutomator._szActiveAutomatorName
-				tAAMData.State = hAutomator._tNetTable.State
-				tAAMData.Automators = {}
-				for k2,v2 in pairs(hAutomator._tAutomatorList or {}) do
-					local tAutomatorData = {}
-					for k3,v3 in pairs(v2) do
-						table.insert(tAutomatorData, v3:GetSaveTable())
-					end
-					tAAMData.Automators[k2] = tAutomatorData
+			local tAAMData = {}
+			tAAMData.ActiveAutomator = hInstance._szActiveAutomatorName
+			tAAMData.State = hInstance._tAutomatorNetTable.State
+			tAAMData.Automators = {}
+			for k2,v2 in pairs(hInstance._tAutomatorList or {}) do
+				local tAutomatorData = {}
+				for k3,v3 in pairs(v2) do
+					table.insert(tAutomatorData, v3:GetSaveTable())
 				end
-				tSaveData.Party.AAM[tostring(v)] = tAAMData
+				tAAMData.Automators[k2] = tAutomatorData
 			end
+			tSaveData.Party.AAM[tostring(v)] = tAAMData
+			tSaveData.Party.Members[k] = v
 		end
 	end
 	
@@ -553,7 +541,7 @@ end
 local function LoadGameStates()
 	local tGameStates = CSaveManager._tSaveData.GameStates or {}
 	for k,v in pairs(tGameStates) do
-		CGameState:SetGameStateValue(k, v)
+		GameRules:SetGameState(k, v)
 	end
 end
 
@@ -643,21 +631,26 @@ local function LoadStaticEntities()
 	local tEntitySaveList = CSaveManager._tSaveData.Entities or {}
 	for k,v in pairs(CSaveManager._tInstanceData) do
 		local nInstanceID = tonumber(k)
-		local hPrecondition = CExpression(v.Precondition or "")
-		if stInstanceData[k] and stInstanceData[k].Type == IW_INSTANCE_EXT_ENTITY and hPrecondition:EvaluateExpression() then
+		local hPrecondition = LoadFunctionSnippet(v.Precondition)
+		if stInstanceData[k] and stInstanceData[k].Type == IW_INSTANCE_EXT_ENTITY and (not hPrecondition or hPrecondition()) then
 			local tEntityData = tEntitySaveList[k]
 			if not tEntityData or tEntityData.State == IW_SAVE_STATE_ENABLED then
 				local hEntity = nil
-				if nInstanceID == CGameState:GetGameStateValue("game.hero_selection") then
-					hEntity = CExtEntity(GameRules:GetPlayerHero(), nInstanceID)
-				else
+				if nInstanceID ~= GameRules:GetGameState("game.hero_selection") then
 					local szUnitName = stInstanceData[k].Name
-					local nUnitTeam = stInstanceData[k].Team
-					hEntity = CExtEntity(CreateUnitByName(szUnitName, Vector(0, 0, 0), false, nil, nil, nUnitTeam), nInstanceID)
-					hEntity = CDialogueEntity(hEntity)
+					local nFactionID = tEntityData and tEntityData.FactionID or stInstanceData[k].FactionID
+					hEntity = CExtEntity(CreateUnitByName(szUnitName, Vector(0, 0, 0), false, nil, nil, DOTA_TEAM_GOODGUYS), nInstanceID)
+					if IsInstanceOf(hEntity, CDOTA_BaseNPC_Hero) then
+						hEntity = CExtHero(hEntity)
+					end
+					hEntity:SetFactionID(nFactionID)
 				end
-				if IsValidExtendedEntity(hEntity) and tEntityData then
-					LoadEntityData(hEntity, tEntityData)
+				if IsValidExtendedEntity(hEntity) then
+					if tEntityData then
+						LoadEntityData(hEntity, tEntityData)
+					else
+						hEntity:GenerateItemList()
+					end
 				end
 			end
 		end
@@ -673,11 +666,14 @@ local function LoadDynamicEntities()
 		if bIsPersistentInstance or bIsMapDynamicInstance then
 			local hEntity = GetInstanceByID(nInstanceID)
 			if not hEntity then
-				if nInstanceID == CGameState:GetGameStateValue("game.hero_selection") then
-					hEntity = CExtEntity(GameRules:GetPlayerHero(), nInstanceID)
-				else
-					hEntity = CExtEntity(CreateUnitByName(v.UnitName, Vector(0, 0, 0), false, nil, nil, v.Team), nInstanceID)
-					hEntity = CDialogueEntity(hEntity)
+				if nInstanceID ~= GameRules:GetGameState("game.hero_selection") then
+					local szUnitName = v.UnitName
+					local nFactionID = v.FactionID
+					hEntity = CExtEntity(CreateUnitByName(szUnitName, Vector(0, 0, 0), false, nil, nil, DOTA_TEAM_GOODGUYS), nInstanceID)
+					if IsInstanceOf(hEntity, CDOTA_BaseNPC_Hero) then
+						hEntity = CExtHero(hEntity)
+					end
+					hEntity:SetFactionID(nFactionID)
 				end
 			end
 			if IsValidExtendedEntity(hEntity) then
@@ -694,30 +690,35 @@ local function LoadStaticInteractables()
 	local tInteractableSaveList = CSaveManager._tSaveData.Interactables or {}
 	for k,v in pairs(CSaveManager._tInstanceData) do
 		local nInstanceID = tonumber(k)
-		local hPrecondition = CExpression(v.Precondition or "")
-		if stInstanceData[k] and hPrecondition:EvaluateExpression() then
+		local hPrecondition = LoadFunctionSnippet(v.Precondition)
+		if stInstanceData[k] and (not hPrecondition or hPrecondition()) then
 			local tInteractableData = tInteractableSaveList[k]
 			local szUnitName = stInstanceData[k].Name
-			local nUnitTeam = stInstanceData[k].Team
+			local nFactionID = stInstanceData[k].FactionID
 			local hOwner = tInteractableData and GetInstanceByID(tInteractableData.Owner) or nil
 			local vPosition = StringToVector(v.Position)
 			local vForward = StringToVector(v.Forward)
 			if stInstanceData[k].Type == IW_INSTANCE_CONTAINER then
 				if tInteractableData and tInteractableData.State == IW_SAVE_STATE_ENABLED then
-					local hContainer = CContainerEntity(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID)
-					LoadInventoryData(hContainer, tInteractableData.Inventory)
+					local hContainer = CContainer(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, DOTA_TEAM_GOODGUYS), nInstanceID)
+					if tInteractableData then
+						LoadInventoryData(hContainer, tInteractableData.Inventory)
+						hContainer:SetLockLevel(tInteractableData.LockLevel)
+					end
 					hContainer:SetAbsOrigin(vPosition)
 					hContainer:SetForwardVector(vForward)
+					hContainer:SetFactionID(nFactionID)
 				end
 			elseif stInstanceData[k].Type == IW_INSTANCE_WORLD_OBJECT then
 				local tInteractableData = tInteractableSaveList[k]
 				if not tInteractableData or tInteractableData.State == IW_SAVE_STATE_ENABLED then
-					local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID)
-					if tInteractableData and tInteractableData.ObjectState then
+					local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, DOTA_TEAM_GOODGUYS), nInstanceID)
+					if tInteractableData then
 						hWorldObject:SetObjectState(tInteractableData.ObjectState)
 					end
 					hWorldObject:SetAbsOrigin(vPosition)
 					hWorldObject:SetForwardVector(vForward)
+					hWorldObject:SetFactionID(nFactionID)
 				end
 			end
 		end
@@ -732,25 +733,50 @@ local function LoadDynamicInteractables()
 		local bIsMapDynamicInstance = (v.State == IW_SAVE_STATE_ENABLED and nInstanceID >= IW_INSTANCE_DYNAMIC_BASE and v.LastMap == GetMapName())
 		if bIsPersistentInstance or bIsMapDynamicInstance then
 			local szUnitName = v.UnitName
-			local nUnitTeam = v.Team
+			local nFactionID = v.FactionID
 			local hOwner = GetInstanceByID(v.Owner)
 			local vPosition = StringToVector(v.Position)
 			local vForward = StringToVector(v.Forward)
 			if v.Type == IW_INSTANCE_CONTAINER then
-				local hContainer = CContainerEntity(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID)
+				local hContainer = CContainer(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, DOTA_TEAM_GOODGUYS), nInstanceID)
 				LoadInventoryData(hContainer, v.Inventory)
+				hContainer:SetLockLevel(v.LockLevel)
 				hContainer:SetAbsOrigin(vPosition)
 				hContainer:SetForwardVector(vForward)
+				hContainer:SetFactionID(nFactionID)
 			elseif v.Type == IW_INSTANCE_WORLD_OBJECT then
-				local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, nUnitTeam), nInstanceID)
-				if v.ObjectState then
-					hWorldObject:SetObjectState(v.ObjectState)
-				end
+				local hWorldObject = CWorldObject(CreateUnitByName(szUnitName, vPosition, false, hOwner, hOwner, DOTA_TEAM_GOODGUYS), nInstanceID)
+				hWorldObject:SetObjectState(v.ObjectState)
 				hWorldObject:SetAbsOrigin(vPosition)
 				hWorldObject:SetForwardVector(vForward)
+				hWorldObject:SetFactionID(nFactionID)
 			end
 		end
 	end
+end
+
+local function LoadAbilitiesForEntity(hEntity, tSpellbookData)
+	for k,v in pairs(tSpellbookData) do
+		local nInstanceID = tonumber(k)
+		if nInstanceID then
+			local hAbility = hEntity:LearnAbility(v.Name, nInstanceID)
+			if hAbility then
+				hAbility:SetLevel(v.Level)
+				if v.Cooldown > 0 then
+					hAbility:StartCooldown(v.Cooldown)
+				end
+				if v.IsAutoCast == 1 then
+					hAbility:OnToggleAutoCast()
+					hAbility:ToggleAutoCast()
+				end
+				if v.IsToggled == 1 then
+					hAbility:ToggleAbility()
+				end
+				hAbility:SetActivated(v.IsActivated == 1)
+			end
+		end
+	end
+	hEntity:UpdateSpellbookNetTable()
 end
 
 local function LoadAbilities()
@@ -758,36 +784,44 @@ local function LoadAbilities()
 	for k,v in pairs(tEntitySaveList) do
 		local nInstanceID = tonumber(k)
 		local hEntity = GetInstanceByID(nInstanceID)
-		if IsValidExtendedEntity(hEntity) then
-			local hSpellbook = hEntity:GetSpellbook()
-			local tSpellbookData = v.Spellbook or {}
-			for k2,v2 in pairs(tSpellbookData) do
-				local nInstanceID = tonumber(k2)
-				if nInstanceID then
-					local hAbility = hSpellbook:LearnAbility(v2.Name, v2.Level, nInstanceID)
-					if hAbility then
-						if v2.Cooldown > 0 then
-							hAbility:StartCooldown(v2.Cooldown)
-						end
-						if v2.IsAutoCast == 1 then
-							hAbility:OnToggleAutoCast()
-							hAbility:ToggleAutoCast()
-						end
-						if v2.IsToggled == 1 then
-							hAbility:ToggleAbility()
-						end
-						hAbility:SetActivated(v2.IsActivated == 1)
-					end
-				end
-			end
-			for k2,v2 in pairs(tSpellbookData.Binds or {}) do
-				local hAbility = hSpellbook:FindAbilityByName(v2)
+		local tSpellbookData = v.Spellbook
+		if IsValidExtendedEntity(hEntity) and tSpellbookData then
+			LoadAbilitiesForEntity(hEntity, v.Spellbook)
+			--local hSpellbook = hEntity:GetSpellbook()
+			
+			--[[for k2,v2 in pairs(tSpellbookData.Binds or {}) do
+				local hAbility = hEntity:FindAbilityByName(v2)
 				if hAbility then
 					FireGameEventLocal("iw_actionbar_bind", { entindex = hEntity:entindex(), ability = hAbility:entindex(), slot = tonumber(k2) })
 				end
-			end
-			hSpellbook:OnEntityRefresh()
+			end]]
 		end
+	end
+end
+
+local function LoadAAMData(hEntity, tAAMData)
+	if IsInstanceOf(hEntity, CAbilityAutomatorModule) and IsValidExtendedHero(hEntity) then
+		hEntity._tAutomatorList = {}
+		hEntity._szActiveAutomatorName = nil
+			
+		for k,v in pairs(tAAMData.Automators or {}) do
+			local tSortedIndices = {}
+			for k2,v2 in pairs(v) do
+				table.insert(tSortedIndices, k2)
+			end
+			table.sort(tSortedIndices)
+			for k2,v2 in ipairs(tSortedIndices) do
+				local tConditionData = v[v2]
+				local szAction = tConditionData.ActionName
+				local nFlags1 = tonumber(tConditionData.Flags1)
+				local nFlags2 = tonumber(tConditionData.Flags2)
+				local nInvMask = tonumber(tConditionData.InverseMask)
+				hEntity:InsertAutomatorCondition(k, CAutomatorCondition(hEntity, szAction, nFlags1, nFlags2, nInvMask))
+			end
+		end
+		hEntity._tNetTable.State = tAAMData.State
+		hEntity:SetActiveAutomator(tAAMData.ActiveAutomator)
+		hEntity:SetAutomatorEnabled(tAAMData.State == AAM_STATE_ENABLED)
 	end
 end
 
@@ -810,27 +844,8 @@ local function LoadParty()
 		if CSaveManager._tSaveData.Party.AAM then
 			for k,v in pairs(CSaveManager._tSaveData.Party.AAM) do
 				local hEntity = GetInstanceByID(tonumber(k))
-				local hAutomator = hEntity:GetAbilityAutomator()
-				if hAutomator then
-					for k2,v2 in pairs(v.Automators or {}) do
-						local tSortedIndices = {}
-						for k3,v3 in pairs(v2) do
-							table.insert(tSortedIndices, k3)
-						end
-						table.sort(tSortedIndices)
-						for k3,v3 in ipairs(tSortedIndices) do
-							local tConditionData = v2[v3]
-							local szAction = tConditionData.ActionName
-							local nFlags1 = tonumber(tConditionData.Flags1)
-							local nFlags2 = tonumber(tConditionData.Flags2)
-							local nInvMask = tonumber(tConditionData.InverseMask)
-							hAutomator:InsertCondition(k2, CAutomatorCondition(hEntity, szAction, nFlags1, nFlags2, nInvMask))
-						end
-					end
-					hAutomator:SetActiveAutomator(v.ActiveAutomator)
-					hAutomator:SetEnabled(v.State == AAM_STATE_ENABLED)
-					hAutomator._tNetTable.State = v.State
-					hAutomator:OnEntityRefresh()
+				if hEntity then
+					LoadAAMData(hEntity, v)
 				end
 			end
 		end
@@ -845,15 +860,7 @@ local function LoadSavedModifierData(hEntity, tModifierData, nInstanceID)
 	local hCaster = GetInstanceByID(tonumber(tModifierData.Caster)) or hEntity
 	local hModifier = nil
 	if hSource then
-		hModifier = hEntity:AddNewModifier(hCaster, hSource, szModifierName, tModifierData.ModifierArgs)
-	else
-		if tModifierData.Source ~= 0 then
-			LogMessage("Modifier source with instance ID \"" .. tModifierData.Source .. "\" was not found.", LOG_SEVERITY_WARNING)
-		end
-		hModifier = AddModifier(szAbilityName, szModifierName, hEntity, hCaster, tModifierData.ModifierArgs)
-	end
-	
-	if hModifier then
+		local hModifier = hEntity:AddNewModifier(hCaster, hSource, szModifierName, tModifierData.ModifierArgs)
 		local nStackCount = tModifierData.StackCount or 0
 		if nStackCount > 0 then
 			hModifier:SetStackCount(nStackCount)
@@ -865,114 +872,105 @@ local function LoadSavedModifierData(hEntity, tModifierData, nInstanceID)
 	end
 end
 
-local function LoadEntityPositions()
+local function LoadEntityPositions(hEntity)
 	local tEntitySaveList = CSaveManager._tSaveData.Entities or {}
-	local hEntity = Entities:First()
-	while hEntity do
-		if IsValidExtendedEntity(hEntity) then
-			local nInstanceID = hEntity:GetInstanceID()
-			local tEntityData = tEntitySaveList[tostring(nInstanceID)]
-			local tInstanceData = CSaveManager._tInstanceData[tostring(nInstanceID)]
-			if tEntityData and tEntityData.State == IW_SAVE_STATE_PERSISTENT then
-				if tEntityData.Health > 0 and tEntityData.LastMap ~= GetMapName() then
-					local hDefaultSpawn = Entities:FindByName(nil, "spawnloc_" .. CSaveManager._tSaveData.CurrentMap)
-					if not hDefaultSpawn then hDefaultSpawn = Entities:FindByName(nil, "spawnloc_" .. nInstanceID) end
-					if not hDefaultSpawn then hDefaultSpawn = Entities:FindByName(nil, "spawnloc_default") end
-					if not hDefaultSpawn then LogMessage("No default spawn location present on map!") end
+	if IsValidExtendedEntity(hEntity) then
+		local nInstanceID = hEntity:GetInstanceID()
+		local tEntityData = tEntitySaveList[tostring(nInstanceID)]
+		local tInstanceData = CSaveManager._tInstanceData[tostring(nInstanceID)]
+		if tEntityData and tEntityData.State == IW_SAVE_STATE_PERSISTENT then
+			if tEntityData.Health > 0 and tEntityData.LastMap ~= GetMapName() then
+				local hDefaultSpawn = Entities:FindByName(nil, "spawnloc_" .. CSaveManager._tSaveData.CurrentMap)
+				if not hDefaultSpawn then hDefaultSpawn = Entities:FindByName(nil, "spawnloc_" .. nInstanceID) end
+				if not hDefaultSpawn then hDefaultSpawn = Entities:FindByName(nil, "spawnloc_default") end
+				if not hDefaultSpawn then LogMessage("No default spawn location present on map!", LOG_SEVERITY_WARNING) end
+				if hDefaultSpawn then
 					FindClearSpaceForUnit(hEntity, hDefaultSpawn:GetAbsOrigin(), false)
 					hEntity:SetForwardVector(hDefaultSpawn:GetForwardVector())
-				else
-					hEntity:SetAbsOrigin(StringToVector(tEntityData.Position))
-					hEntity:SetForwardVector(StringToVector(tEntityData.Forward))
 				end
-			elseif tInstanceData then
-				if tEntityData and tEntityData.LastMap == GetMapName() then
-					hEntity:SetAbsOrigin(StringToVector(tEntityData.Position))
-					hEntity:SetForwardVector(StringToVector(tEntityData.Forward))
-				else
-					local vPosition = StringToVector(tInstanceData.Position)
-					if vPosition.z == 0 then
-						vPosition = GetGroundPosition(vPosition, hEntity)
-					end
-					hEntity:SetAbsOrigin(vPosition)
-					hEntity:SetForwardVector(StringToVector(tInstanceData.Forward))
-					if IsValidNPCEntity(hEntity) then
-						hEntity._vInitialPos = vPosition
-						hEntity._nLastWaypoint = tInstanceData.LastWaypoint or 0
-						hEntity._nNextWaypoint = tInstanceData.NextWaypoint or 0
-					end
+			else
+				hEntity:SetAbsOrigin(StringToVector(tEntityData.Position))
+				hEntity:SetForwardVector(StringToVector(tEntityData.Forward))
+			end
+		elseif tInstanceData then
+			if tEntityData and tEntityData.LastMap == GetMapName() then
+				hEntity:SetAbsOrigin(StringToVector(tEntityData.Position))
+				hEntity:SetForwardVector(StringToVector(tEntityData.Forward))
+			else
+				local vPosition = StringToVector(tInstanceData.Position)
+				if vPosition.z == 0 then
+					vPosition = GetGroundPosition(vPosition, hEntity)
+				end
+				hEntity:SetAbsOrigin(vPosition)
+				hEntity:SetForwardVector(StringToVector(tInstanceData.Forward))
+				if IsValidExtendedEntity(hEntity) then
+					hEntity._vInitialPos = vPosition
+					hEntity._nLastWaypoint = tInstanceData.LastWaypoint or 0
+					hEntity._nNextWaypoint = tInstanceData.NextWaypoint or 0
 				end
 			end
 		end
-		hEntity = Entities:Next(hEntity)
 	end
 end
 
-local function ClearNoisePoint(self, nIndex)
-	self._tNoiseTable[nIndex] = nil
-end
-
-local function LoadEntityValues()
+local function LoadEntityValues(hEntity)
 	local tEntitySaveList = CSaveManager._tSaveData.Entities or {}
-	local hEntity = Entities:First()
-	while hEntity do
-		if IsValidExtendedEntity(hEntity) then
-			local nInstanceID = hEntity:GetInstanceID()
-			local tEntityData = tEntitySaveList[tostring(nInstanceID)]
-			if tEntityData then
-				if tEntityData.Health == 0 then
-					hEntity:ForceKill(false)
-				else
-					hEntity:SetHealth(tEntityData.Health)
-				end
-				hEntity:SetMana(tEntityData.Mana)
-				hEntity:SetStamina(tEntityData.Stamina)
+	if IsValidExtendedEntity(hEntity) then
+		local nInstanceID = hEntity:GetInstanceID()
+		local tEntityData = tEntitySaveList[tostring(nInstanceID)]
+		if tEntityData then
+			if tEntityData.Health == 0 then
+				hEntity:ForceKill(false)
+			else
+				hEntity:SetHealth(tEntityData.Health)
+			end
+			hEntity:SetMana(tEntityData.Mana)
+			hEntity:SetStamina(tEntityData.Stamina)
+			hEntity._fStaminaRegenTime = GameRules:GetGameTime() + tEntityData.StaminaTime
+			
+			if hEntity:IsRealHero() then
 				if tEntityData.RunMode == 1 then
 					hEntity:SetRunMode(true)
 				end
 				if tEntityData.HoldMode == 1 then
 					hEntity:SetHoldPosition(true)
 				end
-				hEntity._fStaminaRegenTime = GameRules:GetGameTime() + tEntityData.StaminaTime
-				
-				if hEntity:IsRealHero() then
-					CDOTA_BaseNPC_Hero.AddExperience(hEntity, tEntityData.Experience, DOTA_ModifyXP_Unspecified, false, true)
-					hEntity._fTotalXP = tEntityData.Experience
-					hEntity._fLevelXP = hEntity._fTotalXP - GameRules.XPTable[hEntity:GetLevel()]
+				CDOTA_BaseNPC_Hero.AddExperience(hEntity, tEntityData.Experience, DOTA_ModifyXP_Unspecified, false, true)
+				hEntity._fTotalXP = tEntityData.Experience
+				hEntity._fLevelXP = hEntity._fTotalXP - GameRules.XPTable[hEntity:GetLevel()]
+			end
+			
+			if IsValidExtendedEntity(hEntity) then
+				hEntity._vInitialPos = StringToVector(tEntityData.InitialPos)
+				local fCurrentTime = GameRules:GetGameTime()
+				for k,v in pairs(tEntityData.ThreatTable or {}) do
+					local hThreatEntity = GetInstanceByID(k)
+					if IsValidExtendedEntity(hThreatEntity) then
+						hEntity._tThreatTable[hThreatEntity:entindex()] = v
+					end
 				end
-				
-				if IsValidNPCEntity(hEntity) then
-					hEntity._vInitialPos = StringToVector(tEntityData.InitialPos)
-					local fCurrentTime = GameRules:GetGameTime()
-					for k,v in pairs(tEntityData.ThreatTable or {}) do
-						local hThreatEntity = GetInstanceByID(k)
-						if IsValidExtendedEntity(hThreatEntity) then
-							hEntity._tThreatTable[hThreatEntity:entindex()] = v
-						end
+				for k,v in pairs(tEntityData.DetectTable or {}) do
+					local hDetectEntity = GetInstanceByID(k)
+					if IsValidEntity(hDetectEntity) then
+						hEntity._tDetectTable[hDetectEntity:entindex()] = fCurrentTime + v
 					end
-					for k,v in pairs(tEntityData.DetectTable or {}) do
-						local hDetectEntity = GetInstanceByID(k)
-						if IsValidEntity(hDetectEntity) then
-							hEntity._tDetectTable[hDetectEntity:entindex()] = fCurrentTime + v
-						end
-					end
-					for k,v in pairs(tEntityData.NoiseTable or {}) do
-						hEntity._tNoiseTable[hEntity._nNoiseTableIndex] =
-						{
-							value    = v.value,
-							origin   = StringToVector(v.origin),
-							speed    = v.speed,	
-							time     = fCurrentTime + v.time,
-							duration = v.duration,
-						}
-						CTimer(fCurrentTime + v.time + v.duration, ClearNoisePoint, hEntity, hEntity._nNoiseTableIndex)
-						hEntity._nNoiseTableIndex = hEntity._nNoiseTableIndex + 1
-					end
-					hEntity._nLastWaypoint = tEntityData.LastWaypoint
-					hEntity._nNextWaypoint = tEntityData.NextWaypoint
 				end
+				for k,v in pairs(tEntityData.NoiseTable or {}) do
+					local tNoiseTable = hEntity._tNoiseTable
+					tNoiseTable[k] = v
+				end
+				hEntity._nLastWaypoint = tEntityData.LastWaypoint
+				hEntity._nNextWaypoint = tEntityData.NextWaypoint
 			end
 		end
+	end
+end
+
+local function LoadEntityPositionsAndValues()
+	local hEntity = Entities:First()
+	while hEntity do
+		LoadEntityPositions(hEntity)
+		LoadEntityValues(hEntity)
 		hEntity = Entities:Next(hEntity)
 	end	
 end
@@ -981,21 +979,22 @@ local function LoadMapContainers()
 	local tInteractableSaveList = CSaveManager._tSaveData.Interactables or {}
 	for k,v in pairs(CSaveManager._tInstanceData) do
 		local nInstanceID = tonumber(k)
-		local hPrecondition = CExpression(v.Precondition or "")
-		if stInstanceData[k] and stInstanceData[k].Type == IW_INSTANCE_CONTAINER and hPrecondition:EvaluateExpression() then
+		local hPrecondition = LoadFunctionSnippet(v.Precondition)
+		if stInstanceData[k] and stInstanceData[k].Type == IW_INSTANCE_CONTAINER and (not hPrecondition or hPrecondition()) then
 			local tContainerData = tInteractableSaveList[k]
 			if not tContainerData then
 				local szUnitName = stInstanceData[k].Name
-				local nUnitTeam = stInstanceData[k].Team
+				local nFactionID = stInstanceData[k].FactionID
 				local vForward = StringToVector(v.Forward)
 				local vPosition = StringToVector(v.Position)
 				if vPosition.z == 0 then
 					vPosition = GetGroundPosition(vPosition, hEntity)
 				end
-				local hContainer = CContainerEntity(CreateUnitByName(szUnitName, vPosition, false, nil, nil, nUnitTeam), nInstanceID)
-				hContainer:GenerateLootList(stInstanceData.LootList)
+				local hContainer = CContainer(CreateUnitByName(szUnitName, vPosition, false, nil, nil, DOTA_TEAM_GOODGUYS), nInstanceID)
+				hContainer:SetFactionID(stInstanceData.FactionID)
 				hContainer:SetAbsOrigin(vPosition)
 				hContainer:SetForwardVector(vForward)
+				hContainer:GenerateItemList()
 			end
 		end
 	end
@@ -1012,17 +1011,15 @@ local function LoadModifiers()
 				LoadSavedModifierData(hInstance, v2)
 			end
 		end
-		if IsValidExtendedEntity(hInstance) then
-			for k2,v2 in pairs(v.Modifiers or {}) do
-				_, _, szAbilityName, szModifierName = string.find(k2, "([%w_]+):([%w_]+)")
-				if szAbilityName and szModifierName then
-					for k3,v3 in pairs(v2) do
-						if type(v3) == "string" and _G[v3] then
-							v2[k3] = _G[v3]
-						end
+		for k2,v2 in pairs(v.Modifiers or {}) do
+			_, _, szAbilityName, szModifierName = string.find(k2, "([%w_]+):([%w_]+)")
+			if szAbilityName and szModifierName then
+				for k3,v3 in pairs(v2) do
+					if type(v3) == "string" and _G[v3] then
+						v2[k3] = _G[v3]
 					end
-					AddModifier(szAbilityName, szModifierName, hInstance, hInstance, v2)
 				end
+				AddModifier(szAbilityName, szModifierName, hInstance, hInstance, v2)
 			end
 		end
 	end
@@ -1032,10 +1029,8 @@ local function LoadModifiers()
 		local nInstanceState = v.State
 		if nInstanceState == 2 or (nInstanceState == 1 and bIsCurrentMap) then
 			local hInstance = GetInstanceByID(nInstanceID)
-			if IsValidExtendedEntity(hInstance) then
-				for k2,v2 in pairs(v.Modifiers or {}) do
-					LoadSavedModifierData(hInstance, v2, tonumber(k2))
-				end
+			for k2,v2 in pairs(v.Modifiers or {}) do
+				LoadSavedModifierData(hInstance, v2, tonumber(k2))
 			end
 		end
 	end
@@ -1051,22 +1046,66 @@ end
 
 function CSaveManager:LoadGame()
 	--TODO: Save and load party formation
-	CInstance:SetAllowDynamicInstances(false)
+	--CInstance:SetAllowDynamicInstances(false)
 	LoadGlobalData()
 	LoadGameStates()
-	LoadPhysicalItems()
 	LoadStaticEntities()
 	LoadDynamicEntities()
 	LoadStaticInteractables()
 	LoadDynamicInteractables()
+	LoadPhysicalItems()
 	LoadAbilities()
 	LoadParty()
-	LoadEntityPositions()
-	LoadEntityValues()
+	LoadEntityPositionsAndValues()
 	LoadMapContainers()
 	LoadModifiers()
 	RefreshAllEntities()
-	CInstance:SetAllowDynamicInstances(true)
+	--CInstance:SetAllowDynamicInstances(true)
+end
+
+--This is an annoying workaround but we have to do it since the player hero isn't loaded until much, much later...
+function CSaveManager:LoadPlayerHero(hEntity, nPlayerID)
+	if hEntity:GetUnitName() == CSaveManager:GetPlayerHeroName() and hEntity:IsRealHero() then
+		local nInstanceID = GameRules:GetGameState("game.hero_selection")
+		hEntity = CExtHero(hEntity, nInstanceID)
+		hEntity:SetFactionID(1)
+		
+		local tEntitySaveList = CSaveManager._tSaveData.Entities or {}
+		local tEntityData = tEntitySaveList[tostring(nInstanceID)]
+		local tSpellbookData = tEntity
+		if tEntityData then
+			LoadEntityData(hEntity, tEntityData)
+			LoadAbilitiesForEntity(hEntity, tEntityData.Spellbook)
+		end
+		
+		for k,v in pairs(tEntitySaveList) do
+			local nInstanceID = tonumber(k)
+			local nInstanceState = v.State
+			if nInstanceState == 2 or (nInstanceState == 1 and bIsCurrentMap) then
+				local hInstance = GetInstanceByID(nInstanceID)
+				if IsValidExtendedEntity(hInstance) then
+					for k2,v2 in pairs(v.Modifiers or {}) do
+						if tonumber(v2.Caster) == nInstanceID then
+							LoadSavedModifierData(hInstance, v2, tonumber(k2))
+						end
+					end
+				end
+			end
+		end
+		
+		CParty:AddToParty(hEntity, nPlayerID + 1)
+		local tAAMData = CSaveManager._tSaveData.Party.AAM
+		if tAAMData then
+			LoadAAMData(hEntity, tAAMData[tostring(nInstanceID)])
+		end
+		GameRules.GetPlayerHero = function() return hEntity end
+		
+		--Because for some reason the position gets overwritten immediately after spawning the entity...
+		CTimer(0.03, function()
+			LoadEntityPositions(hEntity)
+			LoadEntityValues(hEntity)
+		end)
+	end	
 end
 
 ListenToGameEvent("iw_save_game", Dynamic_Wrap(CSaveManager, "OnSaveGame"), CSaveManager)

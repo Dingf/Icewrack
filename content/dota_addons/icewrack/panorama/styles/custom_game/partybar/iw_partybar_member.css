@@ -73,12 +73,13 @@
 	height: 108px;
 	margin-left: 10px;
 	margin-top: 10px;
+	overflow: clip;
 }
 
 .PartyBarPortraitContainer Image
 {
 	width: 108px;
-	height: 108px;
+	height: 144px;
 }
 
 .PartyBarDeathState
@@ -89,6 +90,8 @@
 
 .PartyBarDeathPortrait
 {
+	opacity: 0.95;
+	background-color: #000000ff;
 	visibility: collapse;
 }
 

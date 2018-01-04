@@ -24,9 +24,9 @@ function OnAbilitySkillIconMouseOver()
 		//var szTooltipText = (nState === 1) ? $.Localize("iw_ui_abilities_tooltip_show") : $.Localize("iw_ui_abilities_tooltip_hide");
 		//szTooltipText = szTooltipText.replace(/\{0\}/g, );
 		
-		var szTooltipText = $.Localize("iw_ui_character_skills_" + Math.floor(nSkillID/13) + "_" + (nSkillID % 13));
+		var szTooltipText = $.Localize("iw_ui_character_skills_" + Math.floor(nSkillID/12) + "_" + (nSkillID % 12));
 		szTooltipText = "<b>" + szTooltipText + "</b><br>";
-		szTooltipText = szTooltipText + "<font color=\"#c0c0c0\">" + $.Localize("iw_ui_character_skills_" + Math.floor(nSkillID/13) + "_" + (nSkillID % 13) + "_desc") + "</font>";
+		szTooltipText = szTooltipText + "<font color=\"#c0c0c0\">" + $.Localize("iw_ui_character_skills_" + Math.floor(nSkillID/12) + "_" + (nSkillID % 12) + "_desc") + "</font>";
 		$.DispatchEvent("DOTAShowTextTooltip", $.GetContextPanel(), szTooltipText);
 	}
 }

@@ -14,21 +14,19 @@
 -- 2b Unit has debuff
 -- 5b Unit status effects
 -- 1b Target is a remembered target
+-- 3b Remembered target count
 -- 1b Target is attacking a remembered target
--- 1b Target is attacked by a remembered target
--- 1b Unit is attacking any unit
--- 1b Unit is being attacked by any unit
 
+-- 1b Target is attacked by a remembered target
 -- 1b Target is using an ability on a remembered target
--- 1b Target is using an ability on any unit
 -- 3b Unit position relative to caster
 -- 8b Number of other units near the target
 --    2b Unit relationship
 --    3b Range
 --    3b Number of units
 -- 3b Unit Count
--- 1b Remember current target
 -- 1b Party is in combat
+-- 1b Remember current target
 -- 3b Target Min distance
 -- 3b Target Max distance
 -- 3b Target relationship
@@ -41,10 +39,6 @@ if _VERSION < "Lua 5.2" then
     bit = require("lib/numberlua")
     bit32 = bit.bit32
 end
-
---require("ext_entity")
-require("ext_ability")
---require("party")
 
 local stAAMConditionTeamEnum = 
 {
@@ -133,7 +127,7 @@ end
 local function TargetIsAlive(hCondition, nValue, tTargetList, bInverse)
 	if nValue ~= 0 then
 		for k,v in pairs(tTargetList) do
-			if v:IsAlive() == bInverse then
+			if (v:IsAlive() and not v:IsConsideredDead()) == bInverse then
 				tTargetList[k] = nil
 			end
 		end
@@ -195,11 +189,12 @@ local function TargetHasStatusEffect(hCondition, nValue, tTargetList, bInverse)
 		for k,v in pairs(tTargetList) do
 			local tModifierList = v:FindAllModifiers()
 			local bHasStatusEffect = false
+			local nBitshiftedValue = bit32.lshift(1, nValue)
 			for k2,v2 in pairs(tModifierList) do
 				if IsValidExtendedModifier(v2) then
-					local nStatusEffect = v2:GetStatusEffect()
-					if nStatusEffect ~= IW_STATUS_EFFECT_NONE then
-						if nValue == IW_STATUS_EFFECT_ANY or nStatusEffect == nValue then
+					local nStatusMask = v2:GetStatusMask()
+					if nStatusMask ~= IW_STATUS_EFFECT_NONE then
+						if nValue == IW_STATUS_EFFECT_ANY or bit32.btest(nStatusMask, nBitshiftedValue) then
 							bHasStatusEffect = true
 							break
 						end
@@ -229,6 +224,22 @@ local function TargetIsRemembered(hCondition, nValue, tTargetList, bInverse)
 	return tTargetList
 end
 
+local function TargetRememberedCount(hCondition, nValue, tTargetList, bInverse)
+	if nValue ~= 0 then
+		local nCount = 0
+		local tRememberedTargets = hCondition._tRememberedUnitList
+		for k,v in pairs(tRememberedTargets) do
+			nCount = nCount + 1
+		end
+		if (bInverse and nCount < nValue) or (not bInverse and nCount >= nValue) then
+			return tTargetList
+		else
+			return nil
+		end
+	end
+	return tTargetList
+end
+
 local function TargetAttackingRemembered(hCondition, nValue, tTargetList, bInverse)
 	if nValue ~= 0 then
 		local tRememberedTargets = hCondition._tRememberedUnitList
@@ -239,8 +250,8 @@ local function TargetAttackingRemembered(hCondition, nValue, tTargetList, bInver
 			local hResult = bInverse and v or nil
 			if v._tAttackingTable then
 				for k2,v2 in pairs(tRememberedTargets) do
-					if v._tAttackingTable[k2:entindex()] then
-						hResult = not bInverse and v or nil
+					if v._tAttackingTable[k2:entindex()] > 0 then
+						hResult = (not bInverse) and v or nil
 						break
 					end
 				end
@@ -273,28 +284,6 @@ local function TargetAttackedByRemembered(hCondition, nValue, tTargetList, bInve
 	return tTargetList
 end
 
-local function TargetIsAttacking(hCondition, nValue, tTargetList, bInverse)
-	if nValue ~= 0 then
-		for k,v in pairs(tTargetList) do
-			if (next(v._tAttackingTable or {}) ~= nil) == bInverse then
-				tTargetList[k] = nil
-			end
-		end
-	end
-	return tTargetList
-end
-
-local function TargetIsBeingAttacked(hCondition, nValue, tTargetList, bInverse)
-	if nValue ~= 0 then
-		for k,v in pairs(tTargetList) do
-			if (next(v._tAttackedByTable or {}) ~= nil) == bInverse then
-				tTargetList[k] = nil
-			end
-		end
-	end
-	return tTargetList
-end
-
 local function TargetIsCastingRemembered(hCondition, nValue, tTargetList, bInverse)
 	if nValue ~= 0 then
 		local tRememberedTargets = hCondition._tRememberedUnitList
@@ -314,18 +303,6 @@ local function TargetIsCastingRemembered(hCondition, nValue, tTargetList, bInver
 				end
 			end
 			tTargetList[k] = hResult
-		end
-	end
-	return tTargetList
-end
-
-local function TargetIsCasting(hCondition, nValue, tTargetList, bInverse)
-	if nValue ~= 0 then
-		for k,v in pairs(tTargetList) do
-			local hActiveAbility = v:GetCurrentActiveAbility()
-			if (hActiveAbility ~= nil) == bInverse then
-				tTargetList[k] = nil
-			end
 		end
 	end
 	return tTargetList
@@ -379,10 +356,10 @@ local function TargetNearUnits(hCondition, nValue, tTargetList)
 		local fSearchRange = stDistanceTable[bit32.extract(nValue, 2, 3)]
 		local nUnitAmount = bit32.extract(nValue, 5, 3)
 		for k,v in pairs(tTargetList) do
-			local tUnitsList = FindUnitsInRadius(hEntity:GetTeamNumber(), v:GetAbsOrigin(), nil, fSearchRange, nTargetTeam, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+			local tUnitsList = FindUnitsInRadius(hEntity:GetTeamNumber(), v:GetAbsOrigin(), nil, fSearchRange, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 			local nUnitCount = 0
 			for k2,v2 in pairs(tUnitsList) do
-				if v2 ~= v then                --Ignore self when counting
+				if v2 ~= v and IsValidExtendedEntity(v2) and v:IsTargetTeam(v2, nTargetTeam) then
 					nUnitCount = nUnitCount + 1
 				end
 			end
@@ -411,7 +388,9 @@ end
 
 local function RememberUnits(hCondition, nValue, tTargetList)
 	if nValue ~= 0 then
-		hCondition._tRememberedUnitList = {}
+		for k,v in pairs(hCondition._tRememberedUnitList) do
+			hCondition._tRememberedUnitList[k] = nil
+		end
 		for k,v in pairs(tTargetList) do
 			hCondition._tRememberedUnitList[v] = true
 		end
@@ -481,19 +460,22 @@ end
 
 local function SelectByThreat(hCondition, tTargetList)
 	local hEntity = hCondition._hEntity
-	if IsValidNPCEntity(hEntity) then
-		local hHighestThreatEntity = {}
-		local fHighestThreatValue = -1.0
-		for k,v in pairs(tTargetList) do
-			local fThreat = hEntity:GetThreat(v)
-			if fThreat > fHighestThreatValue then
-				hHighestThreatEntity = v
-				fHighestThreatValue = fThreat
+	local hHighestThreatEntity = nil
+	local fHighestThreatValue = -1.0
+	local tAvoidanceZones = CAvoidanceZone:GetAvoidanceZones()
+	for k,v in pairs(tTargetList) do
+		local fThreat = hEntity:GetThreatForTarget(v)
+		for k2,v2 in pairs(tAvoidanceZones) do
+			if v2:IsTargetInZone(v:GetAbsOrigin()) then
+				fThreat = fThreat - v2:GetAvoidanceValue()
 			end
 		end
-		return hHighestThreatEntity
+		if fThreat > fHighestThreatValue then
+			hHighestThreatEntity = v
+			fHighestThreatValue = fThreat
+		end
 	end
-	return next(tTargetList)
+	return hHighestThreatEntity
 end
 
 local stAAMConditionTargetTable =
@@ -539,17 +521,16 @@ local stAAMConditionFunctionTable =
     {TargetHasDebuff,              2},
     {TargetHasStatusEffect,        5},
     {TargetIsRemembered,           1},
+    {TargetRememberedCount,        3},
+	
     {TargetAttackingRemembered,    1},
     {TargetAttackedByRemembered,   1},
-    {TargetIsAttacking,            1},
-    {TargetIsBeingAttacked,        1},
 	{TargetIsCastingRemembered,    1},
-	{TargetIsCasting,              1},
     {TargetRelativePosition,       3},
     {TargetNearUnits,              8},
 	{TargetUnitCount,              3},
-    {RememberUnits,                1},
     {PartyInCombat,                1},
+    {RememberUnits,                1},
 	{DoNothing,                    9},
 	{SelectTarget,                 4},
 	{SetPartyFocusTarget,          1},
@@ -557,13 +538,25 @@ local stAAMConditionFunctionTable =
 
 CAutomatorCondition = setmetatable({}, { __call = 
 	function(self, hEntity, szActionName, nFlags1, nFlags2, nInverseMask)
+		LogAssert(IsInstanceOf(szActionName, CExtAbility) or (type(szActionName) == "string"), LOG_MESSAGE_ASSERT_TYPE, "CExtAbility\" or \"string")
+		LogAssert(type(nFlags1) == "number", LOG_MESSAGE_ASSERT_TYPE, "number")
+		LogAssert(type(nFlags2) == "number", LOG_MESSAGE_ASSERT_TYPE, "number")
+		LogAssert(type(nInverseMask) == "number", LOG_MESSAGE_ASSERT_TYPE, "number")
+	
 		self = setmetatable({}, {__index = CAutomatorCondition})
 		
 		self._hEntity = hEntity
-		self._szActionName = (type(szActionName) == "table") and szActionName:GetAbilityName() or szActionName
-		self._nFlags1 = nFlags1 or 0
-		self._nFlags2 = nFlags2 or 0
-		self._nInverseMask = nInverseMask or 0
+		self._szActionName = (IsInstanceOf(szActionName, CExtAbility)) and szActionName:GetAbilityName() or szActionName
+		self._nFlags1 = nFlags1
+		self._nFlags2 = nFlags2
+		self._nInverseMask = nInverseMask
+		self._nSpecialValue = 0
+		
+		local _, _, szNewActionName, szSpecialValue = string.find(szActionName, "([%w_]+):([%w_]+)")
+		if szSpecialValue then
+			self._szActionName = szNewActionName
+			self._nSpecialValue = tonumber(szSpecialValue) or 0
+		end
 		
 		self._tTargetList = {}
 		
@@ -572,6 +565,10 @@ CAutomatorCondition = setmetatable({}, { __call =
 
 function CAutomatorCondition:GetActionName()
 	return self._szActionName
+end
+
+function CAutomatorCondition:GetSpecialValue()
+	return self._nSpecialValue
 end
 
 function CAutomatorCondition:GetSaveTable()
@@ -627,11 +624,13 @@ function CAutomatorCondition:SelectTarget(hEntity, tRememberedUnitList)
 		elseif nTargetTeam >= AAM_CONDITION_TEAM_PARTY_1 and nTargetTeam <= AAM_CONDITION_TEAM_PARTY_4 then
 			table.insert(tTargetList, CParty:GetMemberBySlot(nTargetTeam - 4))	
 		else
-			local tNearbyUnits = FindUnitsInRadius(hEntity:GetTeamNumber(), hEntity:GetAbsOrigin(), nil, fMaxRadius, nTargetTeam, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+			local tNearbyUnits = FindUnitsInRadius(hEntity:GetTeamNumber(), hEntity:GetAbsOrigin(), nil, fMaxRadius, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 			for k,v in pairs(tNearbyUnits) do
 				local fDistance = (hEntity:GetAbsOrigin() - v:GetAbsOrigin()):Length2D()
-				if (IsValidExtendedEntity(v) and (bTargetDead ~= v:IsAlive())) and fDistance >= fMinRadius and fDistance <= fMaxRadius then
-					table.insert(tTargetList, v)
+				if fDistance >= fMinRadius and hEntity:IsTargetTeam(v, nTargetTeam) then
+					if IsValidExtendedEntity(v) and (bTargetDead ~= (v:IsAlive() and not v:IsConsideredDead())) then 
+						table.insert(tTargetList, v)
+					end
 				end
 			end
 		end
@@ -641,10 +640,7 @@ function CAutomatorCondition:SelectTarget(hEntity, tRememberedUnitList)
 		end
 		
 		for k,v in pairs(tTargetList) do
-			if not IsValidExtendedEntity(v) or (v:IsAlive() == bCanTargetDead) then
-				tTargetList[k] = nil
-			end
-			if not hEntity:IsTargetInLOS(v) or (not hEntity:IsTargetDetected(v) and v:GetTeamNumber() ~= hEntity:GetTeamNumber()) then
+			if not IsValidExtendedEntity(v) or (hEntity:IsTargetEnemy(v) and not hEntity:IsTargetDetected(v)) then	--TODO: Implement corpse targeting
 				tTargetList[k] = nil
 			end
 		end

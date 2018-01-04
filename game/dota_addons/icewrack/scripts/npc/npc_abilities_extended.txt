@@ -1,6 +1,11 @@
 "IcewrackExtendedAbilityDefinitions"
 {
 	"internal_animation"	{}
+	"internal_revive"
+	{
+		"ScriptFile"	"scripts/vscripts/mechanics/revive.lua"
+	}
+
 	"status_bash"		{}
 	"status_maim"		{}
 	"status_bleed"		{}
@@ -11,12 +16,22 @@
 	"status_wet"		{}
 	"status_warm"		{}
 
+	"aam_do_nothing"	{}
+	"aam_skip_to_condition"	{}
+	"aam_skip_remaining"	{}
+	"aam_attack"		{}
+	"aam_hold_position"	{}
+	"aam_move_away_from"	{}
+	"aam_move_towards"	{}
+	"aam_move_in_front_of"	{}
+	"aam_move_behind"	{}
+	"aam_use_quick_item"	{}
 
 	"iw_axe_berserkers_call"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_berserkers_call.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_AOE"
-		"AbilitySkill"		"155"
+		"AbilitySkill"		"147"
 
 		"StaminaCost"		"20"
 	}
@@ -24,29 +39,29 @@
 	"iw_axe_battle_hunger"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_battle_hunger.lua"
-		"AbilitySkill"		"156"
+		"AbilitySkill"		"148"
 	}
 
 	"iw_axe_counter_helix"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/axe/iw_axe_counter_helix.lua"
-		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_KEYWORD_AOE"
-		"AbilitySkill"		"115"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_KEYWORD_AOE"
+		"AbilitySkill"		"37739"
 
-		"StaminaCost"		"5"
-		"StaminaCostMultiplier"	"0.5"
+		"StaminaCost"		"10"
+		"StaminaUpkeep"		"10"
 	}
 
 	"iw_axe_culling_blade"
 	{
-		"AbilitySkill"		"116"
+		"AbilitySkill"		"37738"
 	}
 
 	"iw_dragon_knight_deafening_roar"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_deafening_roar.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_AOE"
-		"AbilitySkill"		"10"
+		"AbilitySkill"		"37690"
 
 		"ManaCost"		"20"
 		"StaminaCost"		"20"
@@ -64,7 +79,7 @@
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_breathe_fire.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_KEYWORD_AOE"
-		"AbilitySkill"		"10"
+		"AbilitySkill"		"0"
 
 		"ManaCost"		"40"
 
@@ -87,7 +102,7 @@
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_shield_slam.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_SINGLE"
-		"AbilitySkill"		"39570"
+		"AbilitySkill"		"37514"
 
 		"StaminaCost"		"25"
 
@@ -104,6 +119,15 @@
 				"ACT_DOTA_CAST_ABILITY_2"	"1.0"
 			}
 		}
+	}
+
+	"iw_dragon_knight_endurance_aura"
+	{
+		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_endurance_aura.lua"
+		"AbilityFlags"		"IW_ABILITY_FLAG_TOGGLE_OFF_ON_DEATH | IW_ABILITY_FLAG_KEYWORD_AURA"
+		"AbilitySkill"		"58"
+
+		"ManaUpkeep"		"5"
 	}
 
 	"iw_dragon_knight_dragons_blood"
@@ -129,7 +153,7 @@
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/dragon_knight/iw_dragon_knight_dragon_form.lua"
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL"
-		"AbilitySkill"		"9648650"
+		"AbilitySkill"		"8534796"
 
 		"ManaCost"		"100"
 
@@ -145,7 +169,7 @@
 	"iw_drow_ranger_frost_arrows"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_frost_arrows.lua"
-		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK"
+		"AbilityFlags"		""
 		"AbilitySkill"		"33561"
 
 		"ManaCost"		"8"
@@ -169,7 +193,7 @@
 	"iw_drow_ranger_precision_aura"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_precision_aura.lua"
-		"AbilityFlags"		""
+		"AbilityFlags"		"IW_ABILITY_FLAG_TOGGLE_OFF_ON_DEATH | IW_ABILITY_FLAG_KEYWORD_AURA"
 
 		"ManaUpkeep"		"4"
 	}
@@ -177,7 +201,7 @@
 	"iw_drow_ranger_bullseye"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/drow_ranger/iw_drow_ranger_bullseye.lua"
-		"AbilityFlags"		"IW_ABILITY_FLAG_USES_ATTACK_STAMINA | IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_USES_ATTACK_RANGE"
+		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_ATTACK | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_USES_ATTACK_RANGE"
 
 		"StaminaCost"		"15"
 
@@ -193,7 +217,7 @@
 	"iw_bounty_hunter_ensnare"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/bounty_hunter/iw_bounty_hunter_ensnare.lua"
-		"AbilityFlags"		""
+		"AbilityFlags"		"IW_ABILITY_FLAG_IGNORE_LOS_BLOCKERS | IW_ABILITY_FLAG_SINGLE"
 
 		"Properties"	{}
 
@@ -233,7 +257,7 @@
 	"iw_bounty_hunter_smoke_bomb"
 	{
 		"ScriptFile"		"scripts/vscripts/abilities/bounty_hunter/iw_bounty_hunter_smoke_bomb.lua"
-		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_KEYWORD_AOE"
+		"AbilityFlags"		"IW_ABILITY_FLAG_IGNORE_LOS_BLOCKERS | IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_KEYWORD_AOE"
 
 		"AbilityCastAnimation"
 		{
@@ -254,7 +278,7 @@
 		"AbilityFlags"		"IW_ABILITY_FLAG_KEYWORD_SPELL | IW_ABILITY_FLAG_SINGLE | IW_ABILITY_FLAG_AUTOCAST_ATTACK"
 		"AbilitySkill"		"9"
 
-		"ManaCost"		"5"
+		"ManaCost"		"10"
 	}
 
 	"iw_lina_inner_fire"

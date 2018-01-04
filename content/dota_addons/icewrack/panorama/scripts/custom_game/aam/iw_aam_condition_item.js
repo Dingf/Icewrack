@@ -8,9 +8,10 @@ var stDropdownTableParams =
 	6:  {"0":8},
 	10: {"0":4},
 	11: {"0":26},
-	19: {"0":8},
-	20: {"0":8, "1":3, "2":8},
-	21: {"0":8}
+	13: {"0":8},
+	17: {"0":8},
+	18: {"0":8, "1":3, "2":8},
+	19: {"0":8}
 };
 
 function OnAAMConditionItemUpdateValue(hContextPanel, tArgs)

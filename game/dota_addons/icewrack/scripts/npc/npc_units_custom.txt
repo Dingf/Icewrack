@@ -6,10 +6,10 @@
 		// General
 		//----------------------------------------------------------------
 		"BaseClass"				"npc_dota_base"
-		"Model"					"models/development/invisiblebox.mdl"
+		"Model"					"models/development/invisiblebox.vmdl"
 		"SoundSet"				""
 		"Level"					"0"
-		"ModelScale"				"0.01"
+		"ModelScale"				"1"
 
 		// Bounds
 		//----------------------------------------------------------------
@@ -49,50 +49,6 @@
 		// Inventory
 		//----------------------------------------------------------------
 		"HasInventory"				"1"
-	}
-
-	"npc_iw_avoidance_zone"
-	{										
-		// General
-		//----------------------------------------------------------------
-		"BaseClass"				"npc_dota_base_additive"
-		"Model"					"models/development/invisiblebox.mdl"
-		"SoundSet"				""
-		"Level"					"0"
-
-		// Bounds
-		//----------------------------------------------------------------
-		"BoundsHullName"			"DOTA_HULL_SIZE_SMALL"
-		"HealthBarOffset"			"120"
-
-		// Movement
-		//----------------------------------------------------------------
-		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
-		"MovementSpeed"				"0"		// Speed.
-
-		// Armor
-		//----------------------------------------------------------------
-		"ArmorPhysical"				"0"
-		"MagicalResistance"			"0"
-
-		// Status
-		//----------------------------------------------------------------
-		"StatusHealth"				"5000"
-		"StatusHealthRegen"			"0"
-		"StatusMana"				"5000"
-		"StatusManaRegen"			"1000"
-
-		// Team
-		//----------------------------------------------------------------
-		"TeamName"				"DOTA_TEAM_NEUTRALS"
-		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"
-		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
-		"UnitRelationshipClass"			"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
-		
-		// Vision
-		//----------------------------------------------------------------
-		"VisionDaytimeRange"			"0"
-		"VisionNighttimeRange"			"0"
 	}
 
 	"npc_iw_training_target"
@@ -259,6 +215,102 @@
 		"VisionNighttimeRange"			"0"		// Range of vision at night time.
 	}
 
+	"npc_iw_campfire_dummy"
+	{										
+		// General
+		//----------------------------------------------------------------
+		"BaseClass"				"npc_dota_creature"
+		"Model"					"models/development/invisiblebox.mdl"
+		"SoundSet"				""
+		"Level"					"0"
+		"ModelScale"				"1"
+
+		"vscripts"				"units/npc_iw_campfire_dummy.lua"
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_SMALL"
+		"HealthBarOffset"			"120"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"
+		"MagicalResistance"			"0"
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"5000"
+		"StatusHealthRegen"			"0"
+		"StatusMana"				"0"
+		"StatusManaRegen"			"0"
+
+		// Team
+		//----------------------------------------------------------------
+		"TeamName"				"DOTA_TEAM_NEUTRALS"
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
+		"UnitRelationshipClass"			"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"
+		"VisionNighttimeRange"			"0"
+	}
+
+	"npc_iw_revive_tombstone"
+	{										
+		// General
+		//----------------------------------------------------------------
+		"BaseClass"				"npc_dota_creature"
+		"Model"					"models/props_gameplay/tombstoneb01.vmdl"
+		"SoundSet"				""
+		"Level"					"0"
+		"ModelScale"				"0.8"
+
+		"vscripts"				"units/npc_iw_revive_tombstone.lua"
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_SMALL"
+		"HealthBarOffset"			"120"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"
+		"MagicalResistance"			"0"
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"5000"
+		"StatusHealthRegen"			"0"
+		"StatusMana"				"0"
+		"StatusManaRegen"			"0"
+
+		// Team
+		//----------------------------------------------------------------
+		"TeamName"				"DOTA_TEAM_NEUTRALS"
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
+		"UnitRelationshipClass"			"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"			"0"
+		"VisionNighttimeRange"			"0"
+
+		// Inventory
+		//----------------------------------------------------------------
+		"HasInventory"				"1"
+	}
+
 	"npc_iw_expedition_merc_01"
 	{
 		// General
@@ -323,52 +375,6 @@
 		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"
 		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
 		"UnitRelationshipClass"			"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
-	}
-
-	"npc_iw_campfire_dummy"
-	{										
-		// General
-		//----------------------------------------------------------------
-		"BaseClass"				"npc_dota_creature"
-		"Model"					"models/development/invisiblebox.mdl"
-		"SoundSet"				""
-		"Level"					"0"
-		"ModelScale"				"1"
-
-		"vscripts"				"units/npc_iw_campfire_dummy.lua"
-
-		// Bounds
-		//----------------------------------------------------------------
-		"BoundsHullName"			"DOTA_HULL_SIZE_SMALL"
-		"HealthBarOffset"			"120"
-
-		// Movement
-		//----------------------------------------------------------------
-		"MovementCapabilities"			"DOTA_UNIT_CAP_MOVE_NONE"
-
-		// Armor
-		//----------------------------------------------------------------
-		"ArmorPhysical"				"0"
-		"MagicalResistance"			"0"
-
-		// Status
-		//----------------------------------------------------------------
-		"StatusHealth"				"5000"
-		"StatusHealthRegen"			"0"
-		"StatusMana"				"0"
-		"StatusManaRegen"			"0"
-
-		// Team
-		//----------------------------------------------------------------
-		"TeamName"				"DOTA_TEAM_NEUTRALS"
-		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"
-		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
-		"UnitRelationshipClass"			"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
-		
-		// Vision
-		//----------------------------------------------------------------
-		"VisionDaytimeRange"			"0"
-		"VisionNighttimeRange"			"0"
 	}
 
 	"npc_iw_expedition_merc_02"

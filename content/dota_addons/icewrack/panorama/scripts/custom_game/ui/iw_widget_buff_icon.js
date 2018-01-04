@@ -8,64 +8,61 @@ function OnBuffIconMouseOver()
 	{
 		var szTooltipArgs = "buffindex=" + nBuffIndex + "&entindex=" + nEntityIndex;
 		$.DispatchEvent("UIShowCustomLayoutParametersTooltip", "ModifierTooltip", "file://{resources}/layout/custom_game/tooltip/iw_tooltip_modifier.xml", szTooltipArgs);
-		
-		
-		//$.DispatchEvent("DOTAShowBuffTooltip", $.GetContextPanel(), nEntityIndex, nBuffIndex, Entities.IsEnemy(nEntityIndex));
 	}
 }
 
 function OnBuffIconMouseOut()
 {
 	$.DispatchEvent("UIHideCustomLayoutTooltip", "ModifierTooltip");
-	//$.DispatchEvent("DOTAHideBuffTooltip");
+}
+
+function OnBuffIconUpdate(hContextPanel, tArgs)
+{
+	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
+	var nBuffIndex = hContextPanel.GetAttributeInt("buffindex", -1);
+	var fBuffTimeRemaining = Buffs.GetRemainingTime(nEntityIndex, nBuffIndex);
+	var fBuffDuration = Buffs.GetDuration(nEntityIndex, nBuffIndex);
+	fBuffTimeRemaining = (fBuffTimeRemaining < -0.5) ? fBuffDuration : fBuffTimeRemaining;
+	var fBuffTimePercent = (fBuffDuration <= 0) ? 1.0 : fBuffTimeRemaining/fBuffDuration;
+	
+	var nBuffStackCount = Buffs.GetStackCount(nEntityIndex, nBuffIndex);
+	if (nBuffStackCount > 0)
+	{
+		hContextPanel.FindChildTraverse("StackLabel").text = nBuffStackCount + "";
+		hContextPanel.FindChildTraverse("StackLabel").visible = true;
+	}
+	else
+	{
+		hContextPanel.FindChildTraverse("StackLabel").visible = false;
+	}
+	
+	var hLeftDurationFill = hContextPanel.FindChildTraverse("LeftDurationFill");
+	var hRightDurationFill = hContextPanel.FindChildTraverse("RightDurationFill");
+	hLeftDurationFill.visible = (fBuffTimePercent >= 0.0);
+	hRightDurationFill.visible = (fBuffTimePercent >= 0.5);
+	if (fBuffTimePercent >= 0.5)
+	{
+		hLeftDurationFill.style.transform = "rotateZ(0deg)";
+		hRightDurationFill.style.transform = "rotateZ(" + ((1.0 - fBuffTimePercent) * 360.0) + "deg)";
+	}
+	else if (fBuffTimePercent >= 0.0)
+	{
+		hLeftDurationFill.style.transform = "rotateZ(" + ((0.5 - fBuffTimePercent) * 360.0) + "deg)";
+	}
+	else
+	{
+		hContextPanel.visible = false;
+	}
+	return true;
 }
 
 function UpdateBuffIcon(hPanel)
 {
 	if (hPanel.visible === true)
 	{
-		var nEntityIndex = hPanel.GetAttributeInt("entindex", -1);
-		var nBuffIndex = hPanel.GetAttributeInt("buffindex", -1);
-		var fBuffTimeRemaining = Buffs.GetRemainingTime(nEntityIndex, nBuffIndex);
-		var fBuffDuration = Buffs.GetDuration(nEntityIndex, nBuffIndex);
-		fBuffTimeRemaining = (fBuffTimeRemaining < -0.5) ? fBuffDuration : fBuffTimeRemaining;
-		var fBuffTimePercent = (fBuffDuration <= 0) ? 1.0 : fBuffTimeRemaining/fBuffDuration;
-		
-		var hLeftDurationFill = hPanel.FindChildTraverse("LeftDurationFill");
-		var hRightDurationFill = hPanel.FindChildTraverse("RightDurationFill");
-		hLeftDurationFill.visible = (fBuffTimePercent >= 0.0);
-		hRightDurationFill.visible = (fBuffTimePercent >= 0.5);
-		if (fBuffTimePercent >= 0.5)
-		{
-			hLeftDurationFill.style.transform = "rotateZ(0deg)";
-			hRightDurationFill.style.transform = "rotateZ(" + ((1.0 - fBuffTimePercent) * 360.0) + "deg)";
-		}
-		else if (fBuffTimePercent >= 0.0)
-		{
-			hLeftDurationFill.style.transform = "rotateZ(" + ((0.5 - fBuffTimePercent) * 360.0) + "deg)";
-		}
-		else
-		{
-			hPanel.visible = false;
-		}
-		
-		var nBuffStackCount = Buffs.GetStackCount(nEntityIndex, nBuffIndex);
-		if (nBuffStackCount > 0)
-		{
-			hPanel.FindChildTraverse("StackLabel").text = nBuffStackCount + "";
-			hPanel.FindChildTraverse("StackLabel").visible = true;
-		}
-		else
-		{
-			hPanel.FindChildTraverse("StackLabel").visible = false;
-		}
+		DispatchCustomEvent(hPanel, "BuffIconUpdate");
 	}
 	$.Schedule(0.03, hPanel._hUpdateFunction);
-}
-
-function OnBuffIconLoad()
-{
-	RegisterCustomEventHandler($.GetContextPanel(), "BuffIconSetValue", OnBuffIconSetValue);
 }
 
 function OnBuffIconSetValue(hContextPanel, tArgs)
@@ -87,15 +84,32 @@ function OnBuffIconSetValue(hContextPanel, tArgs)
 	hContextPanel.SetAttributeInt("entindex", nEntityIndex);
 	hContextPanel.SetAttributeInt("buffindex", nBuffIndex);
 	hContextPanel.FindChildTraverse("Duration").SetHasClass("IsBuff", !Buffs.IsDebuff(nEntityIndex, nBuffIndex));
-	$.Schedule(0.03, hContextPanel._hUpdateFunction);
+	DispatchCustomEvent(hContextPanel, "BuffIconUpdate");
 	return true;
+}
+
+function OnBuffIconHide(hContextPanel, tArgs)
+{
+	hContextPanel.SetAttributeInt("entindex", -1);
+	hContextPanel.SetAttributeInt("buffindex", -1);
+	hContextPanel.visible = false;
+	return true;
+}
+
+function OnBuffIconLoad()
+{
+	RegisterCustomEventHandler($.GetContextPanel(), "BuffIconUpdate", OnBuffIconUpdate);
+	RegisterCustomEventHandler($.GetContextPanel(), "BuffIconSetValue", OnBuffIconSetValue);
+	RegisterCustomEventHandler($.GetContextPanel(), "BuffIconHide", OnBuffIconHide);
 }
 
 function CreateBuffIcon(hParent, szName, nEntityIndex, nBuffIndex)
 {
 	var hPanel = $.CreatePanel("Panel", hParent, szName);
-	hPanel._hUpdateFunction = UpdateBuffIcon.bind(this, hPanel);
 	hPanel.BLoadLayout("file://{resources}/layout/custom_game/ui/iw_widget_buff_icon.xml", false, false);
 	OnBuffIconSetValue(hPanel, { entindex:nEntityIndex, buffindex:nBuffIndex });
+	
+	hPanel._hUpdateFunction = UpdateBuffIcon.bind(this, hPanel);
+	hPanel._hUpdateFunction();
 	return hPanel;
 }

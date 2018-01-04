@@ -2,7 +2,7 @@
 
 var nDifficulty = -1;
 var nLastEntityIndex = -1;
-var tSkillIcons = [];
+var tAbilityIcons = [];
 
 function OnCharacterActivate()
 {
@@ -18,42 +18,34 @@ function OnCharacterActivate()
 		if (nEntityIndex == nLastEntityIndex)
 			return;
 		
-		nLastEntityIndex = nEntityIndex;
-		for (var i = 0; i < tSkillIcons.length; i++)
-			tSkillIcons[i].visible = false;
-		
-		var nNumSkillIcons = 0;
-		var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
-		if (tEntitySpellbook)
+		var nAbilityIconCount = 0;
+		var tEntityBinds = CustomNetTables.GetTableValue("binds", nEntityIndex);
+		if (tEntityBinds)
 		{
-			var tEntitySpellBinds = tEntitySpellbook.Binds
-			var nSpellbookSize = 0;
-			for (var k in tEntitySpellBinds)
-				nSpellbookSize++;
-
-			if (nSpellbookSize > tSkillIcons.length)
+			for (var k in tEntityBinds)	
 			{
-				for (var i = tSkillIcons.length; i < nSpellbookSize; i++)
+				var hIcon = $("#SkillIcon" + (nAbilityIconCount + 1));
+				if (nAbilityIconCount === tAbilityIcons.length)
 				{
-					var hIcon = $.CreatePanel("Panel", $("#HeroIconContainer"), "SkillIcon" + (i + 1));
+					hIcon = $.CreatePanel("Panel", $("#HeroIconContainer"), "SkillIcon" + (nAbilityIconCount + 1));
 					hIcon.BLoadLayout("file://{resources}/layout/custom_game/maps/map000/iw_map000_icon.xml", false, false);
 					hIcon.AddClass("CharacterSelectIcon");
-					tSkillIcons.push(hIcon);
+					tAbilityIcons.push(hIcon);
 				}
-			}
-		
-			for (var k in tEntitySpellBinds)	
-			{
-				var hIcon = $("#SkillIcon" + (++nNumSkillIcons));
-				var nAbilityIndex = tEntitySpellBinds[k];
-				
-				var szAbilityTextureName = Abilities.GetAbilityTextureName(nAbilityIndex);
-				
-				hIcon.visible = true;
-				hIcon.FindChildTraverse("AbilityTexture").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
-				hIcon.SetAttributeInt("caster", nEntityIndex);
-				hIcon.SetAttributeString("abilityindex", nAbilityIndex);
-				hIcon.SetHasClass("CharacterSelectIconDisabled", !Abilities.IsActivated(nAbilityIndex));
+				var nAbilityIndex = tEntityBinds[k];
+				if (nAbilityIndex !== -1)
+				{
+					hIcon.visible = true;
+					hIcon.FindChildTraverse("AbilityTexture").SetImage("file://{images}/spellicons/" + Abilities.GetAbilityTextureName(nAbilityIndex) + ".png");
+					hIcon.SetAttributeInt("caster", nEntityIndex);
+					hIcon.SetAttributeString("abilityindex", nAbilityIndex);
+					hIcon.SetHasClass("CharacterSelectIconDisabled", !Abilities.IsActivated(nAbilityIndex));
+				}
+				else
+				{
+					hIcon.visible = false;
+				}
+				nAbilityIconCount++;
 			}
 		}
 		
@@ -61,6 +53,7 @@ function OnCharacterActivate()
 		$("#HeroText").text = "\n" + $.Localize("#intro_" + Entities.GetUnitName(nEntityIndex)) + "\n";
 		DispatchCustomEvent($("#NextButton"), "ButtonSetEnabled", { state:true });
 		GameEvents.SendCustomGameEventToServer("iw_character_select_examine", { entindex:nEntityIndex });
+		nLastEntityIndex = nEntityIndex;
 	}
 	else
 	{
@@ -202,5 +195,11 @@ function OnCharacterSelectButtonActivate(hContextPanel, tArgs)
 		hUnthawButton.AddClass("CharacterSelectDifficultyButton");
 		hUnthawButton._szDescription = "#intro_difficulty_unthaw";
 		hUnthawButton._nDifficulty = 3;
+		
+		var tHeroEntities = Entities.GetAllHeroEntities();
+		for (var k in tHeroEntities)
+		{
+			GameEvents.SendCustomGameEventToServer("iw_actionbar_info", { entindex:tHeroEntities[k] });
+		}
 	}
 })();

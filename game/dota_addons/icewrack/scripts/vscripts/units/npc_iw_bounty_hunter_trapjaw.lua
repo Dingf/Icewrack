@@ -63,7 +63,7 @@ function npc_iw_bounty_hunter_trapjaw:OnTrapjawThink()
 		if fTriggerRadius and hParentEntity and nObjectState == 1 then
 			local tUnitsList = FindUnitsInRadius(hParentEntity:GetTeamNumber(), self:GetAbsOrigin(), nil, fTriggerRadius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 			for k,v in pairs(tUnitsList) do
-				if IsValidExtendedEntity(v) and not v:IsFlying() and not v:IsCorpse() then
+				if IsValidExtendedEntity(v) and not v:IsFlying() and not v:IsConsideredDead() then
 					self:OnTrapjawTrigger(v)
 					return
 				end

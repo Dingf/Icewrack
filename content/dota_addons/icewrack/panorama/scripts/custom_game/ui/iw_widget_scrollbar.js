@@ -7,30 +7,32 @@ var stScrollHelperPanelValues = [32, -32, 4, -4];
 
 function OnScrollbarPositionUpdate(hContextPanel, tArgs)
 {
-	var fScrollAmount = hContextPanel._hRefPanel._fScrollAmount;
-	var fContentSize = hContextPanel._hRefPanel["content" + hContextPanel._szVarSize1] * GameUI.GetScaleRatio();
+	var fScrollOffset = hContextPanel._hRefPanel._fScrollOffset;
+	var fScrollAmount = hContextPanel._hRefPanel._fScrollAmount + fScrollOffset;
+	var fContentSize = hContextPanel._hRefPanel["content" + hContextPanel._szVarSize1] * GameUI.GetScaleRatio() - fScrollOffset;
 	var fParentSize = hContextPanel.GetParent()["actuallayout" + hContextPanel._szVarSize1] * GameUI.GetScaleRatio();
 	var fScrollSize = fParentSize - 52;
 	var fScrollbarSize = Math.floor((fParentSize > fContentSize) ? fScrollSize : (fParentSize * fScrollSize)/fContentSize);
 	
 	var fScrollMax = Math.min(fScrollAmount, (fParentSize - fContentSize));
-	var fScrollOffset = (fScrollAmount/fScrollMax) * (fScrollSize - fScrollbarSize);
+	var fScrollPosition = (fScrollAmount/fScrollMax) * (fScrollSize - fScrollbarSize);
 	var hThumb = hContextPanel.FindChildTraverse("Thumb");
-	hThumb.style[hContextPanel._szVarOffset] = Math.floor(fScrollOffset + 26) + "px";
+	hThumb.style[hContextPanel._szVarOffset] = Math.floor(fScrollPosition + 26) + "px";
 	
 	var hScrollRegion1 = hContextPanel.FindChildTraverse("ScrollRegion1");
-	hScrollRegion1.style[hContextPanel._szVarSize1] = Math.floor(fScrollOffset) + "px";
+	hScrollRegion1.style[hContextPanel._szVarSize1] = Math.floor(fScrollPosition) + "px";
 	hScrollRegion1.style[hContextPanel._szVarOffset] = "31px";
 	var hScrollRegion2 = hContextPanel.FindChildTraverse("ScrollRegion2");
-	hScrollRegion2.style[hContextPanel._szVarSize1] = Math.floor(fScrollSize - fScrollOffset - fScrollbarSize) + "px";
-	hScrollRegion2.style[hContextPanel._szVarOffset] = Math.floor(fScrollOffset + fScrollbarSize + 21) + "px";
+	hScrollRegion2.style[hContextPanel._szVarSize1] = Math.floor(fScrollSize - fScrollPosition - fScrollbarSize) + "px";
+	hScrollRegion2.style[hContextPanel._szVarOffset] = Math.floor(fScrollPosition + fScrollbarSize + 21) + "px";
 	return true;
 }
 
 function OnScrollbarSizeUpdate(hContextPanel, tArgs)
 {
 	var bIsVertical = (hContextPanel._nScrollType === SCROLL_TYPE_VERTICAL);
-	var fContentSize = hContextPanel._hRefPanel["content" + hContextPanel._szVarSize1] * GameUI.GetScaleRatio();
+	var fScrollOffset = hContextPanel._hRefPanel._fScrollOffset;
+	var fContentSize = hContextPanel._hRefPanel["content" + hContextPanel._szVarSize1] * GameUI.GetScaleRatio() - fScrollOffset;
 	var fParentSize = hContextPanel.GetParent()["actuallayout" + hContextPanel._szVarSize1] * GameUI.GetScaleRatio();
 	var fScrollSize = fParentSize - 52;
 	var fScrollbarSize = Math.floor((fParentSize > fContentSize) ? fScrollSize : (fParentSize * fScrollSize)/fContentSize);
@@ -44,6 +46,7 @@ function OnScrollbarSizeUpdate(hContextPanel, tArgs)
 
 function CheckScrollSize(hContextPanel)
 {
+	var fScrollOffset = hContextPanel._fScrollOffset;
 	var fContentSize = hContextPanel._hRefPanel["content" + hContextPanel._szVarSize1] * GameUI.GetScaleRatio();
 	var fParentSize = hContextPanel.GetParent()["actuallayout" + hContextPanel._szVarSize1] * GameUI.GetScaleRatio();
 	if ((fContentSize !== hContextPanel._fLastContentSize) || (fParentSize !== hContextPanel._fLastParentSize))
@@ -109,14 +112,16 @@ function OnScrollablePanelScroll(hContextPanel, tArgs)
 {
 	var hScrollbar = hContextPanel._hScrollbar;
 	var fScrollAmount = hContextPanel._fScrollAmount + tArgs.value;
-	var fContentSize = hContextPanel["content" + hScrollbar._szVarSize1] * GameUI.GetScaleRatio();
+	var fScrollOffset = hContextPanel._fScrollOffset;
+	var fContentSize = hContextPanel["content" + hScrollbar._szVarSize1] * GameUI.GetScaleRatio() - fScrollOffset;
 	var fParentSize = hScrollbar.GetParent()["actuallayout" + hScrollbar._szVarSize1] * GameUI.GetScaleRatio();
 	
-	var fScrollMax = Math.min(0, fParentSize - fContentSize);
-	if (fScrollAmount < fScrollMax)
-		fScrollAmount = fScrollMax;
-	if (fScrollAmount > -0.001)		//Small threshold value because when we set fScrollAmount to 0, it doesn't update for some reason...
-		fScrollAmount = -0.001;		//Also prevents parsing errors with values close to zero using scientific notation
+	var fScrollMin = Math.min(0, fParentSize - fContentSize) - fScrollOffset;
+	if (fScrollAmount < fScrollMin)
+		fScrollAmount = fScrollMin;
+	if (fScrollAmount > -0.001 - fScrollOffset)		//Small threshold value because when we set fScrollAmount to 0, it doesn't update for some reason...
+		fScrollAmount = -0.001 - fScrollOffset;		//Also prevents parsing errors with values close to zero using scientific notation
+	fScrollAmount = fScrollAmount;
 	
 	//The transitions are a hack to stop panels from scrolling to the top due to panel size/visibility changes, etc.
 	hContextPanel.style.transition = "position 0.0s linear 0.0s";
@@ -128,6 +133,14 @@ function OnScrollablePanelScroll(hContextPanel, tArgs)
 	hContextPanel.style.transition = "position 99999999.9s ease-in 99999999.9s";
 	hContextPanel._fScrollAmount = fScrollAmount;
 	DispatchCustomEvent(hScrollbar, "ScrollbarPositionUpdate");
+}
+
+function OnScrollbarPanelScrollOffset(hContextPanel, tArgs)
+{
+	hContextPanel._fScrollOffset = tArgs.offset;
+	DispatchCustomEvent(hContextPanel._hScrollbar, "ScrollbarSizeUpdate");
+	DispatchCustomEvent(hContextPanel, "PanelScroll", { value:0 });
+	return true;
 }
 
 function OnScrollbarThumbDragMove()
@@ -202,6 +215,7 @@ function RegisterScrollablePanel(hPanel, hScrollbar, nScrollType)
 	hPanel._nScrollType = nScrollType;
 	hPanel._hScrollbar = hScrollbar;
 	hPanel._fScrollAmount = 0;
+	hPanel._fScrollOffset = 0;
 	
 	hPanel.ClearPanelEvent("onmouseover");
 	hPanel.SetPanelEvent("onmouseover", DispatchCustomEvent.bind(this, hScrollable, "ScrollableMouseOver", { panel:hPanel }));
@@ -209,6 +223,7 @@ function RegisterScrollablePanel(hPanel, hScrollbar, nScrollType)
 	hPanel.SetPanelEvent("onmouseout", DispatchCustomEvent.bind(this, hScrollable, "ScrollableMouseOut", { panel:hPanel }));
 	
 	RegisterCustomEventHandler(hPanel, "PanelScroll", OnScrollablePanelScroll);
+	RegisterCustomEventHandler(hPanel, "PanelScrollOffset", OnScrollbarPanelScrollOffset);
 }
 
 function InitScrollbarPanel(hPanel)

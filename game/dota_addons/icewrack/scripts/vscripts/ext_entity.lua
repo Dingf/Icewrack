@@ -11,18 +11,14 @@
 
 if not CExtEntity then
 
-if _VERSION < "Lua 5.2" then
-    bit = require("lib/numberlua")
-    bit32 = bit.bit32
-end
-
 require("mechanics/attributes")
 require("mechanics/skills")
+require("mechanics/zone_los_blocker")
 require("instance")
 require("container")
 require("spellbook")
+require("dialogue")
 require("aam")
---require("faction")
 
 stExtEntityUnitClassEnum =
 {  
@@ -93,6 +89,7 @@ stExtEntityFlagEnum =
 	IW_UNIT_FLAG_REQ_ATTACK_SOURCE = 32,		-- Unit requires an attack source before it can attack
 	IW_UNIT_FLAG_WEATHER_IMMUNE = 64,			-- Unit is immune to all weather effects (TODO: When implementing weather, skip units with weather immunity)
 	IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE = 128,		-- Unit does not receive health loss from damage (all calculations and on-damage effects are still applied)
+	IW_UNIT_FLAG_CANNOT_DRAIN = 256,			-- Unit cannot be affected by drain effects (lifesteal, life/mana drain, etc.)
 }
 
 for k,v in pairs(stExtEntityUnitClassEnum) do _G[k] = v end
@@ -100,12 +97,11 @@ for k,v in pairs(stExtEntityUnitTypeEnum) do _G[k] = v end
 for k,v in pairs(stExtEntityUnitSubtypeEnum) do _G[k] = v end
 for k,v in pairs(stExtEntityFlagEnum) do _G[k] = v end
 
-local shItemAttackModifier = CreateItem("internal_attack", nil, nil)
-local shItemStaminaModifier = CreateItem("internal_stamina", nil, nil)
-local shItemMoveNoiseModifier = CreateItem("internal_movement_noise", nil, nil)
-local shItemAttributeModifier = CreateItem("internal_attribute_bonus", nil, nil)
-local shItemSkillModifier = CreateItem("internal_skill_bonus", nil, nil)
-local shItemHoldModifier = CreateItem("internal_hold_position", nil, nil)
+local shItemAttackModifier = CreateItem("item_internal_attack", nil, nil)
+local shItemStaminaModifier = CreateItem("item_internal_stamina", nil, nil)
+local shItemAttributeModifier = CreateItem("item_internal_attribute_bonus", nil, nil)
+local shItemSkillModifier = CreateItem("item_internal_skill_bonus", nil, nil)
+local shItemCarryModifier = CreateItem("item_internal_carry_weight", nil, nil)
 
 local stExtEntityData = LoadKeyValues("scripts/npc/npc_units_extended.txt")
 
@@ -119,17 +115,19 @@ end
 
 CExtEntity = setmetatable(ext_class({}), { __call = 
 	function(self, hEntity, nInstanceID)
-		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC")
 		if IsInstanceOf(hEntity, CExtEntity) then
-			LogMessage("Tried to create a CExtEntity from \"" .. hEntity:GetUnitName() .."\", which is already a CExtEntity", LOG_SEVERITY_WARNING)
+			LogMessage(LOG_MESSAGE_WARN_EXISTS, LOG_SEVERITY_WARNING, "CExtEntity", hEntity:GetUnitName())
 			return hEntity
 		end
 		
 		local tExtEntityTemplate = stExtEntityData[hEntity:GetUnitName()]
 		LogAssert(tExtEntityTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 		
-		hEntity = CContainerEntity(hEntity, nInstanceID)
-		--hEntity = CFactionEntity(hEntity, tExtEntityTemplate.FactionMask or 0)
+		hEntity = CContainer(hEntity, nInstanceID)
+		hEntity = CSpellbook(hEntity)
+		hEntity = CAbilityAutomatorModule(hEntity)
+		hEntity = CDialogueEntity(hEntity)
 		ExtendIndexTable(hEntity, CExtEntity)
 		
 		hEntity._nUnitClass   = stExtEntityUnitClassEnum[tExtEntityTemplate.UnitClass] or IW_UNIT_CLASS_NORMAL
@@ -138,16 +136,14 @@ CExtEntity = setmetatable(ext_class({}), { __call =
 		hEntity._nUnitFlags   = GetFlagValue(tExtEntityTemplate.UnitFlags, stExtEntityFlagEnum)
 		hEntity._nAlignment   = stExtEntityAlignment[tExtEntityTemplate.Alignment] or IW_ALIGNMENT_TRUE_NEUTRAL
 		hEntity._fUnitHeight  = tExtEntityTemplate.UnitHeight or 0
-		hEntity._szLootTable  = tExtEntityTemplate.LootTable		--TODO: Rework the loot mechanic for npcs
 		
+		hEntity:SetEquipFlags(tExtEntityTemplate.EquipFlags)
 		hEntity:AddChild(shDefaultProperties)
 		
 		for k,v in pairs(tExtEntityTemplate) do
 			local nPropertyID = stIcewrackPropertiesName[k]
 			hEntity:SetPropertyValue(nPropertyID, v)
 		end
-		
-		hEntity:SetEquipFlags(tExtEntityTemplate.EquipFlags)
 		
 		hEntity._nRealUnitFlags = 0
 		
@@ -159,53 +155,31 @@ CExtEntity = setmetatable(ext_class({}), { __call =
 		hEntity._hOrbAttackSource = nil
 		hEntity._bOrbAttackState = nil
 		
-		hEntity._tExtModifierEventTable = {}
-		hEntity._tExtModifierEventIndex = {}
-		
-		hEntity._nLastOrderID = 0
-		hEntity._tOrderTable = { UnitIndex = hEntity:entindex() }
-		
-		hEntity._bRunMode = true
-		hEntity._bHoldPosition = false
+		hEntity._bCanExceedCapacity = true
 		hEntity._fStamina = hEntity:GetMaxStamina()
 		hEntity._fStaminaRegenTime = 0.0
 		hEntity._fLastStaminaPercent = 1.0
 		hEntity._fLastMaxStamina = hEntity:GetMaxStamina()
 		
-		hEntity._fLifestealRegen = 0
-		
-		hEntity._fTotalXP = 0
-		hEntity._fLevelXP = 0
-		
-		hEntity._hSpellbook = CSpellbook(hEntity)
-		hEntity._hAutomator = CAbilityAutomatorModule(hEntity)
-		
-		hEntity:AddToRefreshList(hEntity._hSpellbook)
-		hEntity:AddToRefreshList(hEntity._hAutomator)
+		hEntity._tDetectTable = {}
+		hEntity._tThreatTable = setmetatable({}, stZeroDefaultMetatable)
+		hEntity._tNoiseTable = setmetatable({}, stZeroDefaultMetatable)
 		
 		--hEntity._tRefreshList = {}
 		hEntity:AddNewModifier(hEntity, shItemAttackModifier, "modifier_internal_attack", {})
 		hEntity:AddNewModifier(hEntity, shItemStaminaModifier, "modifier_internal_stamina", {})
-		hEntity:AddNewModifier(hEntity, shItemAttributeModifier, "modifier_internal_attribute_bonus", {})
-		hEntity:AddNewModifier(hEntity, shItemMoveNoiseModifier, "modifier_internal_movement_noise", {})
 		hEntity:AddNewModifier(hEntity, shItemSkillModifier, "modifier_internal_skill_bonus", {})
+		hEntity:AddNewModifier(hEntity, shItemAttributeModifier, "modifier_internal_attribute_bonus", {})
+		hEntity:AddNewModifier(hEntity, shItemCarryModifier, "modifier_internal_carry_weight", {})
 		
-		if tExtEntityTemplate.IsPlayableHero == 1 then
-			hEntity._tNetTable =
-			{
-				attack_source = { Level = 0 },
-				current_action = "",
-				current_actionindex = -1,
-				run_mode = hEntity._bRunMode,
-				hold_position = hEntity._bHoldPosition,
-				stamina = hEntity._fStamina,
-				stamina_max = hEntity:GetMaxStamina(),
-				stamina_time = hEntity._fStaminaRegenTime,
-				fatigue = hEntity:GetFatigueMultiplier(),	--This could be calculated client-side, but its much more efficient to just put it here
-				properties_base = {},
-				properties_bonus = {},
-			}
-			hEntity:SetThink("CurrentActionThink", hEntity, "CurrentAction", 0.03)
+		hEntity:SetThink("OnNoiseDecayThink", hEntity, "NoiseDecayThink", 0.1)
+		hEntity:SetThink("OnMoveNoiseThink", hEntity, "MoveNoiseThink", 0.03)
+		hEntity:SetThink("OnDetectThink", hEntity, "DetectThink", 0.03)
+		
+		if type(tExtEntityTemplate.Abilities) == "table" then
+			for k,v in pairs(tExtEntityTemplate.Abilities) do
+				hEntity:LearnAbility(v)
+			end
 		end
 		
 		if hEntity.OnSpawn then hEntity:OnSpawn() end
@@ -230,20 +204,12 @@ function CExtEntity:GetAlignment()
 	return self._nAlignment
 end
 
-function CExtEntity:GetFactionMask()
-	return self._nFactionMask
-end
-
 function CExtEntity:GetUnitFlags()
 	return self._nRealUnitFlags
 end
 
 function CExtEntity:GetUnitHeight()
 	return self._fUnitHeight
-end
-
-function CExtEntity:GetLootTableName()
-	return self._szLootTable
 end
 
 function CExtEntity:GetStamina()
@@ -254,24 +220,36 @@ function CExtEntity:GetStaminaRegenTime()
     return self._fStaminaRegenTime
 end
 
-function CExtEntity:GetTotalExperience()
-	return self._fTotalXP
-end
-
-function CExtEntity:GetCurrentLevelExperience()
-	return self._fLevelXP
+function CExtEntity:GetCarryCapacity()
+	return (self:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 2.0) + self:GetPropertyValue(IW_PROPERTY_CARRY_CAPACITY)
 end
 
 function CExtEntity:GetLastOrderID()
 	return self._nLastOrderID
 end
 
-function CExtEntity:GetSpellbook()
-	return self._hSpellbook
+function CExtEntity:GetHighestThreatTarget()
+	local hHighestTarget = nil
+	local fHighestThreat = -1
+	for k,v in pairs(self._tThreatTable) do
+		local hTarget = EntIndexToHScript(k)
+		if hTarget:IsLowAttackPriority() then v = 0 end
+		if not hTarget:IsAlive() or hTarget:GetTeamNumber() == self:GetTeamNumber() then
+			self._tThreatTable[nEntityIndex] = nil
+		elseif v > fHighestThreat and self:CanEntityBeSeenByMyTeam(hTarget) and not hTarget:IsInvulnerable() then
+			hHighestTarget = hTarget
+			fHighestThreat = v
+		end
+	end
+	return hHighestTarget
 end
 
-function CExtEntity:GetAbilityAutomator()
-	return self._hAutomator
+function CExtEntity:GetThreatForTarget(hTarget)
+	local nEntityIndex = hTarget:entindex()
+	if hTarget:IsAlive() and self._tThreatTable[nEntityIndex] then
+		return self._tThreatTable[nEntityIndex]
+	end
+	return 0
 end
 
 function CExtEntity:IsMassive()
@@ -282,20 +260,8 @@ function CExtEntity:IsFlying()
 	return bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_FLYING)
 end
 
-function CExtEntity:IsRevivable()
-	return GameRules:GetCustomGameDifficulty() <= IW_DIFFICULTY_NORMAL and bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_CAN_REVIVE)
-end
-
-function CExtEntity:IsCorpse()
-	return self:HasModifier("modifier_internal_corpse_state") or bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_CONSIDERED_DEAD)
-end
-
-function CExtEntity:IsAlive()
-	if self:IsCorpse() then
-		return false
-	else
-		return CBaseEntity.IsAlive(self)
-	end
+function CExtEntity:IsConsideredDead()
+	return bit32.btest(self:GetUnitFlags(), IW_UNIT_FLAG_CONSIDERED_DEAD)
 end
 
 function CExtEntity:IsDualWielding()
@@ -314,44 +280,22 @@ function CExtEntity:IsDualWielding()
 end
 
 function CExtEntity:IsRunning()
-    return self._bRunMode
+    return true
 end
 
-function CExtEntity:IsHoldPosition()
-    return self._bHoldPosition
+function CExtEntity:IsHoldingPosition()
+    return false
 end
 
-function CExtEntity:UpdateEntityNetTable(bSkipProperties)
-	if self._tNetTable then
-		if not bSkipProperties then
-			local tPropertiesBase = self._tNetTable.properties_base
-			local tPropertiesBonus = self._tNetTable.properties_bonus
-			for k,v in pairs(stIcewrackPropertyEnum) do
-				tPropertiesBase[v] = self:GetBasePropertyValue(v)
-				tPropertiesBonus[v] = self:GetPropertyValue(v) - tPropertiesBase[v]
-			end
-			self._tNetTable.fatigue = self:GetFatigueMultiplier()
-		end
-		CustomNetTables:SetTableValue("entities", tostring(self:entindex()), self._tNetTable)
+function CExtEntity:IsAlive()
+	if self:HasModifier("modifier_internal_corpse_state") then
+		return false
+	else
+		return CDOTA_BaseNPC.IsAlive(self)
 	end
 end
 
-function CExtEntity:GetCurrentAction()
-	local hActiveAbility = self:GetCurrentActiveAbility()
-	if hActiveAbility then
-		return hActiveAbility:GetAbilityName(), hActiveAbility:entindex()
-	elseif not self:IsIdle() then
-		local tOrderTable = self._tOrderTable
-		local nOrderType = tOrderTable.OrderType
-		if nOrderType == DOTA_UNIT_ORDER_MOVE_TO_POSITION or nOrderType == DOTA_UNIT_ORDER_MOVE_TO_TARGET then
-			return "internal_move"
-		elseif self:IsAttacking() or nOrderType == DOTA_UNIT_ORDER_ATTACK_MOVE or nOrderType == DOTA_UNIT_ORDER_ATTACK_TARGET then
-			return "internal_attack"
-		end
-	end	
-end
-
-function CExtEntity:IsTargetInLOS(target)
+function CExtEntity:IsTargetInLOS(target, bIgnoreLOSBlockers)
 	local tTraceArgs =
 	{
 		startpos = self:GetAbsOrigin() + Vector(0, 0, self:GetUnitHeight()),
@@ -363,7 +307,7 @@ function CExtEntity:IsTargetInLOS(target)
 	if type(target) == "userdata" then
 		tTraceArgs.endpos = target + Vector(0, 0, 32)
 	elseif IsInstanceOf(target, CEntityBase) then
-		tTraceArgs.endpos = target:GetAbsOrigin() + Vector(0, 0, 32)
+		tTraceArgs.endpos = target:GetAbsOrigin() + Vector(0, 0, 128)
 		if IsValidExtendedEntity(target) then
 			tTraceArgs.endpos = tTraceArgs.endpos + Vector(0, 0, target:GetUnitHeight())
 		end
@@ -372,69 +316,128 @@ function CExtEntity:IsTargetInLOS(target)
 	if tTraceArgs.endpos then
 		TraceLine(tTraceArgs)
 		if not tTraceArgs.enthit then
-			return true
+			local bResult = true
+			if type(target) == "userdata" then
+				if (target - self:GetAbsOrigin()):Length2D() < 128.0 then
+					return bResult
+				end
+			elseif IsInstanceOf(target, CEntityBase) then
+				if CalcDistanceBetweenEntityOBB(self, target) < 128.0 then
+					return bResult
+				end
+			end
+			
+			if not bIgnoreLOSBlockers then
+				local v1 = tTraceArgs.endpos - tTraceArgs.startpos
+				local tBlockerZones = CLOSBlockerZone:GetLOSBlockerZones()
+				for k,v in pairs(tBlockerZones) do
+					if v:IsTargetInZone(tTraceArgs.startpos) or v:IsTargetInZone(tTraceArgs.endpos) then
+						bResult = false
+						break
+					end
+					local v2 = v:GetOrigin() - tTraceArgs.startpos
+					local u = v2:Dot(v1)/v1:Dot(v1)
+					local v3 = (u * v1)
+					if (v2 - v3):Length() <= v:GetRadius() and u > 0.0 and u < 1.0 then
+						bResult = false
+						break
+					end
+				end
+			end
+			return bResult
 		end
 	end
 	return false
 end
 
-function CExtEntity:FindAbilityByName(szAbilityName)
-	local hSpellbook = self:GetSpellbook()
-	if hSpellbook then
-		return hSpellbook:FindAbilityByName(szAbilityName)
+function CExtEntity:IsTargetInVisionMask(target)
+	if self:IsTargetInLOS(target) then
+		local vForward = self:GetForwardVector():Normalized()
+		local vTargetPos = (type(target) == "userdata") and target or target:GetAbsOrigin()
+		local vTargetVector = (vTargetPos - self:GetAbsOrigin()):Normalized()
+		local fCosTheta = math.min(1.0, math.max(-1.0, vForward:Dot(vTargetVector)))
+		return bit32.btest(self:GetPropertyValue(IW_PROPERTY_VISION_MASK), bit32.lshift(1, math.floor(math.acos(fCosTheta)/0.1308996939)))
 	end
-	return CDOTA_BaseNPC.FindAbilityByName(self, szAbilityName)
+	return false
 end
 
-function CExtEntity:IssueOrder(nOrder, hTarget, hAbility, vPosition, bQueue, bRepeatOnly)
-    local tOrderTable = self._tOrderTable
-	local nTargetEntindex = IsValidEntity(hTarget) and hTarget:entindex() or 0
-	local nAbilityEntindex = IsValidEntity(hAbility) and hAbility:entindex() or 0
-	if bRepeatOnly == true then
-		if tOrderTable.OrderType ~= nOrder then
-			return false
-		elseif hTarget and tOrderTable.TargetIndex ~= nTargetEntindex then
-			return false
-		elseif hAbility and tOrderTable.AbilityIndex ~= nAbilityEntindex then
-			return false
-		elseif vPosition and tOrderTable.Position ~= vPosition then
-			return false
+function CExtEntity:IsTargetDetected(hTarget)
+	if self:IsTargetInLOS(hTarget) then
+		local fCurrentTime = GameRules:GetGameTime()
+		local fLastDetectTime = self._tDetectTable[hTarget:entindex()]
+		if self:IsControllableByAnyPlayer() then
+			return true
+		elseif fLastDetectTime then
+			return fLastDetectTime >= fCurrentTime
 		end
+	end
+	return false
+end
+
+function CExtEntity:AddThreat(hEntity, fThreatAmount, bUseDistance)
+	if not self:IsControllableByAnyPlayer() then
+		if fThreatAmount > 0 and IsValidExtendedEntity(hEntity) and self:IsTargetEnemy(hEntity) then
+			local nEntityIndex = hEntity:entindex()
+			local tThreatTable = self._tThreatTable
+			local fThreatRadius = self:GetPropertyValue(IW_PROPERTY_THREAT_RADIUS)
+			local fDistance = math.min((self:GetAbsOrigin() - hEntity:GetOrigin()):Length2D(), fThreatRadius)
+			local fDistanceMultiplier = bUseDistance and (0.5 * (1.0 - (fDistance/fThreatRadius))) + 0.5 or 1.0
+			local fThreatMultiplier = 1.0 + self:GetPropertyValue(IW_PROPERTY_THREAT_MULTI)/100.0
+			local fThreatValue = fThreatAmount * fDistanceMultiplier * fThreatMultiplier
+			tThreatTable[nEntityIndex] = tThreatTable[nEntityIndex] + fThreatValue
+			
+			local fShareRadius = self:GetPropertyValue(IW_PROPERTY_SHARE_RADIUS)
+			local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, fShareRadius, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+			for k,v in pairs(hNearbyEntities) do
+				if v:GetFactionID() == self:GetFactionID() and v ~= self and IsValidExtendedEntity(v) then
+					v._tThreatTable[nEntityIndex] = v._tThreatTable[nEntityIndex] + fThreatValue * self:GetPropertyValue(IW_PROPERTY_THREAT_SHARE_PCT)
+				end
+			end
+		end
+	end
+end
+
+function CExtEntity:AddNoiseEvent(vNoiseOrigin, fNoiseValue)
+	if not self:HasStatusEffect(IW_STATUS_MASK_DEAF) then
+		local fNoiseThreshold = self:GetPropertyValue(IW_PROPERTY_NOISE_THRESHOLD)
+		local fNoiseValue = fNoiseValue/math.pow(math.max(1, (vNoiseOrigin - self:GetAbsOrigin()):Length2D()/256.0), 2)
+		if fNoiseValue > fNoiseThreshold then
+			local x = GridNav:WorldToGridPosX(vNoiseOrigin.x)
+			local y = GridNav:WorldToGridPosY(vNoiseOrigin.y)
+			if x < 0 then x = x + 1024 end
+			if y < 0 then y = y + 1024 end
+			local nGridIndex = (x * 1024) + y
+			local tNoiseTable = self._tNoiseTable
+			tNoiseTable[nGridIndex] = tNoiseTable[nGridIndex] + fNoiseValue
+		end
+	end
+end
+
+function CExtEntity:DetectEntity(hEntity, fDetectTime)
+	local nEntityIndex = hEntity:entindex()
+	local bIsTargetEnemy = self:IsTargetEnemy(hEntity)
+	
+	self._tDetectTable[nEntityIndex] = GameRules:GetGameTime() + fDetectTime
+	hEntity:MakeVisibleToTeam(self:GetTeamNumber(), fDetectTime)
+	if self._tThreatTable[nEntityIndex] and bIsTargetEnemy then
+		self._tThreatTable[nEntityIndex] = 1.0
 	end
 	
-	tOrderTable.OrderType = nOrder
-	tOrderTable.TargetIndex = nTargetEntindex
-	tOrderTable.AbilityIndex = nAbilityEntindex
-	tOrderTable.Position = vPosition
-	tOrderTable.Queue = bQueue
-    ExecuteOrderFromTable(tOrderTable)
-	return true
-end
-
-function CExtEntity:AddExperience(fAmount)
-	if fAmount > 0 and self:IsRealHero() then
-		local nOldLevel = self:GetLevel()
-		fAmount = math.max(0, fAmount * (1.0 + self:GetPropertyValue(IW_PROPERTY_EXPERIENCE_MULTI)/100.0))
-		CDOTA_BaseNPC_Hero.AddExperience(self, fAmount, DOTA_ModifyXP_Unspecified, false, true)
-		self._fTotalXP = self._fTotalXP + fAmount
-		self._fLevelXP = self._fTotalXP - GameRules.XPTable[self:GetLevel()]
-		local nLevelDiff = self:GetLevel() - nOldLevel
-		if nLevelDiff > 0 then
-			local nParticleID = ParticleManager:CreateParticle("particles/generic_hero_status/iw_hero_levelup.vpcf", PATTACH_WORLDORIGIN, self)
-			ParticleManager:SetParticleControl(nParticleID, 0, self:GetAbsOrigin())
-			ParticleManager:ReleaseParticleIndex(nParticleID)
-			EmitSoundOn("Icewrack.LevelUp", self)
-			for k,v in pairs(stIcewrackAttributeEnum) do
-				self:SetPropertyValue(v + 1, self:GetBasePropertyValue(v + 1) + nLevelDiff)
+	if bIsTargetEnemy then
+		local fShareRadius = self:GetPropertyValue(IW_PROPERTY_SHARE_RADIUS)
+		local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, fShareRadius, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+		for k,v in pairs(hNearbyEntities) do
+			if IsValidExtendedEntity(v) and v:GetFactionID() == self:GetFactionID() and v ~= self then
+				v._tDetectTable[nEntityIndex] = GameRules:GetGameTime() + fDetectTime
+				if not v._tThreatTable[nEntityIndex] then
+					v._tThreatTable[nEntityIndex] = 1.0
+				end
 			end
-			self:SetPropertyValue(IW_PROPERTY_ATTRIBUTE_POINTS, self:GetBasePropertyValue(IW_PROPERTY_ATTRIBUTE_POINTS) + (nLevelDiff * 6))
-			self:SetPropertyValue(IW_PROPERTY_SKILL_POINTS, self:GetBasePropertyValue(IW_PROPERTY_SKILL_POINTS) + nLevelDiff)
-			self:RefreshEntity()
 		end
 	end
 end
 
-function CExtEntity:CreateCorpse()
+--[[function CExtEntity:CreateCorpse()
 	self:RespawnUnit()
 	self._hCorpseItem = CreateItem("internal_corpse", nil, nil)
 	self:AddItem(self._hCorpseItem)
@@ -450,9 +453,9 @@ function CExtEntity:CreateCorpse()
 			self._nCorpseListener = CustomGameEventManager:RegisterListener("iw_lootable_interact", function(_, args) self:OnCorpseLootableInteract(args) end)
 		end
 	end
-end
+end]]
 
-function CExtEntity:OnCorpseLootableInteract(args)
+--[[function CExtEntity:OnCorpseLootableInteract(args)
 	if args.lootable == self:entindex() then
 		if self:IsInventoryEmpty() then
 			self._hCorpseItem:ApplyDataDrivenModifier(self, self, "modifier_internal_corpse_unselectable", {})
@@ -472,10 +475,10 @@ function CExtEntity:OnCorpseReviveFinish(args)
 	self.RemoveModifierByName("modifier_internal_corpse_state")
 	self.RemoveModifierByName("modifier_internal_corpse_unselectable")
 	self._hCorpseItem = nil
-end
+end]]
 
 function CExtEntity:SetAttacking(hEntity)
-	if hEntity:GetTeamNumber() ~= self:GetTeamNumber() and IsValidExtendedEntity(hEntity) then
+	if self:IsTargetEnemy(hEntity) and IsValidExtendedEntity(hEntity) then
 	    local nEntityIndex = hEntity:entindex()
 		local nSelfIndex = self:entindex()
 		self._tAttackingTable[nEntityIndex] = self._tAttackingTable[nEntityIndex] + 1
@@ -527,20 +530,10 @@ function CExtEntity:AddAttackSource(hSource, nLevel)
 	if IsValidInstance(hSource) and type(nLevel) == "number" and nLevel > 0 then
 		if not self._tAttackSourceTable[nLevel] then
 			self._tAttackSourceTable[nLevel] = {}
-			self._tNetTable.attack_source[nLevel] = {}
 		end
 		table.insert(self._tAttackSourceTable[nLevel], hSource)
 		hSource:ApplyModifiers(IW_MODIFIER_ON_ATTACK_SOURCE, self)
 		self:RefreshEntity()
-		if self._tNetTable then
-			local tAttackSourceNetTable = self._tNetTable.attack_source
-			local nHighestSourceLevel = tAttackSourceNetTable.Level
-			if nLevel > nHighestSourceLevel then
-				tAttackSourceNetTable.Level = nLevel
-			end
-			table.insert(self._tNetTable.attack_source[nLevel], hSource:entindex())
-			self:UpdateEntityNetTable(true)
-		end
 	end
 end
 
@@ -575,21 +568,6 @@ function CExtEntity:RemoveAttackSource(hSource, nLevel)
 				hSource:RemoveModifiers(IW_MODIFIER_ON_ATTACK_SOURCE, self)
 				table.remove(self._tAttackSourceTable[nLevel], k)
 				self:RefreshEntity()
-				if self._tNetTable then
-					local tAttackSourceNetTable = self._tNetTable.attack_source
-					if nLevel == tAttackSourceNetTable.Level and not next(tAttackSourceNetTable[nLevel]) then
-						tAttackSourceTable[nLevel] = nil
-						local nHighestLevel = 0
-						for k2,v2 in pairs(self._tAttackSourceTable) do
-							if next(v2) and k2 > nHighestLevel then
-								nHighestLevel = k2
-							end
-						end
-						tAttackSourceNetTable.Level = nHighestLevel
-					end
-					table.remove(tAttackSourceNetTable[nLevel], k)
-					self:UpdateEntityNetTable(true)
-				end
 				return true
 			end
 		end
@@ -599,22 +577,10 @@ end
 
 function CExtEntity:CanPayAttackCosts()
 	local hAttackSource = self:GetCurrentAttackSource() or self
-	return self:GetHealth() >= hAttackSource:GetAttackHealthCost() and self:GetMana() >= hAttackSource:GetAttackManaCost() and self:GetStamina() >= hAttackSource:GetAttackStaminaCost()
-end
-
-function CExtEntity:TriggerExtendedEvent(nEventID, args)
-	local szEventAlias = stExtModifierEventAliases[nEventID]
-	if szEventAlias and self._tExtModifierEventIndex[nEventID] then
-		for k,v in ipairs(self._tExtModifierEventIndex[nEventID]) do
-			local hEventFunction = v[szEventAlias]
-			if type(hEventFunction) == "function" then
-				local result = hEventFunction(v, args)
-				if result ~= nil then
-					return result
-				end
-			end
-		end
-	end
+	local fHealthCost  = math.max(0, hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_HP_FLAT) * (1.0 + self:GetPropertyValue(IW_PROPERTY_HP_COST_PCT)/100.0))
+	local fManaCost    = math.max(0, hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_MP_FLAT) * (1.0 + self:GetPropertyValue(IW_PROPERTY_MP_COST_PCT)/100.0))
+	local fStaminaCost = math.max(0, hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT) * (1.0 + self:GetPropertyValue(IW_PROPERTY_SP_COST_PCT)/100.0))
+	return self:GetHealth() >= fHealthCost and self:GetMana() >= fManaCost and self:GetStamina() >= fStaminaCost
 end
 
 --[[function CExtEntity:AddToRefreshList(hEntity)
@@ -633,8 +599,7 @@ end]]
 function CExtEntity:HasStatusEffect(nStatusEffectMask)
 	for k,v in pairs(self:FindAllModifiers()) do
 		if IsValidExtendedModifier(v) then
-			local nStatusEffect = bit32.lshift(1, v:GetStatusEffect() - 1)
-			if bit32.btest(nStatusEffect, nStatusEffectMask) then
+			if bit32.btest(v:GetStatusMask(), nStatusEffectMask) then
 				return true
 			end
 		end
@@ -645,9 +610,8 @@ end
 function CExtEntity:DispelStatusEffects(nStatusEffectMask)
 	local tDispelledModifiers = {}
 	for k,v in pairs(self:FindAllModifiers()) do
-		if IsValidExtendedModifier(v) then
-			local nStatusEffect = bit32.lshift(1, v:GetStatusEffect() - 1)
-			if bit32.btest(nStatusEffect, nStatusEffectMask) then
+		if IsValidExtendedModifier(v) and v:IsDispellable() then
+			if bit32.btest(v:GetStatusMask(), nStatusEffectMask) then
 				table.insert(tDispelledModifiers, v)
 			end
 		end
@@ -660,7 +624,7 @@ end
 function CExtEntity:RefreshHealthRegen()
 	local fHealthRegenPerSec = self:GetPropertyValue(IW_PROPERTY_HP_REGEN_FLAT)
 	fHealthRegenPerSec = fHealthRegenPerSec + (self:GetPropertyValue(IW_PROPERTY_MAX_HP_REGEN)/100.0 * self:GetMaxHealth())
-	fHealthRegenPerSec = fHealthRegenPerSec + math.min(self._fLifestealRegen, self:GetMaxHealth() * self:GetPropertyValue(IW_PROPERTY_LIFESTEAL_RATE))
+	fHealthRegenPerSec = fHealthRegenPerSec + math.min(self:GetPropertyValue(IW_PROPERTY_HP_LIFESTEAL), self:GetMaxHealth() * self:GetPropertyValue(IW_PROPERTY_LIFESTEAL_RATE))
 	fHealthRegenPerSec = fHealthRegenPerSec * (1.0 + self:GetPropertyValue(IW_PROPERTY_HP_REGEN_PCT)/100)
 	fHealthRegenPerSec = fHealthRegenPerSec * self:GetHealEffectiveness()
 	self:SetBaseHealthRegen(math.max(0, fHealthRegenPerSec))
@@ -674,12 +638,12 @@ function CExtEntity:RefreshManaRegen()
 end
 
 function CExtEntity:RefreshMovementSpeed()
-	local fMovementSpeed = self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_FLAT)
-	if not self._bRunMode then
+	local fMovementSpeed = self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_FLAT) + (self:GetAttributeValue(IW_ATTRIBUTE_AGILITY) * 1.0)
+	if not self:IsRunning() then
 		fMovementSpeed = fMovementSpeed * 0.5
 	end
-	fMovementSpeed = fMovementSpeed * (self:GetFatigueMultiplier() + self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT)/100)
-	self:SetBaseMoveSpeed(math.max(100, fMovementSpeed))
+	fMovementSpeed = fMovementSpeed * (1.0 + self:GetPropertyValue(IW_PROPERTY_MOVE_SPEED_PCT)/100) * (1.0 - self:GetPropertyValue(IW_PROPERTY_FATIGUE_MULTI)/100.0)
+	self:SetBaseMoveSpeed(fMovementSpeed)
 end
 
 function CExtEntity:RefreshVisionRange()
@@ -710,40 +674,6 @@ function CExtEntity:RefreshBaseAttackTime()
 	end
 end
 
-function CExtEntity:SetRunMode(bRunMode)
-	if type(bRunMode) == "boolean" then
-		self._bRunMode = bRunMode
-		if self._tNetTable then
-			self._tNetTable.run_mode = bRunMode
-		end
-		self:RefreshMovementSpeed()
-		self:UpdateEntityNetTable(true)
-	end
-end
-
-function CExtEntity:ToggleRunMode()
-	self:SetRunMode(not self._bRunMode)
-end
-
-function CExtEntity:SetHoldPosition(bHoldMode)
-	if type(bHoldMode) == "boolean" then
-		self._bHoldPosition = bHoldMode
-		if self._tNetTable then
-			self._tNetTable.hold_position = bHoldMode
-		end
-		if bHoldMode then
-			shItemHoldModifier:ApplyDataDrivenModifier(self, self, "modifier_internal_hold_position", {})
-		else
-			self:RemoveModifierByName("modifier_internal_hold_position")
-		end
-		self:UpdateEntityNetTable(true)
-	end
-end
-
-function CExtEntity:ToggleHoldPosition()
-	self:SetHoldPosition(not self._bHoldPosition)
-end
-
 function CExtEntity:SetStamina(fStamina)
 	self._fStamina = math.max(0, math.min(self:GetMaxStamina(), fStamina))
 end
@@ -751,20 +681,11 @@ end
 function CExtEntity:SpendStamina(fStamina)
 	if fStamina >= 0 then
 		self._fStamina = math.max(0, self:GetStamina() - fStamina)
-		self._fStaminaRegenTime = math.max(self._fStaminaRegenTime, GameRules:GetGameTime() + (5.0 * (1.0 + self:GetPropertyValue(IW_PROPERTY_SP_REGEN_TIME_PCT)/100)))
+		self._fStaminaRegenTime = math.max(self._fStaminaRegenTime, GameRules:GetGameTime() + self:GetPropertyValue(IW_PROPERTY_SP_RECHARGE_TIME))
+		
+		--This is a hack to get stamina values clientside without constantly updating the entity nettables
+		self:SetBaseMagicalResistanceValue(self._fStaminaRegenTime)
 	end
-end
-
-function CExtEntity:CurrentActionThink()
-	if self._tNetTable then
-		local szCurrentAction, nActionIndex = self:GetCurrentAction()
-		if szCurrentAction ~= self._tNetTable.current_action then
-			self._tNetTable.current_action = szCurrentAction
-			self._tNetTable.current_actionindex = nActionIndex
-			self:UpdateEntityNetTable(true)
-		end
-	end
-	return 0.03
 end
 
 function CExtEntity:RefreshUnitFlags()
@@ -783,7 +704,12 @@ function CExtEntity:RefreshUnitFlags()
 	self._nRealUnitFlags = nFlags
 end
 
-function CExtEntity:OnEntityRefresh()
+function CExtEntity:RefreshHealthAndMana()
+	self:AddNewModifier(self, shItemAttributeModifier, "modifier_internal_attribute_refresh", {})
+	self:RemoveModifierByName("modifier_internal_attribute_refresh")
+end
+
+function CExtEntity:OnRefreshEntity()
 	self:RefreshUnitFlags()
 	self:RefreshBaseAttackTime()
 	self:RefreshHealthRegen()
@@ -793,9 +719,12 @@ function CExtEntity:OnEntityRefresh()
 	self:SetAcquisitionRange(self:GetAttackRange() + 300.0)
 	
 	self:SetPropertyValue(IW_PROPERTY_ATK_SPEED_DUMMY, self:GetIncreasedAttackSpeed() * 100)		--Only used for clientside display, since Panorama truncates to int
-	self:SetBaseMagicalResistanceValue(self:GetFatigueMultiplier())		--Hack to get fatigue multiplier on client side lua without nettables
 	
-	self:UpdateEntityNetTable()
+	local fMaxStamina = self:GetMaxStamina()
+	if fMaxStamina ~= self._fLastMaxStamina then
+		self._fLastMaxStamina = fMaxStamina
+		self:SetStamina(math.max(0, math.min(fMaxStamina, self._fLastStaminaPercent * fMaxStamina)))
+	end
 end
 
 function CExtEntity:OnEquip(hItem, nSlot)
@@ -806,23 +735,84 @@ end
 
 function CExtEntity:OnUnequip(hItem)
 	if hItem:IsAttackSource() then
-		hEntity:RemoveAttackSource(hItem, 1)
+		self:RemoveAttackSource(hItem, 1)
 	end
 end
 
-function CExtEntity:RemoveEntity()
-	self:RemoveSelf()
+function CExtEntity:OnNoiseDecayThink()
+	if not self:IsControllableByAnyPlayer() and not GameRules:IsGamePaused() then
+		local tNoiseTable = self._tNoiseTable
+		local fDecayRate = GameRules:GetNPCNoiseDecayRate()
+		local fNoiseThreshold = self:GetPropertyValue(IW_PROPERTY_NOISE_THRESHOLD)
+		for k,v in pairs(tNoiseTable) do
+			local fNewValue = v * fDecayRate
+			if fNewValue < fNoiseThreshold then
+				tNoiseTable[k] = nil
+			else
+				tNoiseTable[k] = fNewValue
+			end
+		end
+	end
+	return 0.01
+end
+
+function CExtEntity:OnMoveNoiseThink()
+	if self:IsMoving() and not GameRules:IsGamePaused() then
+		local fNoiseValue = math.max(0, self:GetPropertyValue(IW_PROPERTY_MOVE_NOISE_FLAT) * (1.0 + self:GetPropertyValue(IW_PROPERTY_MOVE_NOISE_PCT)/100.0))
+		if not self:IsRunning() then
+			fNoiseValue = fNoiseValue * 0.25
+		end
+		local fNoiseRadius = fNoiseValue * 100.0
+		if fNoiseRadius > 0 then
+			local vNoiseOrigin = self:GetAbsOrigin()
+			local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), vNoiseOrigin, nil, fNoiseRadius, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+			for k,v in pairs(hNearbyEntities) do
+				if IsValidExtendedEntity(v) and self:IsTargetEnemy(v) then
+					v:AddNoiseEvent(vNoiseOrigin, fNoiseValue, self)
+				end
+			end
+		end
+	end
+	return 0.03
+end
+
+function CExtEntity:OnDetectThink()
+	if not self:IsControllableByAnyPlayer() and not GameRules:IsGamePaused() then
+		local nVisionRange = self:GetCurrentVisionRange()
+		local nVisionMask = self:GetPropertyValue(IW_PROPERTY_VISION_MASK)
+		local fVisionThreshold = self:GetPropertyValue(IW_PROPERTY_VISION_THRESHOLD)
+		
+		local hNearbyEntities = FindUnitsInRadius(self:GetTeamNumber(), self:GetAbsOrigin(), nil, math.max(128.0, nVisionRange * 2.0), DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+		for k,v in pairs(hNearbyEntities) do
+			if IsValidExtendedEntity(v) and v:IsAlive() and self:IsTargetEnemy(v) then
+				if self:IsTargetInVisionMask(v) then
+					local vTargetVector = v:GetAbsOrigin() - self:GetAbsOrigin()
+					local fVisionValue = v:GetPropertyValue(IW_PROPERTY_VISIBILITY_FLAT) * nVisionRange/math.max(128.0, vTargetVector:Length2D())
+					local fVisionMultiplier = 1.0 + v:GetPropertyValue(IW_PROPERTY_VISIBILITY_PCT)/100.0
+					if v:IsMoving() then
+						fVisionMultiplier = fVisionMultiplier + 1.0
+					end
+					fVisionValue = fVisionValue * math.max(0.0, fVisionMultiplier)
+					if fVisionValue > fVisionThreshold then
+						self:DetectEntity(v, GameRules:GetNPCDetectDuration())
+					end
+				else
+					local fDistance = self:GetRangeToUnit(v) - v:GetHullRadius() - self:GetHullRadius()
+					if fDistance < 128.0 then
+						self:DetectEntity(v, GameRules:GetNPCDetectDuration())
+					end
+				end
+			end
+		end
+	end
+	return 0.03
 end
 
 function CExtEntity:RefreshLoadout()
 	return nil
 end
 
-function CExtEntity:IsTargetDetected(hEntity)
-	return true
-end
-
-function CExtEntity:OnAttributesConfirm(args)
+--[[function CExtEntity:OnAttributesConfirm(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	if IsValidExtendedEntity(hEntity) and hEntity:IsRealHero() then
 		for k,v in pairs(args) do
@@ -869,52 +859,10 @@ function CExtEntity:OnToggleHold(args)
 	if IsValidExtendedEntity(hEntity) and hEntity:IsControllableByAnyPlayer() then
 		hEntity:ToggleHoldPosition()
 	end
-end
-
-function CExtEntity:Interact(hEntity)
-	if not self:HasModifier("modifier_internal_corpse_state") then
-		return false
-	elseif self:IsRevivable() and self:GetTeamNumber() == hEntity:GetTeamNumber() then
-		--TODO: Implement revives for friendly party members/revivable units
-		return true
-	end
-end
-
-function CExtEntity:InteractFilterExclude(hEntity)
-	return not self:IsAlive() and hEntity:IsRealHero()
-end
-
-function CExtEntity:GetCustomInteractError(hEntity)
-end
+end]]
 
 function IsValidExtendedEntity(hEntity)
     return (IsValidEntity(hEntity) and IsInstanceOf(hEntity, CExtEntity))
 end
-
-function ExtUnitFilter(hEntity, hTarget, nTargetTeam, nTargetType, nTargetFlags)
-	if IsValidExtendedEntity(hEntity) and IsValidExtendedEntity(hTarget) then
-		local nResult = UnitFilter(hTarget, DOTA_UNIT_TARGET_TEAM_BOTH, nTargetType, nTargetFlags)
-		if nResult == UF_SUCCESS and not hEntity:IsControllableByAnyPlayer() and not hTarget:IsControllableByAnyPlayer() then
-			local bIsEnemy = hEntity:IsEnemy(hTarget)
-			if nTargetTeam == DOTA_UNIT_TARGET_TEAM_FRIENDLY and bIsEnemy then
-				return UF_FAIL_ENEMY
-			elseif nTargetTeam == DOTA_UNIT_TARGET_TEAM_ENEMY and not bIsEnemy then
-				return UF_FAIL_FRIENDLY
-			end
-		end
-		return nResult
-	end
-end
-
-function RemoveEntity(hEntity)
-    if IsValidExtendedEntity(hEntity) then
-	    hEntity:RemoveEntity()
-	end
-end
-	
-CustomGameEventManager:RegisterListener("iw_character_attributes_confirm", Dynamic_Wrap(CExtEntity, "OnAttributesConfirm"))
-CustomGameEventManager:RegisterListener("iw_character_skills_confirm", Dynamic_Wrap(CExtEntity, "OnSkillsConfirm"))
-CustomGameEventManager:RegisterListener("iw_toggle_run", Dynamic_Wrap(CExtEntity, "OnToggleRun"))
-CustomGameEventManager:RegisterListener("iw_toggle_hold", Dynamic_Wrap(CExtEntity, "OnToggleHold"))
 
 end

@@ -1,0 +1,45 @@
+"IcewrackAAMDefinitions"
+{
+	"npc_iw_test_beast"
+	{
+		"default"
+		{
+			"1"
+			{
+				"Action"	"aam_do_nothing"
+				"Flags1"	"1"
+				"Flags2"	"131072"
+				"Inverse"	"1"
+			}
+			"2"
+			{
+				"Action"	"aam_move_away_from"
+				"Flags1"	"268435456"
+				"Flags2"	"29360128"
+				"Inverse"	"0"
+			}
+			"3"
+			{
+				"Action"	"aam_attack"
+				"Flags1"	"268435456"
+				"Flags2"	"29360128"
+				"Inverse"	"4096"
+			}
+			"4"
+			{
+				"Action"	"aam_npc_avoid_danger:251"
+				"Flags1"	"0"
+				"Flags2"	"0"
+				"Inverse"	"0"
+			}
+			"5"
+			{
+				"Action"	"aam_npc_investigate:251"
+				"Flags1"	"0"
+				"Flags2"	"0"
+				"Inverse"	"0"
+			}
+		}
+	}
+
+}

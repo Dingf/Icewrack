@@ -44,20 +44,20 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 {
 	var nAbilityIndex = tArgs.abilityindex;
 	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
+	
 	var szAbilityName = Abilities.GetAbilityName(nAbilityIndex);
-	var szAbilityTextureName = Abilities.GetAbilityTextureName(nAbilityIndex);
-	var tAbilityTemplate = CustomNetTables.GetTableValue("abilities", szAbilityName);
+	var tAbilityData = CustomNetTables.GetTableValue("abilities", nAbilityIndex);
 	
 	DispatchCustomEvent(hContextPanel, "AbilityDetailsSetVisible", { visible:true });
 	hContextPanel.FindChildTraverse("TitleLabel").text = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName);
-	hContextPanel.FindChildTraverse("Icon").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
+	hContextPanel.FindChildTraverse("Icon").SetImage("file://{images}/spellicons/" + Abilities.GetAbilityTextureName(nAbilityIndex) + ".png");
 	hContextPanel.FindChildTraverse("StatsContainer").visible = true;
 	hContextPanel.FindChildTraverse("ComboContainer").visible = false;
 	
 	var szBehaviorText = "";
 	var hBehaviorLabel = hContextPanel.FindChildTraverse("Stat0");
 	var nAbilityBehavior = Abilities.GetBehavior(nAbilityIndex);
-	var nAbilityExtFlags = tAbilityTemplate ? tAbilityTemplate.extflags : 0;
+	var nAbilityExtFlags = tAbilityData.extflags;
 	
 	if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_PASSIVE)
 		szBehaviorText = $.Localize("iw_ui_ability_passive");
@@ -169,25 +169,22 @@ function OnAbilityDetailsUpdate(hContextPanel, tArgs)
 	var hSkillContainer = hContextPanel.FindChildTraverse("SkillContainer");
 	hSkillContainer.RemoveAndDeleteChildren();
 	
-	if (tAbilityTemplate)
+	var nStaminaCost = tAbilityData.stamina;
+	hStaminaLabel.FindChild("Value").text = nStaminaCost.toFixed(0) + "";
+	hStaminaLabel.visible = (nStaminaCost > 0);
+	
+	var nSkillMask = tAbilityData.skill;
+	for (var i = 3; i >= 0; i--)
 	{
-		var nStaminaCost = tAbilityTemplate.stamina;
-		hStaminaLabel.FindChild("Value").text = nStaminaCost.toFixed(0) + "";
-		hStaminaLabel.visible = (nStaminaCost > 0);
-		
-		var nSkillMask = tAbilityTemplate.skill;
-		for (var i = 3; i >= 0; i--)
+		var nLevel = (nSkillMask >>> (i * 8)) & 0x07;
+		var nSkill = ((nSkillMask >>> (i * 8)) & 0xF8) >> 3;
+		if (nSkill !== 0)
 		{
-			var nLevel = (nSkillMask >>> (i * 8)) & 0x07;
-			var nSkill = ((nSkillMask >>> (i * 8)) & 0xF8) >> 3;
-			if (nSkill !== 0)
+			for (var j = 0; j < nLevel; j++)
 			{
-				for (var j = 0; j < nLevel; j++)
-				{
-					var hSkillIcon = $.CreatePanel("Image", hSkillContainer, "SkillIcon" + i + "_" + j);
-					hSkillIcon.SetImage("file://{images}/custom_game/icons/skills/iw_skill_icon_" + (nSkill - 1) + ".tga");
-					hSkillIcon.AddClass("AbilityDetailsSkillIcon");
-				}
+				var hSkillIcon = $.CreatePanel("Image", hSkillContainer, "SkillIcon" + i + "_" + j);
+				hSkillIcon.SetImage("file://{images}/custom_game/icons/skills/iw_skill_icon_" + (nSkill - 1) + ".tga");
+				hSkillIcon.AddClass("AbilityDetailsSkillIcon");
 			}
 		}
 	}

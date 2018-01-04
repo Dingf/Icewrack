@@ -12,10 +12,10 @@ local stBaseAbilityData = LoadKeyValues("scripts/npc/npc_abilities_custom.txt")
 local stExtAbilityData = LoadKeyValues("scripts/npc/npc_abilities_extended.txt")
 
 CExtAbility = setmetatable(ext_class({}), { __call = 
-	function(self, hAbility, nInstanceID)
-		LogAssert(IsInstanceOf(hAbility, CDOTABaseAbility), LOG_MESSAGE_ASSERT_TYPE, "CDOTABaseAbility", type(hAbility))
+	function(self, hAbility, hCaster, nInstanceID)
+		LogAssert(IsInstanceOf(hAbility, CDOTABaseAbility), LOG_MESSAGE_ASSERT_TYPE, "CDOTABaseAbility")
 		if IsInstanceOf(hAbility, CExtAbility) then
-			LogMessage("Tried to create a CExtAbility from \"" .. hAbility:GetAbilityName() .."\", which is already a CExtAbility", LOG_SEVERITY_WARNING)
+			LogMessage(LOG_MESSAGE_WARN_EXISTS, LOG_SEVERITY_WARNING, "CExtAbility", hAbility:GetAbilityName())
 			return hAbility
 		end
 		
@@ -30,6 +30,7 @@ CExtAbility = setmetatable(ext_class({}), { __call =
 		hAbility = CInstance(hAbility, nInstanceID)
 		ExtendIndexTable(hAbility, CExtAbility, CExtAbilityLinker)
 		
+		hAbility._hOverrideCaster = hCaster
 		hAbility._tModifierList = {}
 		hAbility._tActiveModifierList = {}
 		hAbility._tModifierSeeds = {}
@@ -63,6 +64,14 @@ CExtAbility = setmetatable(ext_class({}), { __call =
 				hAbility:SetPropertyValue(nPropertyID, v)
 			end
 		end
+		
+		hAbility._tNetTable =
+		{
+			properties_base = {},
+			properties_bonus = {},
+		}
+		hAbility:UpdateAbilityNetTable()
+		
 		return hAbility
 	end})
 
@@ -89,6 +98,24 @@ function CExtAbility:SetCaster(hEntity)
 	end
 	self._hOverrideCaster = hEntity
 	self:SetOwner(hEntity)
+end
+
+function CExtAbility:UpdateAbilityNetTable()
+	local tNetTable  = self._tNetTable
+	tNetTable.mana = self:GetManaCost()
+	tNetTable.skill = self:GetSkillRequirements()
+	tNetTable.stamina = self:GetStaminaCost()
+	tNetTable.mana_upkeep = self:GetManaUpkeep()
+	tNetTable.stamina_upkeep = self:GetStaminaUpkeep()
+
+	local tPropertiesBase = tNetTable.properties_base
+	local tPropertiesBonus = tNetTable.properties_bonus
+	for k,v in pairs(stIcewrackPropertyEnum) do
+		tPropertiesBase[v] = self:GetBasePropertyValue(v)
+		tPropertiesBonus[v] = self:GetPropertyValue(v) - tPropertiesBase[v]
+	end
+	
+	CustomNetTables:SetTableValue("abilities", tostring(self:entindex()), tNetTable)
 end
 
 function CExtAbility:ApplyModifiers(nTrigger, hEntity)
@@ -140,13 +167,12 @@ local function ParseAbilitySpecialValues(tBaseTemplate)
 	return tAbilitySpecialValues
 end
 
-local stAbilityNetTable = {}
 for k,v in pairs(stExtAbilityData) do
 	local tBaseAbilityTemplate = stBaseAbilityData[k]
 	if tBaseAbilityTemplate then
 		CExtAbilityLinker:LinkExtAbility(k, tBaseAbilityTemplate, v)
-		if IsServer() then
-			stAbilityNetTable[k] =
+		--[[if IsServer() then
+			local stAbilityTemplate =
 			{
 				skill = v.AbilitySkill or 0,
 				mana = v.ManaCost or 0,
@@ -165,8 +191,8 @@ for k,v in pairs(stExtAbilityData) do
 				channeltime = tBaseAbilityTemplate.AbilityChannelTime or 0,
 				special = ParseAbilitySpecialValues(tBaseAbilityTemplate),
 			}
-			CustomNetTables:SetTableValue("abilities", k, stAbilityNetTable[k])
-		end
+			CustomNetTables:SetTableValue("ability_template", k, stAbilityTemplate)
+		end]]
 	end
 end
 

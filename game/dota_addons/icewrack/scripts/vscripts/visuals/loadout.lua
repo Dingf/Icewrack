@@ -28,9 +28,8 @@ local function BuildLoadoutTable(hEntity)
 end
 
 function RefreshLoadout(hEntity)
-	local hInventory = hEntity:GetInventory()
 	local tLoadoutTemplate = tLoadoutData[hEntity:GetUnitName()]
-	if hInventory and tLoadoutTemplate then
+	if IsValidExtendedEntity(hEntity) and tLoadoutTemplate then
 		if not hEntity._tLoadoutTable or not next(hEntity._tLoadoutTable) then
 			BuildLoadoutTable(hEntity)
 		end
@@ -45,7 +44,7 @@ function RefreshLoadout(hEntity)
 					end
 				end
 			end
-			for k,v in pairs(hInventory._tEquippedItems) do
+			for k,v in pairs(hEntity._tEquippedItems) do
 				local tLoadout = tLoadoutTemplate[v:GetName()]
 				if tLoadout then
 					local nLoadoutSlot = tLoadout.Slot

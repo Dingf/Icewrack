@@ -2,49 +2,208 @@
 {
 	"1"
 	{
-		"Text"		"dialogue_legion_intro02_lina01"
-		"InstanceID"	"7"
-		"Precondition"	""
-		"Postcondition"	""
-		"Options"
+		"LeftID"		"0"
+		"RightID"		"7"
+		
+		"Text"
 		{
 			"1"
 			{
-				"Text"		"dialogue_legion_intro02_lina01_op1"
-				"NextNode"	"2"
+				"Speaker"	"IW_DIALOGUE_SPEAKER_RIGHT"
+				"Text"		"iw_damage_type_pure_desc"
 				"Precondition"	""
-				"Postcondition"	""
+				"Prescript"		""
 			}
 			"2"
 			{
-				"Text"		"dialogue_legion_intro02_lina01_op2"
-				"NextNode"	"2"
+				"Speaker"	"IW_DIALOGUE_SPEAKER_NONE"
+				"Text"		"iw_damage_type_fire_desc"
 				"Precondition"	""
-				"Postcondition"	""
+				"Prescript"		""
+			}
+		}
+		
+		"Options"
+		{
+			"Speaker"		"IW_DIALOGUE_SPEAKER_LEFT"
+			"1"
+			{
+				"Text"			"npc_dota_hero_axe"		//The text to display
+				"Precondition"	"return left:GetInstanceID() == 1"		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"2"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Postcondition"	"entity:SetPropertyValue(IW_PROPERTY_ATTR_WIS_FLAT, 10000) print('hey u did it1')"
+					}
+				}
+			}
+			"2"
+			{
+				"Text"			"npc_dota_hero_dragon_knight"		//The text to display
+				"Precondition"	"return left:GetInstanceID() == 2"		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"0"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Postcondition"	"print('hey u did it2')"
+					}
+				}
 			}
 			"3"
 			{
-				"Text"		"dialogue_legion_intro02_lina01_op3"
-				"NextNode"	"0"
-				"Precondition"	""
-				"Postcondition"	""
+				"Text"			"npc_dota_hero_lina"		//The text to display
+				"Precondition"	""		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"0"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Postcondition"	"print('hey u did it3')"
+					}
+				}
 			}
 		}
 	}
+	
 	"2"
 	{
-		"Text"		"dialogue_legion_intro02_lina02"
-		"InstanceID"	"6"
-		"Precondition"	""
-		"Postcondition"	""
-		"Options"
+		"LeftID"		"0"
+		"RightID"		"7"
+		
+		"Text"
 		{
 			"1"
 			{
-				"Text"		"dialogue_legion_intro02_lina02_op1"
-				"NextNode"	"0"
+				"Speaker"	"IW_DIALOGUE_SPEAKER_LEFT"
+				"Text"		"iw_damage_type_death_desc"
 				"Precondition"	""
-				"Postcondition"	""
+				"Prescript"		""
+			}
+		}
+		
+		"Options"
+		{
+			"Speaker"		"IW_DIALOGUE_SPEAKER_NONE"
+			"1"
+			{
+				"Text"			"npc_dota_hero_axe"		//The text to display
+				//"NoHistory"		"1"		Instead of doing this shit, just make it not show up in history if the speaker is null
+				"Precondition"	"return left:GetInstanceID() == 1"		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"3"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Postcondition"	"entity:SetPropertyValue(IW_PROPERTY_ATTR_STR_FLAT, 10000) print('hey u did it1')"
+					}
+				}
+			}
+			"2"
+			{
+				"Text"			"npc_dota_hero_dragon_knight"		//The text to display
+				"Precondition"	"return left:GetInstanceID() == 2"		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"0"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Postcondition"	"print('hey u did it2')"
+					}
+				}
+			}
+			"3"
+			{
+				"Text"			"npc_dota_hero_lina"		//The text to display
+				"Precondition"	""		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"0"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Postcondition"	"print('hey u did it3')"
+					}
+				}
+			}
+		}
+	}
+	"3"
+	{
+		"LeftID"		"0"
+		"RightID"		"7"
+		
+		"Text"
+		{
+			"1"
+			{
+				"Speaker"	"IW_DIALOGUE_SPEAKER_LEFT"
+				"Text"		"iw_damage_type_crush_desc"
+				"Precondition"	""
+				"Prescript"		""
+			}
+		}
+		
+		"Options"
+		{
+			"Speaker"		"IW_DIALOGUE_SPEAKER_LEFT"
+			"1"
+			{
+				"Text"			"npc_dota_hero_axe"		//The text to display
+				"Precondition"	"return left:GetInstanceID() == 1"		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"0"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Postcondition"	"entity:SetPropertyValue(IW_PROPERTY_ATTR_AGI_FLAT, 10000) print('hey u did it1')"
+					}
+				}
+			}
+			"2"
+			{
+				"Text"			"npc_dota_hero_dragon_knight"		//The text to display
+				"Precondition"	"return left:GetInstanceID() == 2"		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"0"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Postcondition"	"print('hey u did it2')"
+					}
+				}
+			}
+			"3"
+			{
+				"Text"			"npc_dota_hero_lina"		//The text to display
+				"Precondition"	""		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"0"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Postcondition"	"print('hey u did it3')"
+					}
+				}
 			}
 		}
 	}

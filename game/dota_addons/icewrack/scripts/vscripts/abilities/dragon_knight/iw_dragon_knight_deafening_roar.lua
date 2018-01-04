@@ -15,24 +15,18 @@ function iw_dragon_knight_deafening_roar:OnSpellStart()
 	local hEntity = self:GetCaster()
 	local fRadius = self:GetAOERadius()
 			
-	local tBuffModifierArgs =
+	local tModifierArgs =
 	{
-		duration = self:GetSpecialValueFor("buff_duration"),
+		duration = self:GetSpecialValueFor("duration"),
 		move_speed = self:GetSpecialValueFor("move_speed"),
 		attack_speed = self:GetSpecialValueFor("attack_speed"),
-	}
-	
-	local tStunModifierArgs =
-	{
-		duration = self:GetSpecialValueFor("stun_duration"),
 	}
 	
 	local hNearbyEntities = FindUnitsInRadius(hEntity:GetTeamNumber(), hEntity:GetAbsOrigin(), nil, self:GetAOERadius(), DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
 	for k,v in pairs(hNearbyEntities) do
 		if v ~= hEntity then
-			v:RemoveModifierByName("modifier_iw_dragon_knight_deafening_roar")
-			v:AddNewModifier(hEntity, self, "modifier_iw_dragon_knight_deafening_roar", tBuffModifierArgs)
-			v:AddNewModifier(hEntity, self, "modifier_iw_dragon_knight_deafening_roar_stun", tStunModifierArgs)
+			v:Interrupt()
+			v:AddNewModifier(hEntity, self, "modifier_iw_dragon_knight_deafening_roar", tModifierArgs)
 		end
 	end
 	

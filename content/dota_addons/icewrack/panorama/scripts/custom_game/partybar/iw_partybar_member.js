@@ -84,25 +84,25 @@ function ToggleSPLabel()
 	}
 }
 
-function SelectPortraitUnit(hContextPanel, tArgs)
+function OnPartybarSelectUnit(hContextPanel, tArgs)
 {
 	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
-	var nAbilityIndex = Abilities.GetLocalPlayerActiveAbility();
-	if ((nAbilityIndex !== -1) && (nAbilityIndex !== 0))
+	if ((nEntityIndex !== -1) && (Entities.IsAlive(nEntityIndex)))
 	{
-		//TODO: Figure out a way to deselect the active ability after targeting a party member like this
-		Game.PrepareUnitOrders({OrderType:dotaunitorder_t.DOTA_UNIT_ORDER_CAST_TARGET,
-								TargetIndex:nEntityIndex,
-								AbilityIndex:nAbilityIndex,
-								Position:Entities.GetAbsOrigin(nEntityIndex),
-								OrderIssuer:PlayerOrderIssuer_t.DOTA_ORDER_ISSUER_PASSED_UNIT_ONLY,
-								UnitIndex:Abilities.GetCaster(nAbilityIndex),
-								QueueBehavior:GameUI.IsShiftDown(),
-								ShowEffects:true});
-	}
-	else
-	{
-		if ((nEntityIndex !== -1) && (Entities.IsAlive(nEntityIndex)))
+		var nAbilityIndex = Abilities.GetLocalPlayerActiveAbility();
+		if ((nAbilityIndex !== -1) && (nAbilityIndex !== 0))
+		{
+			//TODO: Figure out a way to deselect the active ability after targeting a party member like this
+			Game.PrepareUnitOrders({OrderType:dotaunitorder_t.DOTA_UNIT_ORDER_CAST_TARGET,
+									TargetIndex:nEntityIndex,
+									AbilityIndex:nAbilityIndex,
+									Position:Entities.GetAbsOrigin(nEntityIndex),
+									OrderIssuer:PlayerOrderIssuer_t.DOTA_ORDER_ISSUER_PASSED_UNIT_ONLY,
+									UnitIndex:Abilities.GetCaster(nAbilityIndex),
+									QueueBehavior:GameUI.IsShiftDown(),
+									ShowEffects:true});
+		}
+		else
 		{
 			if (GameUI.IsShiftDown() || (tArgs && tArgs.addflag))
 			{
@@ -138,7 +138,7 @@ function SelectPortraitUnit(hContextPanel, tArgs)
 	}
 }
 
-function CenterPortraitUnit(hContextPanel, tArgs)
+function OnPartybarCenterUnit(hContextPanel, tArgs)
 {
 	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
 	if (nEntityIndex !== -1)
@@ -148,14 +148,14 @@ function CenterPortraitUnit(hContextPanel, tArgs)
 	}
 }
 
-function OnSelectPortraitUnit()
+function OnActivatePortraitUnit()
 {
-	SelectPortraitUnit($.GetContextPanel());
+	DispatchCustomEvent($.GetContextPanel(), "PartybarMemberSelect");
 }
 
-function OnCenterPortraitUnit()
+function OnDoubleClickPortraitUnit()
 {
-	CenterPortraitUnit($.GetContextPanel());
+	DispatchCustomEvent($.GetContextPanel(), "PartybarMemberCenter");
 }
 
 function OnPartybarIndicatorActivate(hContextPanel, tArgs)
@@ -189,7 +189,7 @@ function UpdatePartyBarMemberValues()
 	{
 		var nPlayerID = Players.GetLocalPlayer();
 		var tSelectedEntities = Players.GetSelectedEntities(nPlayerID);
-		var bIsEntityAlive = (Entities.IsAlive(nEntityIndex) && !Entities.HasItemInInventory(nEntityIndex, "internal_corpse"));
+		var bIsEntityAlive = (Entities.IsAlive(nEntityIndex) && !Entities.IsCommandRestricted(nEntityIndex));
 		
 		$("#PrimarySelectOverlay").visible = false;
 		$("#SecondarySelectOverlay").visible = false;
@@ -221,21 +221,25 @@ function UpdatePartyBarMemberValues()
 		$("#MPBar").style.width = ((fMana * 182)/((fMaxMana === 0) ? 1 : fMaxMana)) + "px";
 		
 		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-		var fStamina = bIsEntityAlive ? tEntityData.stamina : 0;
+		var fStamina = bIsEntityAlive ? Entities.GetStamina(nEntityIndex) : 0;
 		var fMaxStamina = tEntityData.stamina_max;
 		$("#SPLabel").text = Math.floor(fStamina) + " / " + Math.floor(fMaxStamina);
 		$("#SPBar").style.width = (Math.floor(fStamina * 182)/((fMaxStamina === 0) ? 1 : fMaxStamina)) + "px";
 		
+		var fStaminaRechargeTime = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SP_RECHARGE_TIME);
+		var fCurrentRechargeTime = bIsEntityAlive ? Game.GetGameTime() - Entities.GetStaminaRechargeTime(nEntityIndex) + fStaminaRechargeTime : 0;
+		var nRechargeBarWidth = (fCurrentRechargeTime * 182)/fStaminaRechargeTime;
+		if (nRechargeBarWidth < 8.0)
+			nRechargeBarWidth = 0.0;
+		$("#SPRechargeBar").style.width = nRechargeBarWidth + "px";
 		
-		var fStaminaRegenTime = 5.0 * (1.0 + GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SP_REGEN_TIME_PCT)/100);
-		var fCurrentRegenTime = bIsEntityAlive ? Game.GetGameTime() - tEntityData.stamina_time + fStaminaRegenTime : 0;
-		$("#SPRechargeBar").style.width = ((fCurrentRegenTime * 182)/fStaminaRegenTime) + "px";
-		
-		var szActionName = tEntityData.current_action;
-		if (szActionName && bIsEntityAlive)
+		var szCurrentActionName = tEntityData.current_action;
+		var nCurrentActionIndex = parseInt(tEntityData.current_actionindex);
+		var szAbilityTextureName = nCurrentActionIndex ? Abilities.GetAbilityTextureName(nCurrentActionIndex) : szCurrentActionName;
+		if (szCurrentActionName && bIsEntityAlive)
 		{
-			$("#ActionImage").SetImage("file://{images}/spellicons/" + szActionName + ".png");
-			$("#ActionLabel").text = $.Localize("DOTA_Tooltip_Ability_" + szActionName);
+			$("#ActionImage").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
+			$("#ActionLabel").text = $.Localize("DOTA_Tooltip_Ability_" + szCurrentActionName);
 			$("#ActionContainer").visible = true;
 		}
 		else
@@ -291,8 +295,8 @@ function OnPartyBarMemberLoad()
 	CreatePartybarIndicator(hContextPanel, "RunIndicator", "iw_partybar_run_indicator_", "iw_ui_run_mode_", 2);
 	CreatePartybarIndicator(hContextPanel, "HoldIndicator", "iw_partybar_hold_indicator_", "iw_ui_hold_mode_", 2);
 	
-	RegisterCustomEventHandler(hContextPanel, "PartybarMemberSelect", SelectPortraitUnit);
-	RegisterCustomEventHandler(hContextPanel, "PartybarMemberCenter", CenterPortraitUnit);
+	RegisterCustomEventHandler(hContextPanel, "PartybarMemberSelect", OnPartybarSelectUnit);
+	RegisterCustomEventHandler(hContextPanel, "PartybarMemberCenter", OnPartybarCenterUnit);
 	RegisterCustomEventHandler(hContextPanel, "PartybarIndicatorActivate", OnPartybarIndicatorActivate);
 	
 	UpdatePartyBarMemberValues();

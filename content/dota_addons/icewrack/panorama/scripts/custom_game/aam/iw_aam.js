@@ -444,7 +444,7 @@ function LoadAAMLoader()
 
 (function()
 {
-	CreateWindowPanel($.GetContextPanel(), "AAM", "tactics", "#iw_ui_aam", false, true);
+	CreateWindowPanel($.GetContextPanel(), "AAM", "tactics", "#iw_ui_aam", WINDOW_OPTION_PARTY);
 	
 	LoadAAMLayout();
 	LoadAAMTop();

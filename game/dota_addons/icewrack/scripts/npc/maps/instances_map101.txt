@@ -133,7 +133,7 @@
 		"Position"		"-55 2688 1000"
 		"Forward"		"1 0 0"
 
-		"Precondition"		"game.hero_selection != 6"
+		"Precondition"		"return GameRules:GetGameState('game.hero_selection') ~= 1"
 	}
 	"10002"
 	{

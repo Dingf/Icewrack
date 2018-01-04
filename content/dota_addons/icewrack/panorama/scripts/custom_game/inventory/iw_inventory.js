@@ -124,33 +124,16 @@ function LoadInventorySlots()
 	];
 }
 
-
-
 function LoadInventoryAttribs()
 {
-	/*var hParent = $.GetContextPanel().FindChildTraverse("LeftAttribs1");
-	CreateIconLabel(hParent, "HealthAttrib", "inventory/icons/iw_inventory_icon_health", "", "#ff3000ff", $.Localize("#iw_ui_inventory_health"));
-	CreateIconLabel(hParent, "ManaAttrib", "inventory/icons/iw_inventory_icon_mana", "", "#0080ffff", $.Localize("#iw_ui_inventory_mana"));
-	CreateIconLabel(hParent, "StaminaAttrib", "inventory/icons/iw_inventory_icon_stamina", "", "#ffff00ff", $.Localize("#iw_ui_inventory_stamina"));
-	CreateIconLabel(hParent, "ArmorAttrib", "inventory/icons/iw_inventory_icon_armor", "", "#008000ff", $.Localize("#iw_ui_inventory_armor"));
-	
-	hParent = $.GetContextPanel().FindChildTraverse("LeftAttribs2");
-	$.GetContextPanel()._tResistAttribPanels =
-	[
-		CreateIconLabel(hParent, "FireResAttrib", "inventory/icons/iw_inventory_icon_fire", "", "#ff3000ff", $.Localize("#iw_ui_inventory_fire_res")),
-		CreateIconLabel(hParent, "ColdResAttrib", "inventory/icons/iw_inventory_icon_cold", "", "#0080ffff", $.Localize("#iw_ui_inventory_cold_res")),
-		CreateIconLabel(hParent, "LightningResAttrib", "inventory/icons/iw_inventory_icon_lightning", "", "#ffff00ff", $.Localize("#iw_ui_inventory_lightning_res")),
-		CreateIconLabel(hParent, "DeathResAttrib", "inventory/icons/iw_inventory_icon_death", "", "#008000ff", $.Localize("#iw_ui_inventory_death_res")),
-	];*/
-	
 	var hParent = $.GetContextPanel().FindChildTraverse("RightAttribs");
-	CreateIconLabel(hParent, "GoldAttrib", "icons/iw_icon_gold", "", "#ffc000ff", $.Localize("#iw_ui_inventory_gold"));
-	CreateIconLabel(hParent, "WeightAttrib", "icons/iw_icon_weight", "", "#ffffff80", $.Localize("#iw_ui_inventory_carry"), 126);
+	CreateIconLabel(hParent, "GoldAttrib", "icons/iw_icon_gold", "", "#ffc000ff", $.Localize("#iw_ui_inventory_gold"), 128);
+	CreateIconLabel(hParent, "WeightAttrib", "icons/iw_icon_weight", "", "#ffffff80", $.Localize("#iw_ui_inventory_carry"), 128);
 }
 
 (function()
 {
-	CreateWindowPanel($.GetContextPanel(), "Inventory", "inventory", "#iw_ui_inventory", true, true);
+	CreateWindowPanel($.GetContextPanel(), "Inventory", "inventory", "#iw_ui_inventory", WINDOW_OPTION_SPLIT | WINDOW_OPTION_PARTY);
 	
 	LoadInventoryLayout();
 	LoadInventorySlots();

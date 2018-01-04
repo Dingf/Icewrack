@@ -1,117 +1,112 @@
 "use strict";
 
-//TODO: Investigate why sometimes there is a ton of extra whitespace at the end of a tooltip (maybe has to do with html?)
 function OnTooltipAbilityLoad()
 {
-	var nEntityIndex = parseInt($.GetContextPanel().GetAttributeString("entindex", ""));
 	var nAbilityIndex = parseInt($.GetContextPanel().GetAttributeString("abilityindex", ""));
-	var szAbilityName = nAbilityIndex ? Abilities.GetAbilityName(nAbilityIndex) : $.GetContextPanel().GetAttributeString("abilityname", "");
-	if (nAbilityIndex || szAbilityName)
+	var tAbilityData = CustomNetTables.GetTableValue("abilities", nAbilityIndex);
+	if (tAbilityData)
 	{
+		var bNoSpecialFlag = ($.GetContextPanel().GetAttributeString("nospecial", "") === "1");
+		var nEntityIndex = parseInt($.GetContextPanel().GetAttributeString("entindex", ""));
 		var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-		var tAbilityTemplate = CustomNetTables.GetTableValue("abilities", szAbilityName);
+		
+		var szAbilityName = Abilities.GetAbilityName(nAbilityIndex);
+		var nAbilityBehavior = Abilities.GetBehavior(nAbilityIndex);
+		var nAbilityExtFlags = tAbilityData.extflags;
 		
 		var szBehaviorText = "";
-		if (tAbilityTemplate)
+		if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_PASSIVE)
+			szBehaviorText = $.Localize("iw_ui_ability_passive");
+		else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_CHANNELLED)
 		{
-			var nAbilityBehavior = nAbilityIndex ? Abilities.GetBehavior(nAbilityIndex) : tAbilityTemplate.behavior;
-			var nAbilityExtFlags = tAbilityTemplate ? tAbilityTemplate.extflags : 0;
-			if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_PASSIVE)
-				szBehaviorText = $.Localize("iw_ui_ability_passive");
-			else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_CHANNELLED)
+			szBehaviorText = $.Localize("iw_ui_ability_channeled");
+			szBehaviorText += ", ";
+			szBehaviorText += Abilities.GetChannelTime(nAbilityIndex).toFixed(1);
+			szBehaviorText += "s";
+		}
+		else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_TOGGLE)
+			szBehaviorText = $.Localize("iw_ui_ability_toggled");
+		else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_AUTOCAST)
+			szBehaviorText = $.Localize("iw_ui_ability_autocast");
+		else
+			szBehaviorText = $.Localize("iw_ui_ability_target");
+		
+		//Not passive or toggled
+		if (!(nAbilityBehavior & 0x0202))
+		{
+			szBehaviorText += " - ";
+			if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_POINT)
 			{
-				szBehaviorText = $.Localize("iw_ui_ability_channeled");
-				szBehaviorText += ", ";
-				szBehaviorText += (nAbilityIndex ? Abilities.GetChannelTime(nAbilityIndex) : tAbilityTemplate.channeltime).toFixed(1);
-				szBehaviorText += "s";
+				szBehaviorText += $.Localize("iw_ui_ability_target_ground");
+				
+				var nCastRange = Abilities.GetCastRange(nAbilityIndex);
+				if (nAbilityExtFlags & IW_ABILITY_FLAG_USES_ATTACK_RANGE)
+				{
+					szBehaviorText += ", " + $.Localize("iw_ui_ability_target_attack_range");
+				}
+				else if (nCastRange > 0)
+				{
+					szBehaviorText += ", " + (nCastRange/100.0).toFixed(2) + "m";
+				}
 			}
-			else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_TOGGLE)
-				szBehaviorText = $.Localize("iw_ui_ability_toggled");
-			else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_AUTOCAST)
-				szBehaviorText = $.Localize("iw_ui_ability_autocast");
-			else
-				szBehaviorText = $.Localize("iw_ui_ability_target");
-			
-			//Not passive or toggled
-			if (!(nAbilityBehavior & 0x0202))
+			else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_UNIT_TARGET)
+			{
+				var nTargetTeam = Abilities.GetAbilityTargetTeam(nAbilityIndex);
+				switch (nTargetTeam)
+				{
+					case DOTA_UNIT_TARGET_TEAM.DOTA_UNIT_TARGET_TEAM_FRIENDLY:
+						szBehaviorText += $.Localize("iw_ui_ability_target_ally");
+						break;
+					case DOTA_UNIT_TARGET_TEAM.DOTA_UNIT_TARGET_TEAM_ENEMY:
+						szBehaviorText += $.Localize("iw_ui_ability_target_enemy");
+						break;
+					default:
+						szBehaviorText += $.Localize("iw_ui_ability_target_unit");
+						break;
+				}
+				var nCastRange = Abilities.GetCastRange(nAbilityIndex);
+				if (nAbilityExtFlags & IW_ABILITY_FLAG_USES_ATTACK_RANGE)
+				{
+					szBehaviorText += ", " + $.Localize("iw_ui_ability_target_attack_range");
+				}
+				else if (nCastRange > 0)
+				{
+					szBehaviorText += ", " + (nCastRange/100.0).toFixed(2) + "m";
+				}
+			}
+			else if (nAbilityExtFlags & IW_ABILITY_FLAG_KEYWORD_WEATHER)
+			{
+				szBehaviorText += $.Localize("iw_ui_ability_target_weather");
+			}
+			else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_NO_TARGET)
+			{
+				szBehaviorText += $.Localize("iw_ui_ability_target_self");
+			}
+		}
+		else
+		{
+			if (nAbilityExtFlags & IW_ABILITY_FLAG_KEYWORD_ATTACK)
 			{
 				szBehaviorText += " - ";
-				if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_POINT)
-				{
-					szBehaviorText += $.Localize("iw_ui_ability_target_ground");
-					
-					var nCastRange = nAbilityIndex ? Abilities.GetCastRange(nAbilityIndex) : tAbilityTemplate.castrange;
-					if (nAbilityExtFlags & IW_ABILITY_FLAG_USES_ATTACK_RANGE)
-					{
-						szBehaviorText += ", " + $.Localize("iw_ui_ability_target_attack_range");
-					}
-					else if (nCastRange > 0)
-					{
-						szBehaviorText += ", " + (nCastRange/100.0).toFixed(2) + "m";
-					}
-				}
-				else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_UNIT_TARGET)
-				{
-					var nTargetTeam = nAbilityIndex ? Abilities.GetAbilityTargetTeam(nAbilityIndex) : tAbilityTemplate.targetteam;
-					switch (nTargetTeam)
-					{
-						case DOTA_UNIT_TARGET_TEAM.DOTA_UNIT_TARGET_TEAM_FRIENDLY:
-							szBehaviorText += $.Localize("iw_ui_ability_target_ally");
-							break;
-						case DOTA_UNIT_TARGET_TEAM.DOTA_UNIT_TARGET_TEAM_ENEMY:
-							szBehaviorText += $.Localize("iw_ui_ability_target_enemy");
-							break;
-						default:
-							szBehaviorText += $.Localize("iw_ui_ability_target_unit");
-							break;
-					}
-					var nCastRange = nAbilityIndex ? Abilities.GetCastRange(nAbilityIndex) : tAbilityTemplate.castrange;
-					if (nAbilityExtFlags & IW_ABILITY_FLAG_USES_ATTACK_RANGE)
-					{
-						szBehaviorText += ", " + $.Localize("iw_ui_ability_target_attack_range");
-					}
-					else if (nCastRange > 0)
-					{
-						szBehaviorText += ", " + (nCastRange/100.0).toFixed(2) + "m";
-					}
-				}
-				else if (nAbilityExtFlags & IW_ABILITY_FLAG_KEYWORD_WEATHER)
-				{
-					szBehaviorText += $.Localize("iw_ui_ability_target_weather");
-				}
-				else if (nAbilityBehavior & DOTA_ABILITY_BEHAVIOR.DOTA_ABILITY_BEHAVIOR_NO_TARGET)
-				{
-					szBehaviorText += $.Localize("iw_ui_ability_target_self");
-				}
-			}
-			else
-			{
-				if (nAbilityExtFlags & IW_ABILITY_FLAG_KEYWORD_ATTACK)
-				{
-					szBehaviorText += " - ";
-					szBehaviorText += $.Localize("iw_ui_ability_target_attack");
-				}
+				szBehaviorText += $.Localize("iw_ui_ability_target_attack");
 			}
 		}
 		$("#Behavior").text = szBehaviorText;
 			
+		var nSkillMask = tAbilityData.skill;
 		var hSkillContainer = $("#SkillContainer");
 		hSkillContainer.RemoveAndDeleteChildren();
-		if (tAbilityTemplate)
+		for (var i = 0; i < 4; i++)
 		{
-			var nSkillMask = tAbilityTemplate.skill;
-			for (var i = 0; i < 4; i++)
+			var nLevel = (nSkillMask >>> (i * 8)) & 0x07;
+			var nSkill = ((nSkillMask >>> (i * 8)) & 0xF8) >> 3;
+			if (nSkill !== 0)
 			{
-				var nLevel = (nSkillMask >>> (i * 8)) & 0x07;
-				var nSkill = ((nSkillMask >>> (i * 8)) & 0xF8) >> 3;
-				if (nSkill !== 0)
+				for (var j = 0; j < nLevel; j++)
 				{
-					for (var j = 0; j < nLevel; j++)
-					{
-						var hSkillIcon = $.CreatePanel("Image", hSkillContainer, "SkillIcon" + i + "_" + j);
-						hSkillIcon.SetImage("file://{images}/custom_game/icons/skills/iw_skill_icon_" + (nSkill - 1) + ".tga");
-						hSkillIcon.AddClass("TooltipAbilitySkillIcon");
-					}
+					var hSkillIcon = $.CreatePanel("Image", hSkillContainer, "SkillIcon" + i + "_" + j);
+					hSkillIcon.SetImage("file://{images}/custom_game/icons/skills/iw_skill_icon_" + (nSkill - 1) + ".tga");
+					hSkillIcon.AddClass("TooltipAbilitySkillIcon");
 				}
 			}
 		}
@@ -119,131 +114,110 @@ function OnTooltipAbilityLoad()
 		$("#ManaCost").visible = false;
 		$("#StaminaCost").visible = false;
 		$("#CooldownCost").visible = false;
-		if (tAbilityTemplate)
+		
+		var fStaminaCost = tAbilityData.stamina;
+		var fStaminaUpkeep = tAbilityData.stamina_upkeep;
+		var fManaCost = tAbilityData.mana;
+		var fManaUpkeep = tAbilityData.mana_upkeep;
+		
+		$("#ManaCost").visible = (fManaCost > 0) || (fManaUpkeep > 0);
+		$("#ManaLabel").text = "";
+		if (fManaCost > 0)
 		{
-			var fStaminaCost = tAbilityTemplate.stamina;
-			var fStaminaUpkeep = tAbilityTemplate.stamina_upkeep;
-			var fManaCost = nAbilityIndex ? Abilities.GetManaCost(nAbilityIndex) : tAbilityTemplate.mana;
-			var fManaUpkeep = tAbilityTemplate.mana_upkeep;
-			
-			var tEntitySpellbook = CustomNetTables.GetTableValue("spellbook", nEntityIndex);
-			if (tEntitySpellbook)
-			{
-				var tSpellData = tEntitySpellbook.Spells[nAbilityIndex];
-				if (tSpellData)
-				{
-					fStaminaCost = tSpellData.stamina;
-					fStaminaUpkeep = tSpellData.stamina_upkeep;
-					fManaUpkeep = tSpellData.mana_upkeep;
-				}
-			}
-			
-			$("#ManaCost").visible = (fManaCost > 0) || (fManaUpkeep > 0);
-			$("#ManaLabel").text = "";
-			if (fManaCost > 0)
-			{
-				$("#ManaLabel").text += fManaCost.toFixed(0) + ((fManaUpkeep > 0) ? " + " : "");
-			}
-			if (fManaUpkeep > 0)
-			{
-				$("#ManaLabel").text += Math.floor(fManaUpkeep * 100)/100 + "/s";
-			}
-			
-			$("#StaminaCost").visible = (fStaminaCost > 0) || (fStaminaUpkeep > 0);
-			$("#StaminaLabel").text = "";
-			if (fStaminaCost > 0)
-			{
-				$("#StaminaLabel").text += fStaminaCost.toFixed(0) + ((fStaminaUpkeep > 0) ? " + " : "");
-			}
-			if (fStaminaUpkeep > 0)
-			{
-				$("#StaminaLabel").text += Math.floor(fStaminaUpkeep * 100)/100 + "/s";
-			}
-			
-			var nCooldown = nAbilityIndex ? Abilities.GetCooldown(nAbilityIndex) : tAbilityTemplate.cooldown;
-			$("#CooldownCost").visible = (nCooldown > 0);
-			$("#CooldownLabel").text = Math.round(nCooldown * 100)/100 + "";
+			$("#ManaLabel").text += fManaCost.toFixed(0) + ((fManaUpkeep > 0) ? " + " : "");
+		}
+		if (fManaUpkeep > 0)
+		{
+			$("#ManaLabel").text += Math.floor(fManaUpkeep * 100)/100 + "/s";
+		}
+		
+		$("#StaminaCost").visible = (fStaminaCost > 0) || (fStaminaUpkeep > 0);
+		$("#StaminaLabel").text = "";
+		if (fStaminaCost > 0)
+		{
+			$("#StaminaLabel").text += fStaminaCost.toFixed(0) + ((fStaminaUpkeep > 0) ? " + " : "");
+		}
+		if (fStaminaUpkeep > 0)
+		{
+			$("#StaminaLabel").text += Math.floor(fStaminaUpkeep * 100)/100 + "/s";
+		}
+		
+		var nCooldown = Abilities.GetCooldown(nAbilityIndex);
+		$("#CooldownCost").visible = (nCooldown > 0);
+		$("#CooldownLabel").text = Math.round(nCooldown * 100)/100 + "";
+		
+		var fSpellpower = 0;
+		if (tEntityData)
+		{
+			fSpellpower = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER) + (GetAttributeValue(tEntityData, Instance.IW_PROPERTY_ATTR_INT_FLAT) * 1.0);
 		}
 			
 		var szLocalizedText = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName + "_Description");
+		var tSpecialSections = szLocalizedText.match(/[^{}]+(?=})/g);
+		var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
+		
 		var szFormattedText = "";
-		if (tAbilityTemplate)
+		for (var i = 0; i < tTextSections.length; i++)
 		{
-			var tSpecialSections = szLocalizedText.match(/[^{}]+(?=})/g);
-			var tTextSections = szLocalizedText.replace(/\{[^}]+\}/g, "|").split("|");
-			
-			var fSpellpower = 0;
-			if (tEntityData)
+			szFormattedText += tTextSections[i];
+			if (tSpecialSections && tSpecialSections[i])
 			{
-				fSpellpower = GetPropertyValue(tEntityData, Instance.IW_PROPERTY_SPELLPOWER) + (GetAttributeValue(tEntityData, Instance.IW_PROPERTY_ATTR_INT_FLAT) * 1.0);
-			}
-			for (var i = 0; i < tTextSections.length; i++)
-			{
-				szFormattedText += tTextSections[i];
-				if (tSpecialSections && tSpecialSections[i])
-				{
-					var tAbilitySpecials = tSpecialSections[i].split("|");
-					var tAbilityBaseValues = tAbilitySpecials[0].split("*", 2);
+				var tAbilitySpecials = tSpecialSections[i].split("|");
+				var tAbilityBaseValues = tAbilitySpecials[0].split("*", 2);
 
-					var fSpecialBaseValue = nAbilityIndex ? Abilities.GetSpecialValueFor(nAbilityIndex, tAbilityBaseValues[0]) : tAbilityTemplate.special[tAbilityBaseValues[0]];
-					var fSpecialBonusValue = 0;
-					if (tAbilityBaseValues[0] === "r")
-					{
-						fSpecialBaseValue = ((nAbilityIndex ? Abilities.GetAOERadius(nAbilityIndex) : tAbilityTemplate.radius)/100.0).toFixed(2);
-					}
-					else if (tAbilityBaseValues.length > 1)
-					{
-						var fSpecialBaseMultiplier = parseFloat(tAbilityBaseValues[1]);
-						if (fSpecialBaseMultiplier)
-						{
-							fSpecialBaseValue *= fSpecialBaseMultiplier;
-						}
-					}
-					var fSpecialTotal = fSpecialBaseValue;
-					if (typeof(fSpecialTotal) === "number")
-					{
-						if (tAbilitySpecials.length > 1)
-						{
-							var tAbilitySpecialValues = tAbilitySpecials[1].split("*", 2);
-							var fSpecialBonus = nAbilityIndex ? Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecialValues[0]) : tAbilityTemplate.special[tAbilitySpecialValues[0]];
-							if (typeof(fSpecialBonus) === "number")
-							{
-								fSpecialBonusValue = Math.round(fSpecialBonus * 100)/100;
-							}
-							if (tAbilitySpecialValues.length > 1)
-							{
-								var fSpecialBonusMultiplier = parseFloat(tAbilitySpecialValues[1]);
-								if (fSpecialBonusMultiplier)
-								{
-									fSpecialBonusValue *= fSpecialBonusMultiplier;
-								}
-							}
-						}
-						fSpecialTotal += fSpecialBonusValue * fSpellpower;
-						fSpecialTotal = Math.round(fSpecialTotal * 100)/100;
-					}
-					
-					szFormattedText += "<font color=\"#ffffff\">";
-					if ((GameUI.IsAltDown() || !nAbilityIndex) && (fSpecialBonusValue > 0))
-					{
-						szFormattedText = szFormattedText + "(" + fSpecialBaseValue + " + " + fSpecialBonusValue + "x)";
-					}
-					else
-					{
-						szFormattedText += fSpecialTotal;
-					}
-					szFormattedText += "</font>";
+				var fSpecialBaseValue = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilityBaseValues[0]);
+				var fSpecialBonusValue = 0;
+				if (tAbilityBaseValues[0] === "r")
+				{
+					fSpecialBaseValue = (Abilities.GetAOERadius(nAbilityIndex)/100.0).toFixed(2);
 				}
+				else if (tAbilityBaseValues.length > 1)
+				{
+					var fSpecialBaseMultiplier = parseFloat(tAbilityBaseValues[1]);
+					if (fSpecialBaseMultiplier)
+					{
+						fSpecialBaseValue *= fSpecialBaseMultiplier;
+					}
+				}
+				var fSpecialTotal = fSpecialBaseValue;
+				if (typeof(fSpecialTotal) === "number")
+				{
+					if (tAbilitySpecials.length > 1)
+					{
+						var tAbilitySpecialValues = tAbilitySpecials[1].split("*", 2);
+						var fSpecialBonus = Abilities.GetSpecialValueFor(nAbilityIndex, tAbilitySpecialValues[0]);
+						if (typeof(fSpecialBonus) === "number")
+						{
+							fSpecialBonusValue = Math.round(fSpecialBonus * 100)/100;
+						}
+						if (tAbilitySpecialValues.length > 1)
+						{
+							var fSpecialBonusMultiplier = parseFloat(tAbilitySpecialValues[1]);
+							if (fSpecialBonusMultiplier)
+							{
+								fSpecialBonusValue *= fSpecialBonusMultiplier;
+							}
+						}
+					}
+					fSpecialTotal += fSpecialBonusValue * fSpellpower;
+					fSpecialTotal = Math.round(fSpecialTotal * 100)/100;
+				}
+				
+				szFormattedText += "<font color=\"#ffffff\">";
+				if ((GameUI.IsAltDown() || bNoSpecialFlag) && (fSpecialBonusValue !== 0))
+				{
+					szFormattedText = szFormattedText + "(" + fSpecialBaseValue + (fSpecialBonusValue > 0 ? " + " : " - ") + Math.abs(fSpecialBonusValue) + "x)";
+				}
+				else
+				{
+					szFormattedText += fSpecialTotal;
+				}
+				szFormattedText += "</font>";
 			}
-			$("#Description").text = szFormattedText;
-			var szAbilityTextureName = nAbilityIndex ? Abilities.GetAbilityTextureName(nAbilityIndex) : tAbilityTemplate.texture;
-			$("#Icon").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
 		}
-		else
-		{
-			$("#Description").text = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName + "_Description");
-			$("#Icon").SetImage("file://{images}/spellicons/" + szAbilityName + ".png");
-		}
+		$("#Description").text = szFormattedText;
+		var szAbilityTextureName = Abilities.GetAbilityTextureName(nAbilityIndex);
+		$("#Icon").SetImage("file://{images}/spellicons/" + szAbilityTextureName + ".png");
 		
 		$("#Title").text = $.Localize("DOTA_Tooltip_Ability_" + szAbilityName);
 		$("#NotesContainer").visible = GameUI.IsAltDown();
@@ -267,6 +241,5 @@ function OnTooltipAbilityLoad()
 				}
 			}
 		}
-		
 	}
 }

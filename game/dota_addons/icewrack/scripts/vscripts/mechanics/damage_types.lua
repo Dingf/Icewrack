@@ -17,16 +17,16 @@
 			
 		SLASH:
 			*Physical damage sub-type
-			*Critical strikes apply Maim, which slows the target's movement speed for up to 10 seconds, based on the percentage of max.
-			HP dealt as damage. Moving while Maimed causes the target to suffer additional secondary Slash damage.
+			*Critical strikes apply Maim, which slows the target's movement speed and attack speed for up to 10 seconds, based on the
+			 percentage of max. HP dealt as damage.
 			 
 		PIERCE:
 			*Physical damage sub-type
-			*Critical strikes apply Bleed, dealing 100% of the original damage dealt as secondary Pierce damage over 4 seconds.
+			*Critical strikes apply Bleed, dealing a percentage of the original damage dealt as secondary Pierce damage over 4 seconds.
  
     FIRE:
 		*High damage, medium variance
-        *Critical strikes apply Burning, dealing 5/2/1% of target's maximum HP as secondary Fire damage per second for up to 5 seconds, based on
+        *Critical strikes apply Burning, dealing a percentage of target's maximum HP as secondary Fire damage per second for up to 5 seconds, based on
 		 the percentage of max. HP dealt as damage. Only one instance of Burning can be applied to the target at a time.
 		*Indiscriminate area damage and burning ground effects - lots of friendly fire possible
         
@@ -39,12 +39,12 @@
         
     LIGHTNING:
 		*High damage, high variance
-		*Critical strikes apply Shock, dealing 25/10/5% of the target's current HP as secondary Lightning damage
+		*Critical strikes apply Shock, dealing a percentage of the target's current HP as secondary Lightning damage
         *Intelligent damage - Lightning damage chains or autotargets, preventing friendly fire
     
     DEATH:
 		*Medium damage, as well as damage over time
-        *Critical strikes apply Decay, temporarily reducing maximum health and causing all healing effects to deal secondary Death damage instead.
+        *Critical strikes apply Decay, temporarily increasing damage taken and causing all healing effects to deal secondary Death damage instead.
 		*Poison abilities deal secondary Death damage
 ]]
 

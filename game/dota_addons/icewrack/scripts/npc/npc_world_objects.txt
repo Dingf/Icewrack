@@ -1,0 +1,20 @@
+"IcewrackWorldObjectDefinitions"
+{
+	"npc_iw_bounty_hunter_trapjaw"
+	{
+		"InteractRange"		"64"
+		"ScriptFile"		"scripts/vscripts/units/npc_iw_bounty_hunter_trapjaw.lua"
+	}
+
+	
+	"npc_iw_campfire_dummy"
+	{
+		"InteractRange"		"64"
+	}
+	
+	"npc_iw_revive_tombstone"
+	{
+		"InteractRange"		"64"
+		"ScriptFile"		"scripts/vscripts/units/npc_iw_revive_tombstone.lua"
+	}
+}

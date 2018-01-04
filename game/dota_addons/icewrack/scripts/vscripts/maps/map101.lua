@@ -24,7 +24,7 @@ end
 function CIcewrackMap1_01:OnGameRulesStateChange(keys)
 	local nGameState = GameRules:State_Get()
 	if nGameState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		local hCampDummy = CreateDummyUnit(Vector(0, 0, 0), nil, DOTA_TEAM_GOODGUYS)
+		local hCampDummy = CreateDummyUnit(Vector(0, 0, 0), nil, DOTA_TEAM_GOODGUYS, false)
 		hCampDummy:SetAbsOrigin(Vector(192, -720, 568))
 		hCampDummy:SetDayTimeVisionRange(4000)
 		hCampDummy:SetNightTimeVisionRange(4000)
@@ -34,7 +34,7 @@ function CIcewrackMap1_01:OnGameRulesStateChange(keys)
 			ParticleManager:ReleaseParticleIndex(nParticleID)
 		end
 		
-		local hTrigger = Entities:FindByName(nil, "herotent" .. CGameState:GetGameStateValue("game.hero_selection") .. "_trigger3")
+		local hTrigger = Entities:FindByName(nil, "herotent" .. GameRules:GetGameState("game.hero_selection") .. "_trigger3")
 		if hTrigger then
 			hTrigger:FireOutput("OnKilled", hEntity, hTrigger, nil, 0.0)
 			hTrigger:Destroy()

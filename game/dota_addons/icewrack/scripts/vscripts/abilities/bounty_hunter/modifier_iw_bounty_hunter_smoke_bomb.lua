@@ -42,7 +42,17 @@ function modifier_iw_bounty_hunter_smoke_bomb:OnCreated(args)
 			ParticleManager:SetParticleControl(nParticleID, 1, Vector(fRadius, fRadius, fRadius))
 			self:AddParticle(nParticleID, false, false, -1, false, false)
 			
-			CTimer(args.duration, function() self:GetParent():RemoveSelf() end)
+			CTimer(args.duration, function()
+				local hAvoidanceZone = self._hAvoidanceZone
+				local hBlockerZone = self._hBlockerZone
+				if hAvoidanceZone then
+					hAvoidanceZone:RemoveSelf()
+				end
+				if hBlockerZone then
+					hBlockerZone:RemoveSelf()
+				end
+				self:GetParent():RemoveSelf()
+			end)
 		else
 			self:SetPropertyValue(IW_PROPERTY_ACCURACY_PCT, hAbility._hParentModifier:GetBasePropertyValue(IW_PROPERTY_ACCURACY_PCT))
 		end

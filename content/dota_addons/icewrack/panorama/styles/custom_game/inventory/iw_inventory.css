@@ -12,31 +12,12 @@
 	vertical-align: center;
 }
 
-.InventoryLeftAttribContainer1
+.InventoryAttributesContainer
 {
-	x: 65px;
-	y: 153px;
-	width: 128px;
-	height: 128px;
+	x: 328px;
+	y: 92px;
+	height: 64px;
 	flow-children: down;
-}
-
-.InventoryLeftAttribContainer2
-{
-	x: 353px;
-	y: 153px;
-	width: 128px;
-	height: 128px;
-	flow-children: down;
-}
-
-.InventoryRightAttribContainer
-{
-	x: 217px;
-	y: 109px;
-	width: 256px;
-	height: 32px;
-	flow-children: right;
 }
 
 .InventorySlotOverlay

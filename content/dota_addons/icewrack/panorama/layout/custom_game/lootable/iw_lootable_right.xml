@@ -4,6 +4,6 @@
 	</styles>
 	
 	<Panel hittest="false" class="LootableRightContentRoot">
-		<Panel hittest="false" class="LootableRightAttribContainer" id="RightAttribs" />
+		<Panel hittest="false" class="LootableAttribContainer" id="RightAttribs" />
 	</Panel>
 </root>

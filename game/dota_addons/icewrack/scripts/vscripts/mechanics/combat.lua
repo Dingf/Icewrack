@@ -9,7 +9,7 @@ GameRules.IsInCombat = function() return GameRules.CombatState end
 
 local nCombatEventID = 0
 local stCombatEventTable = {}
-local stCombatNetTable = {}
+local stCombatNetTable = { State = false }
 local nCombatParticleID = nil
 
 local function ClearCombatEvent(nEventID)
@@ -32,5 +32,7 @@ function TriggerCombatEvent(fDuration)
 	CTimer(fDuration, ClearCombatEvent, nCombatEventID)
 	nCombatEventID = nCombatEventID + 1
 end
+
+CustomNetTables:SetTableValue("game", "Combat", stCombatNetTable)
 
 end

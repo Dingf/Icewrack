@@ -107,7 +107,7 @@
 		{
 			_class = "C_INIT_RandomColor"
 			m_ColorMax = [ 64, 64, 64, 255 ]
-			m_ColorMin = [ 192, 192, 192, 255 ]
+			m_ColorMin = [ 128, 128, 128, 255 ]
 		},
 	]
 	m_Emitters = 

@@ -1,6 +1,6 @@
 "DOTAAbilities"
 {
-	"internal_attack"
+	"item_internal_attack"
 	{
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"
@@ -14,7 +14,7 @@
 		}
 	}
 
-	"internal_attribute_bonus"
+	"item_internal_attribute_bonus"
 	{
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"
@@ -23,11 +23,12 @@
 
 		"Modifiers"
 		{
+			"modifier_internal_attribute_refresh"		"LUA_MODIFIER_NO_TRIGGER"
 			"modifier_internal_attribute_bonus"		"LUA_MODIFIER_NO_TRIGGER"
 		}
 	}
 
-	"internal_skill_bonus"
+	"item_internal_skill_bonus"
 	{
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"
@@ -37,10 +38,11 @@
 		"Modifiers"
 		{
 			"modifier_internal_skill_bonus"		"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_internal_skill_bonus_leadership_aura"		"LUA_MODIFIER_NO_TRIGGER"
 		}
 	}
 	
-	"internal_stamina"
+	"item_internal_stamina"
 	{
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"
@@ -53,7 +55,7 @@
 		}
 	}
 
-	"internal_movement_noise"
+	"item_internal_deniable"
 	{
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"
@@ -62,11 +64,24 @@
 
 		"Modifiers"
 		{
-			"modifier_internal_movement_noise"		"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_internal_deniable"		"LUA_MODIFIER_NO_TRIGGER"
 		}
 	}
 
-	"internal_hold_position"
+	"item_internal_carry_weight"
+	{
+		"BaseClass"				"item_lua"
+		"ScriptFile"				"ext_item"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+		"Modifiers"
+		{
+			"modifier_internal_carry_weight"		"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"item_internal_hold_position"
 	{
 		"BaseClass"				"item_datadriven"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
@@ -86,65 +101,20 @@
 		}
 	}
 
-	"internal_corpse"
+	"item_internal_corpse"
 	{
-		"BaseClass"				"item_datadriven"
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
-		
-		"AbilityChannelTime"			"8.0"
-
-		"OnChannelFinish"
-		{
-			"RunScript"
-	            	{
-	            		"ScriptFile"		"scripts/vscripts/ext_entity.lua"
-	            		"Function"		"OnCorpseReviveFinish"
-	            	}
-		}
-
-		"OnChannelInterrupted"
-		{
-			"RunScript"
-	            	{
-	            		"ScriptFile"		"scripts/vscripts/ext_entity.lua"
-	            		"Function"		"OnCorpseReviveInterrupted"
-	            	}
-		}
+		"BaseClass"				"item_lua"
+		"ScriptFile"				"ext_item"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
 
 		"Modifiers"
 		{
-			"modifier_internal_corpse_state"
-			{
-				"IsHidden"						"1"
-				"Attributes"						"MODIFIER_ATTRIBUTE_PERMANENT"
-
-				"States"
-				{	
-					"MODIFIER_STATE_STUNNED"			"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_BLIND"				"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_FROZEN"				"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_PROVIDES_VISION"		"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_NIGHTMARED"			"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_LOW_ATTACK_PRIORITY"		"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_NO_UNIT_COLLISION"		"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_COMMAND_RESTRICTED"		"MODIFIER_STATE_VALUE_ENABLED"
-				}
-			}
-
-			"modifier_internal_corpse_unselectable"
-			{
-				"IsHidden"						"1"
-				"Attributes"						"MODIFIER_ATTRIBUTE_PERMANENT"
-
-				"States"
-				{
-					"MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
-				}
-			}
+			"modifier_internal_corpse_state"		"LUA_MODIFIER_NO_TRIGGER"
+			"modifier_internal_corpse_unselectable"		"LUA_MODIFIER_NO_TRIGGER"
 		}
 	}
 
-	"internal_miss_debuff"
+	"item_internal_miss_debuff"
 	{
 		"BaseClass"				"item_datadriven"
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
@@ -162,7 +132,18 @@
 		}
 	}
 
-	"iw_dragon_knight_dragon_form_source"
+	"item_internal_dialogue"
+	{
+		"BaseClass"				"item_lua"
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+		"Modifiers"
+		{
+			"modifier_internal_dialogue"		"LUA_MODIFIER_NO_TRIGGER"
+		}
+	}
+
+	"item_iw_dragon_knight_dragon_form_source"
 	{
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"
@@ -170,7 +151,7 @@
 		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 	}
 
-	"iw_lina_lesser_fireball_source"
+	"item_iw_lina_lesser_fireball_source"
 	{
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"
@@ -269,8 +250,32 @@
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"
 
-		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"AbilityCastRange"				"650"
+		"AbilityCastPoint"				"1.0"
+
+		"AbilityCooldown"				"1.0"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_ALL"
 		"AbilityTextureName"			"item_tango"
+		"ItemShareability"			"ITEM_FULLY_SHAREABLE"
+	}
+
+	"item_test_potion2"
+	{
+		"BaseClass"				"item_lua"
+		"ScriptFile"				"ext_item"
+
+		"AbilityCastRange"				"650"
+		"AbilityCastPoint"				"1.0"
+
+		"AbilityCooldown"				"1.0"
+
+		"AbilityBehavior"			"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_ALL"
+		"AbilityTextureName"			"item_clarity"
 		"ItemShareability"			"ITEM_FULLY_SHAREABLE"
 	}
 
@@ -288,7 +293,7 @@
 		}
 	}
 
-	"map000_buff"
+	"item_map000_buff"
 	{
 		"BaseClass"				"item_lua"
 		"ScriptFile"				"ext_item"

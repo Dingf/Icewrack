@@ -67,32 +67,27 @@
 	}
 }
 
-.LootableLeftAttribContainer
+.LootableAttribContainer
 {
-	x: 20px;
-	y: 109px;
-	width: 256px;
-	height: 32px;
-	flow-children: right;
+	width: fit-children;
+	height: 64px;
+	flow-children: down;
 }
 
-.LootableRightAttribContainer
+#LeftAttribs
 {
-	x: 217px;
-	y: 109px;
-	width: 256px;
-	height: 32px;
-	flow-children: right;
+	x: 16px;
+	y: 92px;
 }
 
-.LootableLeftScreenPadding
+#RightAttribs
 {
-	x: 26px;
+	x: 328px;
+	y: 92px;
 }
 
-.LootableTakeAllButton
+#TakeAllButton
 {
-	x: 8px;
-	y: 72px;
-	transform: scale3d(0.65, 0.65, 1);
+	y: 80px;
+	horizontal-align: center;
 }

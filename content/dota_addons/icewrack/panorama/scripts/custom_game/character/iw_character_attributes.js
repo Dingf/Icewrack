@@ -2,14 +2,14 @@
 
 var stAttributesShortNames =
 [
-	"str", "end", "agi", "cun", "int", "wis"
+	"str", "con", "agi", "per", "int", "wis"
 ];
 
 var stAttributesDetailParams =
 [
-	[2, 1, 1],
+	[2, 2, 1],
 	[5, 1, 1],
-	[1, 1, 1],
+	[1, 1, 1, 1],
 	[5, 5],
 	[1, 0.5, 0.5],
 	[2, 0.05, 1]
@@ -262,7 +262,7 @@ function OnAttributesLoad()
 		$.GetContextPanel()._tAttribSections.push(hSection);
 		$.GetContextPanel()._tAllocatedPoints.push(0);
 	}
-	CreateVerticalScrollbar($.GetContextPanel(), "AttribListScrollbar", hAttributeList);
+	CreateVerticalScrollbar($.GetContextPanel(), "AttribListScrollbar", $("#ListContainer"));
 	
 	RegisterCustomEventHandler($.GetContextPanel(), "AttributesUpdate", OnAttributesUpdate);
 	RegisterCustomEventHandler($.GetContextPanel(), "WindowPartyUpdate", OnAttributesPartyUpdate);

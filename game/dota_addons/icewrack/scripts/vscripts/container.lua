@@ -1,23 +1,27 @@
-if not CContainerEntity then
+if not CContainer then
 
-require("instance")
 require("entity_base")
---require("interactable")
---require("inventory")
-require("loot_list")
+require("ext_item")
 
-CContainerEntity = setmetatable(ext_class({}), { __call =
+local stItemListData = LoadKeyValues("scripts/npc/iw_item_lists.txt")
+local stContainerData = LoadKeyValues("scripts/npc/npc_containers.txt")
+
+local shItemDeniableModifier = CreateItem("item_internal_deniable", nil, nil)
+
+CContainer = setmetatable(ext_class({}), { __call =
 	function(self, hEntity, nInstanceID)
-		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
-		if IsInstanceOf(hEntity, CContainerEntity) then
-			LogMessage("Tried to create a CContainerEntity from \"" .. hEntity:GetUnitName() .."\", which is already a CContainerEntity", LOG_SEVERITY_WARNING)
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC")
+		if IsInstanceOf(hEntity, CContainer) then
+			LogMessage(LOG_MESSAGE_WARN_EXISTS, LOG_SEVERITY_WARNING, "CContainer", hEntity:GetUnitName())
 			return hEntity
 		end
 		
-		--local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()] or {}
-		hEntity = CEntityBase(hEntity, nInstanceID)
-		--hEntity = CInteractable(hEntity, nInstanceID)
-		ExtendIndexTable(hEntity, CContainerEntity)
+		local tContainerTemplate = stContainerData[hEntity:GetUnitName()] or {}
+		
+		if not IsInstanceOf(hEntity, CEntityBase) then
+			hEntity = CEntityBase(hEntity, nInstanceID)
+		end
+		ExtendIndexTable(hEntity, CContainer)
 		
 		hEntity._tItemList = {}
 		hEntity._tInventoryUnits = {}
@@ -25,83 +29,92 @@ CContainerEntity = setmetatable(ext_class({}), { __call =
 		hEntity._nEquipFlags = 0
 		
 		hEntity._nGoldAmount = 0
-		hEntity._bIgnoreCarryWeight = false
+		hEntity._bCanExceedCapacity = false
+		hEntity._nLockLevel = tContainerTemplate.LockLevel or 0
+		hEntity._fCarryCapacity = tContainerTemplate.CarryCapacity or 0
 		
-		--hEntity._tNetTableItemList = {}
-		--hEntity._tNetTableEquippedItems = {}
+		hEntity:SetInteractRange(tContainerTemplate.InteractRange)
+		hEntity:SetInteractZone(tContainerTemplate.InteractZone)
+		
+		hEntity:AddNewModifier(hEntity, shItemDeniableModifier, "modifier_internal_deniable", {})
+		
 		hEntity._tInventoryNetTable =
 		{
 			item_list = {},
 			equipped = {},
 		}
 		
-		--[[local hLootList = CLootList(tInteractableTemplate.LootList)
-		if bGenerateLootTable and hInventory and hLootList then
-			local tLootList = hLootList:GenerateLootList()
-			for k,v in pairs(tLootList) do
-				hInventory:AddItemToInventory(v)
-			end
-		end]]
-		
 		return hEntity
 	end
 })
-	
---[[function CContainerEntity:GetInventory()
-	return self._hInventory
-end]]
 
-function CContainerEntity:Interact(hEntity)
+function CContainer:Interact(hEntity)
 	if hEntity:IsRealHero() then
-		CustomGameEventManager:Send_ServerToAllClients("iw_lootable_interact", { entindex = hEntity:entindex(), lootable = self:entindex() })
+		if self:GetLockLevel() > 0 then
+	
+		else
+			CustomGameEventManager:Send_ServerToAllClients("iw_lootable_interact", { entindex = hEntity:entindex(), lootable = self:entindex() })
+		end
 		return true
 	end
 end
 
-function CContainerEntity:InteractFilterInclude(hEntity)
-	return hEntity:IsRealHero()
+function CContainer:InteractFilter(hEntity)
+	return not self:IsAlive()
 end
 
-function CContainerEntity:GetCustomInteractError(hEntity)
+function CContainer:GetCustomInteractError(hEntity)
 end
 
-function CContainerEntity:GenerateLootList(szLootListName)
-	local hLootList = CLootList(szLootListName)
-	if hLootList and self:IsInventoryEmpty() then
-		for k,v in pairs(hLootList:GenerateLootList()) do
-			self:AddItemToInventory(v)
+function CContainer:GenerateItemList()
+	local tContainerTemplate = stContainerData[self:GetUnitName()] or {}
+	if tContainerTemplate and tContainerTemplate.ItemList then
+		for k,v in pairs(tContainerTemplate.ItemList) do
+			local hPrecondition = LoadFunctionSnippet(v.Precondition)
+			if RandomFloat(0.0, 100.0) < v.Chance and (not hPrecondition or hPrecondition()) then
+				local tItemList = stItemListData[v.Name]
+				if tItemList then
+					local nWeightSum = 0
+					for k2,v2 in pairs(tItemList) do
+						nWeightSum = nWeightSum + v2.Weight
+					end
+					local fResult = RandomFloat(0.0, nWeightSum)
+					for k2,v2 in pairs(tItemList) do
+						fResult = fResult - v2.Weight
+						if fResult <= 0 then
+							local hItem = CExtItem(CreateItem(k2, nil, nil))
+							hItem:SetStackCount(RandomInt(v2.Min, v2.Max))
+							self:AddItemToInventory(hItem)
+							break
+						end
+					end
+				end
+			end
 		end
 	end
 end
 
-function CContainerEntity:UpdateInventoryNetTable()
-	--self._tNetTable.item_list = self._tNetTableItemList
-	--self._tNetTable.equipped = self._tNetTableEquippedItems
-	self._tInventoryNetTable.weight = self:GetCurrentWeight()
-	self._tInventoryNetTable.weight_max = self._bIgnoreWeight and -1 or self:GetCarryCapacity()
+function CContainer:UpdateInventoryNetTable()
+	self._tInventoryNetTable.weight = self:GetCarryWeight()
+	self._tInventoryNetTable.weight_max = self:GetCarryCapacity()
 	self._tInventoryNetTable.gold = self:GetGoldAmount()
 	CustomNetTables:SetTableValue("inventory", tostring(self:entindex()), self._tInventoryNetTable)
 end
 
-function CContainerEntity:RefreshInventory(hEntity)
-	if IsValidContainer(hEntity) then
-		if self:GetCurrentWeight() > self:GetCarryCapacity() then
-			--TODO: Create a rooted modifier here for when the entity is overencumbered
-		end
-		local tNetTableItemList = hEntity._tNetTable.item_list
-		for k,v in pairs(hEntity._tEquippedItems) do
-			v:UpdateNetTable()
-			tNetTableItemList[v:entindex()] = true
-		end
-		hEntity:UpdateInventoryNetTable()
+function CContainer:RefreshInventory()
+	local tNetTableItemList = self._tInventoryNetTable.item_list
+	for k,v in pairs(self._tEquippedItems) do
+		v:UpdateItemNetTable()
+		tNetTableItemList[v:entindex()] = true
 	end
+	self:UpdateInventoryNetTable()
 end
 
-function CContainerEntity:OnEntityRefresh()
+function CContainer:OnRefreshEntity()
 	self:RefreshInventory()
 end
 
-function CContainerEntity:GetCurrentWeight()
+function CContainer:GetCarryWeight()
     local fWeight = 0.0
     for k,v in pairs(self._tItemList) do
 		if not k:IsNull() then
@@ -111,58 +124,82 @@ function CContainerEntity:GetCurrentWeight()
     return fWeight
 end
 
-function CContainerEntity:GetCarryCapacity()
-	return (self:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 2.0)
+function CContainer:GetCarryCapacity()
+	return self._fCarryCapacity
 end
 
-function CContainerEntity:GetEquipFlags()
+function CContainer:GetEquipFlags()
 	return self._nEquipFlags
 end
 
-function CContainerEntity:GetEquippedItem(nSlot)
+function CContainer:GetEquippedItem(nSlot)
 	return self._tEquippedItems[nSlot]
 end
 
-function CContainerEntity:GetItemList()
+function CContainer:GetItemList()
 	return self._tItemList
 end
 
-function CContainerEntity:IsInventoryEmpty()
-	return (next(self._tItemList) == nil)
+function CContainer:GetCanCarryAmount(hItem)
+	local nAmount = hItem:GetStackCount()
+	if self:GetCarryCapacity() > 0 and not self:CanExceedCarryCapacity() then
+		nAmount = math.min(nAmount, math.floor((self:GetCarryCapacity() - self:GetCarryWeight())/hItem:GetWeight()))
+	end
+	return nAmount
 end
 
-function CContainerEntity:GetGoldAmount()
+function CContainer:IsInventoryEmpty()
+	for k,v in pairs(self._tItemList) do
+		if not bit32.btest(k:GetItemFlags(), IW_ITEM_FLAG_HIDDEN) then
+			return false
+		end
+	end
+	return true
+end
+
+function CContainer:IsAlive()
+	return false
+end
+
+function CContainer:CanExceedCarryCapacity()
+	return self._bCanExceedCapacity
+end
+
+function CContainer:GetGoldAmount()
 	return self._nGoldAmount
 end
 
-function CContainerEntity:SetGoldAmount(nAmount)
+function CContainer:SetGoldAmount(nAmount)
 	if type(nAmount) == "number" then
 		self._nGoldAmount = nAmount
 		self:UpdateInventoryNetTable()
 	end
 end
 
-function CContainerEntity:AddGoldAmount(nAmount)
+function CContainer:AddGoldAmount(nAmount)
 	if type(nAmount) == "number" then
 		self._nGoldAmount = self._nGoldAmount + nAmount
 		self:UpdateInventoryNetTable()
 	end
 end
 
-function CContainerEntity:SetIgnoreWeight(bValue)
-	if type(bValue) == "boolean" then
-		self._bIgnoreWeight = bValue
-		self:UpdateInventoryNetTable()
+function CContainer:GetLockLevel(nLockLevel)
+	return self._nLockLevel
+end
+
+function CContainer:SetLockLevel(nLockLevel)
+	if type(nLockLevel) == "number" then
+		self._nLockLevel = nLockLevel
 	end
 end
 
-function CContainerEntity:SetEquipFlags(nEquipFlags)
+function CContainer:SetEquipFlags(nEquipFlags)
 	if type(nEquipFlags) == "number" then
 		self._nEquipFlags = nEquipFlags
 	end
 end
 
-function CContainerEntity:EquipItem(hItem, nSlot)
+function CContainer:EquipItem(hItem, nSlot)
 	local nItemSlots = hItem:GetItemSlots()
     if IsValidContainer(self) and IsValidExtendedItem(hItem) and self._tItemList[hItem] then
 		if nSlot and bit32.band(nItemSlots, bit32.lshift(1, nSlot - 1)) == 0 then
@@ -195,10 +232,10 @@ function CContainerEntity:EquipItem(hItem, nSlot)
 					end
 					hItem:ApplyModifiers(IW_MODIFIER_ON_EQUIP, self)
 				end
-				hItem:UpdateNetTable()
+				hItem:UpdateItemNetTable()
 				self._tEquippedItems[i] = hItem
 				self._tInventoryNetTable.item_list[hItem:entindex()] = true
-				self._tNetTable.equipped[i] = hItem:entindex()
+				self._tInventoryNetTable.equipped[i] = hItem:entindex()
 				self:RefreshEntity()
 				self:RefreshLoadout()
 				
@@ -222,7 +259,7 @@ function CContainerEntity:EquipItem(hItem, nSlot)
 	return false
 end
 
-function CContainerEntity:UnequipItem(nSlot)
+function CContainer:UnequipItem(nSlot)
     local hItem = self._tEquippedItems[nSlot]
 	if IsValidExtendedEntity(self) and IsValidExtendedItem(hItem) then
 		if bit32.band(hItem:GetItemFlags(), IW_ITEM_FLAG_CANNOT_UNEQUIP) ~= 0 then return false end
@@ -235,7 +272,7 @@ function CContainerEntity:UnequipItem(nSlot)
 			self:RemoveChild(hItem)
 		end
 		hItem:RemoveModifiers(IW_MODIFIER_ON_EQUIP)
-		hItem:UpdateNetTable()
+		hItem:UpdateItemNetTable()
 		self._tEquippedItems[nSlot] = nil
 		self._tInventoryNetTable.item_list[hItem:entindex()] = true
 		self._tInventoryNetTable.equipped[nSlot] = nil
@@ -260,7 +297,7 @@ function CContainerEntity:UnequipItem(nSlot)
 	return false
 end
 
-function CContainerEntity:DropItem(hItem)
+function CContainer:DropItem(hItem)
     local hInventoryUnit = self._tItemList[hItem]
     if hInventoryUnit then
 		for i = 1,IW_MAX_INVENTORY_SLOT-1 do
@@ -273,20 +310,21 @@ function CContainerEntity:DropItem(hItem)
 			end
 		end
 		
+		hItem:SetOwner(nil)
 		hItem:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, self)
-		local vDropPosition = self._hEntity:GetAbsOrigin() + RandomVector(32.0)
-		hInventoryUnit:DropItemAtPositionImmediate(hItem, GetGroundPosition(vDropPosition, self._hEntity))
+		local vDropPosition = self:GetAbsOrigin() + RandomVector(32.0)
+		hInventoryUnit:DropItemAtPositionImmediate(hItem, GetGroundPosition(vDropPosition, self))
 		local hItemContainer = hItem:GetContainer()
 		if not hItemContainer then
 			CreateItemOnPositionSync(vDropPosition, hItem)
 		end
 		self._tItemList[hItem] = nil
 		self._tInventoryNetTable.item_list[hItem:entindex()] = nil
-		self:RefreshInventory()
+		self:RefreshEntity()
 	end
 end
 
-function CContainerEntity:RemoveItem(hItem)
+function CContainer:RemoveItem(hItem, bSkipRefresh)
     local hInventoryUnit = self._tItemList[hItem]
     if hInventoryUnit then
 		for i = 1,IW_MAX_INVENTORY_SLOT-1 do
@@ -299,23 +337,41 @@ function CContainerEntity:RemoveItem(hItem)
 			end
 		end
 		
+		hItem:SetOwner(nil)
 		hItem:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, self)
 		self._tItemList[hItem] = nil
 		self._tInventoryNetTable.item_list[hItem:entindex()] = nil
-		self:RefreshInventory()
+		if not bSkipRefresh then
+			self:RefreshEntity()
+		end
     end
 end
 
-function CContainerEntity:TransferItem(hItem, hTarget)
+function CContainer:TransferItem(hItem, hTarget)
 	if self._tItemList[hItem] and IsValidContainer(hTarget) and hTarget ~= self then
 		local nItemIndex = hItem:entindex()
 		if hTarget:AddItemToInventory(hItem) then
 			self:RemoveItem(hItem)
 		else
-			hItem:UpdateNetTable()
+			hItem:UpdateItemNetTable()
 			self._tInventoryNetTable.item_list[nItemIndex] = true
-			self:RefreshInventory()
+			self:RefreshEntity()
 		end
+	end
+end
+
+function CContainer:TransferAllItems(hTarget)
+	if IsValidContainer(hTarget) and hTarget ~= self then
+		for k,v in pairs(self._tItemList) do
+			if hTarget:AddItemToInventory(k, true) then
+				self:RemoveItem(k, true)
+			else
+				k:UpdateItemNetTable()
+				self._tInventoryNetTable.item_list[nItemIndex] = true
+			end
+		end
+		self:RefreshEntity()
+		hTarget:RefreshEntity()
 	end
 end
 
@@ -323,15 +379,14 @@ local function MoveItemToDummy(hEntity, hItem)
 	for k,v in pairs(hEntity._tInventoryUnits) do
 		if v < 6 then
 			k:AddItem(hItem)
-			hEntity:DropItemAtPositionImmediate(hItem, hEntity:GetAbsOrigin())
-			local hContainer = hItem:GetContainer()
-			if hContainer then hContainer:RemoveSelf() end
 			return k
 		end
 	end
 	
-	local hInventoryUnit = CreateDummyUnit(hEntity:GetAbsOrigin(), hEntity:GetOwner(), hEntity:GetTeamNumber())
+	local hInventoryUnit = CreateDummyUnit(hEntity:GetAbsOrigin(), hEntity:GetOwner(), hEntity:GetTeamNumber(), true)
 	if hInventoryUnit and IsValidEntity(hInventoryUnit) then
+		hInventoryUnit:SetControllableByPlayer(0, false)
+		hInventoryUnit:SetThink(function() hInventoryUnit:SetAbsOrigin(hEntity:GetAbsOrigin() + Vector(100, 0, 0)) return 0.1 end)
 		hEntity._tInventoryUnits[hInventoryUnit] = 0
 		hItem:SetPurchaser(hInventoryUnit)
 		hInventoryUnit:AddItem(hItem)
@@ -342,16 +397,12 @@ local function MoveItemToDummy(hEntity, hItem)
 	end
 end
 
-function CContainerEntity:AddItemToInventory(hItem)
+function CContainer:AddItemToInventory(hItem, bSkipRefresh)
 	if IsValidExtendedItem(hItem) then
-		local nAmount = hItem:GetStackCount()
-		if not self._bIgnoreWeight and self:GetCarryCapacity() > 0 then
-			nAmount = math.min(nAmount, math.floor((self:GetCarryCapacity() - self:GetCurrentWeight())/hItem:GetWeight()))
-		end
+		local nAmount = self:GetCanCarryAmount(hItem)
 		if nAmount < 1 then
 			return false
 		end
-		
 		if bit32.btest(hItem:GetItemFlags(), IW_ITEM_FLAG_UNIQUE) then
 			for k,v in pairs(self._tItemList) do
 				if v:GetName() == hItem:GetName() then
@@ -365,14 +416,14 @@ function CContainerEntity:AddItemToInventory(hItem)
 				local hInventoryItem = k
 				if hInventoryItem and hInventoryItem:GetName() == hItem:GetName() and hInventoryItem:GetStackCount() < hInventoryItem:GetMaxStacks() then
 					local nOverflow = hInventoryItem:ModifyStackCount(nAmount)
-					hInventoryItem:UpdateNetTable()
+					hInventoryItem:UpdateItemNetTable()
 					self._tInventoryNetTable.item_list[hInventoryItem:entindex()] = true
 					if nOverflow > 0 then
 						nAmount = nOverflow
 						hItem:SetStackCount(nOverflow)
 					else
 						hItem:SetThink(function() hItem:RemoveSelf() end, "ItemStackRemove", 0.03)
-						self:RefreshInventory()
+						self:RefreshEntity()
 						return true
 					end
 				end
@@ -396,54 +447,86 @@ function CContainerEntity:AddItemToInventory(hItem)
 		--[[if self:GetPropertyValue(IW_PROPERTY_SKILL_LORE) >= hItem:GetIdentifyLevel() then
 			hItem:Identify()
 		end]]
-		hItem:ApplyModifiers(IW_MODIFIER_ON_ACQUIRE, self._hEntity)
-		hItem:SetPurchaser(self._hEntity)
+		hItem:ApplyModifiers(IW_MODIFIER_ON_ACQUIRE, self)
+		hItem:SetPurchaser(self)
+		hItem:SetOwner(self)
 		hItem:SetStackCount(nAmount)
-		hItem:UpdateNetTable()
+		hItem:UpdateItemNetTable()
 		self._tItemList[hItem] = hInventoryUnit
-		self._tInventoryNetTable.item_list[hItem:entindex()] = true
 		self._tInventoryUnits[hInventoryUnit] = self._tInventoryUnits[hInventoryUnit] + 1
-		self:EquipItem(hItem)
-		self:RefreshInventory()
+		self._tInventoryNetTable.item_list[hItem:entindex()] = true
+		self:EquipItem(hItem)	--TODO: Make an autoequip option that will change whether or not this gets called
+		if not bSkipRefresh then
+			self:RefreshEntity()
+		end
 		return not bIsNewStack
 	end
 	return false
 end
 
-function IsValidContainer(hEntity)
-    return (IsValidEntity(hEntity) and IsInstanceOf(hEntity, CContainerEntity))
+function CContainer:OnContainerDestroyed()
+	local tItemList = {}
+	for k,v in pairs(self._tItemList) do
+		table.insert(tItemList, k)
+	end
+	
+	for k,v in pairs(tItemList) do
+		if RandomFloat(0.0, 100.0) < 50.0 then	--TODO: Make this not just 50%, but determined based on item or something?
+			self:DropItem(v)
+			local nPosIterations = 0
+			local vTargetPos = self:GetAbsOrigin() + RandomVector(RandomFloat(50, 150))
+			while not GridNav:IsTraversable(vTargetPos) and nPosIterations < 10 do
+				nPosIterations = nPosIterations + 1
+				vTargetPos = self:GetAbsOrigin() + RandomVector(RandomFloat(10, 150))
+			end
+			local fLaunchHeight = RandomFloat(200.0, 300.0)
+			v:LaunchLoot(false, fLaunchHeight, fLaunchHeight * 0.0025, vTargetPos)
+		end
+	end
+	
+	for k,v in pairs(self._tInventoryUnits) do
+		k:RemoveSelf()
+	end
+	
+	self:SetInstanceState(false)
+	CustomNetTables:SetTableValue("inventory", tostring(self:entindex()), nil)
 end
 
-local function OnInventoryEquipEvent(args)
+function IsValidContainer(hEntity)
+    return (IsValidEntity(hEntity) and IsInstanceOf(hEntity, CContainer))
+end
+
+local CContainerEventHandler = {}
+function CContainerEventHandler:OnInventoryEquipEvent(args)
 	local hEntity = EntIndexToHScript(args.entindex)
-	if IsValidContainer(hEntity) and hInventory then
+	if IsValidContainer(hEntity) then
 		if args.itemindex == -1 then
-			hInventory:UnequipItem(args.slot)
+			hEntity:UnequipItem(args.slot)
 		else
 			local hItem = EntIndexToHScript(args.itemindex)
 			if hItem then
 				local nSourceSlot = nil
 				for i = 1,IW_MAX_INVENTORY_SLOT-1 do
-					if hInventory._tEquippedItems[i] == hItem then
+					if hEntity._tEquippedItems[i] == hItem then
 						nSourceSlot = i
 						break
 					end
 				end
 				if nSourceSlot then
-					local hItem2 = hInventory._tEquippedItems[args.slot]
+					local hItem2 = hEntity._tEquippedItems[args.slot]
 					if hItem2 then
-						hInventory:EquipItem(hItem2, nSourceSlot)
+						hEntity:EquipItem(hItem2, nSourceSlot)
 					end
-					hInventory:EquipItem(hItem, args.slot)
+					hEntity:EquipItem(hItem, args.slot)
 				else
-					hInventory:EquipItem(hItem, args.slot)
+					hEntity:EquipItem(hItem, args.slot)
 				end
 			end
 		end
 	end
 end
 
-local function OnInventoryDropEvent(args)
+function CContainerEventHandler:OnInventoryDropEvent(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	if IsValidContainer(hEntity) then
 		local hItem = EntIndexToHScript(args.itemindex)
@@ -451,21 +534,27 @@ local function OnInventoryDropEvent(args)
 	end
 end
 
-local function OnInventoryUseEvent(args)
+function CContainerEventHandler:OnInventoryUseEvent(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	if IsValidContainer(hEntity) then
 		local hItem = EntIndexToHScript(args.itemindex)
 		local hInventoryUnit = hEntity._tItemList[hItem]
 		if hItem and hInventoryUnit then
-			--[[if not hEntity:HasItemInInventory(hItem:GetAbilityName()) then
+			if hEntity._hInventoryItem then
+				hEntity:DropItemAtPositionImmediate(hEntity._hInventoryItem, hEntity:GetAbsOrigin())
+				local hContainer = hEntity._hInventoryItem:GetContainer()
+				if hContainer then hContainer:RemoveSelf() end
+			end
+			if not hEntity:HasItemInInventory(hItem:GetAbilityName()) then
 				hEntity:AddItem(hItem)
-			end]]
+				hEntity._hInventoryItem = hItem
+			end
 			CustomGameEventManager:Send_ServerToAllClients("iw_inventory_use_item", args)
 		end
 	end
 end
 
-local function OnInventoryUseFinishEvent(args)
+function CContainerEventHandler:OnInventoryUseFinishEvent(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	local hOwner = hEntity:GetOwner()
 	if IsValidContainer(hEntity) then
@@ -474,9 +563,6 @@ local function OnInventoryUseFinishEvent(args)
 			--[[if hEntity:GetCurrentAction() == hItem:GetAbilityName() then
 				hEntity:SetThink(function()
 					if not hItem or hItem:IsNull() then return nil
-					elseif bit32.btest(hItem:GetItemFlags(), IW_ITEM_FLAG_QUEST) then
-						--TODO: Throw an error to the client about the item being an undroppable quest item
-						return nil
 					elseif hEntity:GetCurrentAction() ~= hItem:GetAbilityName() then
 						hEntity:DropItemAtPositionImmediate(hItem, hEntity:GetAbsOrigin())
 						local hContainer = hItem:GetContainer()
@@ -495,7 +581,7 @@ local function OnInventoryUseFinishEvent(args)
 	end
 end
 
-local function OnLootableTakeEvent(args)
+function CContainerEventHandler:OnLootableTakeEvent(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	local hLootable = EntIndexToHScript(args.lootable)
 	if IsValidContainer(hEntity) and IsValidContainer(hLootable) then
@@ -504,7 +590,7 @@ local function OnLootableTakeEvent(args)
 	end
 end
 
-local function OnLootableStoreEvent(args)
+function CContainerEventHandler:OnLootableStoreEvent(args)
 	local hEntity = EntIndexToHScript(args.entindex)
 	local hLootable = EntIndexToHScript(args.lootable)
 	if IsValidContainer(hEntity) and IsValidContainer(hLootable) then
@@ -513,11 +599,20 @@ local function OnLootableStoreEvent(args)
 	end
 end
 
-CustomGameEventManager:RegisterListener("iw_inventory_equip_item", OnInventoryEquipEvent)
-CustomGameEventManager:RegisterListener("iw_inventory_drop_item", OnInventoryDropEvent)
-CustomGameEventManager:RegisterListener("iw_inventory_use_item", OnInventoryUseEvent)
-CustomGameEventManager:RegisterListener("iw_inventory_use_finish", OnInventoryUseFinishEvent)
-CustomGameEventManager:RegisterListener("iw_lootable_take_item", OnLootableTakeEvent)
-CustomGameEventManager:RegisterListener("iw_lootable_store_item", OnLootableStoreEvent)
+function CContainerEventHandler:OnLootableTakeAllEvent(args)
+	local hEntity = EntIndexToHScript(args.entindex)
+	local hLootable = EntIndexToHScript(args.lootable)
+	if IsValidContainer(hEntity) and IsValidContainer(hLootable) then
+		hLootable:TransferAllItems(hEntity)
+	end
+end
+
+CustomGameEventManager:RegisterListener("iw_inventory_equip_item", CContainerEventHandler.OnInventoryEquipEvent)
+CustomGameEventManager:RegisterListener("iw_inventory_drop_item", CContainerEventHandler.OnInventoryDropEvent)
+CustomGameEventManager:RegisterListener("iw_inventory_use_item", CContainerEventHandler.OnInventoryUseEvent)
+CustomGameEventManager:RegisterListener("iw_inventory_use_finish", CContainerEventHandler.OnInventoryUseFinishEvent)
+CustomGameEventManager:RegisterListener("iw_lootable_take_item", CContainerEventHandler.OnLootableTakeEvent)
+CustomGameEventManager:RegisterListener("iw_lootable_store_item", CContainerEventHandler.OnLootableStoreEvent)
+CustomGameEventManager:RegisterListener("iw_lootable_take_all", CContainerEventHandler.OnLootableTakeAllEvent)
 
 end

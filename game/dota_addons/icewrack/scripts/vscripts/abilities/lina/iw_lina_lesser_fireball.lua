@@ -1,18 +1,25 @@
 iw_lina_lesser_fireball = class({})
 
-function iw_lina_lesser_fireball:OnAbilityLearned()
-	local hEntity = self:GetCaster()
-	local hAbility = hEntity:AddAbility("iw_lina_lesser_fireball_orb")
-	hAbility:SetLevel(1)
-	hAbility:SetActivated(false)
-	
-	local hAttackSource = self._hAttackSource
-	if not hAttackSource then
-		hAttackSource = CExtItem(CreateItem("iw_lina_lesser_fireball_source", nil, nil))
+function iw_lina_lesser_fireball:OnAbilityLearned(hEntity)
+	if IsValidExtendedEntity(hEntity) then
+		local hAbility = hEntity:FindAbilityByName("iw_lina_lesser_fireball_orb")
+		if not hAbility then
+			hAbility = hEntity:AddAbility("iw_lina_lesser_fireball_orb")
+			hAbility:SetLevel(1)
+		end
+		
+		local hAttackSource = self._hAttackSource
+		if not hAttackSource then
+			hAttackSource = CExtItem(CreateItem("item_iw_lina_lesser_fireball_source", nil, nil))
+			hAttackSource._hParentAbility = self
+			self._hAttackSource = hAttackSource
+		end
+		local hPreviousOwner = hAttackSource:GetOwner()
+		if hPreviousOwner then
+			hPreviousOwner:RemoveFromRefreshList(hAttackSource)
+		end
 		hAttackSource:SetOwner(hEntity)
 		hEntity:AddToRefreshList(hAttackSource)
-		hAttackSource._hParentAbility = self
-		self._hAttackSource = hAttackSource
 	end
 end
 

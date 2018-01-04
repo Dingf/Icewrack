@@ -1,0 +1,12 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/custom_game/ui/iw_window.css" />
+	</styles>
+	
+	<Panel hittest="false" class="WindowTradeHeaderRoot">
+		<Image hittest="false" src="file://{images}/custom_game/ui/iw_window_overlay_trade.tga" />
+		<Label hittest="false" class="WindowHeaderTitle" id="LeftNameTitle" />
+		<Label hittest="false" class="WindowHeaderTitle" id="RightNameTitle" />
+		<Panel hittest="false" class="WindowTradeHeaderCenter" id="TradeHeaderCenter" />
+	</Panel>
+</root>

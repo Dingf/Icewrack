@@ -1,6 +1,6 @@
 "use strict";
 
-var MAX_SKILL_ENTRIES = 13;
+var MAX_SKILL_ENTRIES = 12;
 var MAX_SKILL_LEVEL = 5;
 
 function ConfirmSkillSelection(hContextPanel)

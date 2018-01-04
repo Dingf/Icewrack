@@ -1,0 +1,354 @@
+"IcewrackContainerDefinitions"
+{
+	"prop_iw_snowy_crate_01"
+	{
+		"InteractRange"		"64"
+		"CarryCapacity"		"150"
+		"ItemList"
+		{
+			"1"
+			{
+				"Name"		"drop_list_test"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"2"
+			{
+				"Name"		"drop_list_test2"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"3"
+			{
+				"Name"		"drop_list_test3"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"4"
+			{
+				"Name"		"drop_list_test_axe"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"5"
+			{
+				"Name"		"drop_list_test_shield"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"6"
+			{
+				"Name"		"drop_list_test_dagger"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+		}
+	}
+
+	"prop_iw_snowy_crate_02"
+	{
+		"InteractRange"		"64"
+		"CarryCapacity"		"250"
+		"ItemList"
+		{
+			"1"
+			{
+				"Name"		"drop_list_test"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"2"
+			{
+				"Name"		"drop_list_test2"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"3"
+			{
+				"Name"		"drop_list_test3"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"4"
+			{
+				"Name"		"drop_list_test_axe"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"5"
+			{
+				"Name"		"drop_list_test_shield"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"6"
+			{
+				"Name"		"drop_list_test_dagger"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+		}
+	}
+
+	"prop_iw_snowy_crate_03"
+	{
+		"InteractRange"		"64"
+		"CarryCapacity"		"400"
+		"ItemList"
+		{
+			"1"
+			{
+				"Name"		"drop_list_test"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"2"
+			{
+				"Name"		"drop_list_test2"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"3"
+			{
+				"Name"		"drop_list_test3"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"4"
+			{
+				"Name"		"drop_list_test_axe"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"5"
+			{
+				"Name"		"drop_list_test_shield"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"6"
+			{
+				"Name"		"drop_list_test_dagger"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+		}
+	}
+
+	"prop_iw_snowy_barrel_01"
+	{
+		"InteractRange"		"64"
+		"CarryCapacity"		"100"
+		"ItemList"
+		{
+			"1"
+			{
+				"Name"		"drop_list_test"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"2"
+			{
+				"Name"		"drop_list_test2"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"3"
+			{
+				"Name"		"drop_list_test3"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"4"
+			{
+				"Name"		"drop_list_test_axe"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"5"
+			{
+				"Name"		"drop_list_test_shield"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"6"
+			{
+				"Name"		"drop_list_test_dagger"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+		}
+	}
+
+	"prop_iw_snowy_barrel_02"
+	{
+		"InteractRange"		"64"
+		"CarryCapacity"		"300"
+		"ItemList"
+		{
+			"1"
+			{
+				"Name"		"drop_list_test"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"2"
+			{
+				"Name"		"drop_list_test2"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"3"
+			{
+				"Name"		"drop_list_test3"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"4"
+			{
+				"Name"		"drop_list_test_axe"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"5"
+			{
+				"Name"		"drop_list_test_shield"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"6"
+			{
+				"Name"		"drop_list_test_dagger"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+		}
+	}
+
+	"prop_iw_warlock_crate"
+	{
+		"InteractRange"		"64"
+		"CarryCapacity"		"400"
+		"ItemList"
+		{
+			"1"
+			{
+				"Name"		"drop_list_test"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"2"
+			{
+				"Name"		"drop_list_test2"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"3"
+			{
+				"Name"		"drop_list_test3"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"4"
+			{
+				"Name"		"drop_list_test_axe"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"5"
+			{
+				"Name"		"drop_list_test_shield"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"6"
+			{
+				"Name"		"drop_list_test_dagger"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+		}
+	}
+	
+	
+
+	"prop_iw_test_treasure_chest"
+	{
+		"InteractRange"		"64"
+		"CarryCapacity"		"1000"
+		"ItemList"
+		{
+			"1"
+			{
+				"Name"		"drop_list_test"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"2"
+			{
+				"Name"		"drop_list_test2"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"3"
+			{
+				"Name"		"drop_list_test3"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"4"
+			{
+				"Name"		"drop_list_test_axe"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"5"
+			{
+				"Name"		"drop_list_test_shield"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+
+			"6"
+			{
+				"Name"		"drop_list_test_dagger"
+				"Precondition"	""
+				"Chance"	"100"
+			}
+		}
+	}
+}

@@ -8,7 +8,7 @@
         *Increases Physical damage dealt with attacks by 1%
         *Increases carry capacity by 1
         
-    ENDURANCE (END):
+    CONSTITUTION (CON):
         *Increases HP by 5
         *Increases SP by 1
 		*Increases resistance to physical debuffs by 1
@@ -17,8 +17,9 @@
         *Increases accuracy score by 1
         *Increases dodge score by 1
         *Increases attack speed by 1
+		*Increases movement speed by 1
         
-    CUNNING (CUN):
+    PERCEPTION (PER):
         *Increases critical strike chance by 5%
         *Increases critical strike multiplier by 5%
         *Requirement for some persuasion checks (TODO)
@@ -39,9 +40,9 @@ if IsServer() and not modifier_internal_attribute_bonus then
 stIcewrackAttributeEnum =
 {
 	IW_ATTRIBUTE_STRENGTH = 0,
-	IW_ATTRIBUTE_ENDURANCE = 1,
+	IW_ATTRIBUTE_CONSTITUTION = 1,
 	IW_ATTRIBUTE_AGILITY = 2,
-	IW_ATTRIBUTE_CUNNING = 3,
+	IW_ATTRIBUTE_PERCEPTION = 3,
 	IW_ATTRIBUTE_INTELLIGENCE = 4,
 	IW_ATTRIBUTE_WISDOM = 5,
 }
@@ -50,9 +51,9 @@ for k,v in pairs(stIcewrackAttributeEnum) do _G[k] = v end
 stIcewrackAttributeValues =
 {
 	[IW_ATTRIBUTE_STRENGTH] = true,
-	[IW_ATTRIBUTE_ENDURANCE] = true,
+	[IW_ATTRIBUTE_CONSTITUTION] = true,
 	[IW_ATTRIBUTE_AGILITY] = true,
-	[IW_ATTRIBUTE_CUNNING] = true,
+	[IW_ATTRIBUTE_PERCEPTION] = true,
 	[IW_ATTRIBUTE_INTELLIGENCE] = true,
 	[IW_ATTRIBUTE_WISDOM] = true,
 }
@@ -70,14 +71,14 @@ modifier_internal_attribute_bonus._tDeclareFunctionList =
 function modifier_internal_attribute_bonus:GetModifierExtraHealthBonus(args)
 	local hEntity = self:GetParent()
 	if not hEntity:IsRealHero() then
-		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_ENDURANCE) * 5.0) + (hEntity:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 2.0)
+		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_CONSTITUTION) * 5.0) + (hEntity:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 2.0)
 	end
 end
 
 function modifier_internal_attribute_bonus:GetModifierHealthBonus(args)
 	local hEntity = self:GetParent()
 	if hEntity:IsRealHero() then
-		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_ENDURANCE) * 5.0) + (hEntity:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 2.0)
+		return (hEntity:GetAttributeValue(IW_ATTRIBUTE_CONSTITUTION) * 5.0) + (hEntity:GetAttributeValue(IW_ATTRIBUTE_STRENGTH) * 2.0)
 	end
 end 
 

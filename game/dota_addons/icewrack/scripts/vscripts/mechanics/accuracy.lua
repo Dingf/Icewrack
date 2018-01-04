@@ -24,7 +24,7 @@ function PerformAccuracyCheck(hVictim, hAttacker, fBonusAccuracy)
 	if hVictim:IsMoving() then
 		fDodgeMultiplier = fDodgeMultiplier * 1.5
 	end
-	if hVictim:HasStatusEffect(IW_STATUS_MASK_STUN + IW_STATUS_MASK_ROOT + IW_STATUS_MASK_FREEZE + IW_STATUS_MASK_PETRIFY) then
+	if IsValidExtendedEntity(hVictim) and hVictim:HasStatusEffect(IW_STATUS_MASK_STUN + IW_STATUS_MASK_ROOT + IW_STATUS_MASK_FREEZE + IW_STATUS_MASK_PETRIFY) then
 		fDodgeMultiplier = 0.0
 	end
 	

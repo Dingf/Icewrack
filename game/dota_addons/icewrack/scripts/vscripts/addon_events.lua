@@ -5,6 +5,8 @@ end
 
 require("mechanics/effect_shatter")
 require("mechanics/combat")
+require("mechanics/corpse")
+require("mechanics/revive")
 require("timer")
 require("map_info")
 require("ext_ability")
@@ -12,50 +14,45 @@ require("ext_item")
 require("ext_entity")
 require("ext_modifier")
 require("party")
+
+
 --require("interactable")
 --require("inventory")
 
 --TODO: Remove the trace() statements from the SFS
 
+
 function CIcewrackGameMode:OnEntitySpawned(keys)
     local hEntity = EntIndexToHScript(keys.entindex)
-	if hEntity:GetUnitName() == "npc_dota_hero_base" then
-		hEntity:AddAbility("internal_dummy_buff")
-		hEntity:FindAbilityByName("internal_dummy_buff"):ApplyDataDrivenModifier(hEntity, hEntity, "modifier_internal_dummy_buff", {})
-		hEntity:RemoveAbility("internal_dummy_buff")
-		hEntity:SetDayTimeVisionRange(0.0)
-		hEntity:SetNightTimeVisionRange(0.0)
-		hEntity:SetBaseMoveSpeed(0)
-		hEntity:AddEffects(EF_NODRAW)
+	local szEntityUnitName = hEntity:GetUnitName()
+	if szEntityUnitName == CSaveManager:GetPlayerHeroName() and szEntityUnitName ~= "npc_dota_hero_base" and not IsValidExtendedEntity(hEntity) then
+		CSaveManager:LoadPlayerHero(hEntity, 0)
 	end
-	
-	--TODO: Testing code; Delete me
-	if hEntity:GetUnitName() == "npc_dota_hero_windrunner" then
-		hEntity:SetControllableByPlayer(0, true)
-		FireGameEvent("iw_ability_combo", { name="iw_combo_shatter" })
-		CTimer(3.0, function() 
-		CParty:AddToParty(hEntity) end)
-	end
-	--[[if hEntity:GetUnitName() == "npc_dota_hero_dragon_knight" then
-		hEntity:SetControllableByPlayer(0, true)
-		CTimer(3.0, function() 
-		CParty:AddToParty(hEntity) end)
-	end]]
 end
 
 function CIcewrackGameMode:OnEntityKilled(keys)
     local hEntity = EntIndexToHScript(keys.entindex_killed)
 	if IsValidExtendedEntity(hEntity) then
-		if bit32.band(hEntity:GetUnitFlags(), IW_UNIT_FLAG_NO_CORPSE) == 0 and not TriggerShatter(hEntity) then
-			--TODO: Make it so that on lower difficulties, player heroes can be revived
-			--TODO: Make it so that on higher difficulties, the game ends when the player hero dies
-			if hEntity == GameRules:GetPlayerHero() and GameRules:GetCustomGameDifficulty() >= IW_DIFFICULTY_HARD then
-			else
-				local nDeathFrames = hEntity:GetPropertyValue(IW_PROPERTY_CORPSE_TIME)
-				local fDeathTime = (nDeathFrames - 1)/30.0
-				CTimer(fDeathTime, CExtEntity.CreateCorpse, hEntity);
+		for k,v in pairs(hEntity._tSpellList) do
+			local hAbility = v:FindAbilityByName(k)
+			hAbility:OnOwnerDied()
+		end
+		if not bit32.btest(hEntity:GetUnitFlags(), IW_UNIT_FLAG_NO_CORPSE) and not TriggerShatter(hEntity) then
+			local nDeathFrames = hEntity:GetPropertyValue(IW_PROPERTY_CORPSE_TIME)
+			CTimer((nDeathFrames - 1)/30.0, CreateCorpse, hEntity)
+			if hEntity:IsRealHero() and CParty:IsPartyMember(hEntity) and GameRules:GetCustomGameDifficulty() < IW_DIFFICULTY_UNTHAW then
+				CreateReviveTombstone(hEntity)
 			end
 		end
+	elseif IsInstanceOf(hEntity, CContainer) then
+		hEntity:OnContainerDestroyed()
+	end
+end
+
+function CIcewrackGameMode:OnPlayerConnectFull(keys)
+    local hPlayerInstance = PlayerInstanceFromIndex(keys.index + 1)
+	if hPlayerInstance then
+		--TODO: Either do something here or remove me
 	end
 end
 
@@ -63,31 +60,31 @@ function CIcewrackGameMode:OnGameRulesStateChange(keys)
 	local nGameState = GameRules:State_Get()
 	if nGameState == DOTA_GAMERULES_STATE_CUSTOM_GAME_SETUP then
 		PlayerResource:SetCustomTeamAssignment(0, DOTA_TEAM_GOODGUYS)
-		GameRules:GetGameModeEntity():SetCustomGameForceHero("npc_dota_hero_base")
-		Tutorial:SelectHero("npc_dota_hero_base")	--A bit of a hack that lets us bypass the hero selection screen while still picking a hero
-		local szHeroName = CSaveManager:GetPlayerHeroName() or "npc_dota_hero_base"
-		local hPlayerHero = CreateHeroForPlayer(szHeroName, PlayerResource:GetPlayer(0))
-		GameRules.GetPlayerHero = function() return hPlayerHero end
+		GameRules:GetGameModeEntity():SetCustomGameForceHero(CSaveManager:GetPlayerHeroName() or "npc_dota_hero_base")
 		CSaveManager:LoadGame()
 		GameRules:FinishCustomGameSetup()
 	elseif nGameState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		CSaveManager._tSaveSpecial.Loading = nil
 		CSaveManager:CreateSaveList(self, keys)
-		CSaveManager:CreateBindList(self, keys)
-		if CSaveManager:GetPlayerHeroName() then
-			PlayerResource:SetOverrideSelectionEntity(0, GameRules:GetPlayerHero())
-			CTimer(1.0, function() PlayerResource:SetOverrideSelectionEntity(0, nil) SendToConsole("dota_select_all_others") end)
-			--TODO: Debug code; remove me
-			CTimer(0.03, function() GameRules:GetPlayerHero():AddExperience(100) return 0.03 end)
-		end
 	end
 end
 
 local function OnMoveToPosition(hEntity, vPosition, bIsManualOrder)
-	if IsValidExtendedEntity(hEntity) then
+	if IsValidExtendedHero(hEntity) and bIsManualOrder then
 		hEntity:SetHoldPosition(false)
 	end
 	return true
+end
+
+local function OnInteractableMoveThink(hEntity, hTarget, nOrderID)
+	if hEntity:GetLastOrderID() == nOrderID then
+		if hTarget:IsInInteractRange(hEntity) then
+			hEntity:Stop()
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
+		else
+			CTimer(0.03, OnInteractableMoveThink, hEntity, hTarget, nOrderID)
+		end
+	end
 end
 
 local function OnInteractableActivate(hEntity, hTarget)
@@ -111,10 +108,6 @@ local function OnInteractableActivate(hEntity, hTarget)
 	if hEntity == hBestEntity then
 		if hTarget:IsInInteractRange(hEntity) then
 			hEntity:Stop()
-			local vPosition = hEntity:GetAbsOrigin()
-			hEntity:SetAbsOrigin(vPosition + (vPosition - hTarget:GetAbsOrigin()):Normalized())
-			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vPosition, false)
-			
 			if not hTarget:OnInteract(hEntity) then
 				local szErrorMessage = hTarget:OnGetCustomInteractError(hEntity)
 				if szErrorMessage then
@@ -123,7 +116,7 @@ local function OnInteractableActivate(hEntity, hTarget)
 			end
 			return IW_INTERACTABLE_RESULT_SUCCESS
 		else
-			CTimer(0.03, CExtEntity.IssueOrder, hEntity, DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false, true)
+			CTimer(0.03, OnInteractableMoveThink, hEntity, hTarget, hEntity:GetLastOrderID())
 			return IW_INTERACTABLE_RESULT_EN_ROUTE
 		end
 	end
@@ -131,17 +124,17 @@ local function OnInteractableActivate(hEntity, hTarget)
 end
 
 local function OnMoveToTarget(hEntity, hTarget, bIsManualOrder)
-	if IsValidExtendedEntity(hEntity) then
+	if IsValidExtendedHero(hEntity) and bIsManualOrder then
 		hEntity:SetHoldPosition(false)
 	end
-	if IsInstanceOf(hTarget, CEntityBase) and OnInteractableActivate(hEntity, hTarget) ~= IW_INTERACTABLE_RESULT_FAIL then
-		return true
+	if IsInstanceOf(hTarget, CEntityBase) and OnInteractableActivate(hEntity, hTarget) == IW_INTERACTABLE_RESULT_SUCCESS then
+		return false
 	end
 	return true
 end
 
 local function OnAttackMove(hEntity, vPosition, bIsManualOrder)
-	if IsValidExtendedEntity(hEntity) then
+	if IsValidExtendedHero(hEntity) and bIsManualOrder then
 		hEntity:SetHoldPosition(false)
 	end
 	return true
@@ -174,23 +167,18 @@ end
 
 local function OnAttackTarget(hEntity, hTarget, bIsManualOrder)
 	if IsValidExtendedEntity(hEntity) then
-		--[[if IsValidInteractable(hTarget) then
-			local nResult = OnInteractableActivate(hEntity, hTarget)
-			if nResult == IW_INTERACTABLE_RESULT_EN_ROUTE then
-				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
-				hEntity:SetHoldPosition(false)
-				return false
-			elseif nResult == IW_INTERACTABLE_RESULT_SUCCESS then
-				hEntity:SetHoldPosition(false)
-				return false
-			end
-		end]]
+		if IsValidExtendedEntity(hTarget) and not hTarget:IsAlive() and CBaseEntity.IsAlive(hTarget) then
+			hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
+			return false
+		end
 		
 		local fAttackRange = hEntity:GetAttackRange()
 		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D() - hEntity:GetHullRadius() - hTarget:GetHullRadius()
 		if not hEntity:IsTargetInLOS(hTarget) or fDistance > fAttackRange then
-			if bIsManualOrder or not hEntity:IsHoldPosition() then
-				hEntity:SetHoldPosition(false)
+			if bIsManualOrder or not hEntity:IsHoldingPosition() then
+				if IsValidExtendedHero(hEntity) then
+					hEntity:SetHoldPosition(false)
+				end
 				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
 				CTimer(0.03, OnAttackTargetVisionThink, hEntity, hTarget, hEntity:GetLastOrderID())
 			else
@@ -214,7 +202,8 @@ local function OnCastPositionVisionThink(hAbility, hEntity, vPosition, nOrderID)
 	if hEntity:GetLastOrderID() == nOrderID then
 		local fCastRange = hAbility:GetCastRange()
 		local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D() - hEntity:GetHullRadius()
-		if hEntity:IsTargetInLOS(vPosition) and fDistance <= fCastRange then
+		local bIgnoreBlockers = bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_IGNORE_LOS_BLOCKERS)
+		if hEntity:IsTargetInLOS(vPosition, bIgnoreBlockers) and fDistance <= fCastRange then
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_POSITION, nil, hAbility, vPosition, false)
 		else
@@ -224,19 +213,20 @@ local function OnCastPositionVisionThink(hAbility, hEntity, vPosition, nOrderID)
 end
 
 local function OnCastPosition(hEntity, hAbility, vPosition, bIsManualOrder)
-	if IsValidExtendedAbility(hAbility) then
-		if not bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_DOES_NOT_REQ_VISION) and vPosition then
-			local fCastRange = hAbility:GetCastRange()
-			local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D() - hEntity:GetHullRadius()
-			if not hEntity:IsTargetInLOS(vPosition) or fDistance > fCastRange then
-				if bIsManualOrder or not hEntity:IsHoldPosition() then
-					hEntity:Stop()
+	if IsValidExtendedAbility(hAbility) and hAbility:CastFilterResultLocation(vPosition) == UF_SUCCESS then
+		local fCastRange = hAbility:GetCastRange()
+		local fDistance = (hEntity:GetAbsOrigin() - vPosition):Length2D() - hEntity:GetHullRadius()
+		local bRequiresVision = not bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_DOES_NOT_REQ_VISION)
+		local bIgnoreBlockers = bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_IGNORE_LOS_BLOCKERS)
+		if (bRequiresVision and not hEntity:IsTargetInLOS(vPosition, bIgnoreBlockers)) or fDistance > fCastRange then
+			if bIsManualOrder or not hEntity:IsHoldingPosition() then
+				if IsValidExtendedHero(hEntity) then
 					hEntity:SetHoldPosition(false)
-					hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vPosition, false)
-					CTimer(0.03, OnCastPositionVisionThink, hAbility, hEntity, vPosition, hEntity:GetLastOrderID())
 				end
-				return false
+				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_POSITION, nil, nil, vPosition, false)
+				CTimer(0.03, OnCastPositionVisionThink, hAbility, hEntity, vPosition, hEntity:GetLastOrderID())
 			end
+			return false
 		end
 	end
 	return true
@@ -246,7 +236,8 @@ local function OnCastTargetVisionThink(hAbility, hEntity, hTarget, nOrderID)
 	if hEntity:GetLastOrderID() == nOrderID then
 		local fCastRange = hAbility:GetCastRange()
 		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D() - hEntity:GetHullRadius() - hTarget:GetHullRadius()
-		if hEntity:IsTargetInLOS(hTarget) and fDistance <= fCastRange then
+		local bIgnoreBlockers = bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_IGNORE_LOS_BLOCKERS)
+		if hEntity:IsTargetInLOS(hTarget, bIgnoreBlockers) and fDistance <= fCastRange then
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, hAbility, nil, false)
 		else
@@ -265,14 +256,16 @@ end
 
 local function OnCastTarget(hEntity, hAbility, hTarget, bIsManualOrder)
 	local nAbilityBehavior = hAbility:GetBehavior()
-	if IsValidExtendedAbility(hAbility) then
+	if (IsValidExtendedAbility(hAbility) or IsValidExtendedItem(hAbility)) and hAbility:CastFilterResultTarget(hTarget) == UF_SUCCESS then
 		local fCastRange = hAbility:GetCastRange()
 		local fDistance = (hEntity:GetAbsOrigin() - hTarget:GetAbsOrigin()):Length2D() - hEntity:GetHullRadius() - hTarget:GetHullRadius()
-		local bIsTargetVisible = bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_DOES_NOT_REQ_VISION) or hEntity:IsTargetInLOS(hTarget)
-		if not bIsTargetVisible or fDistance > fCastRange then
-			if bIsManualOrder or not hEntity:IsHoldPosition() then
-				hEntity:Stop()
-				hEntity:SetHoldPosition(false)
+		local bRequiresVision = not bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_DOES_NOT_REQ_VISION)
+		local bIgnoreBlockers = bit32.btest(hAbility:GetAbilityFlags(), IW_ABILITY_FLAG_IGNORE_LOS_BLOCKERS)
+		if (bRequiresVision and not hEntity:IsTargetInLOS(hTarget, bIgnoreBlockers)) or fDistance > fCastRange then
+			if bIsManualOrder or not hEntity:IsHoldingPosition() then
+				if IsValidExtendedHero(hEntity) then
+					hEntity:SetHoldPosition(false)
+				end
 				hEntity:IssueOrder(DOTA_UNIT_ORDER_MOVE_TO_TARGET, hTarget, nil, nil, false)
 				CTimer(0.03, OnCastTargetVisionThink, hAbility, hEntity, hTarget, hEntity:GetLastOrderID())
 			end
@@ -299,7 +292,7 @@ end
 
 local function OnHoldPosition(hEntity, bIsManualOrder)
 	if IsValidExtendedEntity(hEntity) and hEntity:IsControllableByAnyPlayer() and bIsManualOrder then
-		hEntity:ToggleHoldPosition()
+		--hEntity:ToggleHoldPosition()
 	end
 	return true
 end
@@ -376,20 +369,25 @@ function CIcewrackGameMode:ItemAddedToInventoryFilter(keys)
 	local hEntity = EntIndexToHScript(keys.inventory_parent_entindex_const)
     local hItem = EntIndexToHScript(keys.item_entindex_const)
 	
-	if string.find(hItem:GetAbilityName(), "internal_") == 1 then
+	if string.find(hItem:GetAbilityName(), "item_internal_") == 1 or hEntity:GetUnitName() == "npc_iw_generic_dummy" then
 		return true
+	elseif hItem:GetAbilityName() == "item_tpscroll" then
+		return false	--TODO: Remove this once Valve stops giving everybody TP scrolls
 	else
 		if not IsValidExtendedItem(hItem) then
 			hItem = CExtItem(hItem)
 		end
-		if IsValidExtendedEntity(hEntity) then
-			if not hEntity:AddItemToInventory(hItem) then
-				CTimer(0.03, CExtEntity.IssueOrder, hEntity, DOTA_UNIT_ORDER_DROP_ITEM, hEntity, hItem, hEntity:GetAbsOrigin(), false)
+		if IsInstanceOf(hEntity, CContainer) then
+			if hEntity._tItemList[hItem] then
+				return true
+			elseif not hEntity:AddItemToInventory(hItem) then
+				CTimer(0.03, CEntityBase.IssueOrder, hEntity, DOTA_UNIT_ORDER_DROP_ITEM, hEntity, hItem, hEntity:GetAbsOrigin(), false)
 				return true
 			end
+			return false
 		end
 	end
-	return false
+	return true
 end
 
 function CIcewrackGameMode:ModifyExperienceFilter(keys)
@@ -403,16 +401,31 @@ function CIcewrackGameMode:OnQuit(keys)
 end
 
 function CIcewrackGameMode:OnPause(keys)
-	if GameRules.OverridePauseLevel then
-		GameRules.OverridePauseLevel = GameRules.OverridePauseLevel + 1
-		PauseGame(true)
+	if not GameRules:GetMapInfo():IsOverride() and keys.PlayerID == 0 then
+		GameRules.PauseState = (not GameRules.PauseState)
+		PauseGame(GameRules.PauseState or (GameRules.OverridePauseLevel > 0))
 	end
 end
 
-function CIcewrackGameMode:OnUnpause(keys)
-	if GameRules.OverridePauseLevel then
-		GameRules.OverridePauseLevel = GameRules.OverridePauseLevel - 1
-		PauseGame(GameRules.PauseState or (GameRules.OverridePauseLevel > 0))
+function CIcewrackGameMode:OnPauseOverride(keys)
+	GameRules.OverridePauseLevel = GameRules.OverridePauseLevel + 1
+	PauseGame(true)
+end
+
+function CIcewrackGameMode:OnUnpauseOverride(keys)
+	GameRules.OverridePauseLevel = GameRules.OverridePauseLevel - 1
+	PauseGame(GameRules.PauseState or (GameRules.OverridePauseLevel > 0))
+end
+
+function CIcewrackGameMode:OnQuicksave(keys)
+	if not GameRules:GetMapInfo():IsOverride() and keys.PlayerID == 0 then
+		FireGameEventLocal("iw_save_game", { mode = IW_SAVE_MODE_QUICKSAVE })
+	end
+end
+
+function CIcewrackGameMode:OnQuickload(keys)
+	if not GameRules:GetMapInfo():IsOverride() and keys.PlayerID == 0 then
+		CSaveManager:LoadSave(CSaveManager._tSaveSpecial.Quicksave)
 	end
 end
 

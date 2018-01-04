@@ -89,12 +89,9 @@
 	margin-left: 0px;
 }
 
-.CharacterAttributePointsIconLabel
+.CharacterAttributeContainer
 {
-	position: 772px 184px 0px;
-}
-
-.CharacterSkillPointsIconLabel
-{
-	position: 884px 184px 0px;
+	x: 884px;
+	y: 154px;
+	flow-children: down;
 }

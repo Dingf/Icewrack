@@ -21,6 +21,10 @@
 		<Panel hittest="false" class="ItemListContent" id="ListContent">
 			<Panel hittest="false" class="ItemListSorter" id="ListSorter">
 				<Panel hittest="false" class="ItemListSorterSpacer" />
+				<Panel class="ItemListSorterRightCategory" id="TypeCategory" onactivate="OnItemListTypeSort()">
+					<Label class="ItemListSorterLabel" text="#iw_ui_item_list_type"/>
+					<Image class="ItemListSorterDirectionIcon" id="SortDirection" src="file://{images}/custom_game/ui/iw_arrow_small.tga"/>
+				</Panel>
 				<Panel class="ItemListSorterRightCategory" id="NameCategory" onactivate="OnItemListNameSort()">
 					<Label class="ItemListSorterLabel" text="#iw_ui_item_list_name"/>
 					<Image class="ItemListSorterDirectionIcon" id="SortDirection" src="file://{images}/custom_game/ui/iw_arrow_small.tga"/>

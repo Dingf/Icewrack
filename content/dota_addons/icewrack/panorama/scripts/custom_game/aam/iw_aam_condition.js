@@ -1,7 +1,6 @@
 "use strict";
 
-var tAAMConditionOffsets = [0, 0, 3, 6, 9, 12, 14, 17, 18, 19, 20, 22, 27, 28, 29, 30, 31, 32, 33, 34, 37, 45, 48, 49, 50, 63, 64];
-
+var tAAMConditionOffsets = [0, 0, 3, 6, 9, 12, 14, 17, 18, 19, 20, 22, 27, 28, 29, 32, 33, 34, 35, 38, 46, 49, 50, 63, 64];
 var tAAMConditionSpecialActions = 
 [
 	"aam_do_nothing",
@@ -19,7 +18,7 @@ function UpdateAAMConditionState(hContextPanel)
 {
 	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
 	var hConditionMenu = hContextPanel.FindChildTraverse("ConditionMenu");
-	var tEntityBindList = CustomNetTables.GetTableValue("spellbook", nEntityIndex).Binds;
+	var tEntityBindList = CustomNetTables.GetTableValue("binds", nEntityIndex);
 	var szActionName = hConditionMenu._mValue;
 	DispatchCustomEvent(hConditionMenu, "DropdownMenuClear");
 	for (var i = 0; i < tAAMConditionSpecialActions.length; i++)
@@ -29,9 +28,9 @@ function UpdateAAMConditionState(hContextPanel)
 	for (var k in tEntityBindList)
 	{
 		var nAbilityIndex = parseInt(tEntityBindList[k]);
-		var szAbilityName = Abilities.GetAbilityName(nAbilityIndex);
-		if (!Abilities.IsPassive(nAbilityIndex))
+		if ((nAbilityIndex !== -1) && !Abilities.IsPassive(nAbilityIndex))
 		{
+			var szAbilityName = Abilities.GetAbilityName(nAbilityIndex);
 			AddDropdownMenuItem(hConditionMenu, $.Localize("DOTA_Tooltip_Ability_" + szAbilityName), szAbilityName);
 		}
 	}
@@ -171,8 +170,18 @@ function OnAAMConditionItemDelete(hContextPanel, tArgs)
 function OnAAMConditionSetAbility(hContextPanel, tArgs)
 {
 	var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
+	var nAbilityIndex = -1;
 	var tEntitySpellbookInfo = CustomNetTables.GetTableValue("spellbook", String(nEntityIndex));
-	var nAbilityIndex = tEntitySpellbookInfo ? tEntitySpellbookInfo.SpellList[tArgs.name] : -1;
+	for (var k in tEntitySpellbookInfo)
+	{
+		var nSpellbookAbilityIndex = parseInt(k);
+		if (Abilities.GetAbilityName(nSpellbookAbilityIndex) === tArgs.name)
+		{
+			nAbilityIndex = nSpellbookAbilityIndex;
+			break;
+		}
+	}
+	
 	hContextPanel.SetAttributeInt("abilityindex", nAbilityIndex);
 	hContextPanel.SetAttributeString("ability", tArgs.name);
 	
@@ -183,7 +192,7 @@ function OnAAMConditionSetAbility(hContextPanel, tArgs)
 	}
 	else
 	{
-		hConditionIcon.SetImage("file://{images}/spellicons/" + szActionName + ".png");
+		hConditionIcon.SetImage("file://{images}/spellicons/" + tArgs.name + ".png");
 	}
 	return true;
 }
@@ -208,7 +217,7 @@ function OnAAMConditionSetValue(hContextPanel, tArgs)
 		var nInverse = (nInverseMask >>> (i - 1)) & 0x01;
 		
 		var nValue = (nOffset < 32) ? ((nFlags1 >>> nOffset) & ~(0xFFFFFFFF << nSize)) : ((nFlags2 >>> (nOffset - 32)) & ~(0xFFFFFFFF << nSize));
-		if (i === 24)
+		if (i === 22)
 		{
 			var hConditionBody = hContextPanel.FindChildTraverse("ConditionBody");
 			var hDropdown0 = hConditionBody.FindChild("DropdownMenu0");
@@ -327,8 +336,8 @@ function CreateAAMCondition(hParent, szName, nEntityIndex, bIsLocal)
 	var hAddDropdownMenu = CreateDropdownMenu(hPanel.FindChildTraverse("AddCondition"), "AddDropdownMenu");
 	for (var i = 1; i < tAAMConditionOffsets.length - 1; i++)
 	{
-		//Offset 24 is the targeting params in the main condition body; don't create a dropdown for it
-		if (i !== 24)
+		//Offset 22 is the targeting params in the main condition body; don't create a dropdown for it
+		if (i !== 22)
 		{
 			var szLocalizedText = $.Localize("#iw_ui_aam_condition" + i);
 			szLocalizedText = szLocalizedText.replace(/\{[^}]\}/g, "");

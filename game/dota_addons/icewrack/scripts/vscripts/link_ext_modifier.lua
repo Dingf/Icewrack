@@ -50,8 +50,8 @@ function CExtModifierLinker:RemoveOnDeath()
 	return not self._bIsPermanent
 end
 
-function CExtModifierLinker:GetStatusEffect()
-	return self._nStatusEffect
+function CExtModifierLinker:GetStatusMask()
+	return self._nStatusMask
 end
 
 function CExtModifierLinker:GetModifierClass()
@@ -199,7 +199,7 @@ function CExtModifierLinker:BuildTextureArgsString()
 	table.insert(tModifierStringBuilder, self:GetModifierClass())
 	table.insert(tModifierStringBuilder, " ")
 	table.insert(tModifierStringBuilder, "status_effect=")
-	table.insert(tModifierStringBuilder, self:GetStatusEffect())
+	table.insert(tModifierStringBuilder, self:GetStatusMask())
 	table.insert(tModifierStringBuilder, " ")
 	table.insert(tModifierStringBuilder, "texture=")
 	table.insert(tModifierStringBuilder, self._szTextureName)
@@ -227,9 +227,8 @@ function CExtModifierLinker:OnModifierCreatedDefault(keys)
 			end
 		end
 		self:BuildTextureArgsString()
-	elseif IsServer() and IsInstanceOf(hTarget, CEntityBase) then
+	else
 		self = CExtModifier(CInstance(self))
-		hTarget:AddChild(self)
 		self:RecordModifierArgs(keys)
 		local nModifierID = self:RetrieveModifierID()
 		local szModifierName = self:GetName()
@@ -258,6 +257,7 @@ function CExtModifierLinker:OnModifierCreatedDefault(keys)
 		self:CullModifierStacks()
 		
 		if IsValidExtendedEntity(hTarget) then
+			hTarget:AddChild(self)
 			if self:IsDebuff() then
 				local hCaster = self:GetCaster()
 				hCaster:SetAttacking(hTarget)
@@ -641,7 +641,7 @@ for k,v in pairs(stExtModifierData) do
 		hLuaModifier._nModifierID = 0
 		hLuaModifier._tModifierNetTable = {}
 		
-		hLuaModifier._nStatusEffect = stIcewrackStatusEffectEnum[tLinkLuaModifierTemplate.StatusEffect] or IW_STATUS_EFFECT_NONE
+		hLuaModifier._nStatusMask = GetBitshiftedFlagValue(tLinkLuaModifierTemplate.StatusEffect, stIcewrackStatusEffectEnum)
 		hLuaModifier._nModifierClass = stExtModifierClassEnum[tLinkLuaModifierTemplate.ModifierClass] or IW_MODIFIER_CLASS_NONE
 		
 		hLuaModifier._bIsDebuff = (tLinkLuaModifierTemplate.IsDebuff == 1)

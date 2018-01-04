@@ -31,18 +31,18 @@ function modifier_status_decay:OnHealingReceived(args)
 	end
 end
 
-else
+end
 
 function ApplyDecay(hTarget, hEntity, fDamagePercentHP)
 	if fDamagePercentHP > 0.1 then
 		local fBaseDuration = 10.0 * fDamagePercentHP
-		local nUnitClass = hTarget:GetUnitClass()
-		local fHealthPercent = -25.0
+		local nUnitClass = IsValidExtendedEntity(hTarget) and hTarget:GetUnitClass() or IW_UNIT_CLASS_NORMAL
+		local fDamageEffectiveness = 50.0
 		local fHealEffectiveness = -100.0
 		if nUnitClass == IW_UNIT_CLASS_ELITE then
-			fHealthPercent = -10.0
+			fDamageEffectiveness = 25.0
 		elseif nUnitClass == IW_UNIT_CLASS_BOSS or nUnitClass == IW_UNIT_CLASS_ACT_BOSS then
-			fHealthPercent = -5.0
+			fDamageEffectiveness = 10.0
 		end
 		local hModifier = hTarget:FindModifierByName("modifier_status_decay")
 		if hModifier then
@@ -54,13 +54,11 @@ function ApplyDecay(hTarget, hEntity, fDamagePercentHP)
 		else
 			local tModifierArgs =
 			{
-				health_percent = fHealthPercent/100.0,
-				heal_effectiveness = fHealEffectiveness,
+				damage_effect = fDamageEffectiveness,
+				heal_effect = fHealEffectiveness,
 				duration = fBaseDuration,
 			}
 			AddModifier("status_decay", "modifier_status_decay", hTarget, hEntity, tModifierArgs)
 		end
 	end
-end
-
 end

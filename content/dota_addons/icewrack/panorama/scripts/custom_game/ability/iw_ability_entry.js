@@ -43,7 +43,6 @@ function OnAbilityEntryMouseOverThink()
 	}
 	else
 	{
-		$.GetContextPanel()._bTooltipVisible = false;
 		$.DispatchEvent("UIHideCustomLayoutTooltip", "AbilityTooltip");
 	}
 	return 0.03
@@ -51,7 +50,6 @@ function OnAbilityEntryMouseOverThink()
 
 function OnAbilityEntryIconMouseOver()
 {
-	$.GetContextPanel()._bTooltipVisible = false;
 	$.GetContextPanel()._bMouseOver = true;
 	OnAbilityEntryMouseOverThink();
 }
@@ -134,10 +132,10 @@ function CreateAbilityEntry(hParent, szName, nEntityIndex, nAbilityIndex)
 	hPanel.SetAttributeInt("abilityindex", nAbilityIndex);
 	
 	var nAbilitySkillMask = 0;
-	var tAbilityTemplate = CustomNetTables.GetTableValue("abilities", szAbilityName);
-	if (tAbilityTemplate)
+	var tAbilityData = CustomNetTables.GetTableValue("abilities", nAbilityIndex);
+	if (tAbilityData)
 	{
-		var nSkillMask = tAbilityTemplate.skill;
+		var nSkillMask = tAbilityData.skill;
 		var tAbilitySkillValues = [];
 		for (var i = 0; i < 4; i++)
 		{

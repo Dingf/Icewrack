@@ -20,7 +20,7 @@ require("timer")
 require("mechanics/modifier_triggers")
 require("mechanics/skills")
 require("instance")
-require("expression")
+require("entity_base")
 end
 
 stExtAbilityFlagEnum =
@@ -36,15 +36,17 @@ stExtAbilityFlagEnum =
 	IW_ABILITY_FLAG_ONLY_CAST_IN_COMBAT = 256,
 	IW_ABILITY_FLAG_ONLY_CAST_NO_COMBAT = 512,
 	IW_ABILITY_FLAG_DOES_NOT_REQ_VISION = 1024,
-	IW_ABILITY_FLAG_CAN_CAST_IN_TOWN    = 2048,		--TODO: Implement me
-	IW_ABILITY_FLAG_USES_ATTACK_STAMINA = 4096,
+	IW_ABILITY_FLAG_IGNORE_LOS_BLOCKERS = 2048,
+	IW_ABILITY_FLAG_CAN_CAST_IN_TOWN    = 4096,		--TODO: Implement me
 	IW_ABILITY_FLAG_USES_ATTACK_RANGE   = 8192,
 	IW_ABILITY_FLAG_AUTOCAST_ATTACK     = 16384,
-	IW_ABILITY_FLAG_KEYWORD_SPELL       = 32768,
-	IW_ABILITY_FLAG_KEYWORD_ATTACK      = 65536,
-	IW_ABILITY_FLAG_KEYWORD_SINGLE      = 131072,
-	IW_ABILITY_FLAG_KEYWORD_AOE         = 262144,
-	IW_ABILITY_FLAG_KEYWORD_WEATHER     = 524288,
+	IW_ABILITY_FLAG_TOGGLE_OFF_ON_DEATH = 32768,
+	IW_ABILITY_FLAG_KEYWORD_SPELL       = 65536,
+	IW_ABILITY_FLAG_KEYWORD_ATTACK      = 131072,
+	IW_ABILITY_FLAG_KEYWORD_SINGLE      = 262144,
+	IW_ABILITY_FLAG_KEYWORD_AOE         = 524288,
+	IW_ABILITY_FLAG_KEYWORD_WEATHER     = 1048576,
+	IW_ABILITY_FLAG_KEYWORD_AURA        = 2097152,
 }
 
 for k,v in pairs(stExtAbilityFlagEnum) do _G[k] = v end
@@ -164,7 +166,8 @@ function CExtAbilityLinker:GetCastRange(vLocation, hTarget)
 		end
 	end
 	
-	if bit32.btest(self._nAbilityFlags, IW_ABILITY_FLAG_USES_ATTACK_RANGE) then
+	local nAbilityFlags = self:GetAbilityFlags()
+	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_USES_ATTACK_RANGE) then
 		return hEntity:GetAttackRange()
 	end
 	return self.BaseClass.GetCastRange(self, vLocation, hTarget)
@@ -192,18 +195,7 @@ function CExtAbilityLinker:GetCooldown(nLevel)
 	return self.BaseClass.GetCooldown(self, nLevel)
 end
 
-function CExtAbilityLinker:GetHealthCostMultiplier()
-	local hEntity = self:GetCaster()
-	local fFatigueMultiplier = 0.0
-	if IsServer() then
-		fFatigueMultiplier = hEntity and hEntity:GetFatigueMultiplier() or 1.0
-	else
-		fFatigueMultiplier = hEntity and hEntity:GetBaseMagicalResistanceValue() or 1.0
-	end
-	return (self._fHealthCostMultiplier or 1.0) * fFatigueMultiplier
-end
-
-function CExtAbilityLinker:GetHealthCost(nLevel)
+function CExtAbilityLinker:GetBaseHealthCost(nLevel)
 	local hEntity = self:GetCaster()
 	local fHealthCost = 0
 	local tBaseFunctions = self._tBaseFunctions
@@ -214,28 +206,23 @@ function CExtAbilityLinker:GetHealthCost(nLevel)
 		if not nLevel or nLevel == -1 then nLevel = self:GetLevel() end
 		fHealthCost = tHealthCosts[nLevel] or 0
 	end
-	
-	if IsServer() then
-		fHealthCost = fHealthCost * (hEntity and hEntity:GetFatigueMultiplier() or 1.0)
-	else
-		fHealthCost = fHealthCost * (hEntity and hEntity:GetBaseMagicalResistanceValue() or 1.0)
+	local nAbilityFlags = self:GetAbilityFlags()
+	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_KEYWORD_ATTACK) then
+		local hAttackSource = hEntity:GetCurrentAttackSource()
+		if not hAttackSource then
+			hAttackSource = hEntity
+		end
+		fHealthCost = fHealthCost + hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_HP_FLAT)
 	end
-	fHealthCost = fHealthCost * self:GetHealthCostMultiplier()
-	return floor(fHealthCost)
+	return fHealthCost
 end
 
-function CExtAbilityLinker:GetManaCostMultiplier()
+function CExtAbilityLinker:GetHealthCost(nLevel)
 	local hEntity = self:GetCaster()
-	local fFatigueMultiplier = 0.0
-	if IsServer() then
-		fFatigueMultiplier = hEntity and hEntity:GetFatigueMultiplier() or 1.0
-	else
-		fFatigueMultiplier = hEntity and hEntity:GetBaseMagicalResistanceValue() or 1.0
-	end
-	return (self._fManaCostMultiplier or 1.0) * fFatigueMultiplier
+	return floor(self:GetBaseHealthCost(nLevel) * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_HP_COST_PCT)/100.0))
 end
 
-function CExtAbilityLinker:GetManaCost(nLevel)
+function CExtAbilityLinker:GetBaseManaCost(nLevel)
 	local hEntity = self:GetCaster()
 	local fManaCost = 0
 	local tBaseFunctions = self._tBaseFunctions
@@ -246,8 +233,20 @@ function CExtAbilityLinker:GetManaCost(nLevel)
 		if not nLevel or nLevel == -1 then nLevel = self:GetLevel() end
 		fManaCost = tManaCosts[nLevel] or 0
 	end
-	fManaCost = fManaCost * self:GetManaCostMultiplier()
-	return floor(fManaCost)
+	local nAbilityFlags = self:GetAbilityFlags()
+	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_KEYWORD_ATTACK) then
+		local hAttackSource = hEntity:GetCurrentAttackSource()
+		if not hAttackSource then
+			hAttackSource = hEntity
+		end
+		fManaCost = fManaCost + hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_MP_FLAT)
+	end
+	return fManaCost
+end
+
+function CExtAbilityLinker:GetManaCost(nLevel)
+	local hEntity = self:GetCaster()
+	return floor(self:GetBaseManaCost(nLevel) * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_MP_COST_PCT)/100.0))
 end
 
 function CExtAbilityLinker:GetManaUpkeep()
@@ -257,17 +256,11 @@ function CExtAbilityLinker:GetManaUpkeep()
 	if tBaseFunctions and tBaseFunctions.GetManaUpkeep then
 		fManaUpkeep = tBaseFunctions.GetManaUpkeep(self)
 	end
-	fManaUpkeep = fManaUpkeep * self:GetManaCostMultiplier()
+	fManaUpkeep = fManaUpkeep * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_MP_COST_PCT)/100.0)
 	return fManaUpkeep
 end
 
-function CExtAbilityLinker:GetStaminaCostMultiplier()
-	local hEntity = self:GetCaster()
-	local fFatigueMultiplier = hEntity and hEntity:GetFatigueMultiplier() or 1.0
-	return (self._fStaminaCostMultiplier or 1.0) * fFatigueMultiplier
-end
-
-function CExtAbilityLinker:GetStaminaCost(nLevel)
+function CExtAbilityLinker:GetBaseStaminaCost(nLevel)
 	local hEntity = self:GetCaster()
 	local fStaminaCost = 0
 	local tBaseFunctions = self._tBaseFunctions
@@ -278,29 +271,31 @@ function CExtAbilityLinker:GetStaminaCost(nLevel)
 		if not nLevel or nLevel == -1 then nLevel = self:GetLevel() end
 		fStaminaCost = tStaminaCosts[nLevel] or 0
 	end
-	
 	local nAbilityFlags = self:GetAbilityFlags()
-	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_USES_ATTACK_STAMINA) then
+	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_KEYWORD_ATTACK) then
 		local hAttackSource = hEntity:GetCurrentAttackSource()
 		if not hAttackSource then
 			hAttackSource = hEntity
 		end
 		fStaminaCost = fStaminaCost + hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT)
 	end
-	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_KEYWORD_ATTACK) then
-		fStaminaCost = fStaminaCost * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_ATTACK_SP_PCT)/100.0)
-	end
-	fStaminaCost = fStaminaCost * self:GetStaminaCostMultiplier()
-	return floor(fStaminaCost)
+	return fStaminaCost
+end
+
+function CExtAbilityLinker:GetStaminaCost(nLevel)
+	local hEntity = self:GetCaster()
+	return floor(self:GetBaseStaminaCost(nLevel) * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_SP_COST_PCT)/100.0))
 end
 
 function CExtAbilityLinker:GetStaminaUpkeep()
+	local hEntity = self:GetCaster()
 	local fStaminaUpkeep = self._fStaminaUpkeep or 0
 	local tBaseFunctions = self._tBaseFunctions
+	local nAbilityFlags = self:GetAbilityFlags()
 	if tBaseFunctions and tBaseFunctions.GetStaminaUpkeep then
 		fStaminaUpkeep = tBaseFunctions.GetStaminaUpkeep(self)
 	end
-	fStaminaUpkeep = fStaminaUpkeep * self:GetStaminaCostMultiplier()
+	fStaminaUpkeep = fStaminaUpkeep * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_SP_COST_PCT)/100.0)
 	return fStaminaUpkeep
 end
 
@@ -431,10 +426,6 @@ end
 function CExtAbilityLinker:EvaluatePrereqs(vLocation, hTarget)
 	if IsServer() and IsInstanceOf(self, CDOTA_Ability_Lua) then
 		local hEntity = self:GetCaster()
-		for k,v in pairs(self._tPrereqExpressions) do
-			if not v:EvaluateExpression(hEntity) then return false end
-		end
-		
 		for k,v in pairs(self._tPrereqCasterModifiers) do
 			if not hEntity:HasModifier(v) then return false end
 		end
@@ -578,7 +569,8 @@ function CExtAbilityLinker:GetCustomCastErrorLocation(vLocation)
 end
 
 function CExtAbilityLinker:CastFilterResultTarget(hTarget)
-	local nResult = UnitFilter(hTarget, self:GetAbilityTargetTeam(), self:GetAbilityTargetType(), self:GetAbilityTargetFlags(), self:GetCaster():GetTeamNumber())
+	local hCaster = self:GetCaster()
+	local nResult = ExtUnitFilter(hCaster, hTarget, self:GetAbilityTargetTeam(), self:GetAbilityTargetType(), self:GetAbilityTargetFlags())
 	if nResult ~= UF_SUCCESS then
 		return nResult
 	end
@@ -586,39 +578,22 @@ function CExtAbilityLinker:CastFilterResultTarget(hTarget)
 end
 
 function CExtAbilityLinker:GetCustomCastErrorTarget(hTarget)
-	local nResult = UnitFilter(hTarget, self:GetAbilityTargetTeam(), self:GetAbilityTargetType(), self:GetAbilityTargetFlags(), self:GetCaster():GetTeamNumber())
+	local hCaster = self:GetCaster()
+	local nResult = ExtUnitFilter(hCaster, hTarget, self:GetAbilityTargetTeam(), self:GetAbilityTargetType(), self:GetAbilityTargetFlags())
 	if nResult ~= UF_SUCCESS then
 		return stUnitFilterCastErrors[nResult]
 	end
 	return self:GetCustomCastError(nil, hTarget)
 end
 
-function CExtAbilityLinker:OnAbilityLearned()
+function CExtAbilityLinker:OnAbilityLearned(hEntity)
+	self:RemoveModifiers(IW_MODIFIER_ON_LEARN)
+	self:ApplyModifiers(IW_MODIFIER_ON_LEARN, hEntity)
 	local tBaseFunctions = self._tBaseFunctions
 	if tBaseFunctions then
 		local hBaseFunction = tBaseFunctions.OnAbilityLearned
 		if hBaseFunction then
-			return hBaseFunction(self)
-		end
-	end
-end
-
-function CExtAbilityLinker:OnAbilityBind()
-	local tBaseFunctions = self._tBaseFunctions
-	if tBaseFunctions then
-		local hBaseFunction = tBaseFunctions.OnAbilityBind
-		if hBaseFunction then
-			return hBaseFunction(self)
-		end
-	end
-end
-
-function CExtAbilityLinker:OnAbilityUnbind()
-	local tBaseFunctions = self._tBaseFunctions
-	if tBaseFunctions then
-		local hBaseFunction = tBaseFunctions.OnAbilityUnbind
-		if hBaseFunction then
-			return hBaseFunction(self)
+			return hBaseFunction(self, hEntity)
 		end
 	end
 end
@@ -657,7 +632,7 @@ function CExtAbilityLinker:OnSpellStart()
 	
 	self:ApplyModifiers(IW_MODIFIER_ON_USE)
 	local hCursorTarget = self:GetCursorTarget()
-	if hCursorTarget and hCursorTarget:GetTeamNumber() ~= hEntity:GetTeamNumber() then
+	if hCursorTarget and hEntity:IsTargetEnemy(hCursorTarget) then
 		hEntity:SetAttacking(hCursorTarget)
 	end
 	
@@ -670,6 +645,37 @@ function CExtAbilityLinker:OnSpellStart()
 	end
 	
 	hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_POST_ABILITY_CAST, self)
+end
+
+function CExtAbilityLinker:OnChannelThink(fInterval)
+	local hEntity = self:GetCaster()
+	local fManaUpkeep = self:GetManaUpkeep() * fInterval
+	if fManaUpkeep > 0 then
+		local fEntityMana = hEntity:GetMana()
+		if fManaUpkeep >= fEntityMana then
+			hEntity:SetMana(0)
+			hEntity:Interrupt()
+		else
+			hEntity:SetMana(fEntityMana - fManaUpkeep)
+		end
+	end
+	local fStaminaUpkeep = self:GetStaminaUpkeep() * fInterval
+	if fStaminaUpkeep > 0 then
+		local fEntityStamina = hEntity:GetStamina()
+		if fStaminaUpkeep >= fEntityStamina then
+			hEntity:Interrupt()
+		else
+			hEntity:SpendStamina(fStaminaUpkeep)
+		end
+	end
+	
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.OnChannelThink
+		if hBaseFunction then
+			hBaseFunction(self, fInterval)
+		end
+	end
 end
 
 function CExtAbilityLinker:OnChannelFinish(bInterrupted)
@@ -753,6 +759,71 @@ function CExtAbilityLinker:OnToggleAutoCast()
 	end
 end
 
+local function OnOwnerDiedToggleThink(self)
+	if self:GetToggleState() then
+		self:ToggleAbility()
+		return 0.03
+	elseif self:GetAutoCastState() then
+		self:ToggleAutoCast()
+		return 0.03
+	end
+end
+
+function CExtAbilityLinker:OnOwnerDied()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.OnOwnerDied
+		if hBaseFunction then
+			hBaseFunction(self)
+		end
+	end
+	
+	local nAbilityFlags = self:GetAbilityFlags()
+	if bit32.btest(nAbilityFlags, IW_ABILITY_FLAG_TOGGLE_OFF_ON_DEATH) then
+		CTimer(0.03, OnOwnerDiedToggleThink, self)
+	end
+end
+
+function CExtAbilityLinker:OnRefreshEntity()
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.OnRefreshEntity
+		if hBaseFunction then
+			hBaseFunction(self)
+		end
+	end
+end
+
+function CExtAbilityLinker:OnAbilityBind(hEntity)
+	if self:CheckSkillRequirements(hEntity) then
+		self:ApplyModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
+		local tBaseFunctions = self._tBaseFunctions
+		if tBaseFunctions then
+			local hBaseFunction = tBaseFunctions.OnAbilityBind
+			if hBaseFunction then
+				hBaseFunction(self, hEntity)
+			end
+		end
+	end
+end
+
+function CExtAbilityLinker:OnAbilityUnbind(hEntity)
+	if self:GetToggleState() then
+		self:ToggleAbility()
+	elseif self:GetAutoCastState() then
+		self:ToggleAutoCast()
+	end
+	self:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE, hEntity)
+	
+	local tBaseFunctions = self._tBaseFunctions
+	if tBaseFunctions then
+		local hBaseFunction = tBaseFunctions.OnAbilityUnbind
+		if hBaseFunction then
+			hBaseFunction(self, hEntity)
+		end
+	end
+end
+
 function CExtAbilityLinker:ApplyModifiers(hEntity, nTrigger)
 	--This function should be overriden by the implementing classes (ext_ability, ext_item)
 	LogMessage("Tried to access virtual function CExtAbilityLinker:ApplyModifiers()", LOG_SEVERITY_WARNING)
@@ -785,12 +856,12 @@ function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemp
 	end
 	
 	hExtAbility._tBaseFunctions = {}
-	for k,v in pairs(CExtAbilityLinker) do
-		if hExtAbility[k] and type(hExtAbility[k]) == "function" then
+	for k,v in pairs(hExtAbility) do
+		if type(hExtAbility[k]) == "function" then
 			hExtAbility._tBaseFunctions[k] = hExtAbility[k]
 		end
-		hExtAbility[k] = v
 	end
+	ExtendIndexTable(hExtAbility, CExtAbilityLinker)
 	
 	hExtAbility._tPropertyList = {}
 	for k,v in pairs(tExtTemplate.Properties or {}) do
@@ -817,10 +888,6 @@ function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemp
 	
 	hExtAbility._fManaUpkeep = tExtTemplate.ManaUpkeep or 0
 	hExtAbility._fStaminaUpkeep = tExtTemplate.StaminaUpkeep or 0
-	
-	hExtAbility._fHealthCostMultiplier = type(tExtTemplate.HealthCostMultiplier) == "number" and max(0.0, tExtTemplate.HealthCostMultiplier)
-	hExtAbility._fManaCostMultiplier = type(tExtTemplate.ManaCostMultiplier) == "number" and max(0.0, tExtTemplate.ManaCostMultiplier)
-	hExtAbility._fStaminaCostMultiplier = type(tExtTemplate.StaminaCostMultiplier) == "number" and max(0.0, tExtTemplate.StaminaCostMultiplier)
 	
 	hExtAbility._tAbilityCosts =
 	{
@@ -856,12 +923,6 @@ function CExtAbilityLinker:LinkExtAbility(szAbilityName, tBaseTemplate, tExtTemp
 	
 	if IsServer() then
 		local tExtAbilityPrereqs = tExtTemplate.Prequisites or {}
-			
-		hExtAbility._tPrereqExpressions = {}
-		local tExtAbilityPrereqExpressions = tExtAbilityPrereqs.Expressions or {}
-		for k,v in pairs(tExtAbilityPrereqExpressions) do
-			table.insert(hExtAbility._tPrereqExpressions, CExpression(v))
-		end
 			
 		hExtAbility._tPrereqCasterModifiers = tExtAbilityPrereqs.CasterModifiers or {}
 		hExtAbility._tPrereqTargetModifiers = tExtAbilityPrereqs.TargetModifiers or {}

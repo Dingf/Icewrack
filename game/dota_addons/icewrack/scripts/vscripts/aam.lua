@@ -5,9 +5,9 @@
 if not CAbilityAutomatorModule then
 
 require("mechanics/difficulty")
---require("ext_entity")
-require("aam_special")
+require("mechanics/zone_avoid")
 require("aam_condition")
+require("aam_special")
 
 local stAAMStateEnum =
 {
@@ -18,85 +18,86 @@ local stAAMStateEnum =
 
 for k,v in pairs(stAAMStateEnum) do _G[k] = v end
 
---TODO: Load default AAM data from a kv file
---stAbilityAutomatorData = LoadKeyValues("scripts/npc/npc_units_aam.txt")
-CAbilityAutomatorModule = setmetatable({}, { __call = 
+local stAbilityAutomatorData = LoadKeyValues("scripts/npc/npc_aam.txt")
+CAbilityAutomatorModule = setmetatable(ext_class({}), { __call = 
 	function(self, hEntity)
-		LogAssert(IsValidExtendedEntity(hEntity), LOG_MESSAGE_ASSERT_TYPE, "CExtEntity", type(hEntity))
-		if hEntity._hAutomator and hEntity._hAutomator._bIsAutomator then
-			return hEntity._hAutomator
+		LogAssert(IsInstanceOf(hEntity, CEntityBase), LOG_MESSAGE_ASSERT_TYPE, "CEntityBase")
+		if IsInstanceOf(hEntity, CAbilityAutomatorModule) then
+			LogMessage(LOG_MESSAGE_WARN_EXISTS, LOG_SEVERITY_WARNING, "CAbilityAutomatorModule", hEntity:GetName())
+			return hEntity
 		end
 			
-		local tAbilityAutomatorTemplate = {}--stAbilityAutomatorData[hEntity:GetUnitName()] or {}
+		ExtendIndexTable(hEntity, CAbilityAutomatorModule)
 		
-		self = setmetatable({}, {__index =
-			function(self, k)
-				return CAbilityAutomatorModule[k] or nil
-			end})
+		hEntity._bIsAutomatorEnabled = false
 		
+		hEntity._tAutomatorList = {}
+		hEntity._szActiveAutomatorName = nil
 		
-		self._bIsAutomator = true
-		self._bIsEnabled = false
-		self._hEntity = hEntity
-		self._szName = szName
-		
-		self._nAutomatorSize = 0
-		self._tAutomatorList = {}
-		self._szActiveAutomatorName = nil
-		
-		self._tRememberedUnitList = {}
-		self._tNetTable =
+		hEntity._tRememberedUnitList = {}
+		hEntity._tAutomatorNetTable =
 		{
-			Enabled = self._bIsEnabled,
+			Enabled = self._bIsAutomatorEnabled,
 			State = AAM_STATE_DISABLED,
 			ActiveAutomator = "",
 			AutomatorList = {}
 		}
 		
-		self._tSpecialActions = setmetatable({}, { __index = stAAMSpecialActionTable })
+		hEntity._tSpecialActions = setmetatable({}, { __index = stAAMSpecialActionTable })
 
-		for k,v in pairs(tAbilityAutomatorTemplate) do
-			local szAutomatorName = k
-			for k2,v2 in pairs(v) do
-				if v2.Ability and v2.Flags1 and v2.Flags2 and v2.InverseMask then
-					self:InsertCondition(k, CAutomatorCondition(hENtity, v2.Ability, v2.Flags1, v2.Flags2, v2.InverseMask))
+		local tAbilityAutomatorTemplate = stAbilityAutomatorData[hEntity:GetUnitName()]
+		if tAbilityAutomatorTemplate then
+			for k,v in pairs(tAbilityAutomatorTemplate) do
+				local szAutomatorName = k
+				local tConditionList = {}
+				for k2,v2 in pairs(v) do
+					local nPriority = tonumber(k2)
+					if nPriority then
+						tConditionList[nPriority] = CAutomatorCondition(hEntity, v2.Action, v2.Flags1, v2.Flags2, v2.Inverse)
+					end
+				end
+				for k2,v2 in ipairs(tConditionList) do
+					hEntity:InsertAutomatorCondition(k, v2)
+				end
+				
+				if not hEntity._szActiveAutomatorName then
+					hEntity:SetActiveAutomator(k)
 				end
 			end
-			if not self._szActiveAutomatorName then
-				self:SetActiveAutomator(k)
-			end
+			hEntity:SetAutomatorEnabled(true)
 		end
-		self:UpdateNetTable()
 		
-		hEntity.OnAAMThink = self.OnThink
-		hEntity:SetThink("OnAAMThink", self, "AAMThink", 0.03)
+		hEntity:SetThink("OnAAMThink", hEntity, "AAMThink", 0.03)
 		
-		return self
+		hEntity:UpdateAAMNetTable()
+		
+		return hEntity
 	end})
-	
 
-function CAbilityAutomatorModule:SetEnabled(bState)
+function CAbilityAutomatorModule:SetAutomatorEnabled(bState)
 	if type(bState) == "boolean" then
-		self._bIsEnabled = bState
+		self._bIsAutomatorEnabled = bState
 	end
 end
 
-function CAbilityAutomatorModule:IsEnabled()
-	return self._bIsEnabled
+function CAbilityAutomatorModule:IsAutomatorEnabled()
+	return self._bIsAutomatorEnabled
+end
+	
+function CAbilityAutomatorModule:UpdateAAMNetTable()
+	CustomNetTables:SetTableValue("aam", tostring(self:entindex()), self._tAutomatorNetTable)
 end
 
-function CAbilityAutomatorModule:UpdateNetTable()
-	local hEntity = self._hEntity
-	CustomNetTables:SetTableValue("aam", tostring(hEntity:entindex()), self._tNetTable)
-end
-
-function CAbilityAutomatorModule:OnEntityRefresh()
-	self:UpdateNetTable()
+function CAbilityAutomatorModule:OnRefreshEntity()
+	self:UpdateAAMNetTable()
 end
 
 function CAbilityAutomatorModule:SetActiveAutomator(szAutomatorName)
-	self._szActiveAutomatorName = szAutomatorName
-	self._tNetTable.ActiveAutomator = szAutomatorName or ""
+	if szAutomatorName == nil or type(szAutomatorName) == "string" then
+		self._szActiveAutomatorName = szAutomatorName
+		self._tAutomatorNetTable.ActiveAutomator = szAutomatorName or ""
+		self:UpdateAAMNetTable()
+	end
 end
 
 function CAbilityAutomatorModule:GetActiveAutomatorName()
@@ -110,13 +111,12 @@ function CAbilityAutomatorModule:GetActiveAutomator()
 	return nil
 end
 
-function CAbilityAutomatorModule:InsertCondition(szAutomatorName, hCondition, nPriority)
+function CAbilityAutomatorModule:InsertAutomatorCondition(szAutomatorName, hCondition, nPriority)
 	local hAutomator = nil
 	hAutomator = self._tAutomatorList[szAutomatorName]
 	if not hAutomator then
-		self._nAutomatorSize = self._nAutomatorSize + 1
 		self._tAutomatorList[szAutomatorName] = {}
-		self._tNetTable.AutomatorList[szAutomatorName] = {}
+		self._tAutomatorNetTable.AutomatorList[szAutomatorName] = {}
 		hAutomator = self._tAutomatorList[szAutomatorName]
 		if not self._szActiveAutomatorName then
 			self:SetActiveAutomator(szAutomatorName)
@@ -130,7 +130,7 @@ function CAbilityAutomatorModule:InsertCondition(szAutomatorName, hCondition, nP
 	
 	local hAutomator = self._tAutomatorList[szAutomatorName]
 	table.insert(self._tAutomatorList[szAutomatorName], nPriority, hCondition)
-	table.insert(self._tNetTable.AutomatorList[szAutomatorName], nPriority,
+	table.insert(self._tAutomatorNetTable.AutomatorList[szAutomatorName], nPriority,
 	{
 		Ability = hCondition._szActionName,
 		Flags1  = hCondition._nFlags1,
@@ -141,7 +141,10 @@ end
 
 function CAbilityAutomatorModule:InsertSpecialAction(szActionName, hFunction)
 	if type(szActionName) == "string" and type(hFunction) == "function" then
-		self._tSpecialActions[szActionName] = hFunction
+		local hAbility = self:AddAbility(szActionName)	--This is mostly so that the client will have an ability to reference for tooltips
+		if hAbility then
+			self._tSpecialActions[szActionName] = hFunction
+		end
 	end
 end
 
@@ -155,7 +158,7 @@ function CAbilityAutomatorModule:RemoveConditionByHandle(szAutomatorName, hCondi
 		for k,v in pairs(hAutomator) do
 			if hCondition == v then
 				table.remove(hAutomator, k)
-				table.remove(self._tNetTable.AutomatorList[szAutomatorName], k)
+				table.remove(self._tAutomatorNetTable.AutomatorList[szAutomatorName], k)
 				return hCondition
 			end
 		end
@@ -172,23 +175,22 @@ function CAbilityAutomatorModule:RemoveConditionByPriority(szAutomatorName, nPri
 	if hAutomator then
 		local hCondition = hAutomator[nPriority]
 		table.remove(hAutomator, nPriority)
-		table.remove(self._tNetTable.AutomatorList[szAutomatorName], nPriority)
+		table.remove(self._tAutomatorNetTable.AutomatorList[szAutomatorName], nPriority)
 		return hCondition
 	end
 	return nil
 end
 
 function CAbilityAutomatorModule:CastFilterAbility(szAbilityName, hTarget, vPosition)
-	local hEntity = self._hEntity
 	local hAbility = nil
 	if type(szAbilityName) == "string" then
-		hAbility = hEntity:FindAbilityByName(szAbilityName)
+		hAbility = self:FindAbilityByName(szAbilityName)
 	elseif type(hAbility) == "table" then
 		hAbility = szAbilityName
 	end
 	if hAbility and hAbility:IsFullyCastable() then
-		if hEntity:IsHoldPosition() then
-			local fDistance = (hTarget:GetAbsOrigin() - hEntity:GetAbsOrigin()):Length2D()
+		if self:IsHoldingPosition() then
+			local fDistance = (hTarget:GetAbsOrigin() - self:GetAbsOrigin()):Length2D()
 			if fDistance > hAbility:GetCastRange() then
 				return false
 			end
@@ -199,21 +201,21 @@ function CAbilityAutomatorModule:CastFilterAbility(szAbilityName, hTarget, vPosi
 			if hAbility.CastFilterResult and hAbility:CastFilterResult() ~= UF_SUCCESS then
 				return false
 			end
-			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_NO_TARGET, nil, hAbility, nil, false)
+			self:IssueOrder(DOTA_UNIT_ORDER_CAST_NO_TARGET, nil, hAbility, nil, false)
 			return true
 		elseif bit32.btest(nBehavior, DOTA_ABILITY_BEHAVIOR_UNIT_TARGET) then
-			if UnitFilter(hTarget, hAbility:GetAbilityTargetTeam(), hAbility:GetAbilityTargetType(), hAbility:GetAbilityTargetFlags(), hEntity:GetTeamNumber()) == UF_SUCCESS then
+			if ExtUnitFilter(self, hTarget, hAbility:GetAbilityTargetTeam(), hAbility:GetAbilityTargetType(), hAbility:GetAbilityTargetFlags()) == UF_SUCCESS then
 				if hAbility.CastFilterResultTarget and hAbility:CastFilterResultTarget(hTarget) ~= UF_SUCCESS then
 					return false
 				end
-				hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, hAbility, nil, false)
+				self:IssueOrder(DOTA_UNIT_ORDER_CAST_TARGET, hTarget, hAbility, nil, false)
 				return true
 			end
 		elseif bit32.btest(nBehavior, DOTA_ABILITY_BEHAVIOR_POINT) or bit32.btest(nBehavior, DOTA_ABILITY_BEHAVIOR_AOE) then
 			if hAbility.CastFilterResultLocation and hAbility:CastFilterResultLocation(hTarget:GetAbsOrigin()) ~= UF_SUCCESS then 
 				return false
 			end
-			hEntity:IssueOrder(DOTA_UNIT_ORDER_CAST_POSITION, nil, hAbility, hTarget:GetAbsOrigin(), false)
+			self:IssueOrder(DOTA_UNIT_ORDER_CAST_POSITION, nil, hAbility, hTarget:GetAbsOrigin(), false)
 			return true
 		end
 	end
@@ -221,22 +223,21 @@ function CAbilityAutomatorModule:CastFilterAbility(szAbilityName, hTarget, vPosi
 end
 
 function CAbilityAutomatorModule:OnAAMThink()
-	local hEntity = self._hEntity
 	local hActiveAutomator = self:GetActiveAutomator()
-	if hActiveAutomator and self:IsEnabled() and not GameRules:IsGamePaused() then
-		if hEntity:IsAlive() and hEntity:GetCurrentActiveAbility() == nil and hEntity:AttackReady() then
+	if hActiveAutomator and self:IsAutomatorEnabled() and not GameRules:IsGamePaused() then
+		if self:IsAlive() and self:GetCurrentActiveAbility() == nil and self:AttackReady() then
 			self._nCurrentStep = 1
 			for k,v in pairs(self._tRememberedUnitList) do
 				self._tRememberedUnitList[k] = nil
 			end
 			while hActiveAutomator[self._nCurrentStep] do
 				local hCondition = hActiveAutomator[self._nCurrentStep]
-				local hTarget = hCondition:SelectTarget(hEntity, self._tRememberedUnitList)
+				local hTarget = hCondition:SelectTarget(self, self._tRememberedUnitList)
 				if hTarget then
 					local szActionName = hCondition:GetActionName()
 					local hSpecialAction = self._tSpecialActions[szActionName]
 					if hSpecialAction then
-						if hSpecialAction(hEntity, self, hTarget) then
+						if hSpecialAction(self, self, hTarget, hCondition:GetSpecialValue()) then
 							break
 						end
 					else
@@ -249,27 +250,27 @@ function CAbilityAutomatorModule:OnAAMThink()
 			end
 		end
 	end
-	return hEntity:IsControllableByAnyPlayer() and 0.03 or stAAMNPCThinkRates[GameRules:GetCustomGameDifficulty()]
+	return self:IsControllableByAnyPlayer() and 0.03 or GameRules:GetNPCThinkRate()
 end
 
-function CAbilityAutomatorModule:OnChangeState(args)
+
+local CAutomatorEventHandler = {}
+function CAutomatorEventHandler:OnChangeState(args)
 	local hEntity = EntIndexToHScript(args.entindex)
-	local hAutomatorModule = hEntity:GetAbilityAutomator()
-	if hAutomatorModule then
-		hAutomatorModule:SetEnabled(args.state ~= AAM_STATE_DISABLED)
+	if IsInstanceOf(hEntity, CAbilityAutomatorModule) then
+		hEntity:SetAutomatorEnabled(args.state ~= AAM_STATE_DISABLED)
 		if not args.hidden or args.hidden == 0 then
-			hAutomatorModule._tNetTable.State = args.state
-			hAutomatorModule:UpdateNetTable()
+			hEntity._tAutomatorNetTable.State = args.state
+			hEntity:UpdateAAMNetTable()
 		end
 	end
 end
 
-function CAbilityAutomatorModule:OnUpdate(args)
+function CAutomatorEventHandler:OnUpdate(args)
 	local hEntity = EntIndexToHScript(args.entindex)
-	local hAutomatorModule = hEntity:GetAbilityAutomator()
-	if hAutomatorModule then
-		local szAutomatorName = hAutomatorModule:GetActiveAutomatorName()
-		local hAutomator = hAutomatorModule:GetActiveAutomator()
+	if IsInstanceOf(hEntity, CAbilityAutomatorModule) then
+		local szAutomatorName = hEntity:GetActiveAutomatorName()
+		local hAutomator = hEntity:GetActiveAutomator()
 		if hAutomator and hAutomator[args.priority] then
 			local hCondition = hAutomator[args.priority]
 			hCondition._szActionName = args.ability
@@ -277,93 +278,88 @@ function CAbilityAutomatorModule:OnUpdate(args)
 			hCondition._nFlags2 = args.flags2
 			hCondition._nInverseMask = args.invmask
 			
-			local tConditionData = hAutomatorModule._tNetTable.AutomatorList[szAutomatorName]
+			local tConditionData = hEntity._tAutomatorNetTable.AutomatorList[szAutomatorName]
 			tConditionData[args.priority].Ability = args.ability
 			tConditionData[args.priority].Flags1 = args.flags1
 			tConditionData[args.priority].Flags2 = args.flags2
 			tConditionData[args.priority].InverseMask = args.invmask
-			hAutomatorModule:UpdateNetTable()
+			hEntity:UpdateAAMNetTable()
 		else
-			hAutomatorModule:InsertCondition(szAutomatorName, CAutomatorCondition(hEntity, args.ability, args.flags1, args.flags2, args.invmask))
-			hAutomatorModule:UpdateNetTable()
+			hEntity:InsertAutomatorCondition(szAutomatorName, CAutomatorCondition(hEntity, args.ability, args.flags1, args.flags2, args.invmask))
+			hEntity:UpdateAAMNetTable()
 		end
 	end
 end
 
-function CAbilityAutomatorModule:OnMove(args)
+function CAutomatorEventHandler:OnMove(args)
 	local hEntity = EntIndexToHScript(args.entindex)
-	local hAutomatorModule = hEntity:GetAbilityAutomator()
-	if hAutomatorModule then
-		local szAutomatorName = hAutomatorModule:GetActiveAutomatorName()
-		local hCondition = hAutomatorModule:RemoveConditionByPriority(szAutomatorName, args.old_priority)
+	if IsInstanceOf(hEntity, CAbilityAutomatorModule) then
+		local szAutomatorName = hEntity:GetActiveAutomatorName()
+		local hCondition = hEntity:RemoveConditionByPriority(szAutomatorName, args.old_priority)
 		
 		local hAutomator = nil
 		if szAutomatorName and type(szAutomatorName) == "string" then
-			hAutomator = hAutomatorModule._tAutomatorList[szAutomatorName]
+			hAutomator = hEntity._tAutomatorList[szAutomatorName]
 		end
-		hAutomatorModule:InsertCondition(szAutomatorName, hCondition, args.new_priority)
-		hAutomatorModule:UpdateNetTable()
+		hEntity:InsertAutomatorCondition(szAutomatorName, hCondition, args.new_priority)
+		hEntity:UpdateAAMNetTable()
 	end
 end
 
-function CAbilityAutomatorModule:OnDelete(args)
+function CAutomatorEventHandler:OnDelete(args)
 	local hEntity = EntIndexToHScript(args.entindex)
-	local hAutomatorModule = hEntity:GetAbilityAutomator()
-	if hAutomatorModule then
-		local szAutomatorName = hAutomatorModule._szActiveAutomatorName
-		hAutomatorModule:RemoveConditionByPriority(szAutomatorName, args.priority)
-		hAutomatorModule:UpdateNetTable()
+	if IsInstanceOf(hEntity, CAbilityAutomatorModule) then
+		local szAutomatorName = hEntity._szActiveAutomatorName
+		hEntity:RemoveConditionByPriority(szAutomatorName, args.priority)
+		hEntity:UpdateAAMNetTable()
 	end
 end
 
-function CAbilityAutomatorModule:OnSave(args)
+function CAutomatorEventHandler:OnSave(args)
 	local hEntity = EntIndexToHScript(args.entindex)
-	local hAutomatorModule = hEntity:GetAbilityAutomator()
-	if hAutomatorModule then
-		if hAutomatorModule:GetActiveAutomatorName() ~= args.name then
-			hAutomatorModule._tAutomatorList[args.name] = {}
-			hAutomatorModule._tNetTable.AutomatorList[args.name] = {}
-			local hActiveAutomator = hAutomatorModule:GetActiveAutomator()
+	if IsInstanceOf(hEntity, CAbilityAutomatorModule) then
+		if hEntity:GetActiveAutomatorName() ~= args.name then
+			hEntity._tAutomatorList[args.name] = {}
+			hEntity._tAutomatorNetTable.AutomatorList[args.name] = {}
+			local hActiveAutomator = hEntity:GetActiveAutomator()
 			if hActiveAutomator then
 				for k,v in ipairs(hActiveAutomator) do
-					hAutomatorModule:InsertCondition(args.name, v)
+					hEntity:InsertAutomatorCondition(args.name, v)
 				end
 			end
 		end
-		hAutomatorModule:SetActiveAutomator(args.name)
-		hAutomatorModule:UpdateNetTable()
+		hEntity:SetActiveAutomator(args.name)
+		hEntity:UpdateAAMNetTable()
 	end
 end
 
-function CAbilityAutomatorModule:OnLoad(args)
+function CAutomatorEventHandler:OnLoad(args)
 	local hEntity = EntIndexToHScript(args.entindex)
-	local hAutomatorModule = hEntity:GetAbilityAutomator()
-	if hAutomatorModule then
-		hAutomatorModule:SetActiveAutomator(args.name)
-		hAutomatorModule:UpdateNetTable()
+	if IsInstanceOf(hEntity, CAbilityAutomatorModule) then
+		hEntity:SetActiveAutomator(args.name)
+		self:UpdateAAMNetTable()
 	end
 end
 
-function CAbilityAutomatorModule:OnDeleteAutomator(args)
+function CAutomatorEventHandler:OnDeleteAutomator(args)
 	local hEntity = EntIndexToHScript(args.entindex)
-	local hAutomatorModule = hEntity:GetAbilityAutomator()
-	if hAutomatorModule then
-		hAutomatorModule._tAutomatorList[args.name] = nil
-		hAutomatorModule._tNetTable.AutomatorList[args.name] = nil
-		if hAutomatorModule:GetActiveAutomatorName() == args.name then
-			local szNextAutomator,_ = next(hAutomatorModule._tAutomatorList)
-			hAutomatorModule:SetActiveAutomator(szNextAutomator)
+	if IsInstanceOf(hEntity, CAbilityAutomatorModule) then
+		hEntity._tAutomatorList[args.name] = nil
+		hEntity._tAutomatorNetTable.AutomatorList[args.name] = nil
+		if hEntity:GetActiveAutomatorName() == args.name then
+			local szNextAutomator,_ = next(hEntity._tAutomatorList)
+			hEntity:SetActiveAutomator(szNextAutomator)
 		end
-		hAutomatorModule:UpdateNetTable()
+		self:UpdateAAMNetTable()
 	end
 end
 
-CustomGameEventManager:RegisterListener("iw_aam_change_state", Dynamic_Wrap(CAbilityAutomatorModule, "OnChangeState"))
-CustomGameEventManager:RegisterListener("iw_aam_update_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnUpdate"))
-CustomGameEventManager:RegisterListener("iw_aam_move_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnMove"))
-CustomGameEventManager:RegisterListener("iw_aam_delete_condition", Dynamic_Wrap(CAbilityAutomatorModule, "OnDelete"))
-CustomGameEventManager:RegisterListener("iw_aam_save", Dynamic_Wrap(CAbilityAutomatorModule, "OnSave"))
-CustomGameEventManager:RegisterListener("iw_aam_load", Dynamic_Wrap(CAbilityAutomatorModule, "OnLoad"))
-CustomGameEventManager:RegisterListener("iw_aam_delete_automator", Dynamic_Wrap(CAbilityAutomatorModule, "OnDeleteAutomator"))
+CustomGameEventManager:RegisterListener("iw_aam_change_state", CAutomatorEventHandler.OnChangeState)
+CustomGameEventManager:RegisterListener("iw_aam_update_condition", CAutomatorEventHandler.OnUpdate)
+CustomGameEventManager:RegisterListener("iw_aam_move_condition", CAutomatorEventHandler.OnMove)
+CustomGameEventManager:RegisterListener("iw_aam_delete_condition", CAutomatorEventHandler.OnDelete)
+CustomGameEventManager:RegisterListener("iw_aam_save", CAutomatorEventHandler.OnSave)
+CustomGameEventManager:RegisterListener("iw_aam_load", CAutomatorEventHandler.OnLoad)
+CustomGameEventManager:RegisterListener("iw_aam_delete_automator", CAutomatorEventHandler.OnDeleteAutomator)
 
 end

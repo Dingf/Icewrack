@@ -3,10 +3,9 @@ if IsServer() and not modifier_internal_attack then
 require("ext_entity")
 require("ext_item")
 --require("interactable")
-require("npc")
 require("mechanics/accuracy")
 
-local shMissModifier = CreateItem("internal_miss_debuff", nil, nil)
+local shMissModifier = CreateItem("item_internal_miss_debuff", nil, nil)
 
 modifier_internal_attack = class({})
 function modifier_internal_attack:DeclareFunctions()
@@ -36,7 +35,7 @@ end
 
 function modifier_internal_attack:OnRefresh()
 	local hEntity = self:GetParent()
-	if bit32.band(hEntity:GetUnitFlags(), IW_UNIT_FLAG_REQ_ATTACK_SOURCE) ~= 0 then
+	if bit32.btest(hEntity:GetUnitFlags(), IW_UNIT_FLAG_REQ_ATTACK_SOURCE) then
 		local hAttackSource = hEntity:GetCurrentAttackSource()
 		local bIsDisarmed = hEntity:HasModifier("modifier_internal_attack_disarm")
 		if not hAttackSource and not bIsDisarmed then
@@ -53,15 +52,18 @@ function modifier_internal_attack:OnAttack(keys)
 	local hTarget = keys.target
 	if hEntity == self:GetParent() and IsValidExtendedEntity(hEntity) and IsValidExtendedEntity(hTarget) then
 		local hAttackSource = hEntity:GetCurrentAttackSource(true) or hEntity
-		hEntity:RefreshEntity()
+		local fHealthCost  = math.max(0, hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_HP_FLAT) * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_HP_COST_PCT)/100.0))
+		local fManaCost    = math.max(0, hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_MP_FLAT) * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_MP_COST_PCT)/100.0))
+		local fStaminaCost = math.max(0, hAttackSource:GetBasePropertyValue(IW_PROPERTY_ATTACK_SP_FLAT) * (1.0 + hEntity:GetPropertyValue(IW_PROPERTY_SP_COST_PCT)/100.0))
 		
-		hEntity:SetHealth(hEntity:GetHealth() - hAttackSource:GetAttackHealthCost())
-		hEntity:SetMana(hEntity:GetMana() - hAttackSource:GetAttackManaCost())
-		hEntity:SpendStamina(hAttackSource:GetAttackStaminaCost())
+		hEntity:SetHealth(hEntity:GetHealth() - fHealthCost)
+		hEntity:SetMana(hEntity:GetMana() - fManaCost)
+		hEntity:SpendStamina(fStaminaCost)
 		
 		hEntity:Stop()
 		hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
 		hEntity:TriggerExtendedEvent(IW_MODIFIER_EVENT_ON_ATTACK_EVENT_START)
+		hEntity:RefreshEntity()
 		
 		table.insert(hEntity._tAttackQueue, hAttackSource)
 	end
@@ -71,7 +73,7 @@ end
 function modifier_internal_attack:OnAttackStart(keys)
 	local hEntity = keys.attacker
 	local hTarget = keys.target
-	if hEntity == self:GetParent() and IsValidExtendedEntity(hTarget) and IsValidExtendedEntity(hEntity) and not hTarget:IsCorpse() then
+	if hEntity == self:GetParent() and IsValidExtendedEntity(hEntity) then
 		if not hEntity:CanPayAttackCosts() then
 			hEntity:Stop()
 			hEntity:IssueOrder(DOTA_UNIT_ORDER_ATTACK_TARGET, hTarget, nil, nil, false)
@@ -95,10 +97,14 @@ end
 function modifier_internal_attack:OnAttackLanded(keys)
 	local hEntity = keys.attacker
 	local hTarget = keys.target
-	if hEntity == self:GetParent() and IsValidExtendedEntity(hTarget) and IsValidExtendedEntity(hEntity) then
+	if hEntity == self:GetParent() and IsInstanceOf(hTarget, CEntityBase) and IsValidExtendedEntity(hEntity) then
 		keys.Percent = 100
 		_,keys.source = next(hEntity._tAttackQueue)
 		DealAttackDamage(self, keys)
+		if not hEntity:IsTargetEnemy(hTarget) and not hTarget:IsControllableByAnyPlayer() then
+			local nFactionWeight = hTarget:GetPlayerFactionWeight()
+			hTarget:SetOverrideFactionWeight(IW_PLAYER_FACTION, nFactionWeight - 20.0)
+		end
 		table.remove(hEntity._tAttackQueue, 1)
 	end
 end

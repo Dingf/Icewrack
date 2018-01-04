@@ -10,14 +10,14 @@ local stExtModifierData = LoadKeyValues("scripts/npc/npc_modifiers_extended.txt"
 
 CExtModifier = setmetatable(ext_class({}), { __call = 
 	function(self, hModifier)
-		LogAssert(IsInstanceOf(hModifier, CDOTA_Buff), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_Buff", type(hModifier))
+		LogAssert(IsInstanceOf(hModifier, CDOTA_Buff), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_Buff")
 		if IsInstanceOf(hModifier, CExtModifier) then
-			LogMessage("Tried to create a CExtItem from \"" .. hModifier:GetName() .."\", which is already a CExtItem", LOG_SEVERITY_WARNING)
+			LogMessage(LOG_MESSAGE_WARN_EXISTS, LOG_SEVERITY_WARNING, "CExtModifier", hModifier:GetName())
 			return hModifier
 		end
-		
+
 		ExtendIndexTable(hModifier, CExtModifier)
-		
+
 		local szModifierName = hModifier:GetName()
 		local szAbilityName = nil
 		local hAbility = hModifier:GetAbility()
@@ -88,22 +88,34 @@ end
 function CExtModifier:GetRealDurationMultiplier(hTarget)
 	local hSource = self:GetCaster()
 	local fDurationMultiplier = 1.0
-	if self:IsDebuff() then
-		fDurationMultiplier = hTarget:GetSelfDebuffDuration()
-		if self:GetModifierClass() == IW_MODIFIER_CLASS_PHYSICAL then
-			fDurationMultiplier = fDurationMultiplier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetPhysicalDebuffDefense())
-		elseif self:GetModifierClass() == IW_MODIFIER_CLASS_MAGICAL then
-			fDurationMultiplier = fDurationMultiplier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetMagicalDebuffDefense())
+	if IsValidInstance(hTarget) and IsValidInstance(hSource) then
+		if self:IsDebuff() then
+			fDurationMultiplier = hTarget:GetSelfDebuffDuration()
+			if self:GetModifierClass() == IW_MODIFIER_CLASS_PHYSICAL then
+				fDurationMultiplier = fDurationMultiplier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetPhysicalDebuffDefense())
+			elseif self:GetModifierClass() == IW_MODIFIER_CLASS_MAGICAL then
+				fDurationMultiplier = fDurationMultiplier * (100 * hSource:GetOtherDebuffDuration())/(100 + hTarget:GetMagicalDebuffDefense())
+			else
+				fDurationMultiplier = fDurationMultiplier * hSource:GetOtherDebuffDuration()
+			end
 		else
-			fDurationMultiplier = fDurationMultiplier * hSource:GetOtherDebuffDuration()
+			fDurationMultiplier = hTarget:GetSelfBuffDuration() * hSource:GetOtherBuffDuration()
 		end
-	else
-		fDurationMultiplier = hTarget:GetSelfBuffDuration() * hSource:GetOtherBuffDuration()
-	end
-	
-	local nStatusEffect = self:GetStatusEffect()
-	if nStatusEffect ~= IW_STATUS_EFFECT_NONE then
-		fDurationMultiplier = fDurationMultiplier * hTarget:GetStatusEffectDurationMultiplier(nStatusEffect)
+		
+		local nStatusMask = self:GetStatusMask()
+		local fMinStatusMultiplier = nil
+		for i=IW_STATUS_EFFECT_FIRST,IW_STATUS_EFFECT_LAST do
+			if bit32.btest(nStatusMask, bit32.lshift(1, i - 1)) then
+				local fStatusMultiplier = hTarget:GetStatusEffectDurationMultiplier(i)
+				if not fMinStatusMultiplier or fStatusMultiplier < fMinStatusMultiplier then
+					fMinStatusMultiplier = fStatusMultiplier
+				end
+			end
+		end
+		
+		if fMinStatusMultiplier then
+			fDurationMultiplier = fDurationMultiplier * fMinStatusMultiplier
+		end
 	end
 	return fDurationMultiplier
 end
@@ -113,7 +125,7 @@ function CExtModifier:SetDuration(fDuration, bInformClient)
 	local hTarget = self:GetParent()
 	
 	local fDurationMultiplier = 1.0
-	if not self:IsStrict() then
+	if not self:IsStrict() and IsValidInstance(hTarget) then
 		fDurationMultiplier = self:GetRealDurationMultiplier(hTarget)
 	end
 	if fDuration == -1 then
@@ -127,7 +139,7 @@ function CExtModifier:SetDuration(fDuration, bInformClient)
 	return fDuration
 end
 
-function CExtModifier:OnEntityRefresh()
+function CExtModifier:OnRefreshEntity()
 	self:RefreshModifier()
 end
 
@@ -145,7 +157,7 @@ function AddModifier(szAbilityName, szModifierName, hTarget, hSource, tModifierA
 	if type(szAbilityName) == "table" then
 		hAbility = szAbilityName
 	else
-		local hBuffDummy = CreateDummyUnit(hTarget:GetAbsOrigin(), nil, 0)
+		local hBuffDummy = CreateDummyUnit(hTarget:GetAbsOrigin(), nil, hTarget:GetTeamNumber(), true)
 		hBuffDummy:AddAbility(szAbilityName)
 		hAbility = hBuffDummy:FindAbilityByName(szAbilityName)
 		hAbility:SetOwner(hSource)

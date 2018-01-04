@@ -5,9 +5,13 @@ if _VERSION < "Lua 5.2" then
     bit32 = bit.bit32
 end
 
+require("ext_entity")
+require("ext_ability")
+require("ext_item")
+
 --TODO: Change the bind system to not use the "bind" command when Valve fixes keybinds for panorama
 
-stValidBindKeys =
+local stValidHotkeys =
 {
 	--A, S, and H are not valid because they are used for in-game commands (attack, stop, and hold position)
 	b = "B", c = "C", d = "D", e = "E", f = "F", g = "G", i = "I", j = "J", k = "K", l = "L", m = "M",
@@ -20,7 +24,150 @@ stValidBindKeys =
 	ins = "INS", del = "DEL", pgdn = "PGDN", pgup = "PGUP", home = "HOME", ["end"] = "END",
 }
 
-stDefaultBinds =
+local stValidActionBindSlots = {}
+for i=1,10 do stValidActionBindSlots[i] = true end
+local function ActionBindIndexFunction(self, k)
+	return stValidActionBindSlots[k] and -1 or nil
+end
+
+CBindManager = 
+{
+	_stDefaultActionBinds = {},
+	_tHotkeyBinds = {},
+	_tActionBinds = {},
+	_tNetTable =
+	{
+		Hotkeys = {},
+		Actions = {},
+	}
+}
+
+function CBindManager:CreateFromDefaultActionBinds(hEntity)
+	local tEntityBindTable = setmetatable({}, { __index = ActionBindIndexFunction })
+	local szUnitName = hEntity:GetUnitName()
+	local tDefaultActionBinds = CBindManager._stDefaultActionBinds[szUnitName]
+	if tDefaultActionBinds then
+		for k,v in pairs(tDefaultActionBinds) do
+			local hAbility = hEntity:FindAbilityByName(v)
+			if hAbility then
+				tEntityBindTable[k] = hAbility:entindex()
+				hAbility:OnAbilityBind(hEntity, k)
+			end
+		end
+	end
+	return tEntityBindTable
+end
+	
+function CBindManager:SetActionBind(hEntity, nSlot, hAbility)
+	if IsValidExtendedEntity(hEntity) then
+		if hAbility then
+			LogAssert(IsValidExtendedAbility(hAbility) or IsValidExtendedItem(hAbility), LOG_MESSAGE_ASSERT_TYPE, "CExtAbility\" or \"CExtItem")
+			if hAbility:GetOwner() ~= hEntity then
+				LogMessage("Tried to bind item or ability \"" .. hAbility:GetAbilityName() .. "\" that does not belong to entity .. \"" .. hEntity:GetUnitName() .. "\"", LOG_SEVERITY_WARNING)
+				return
+			end
+		end
+	
+		local nEntityIndex = hEntity:entindex()
+		local tEntityBindTable = CBindManager._tActionBinds[nEntityIndex]
+		local tEntityBindNetTable = CBindManager._tNetTable.Actions[nEntityIndex]
+		if not tEntityBindTable then
+			tEntityBindTable = CBindManager:CreateFromDefaultActionBinds(hEntity)
+			tEntityBindNetTable = {}
+			for k,v in pairs(stValidActionBindSlots) do
+				tEntityBindNetTable[k] = tEntityBindTable[k]
+			end
+			CBindManager._tActionBinds[nEntityIndex] = tEntityBindTable
+			CBindManager._tNetTable.Actions[nEntityIndex] = tEntityBindNetTable
+			CustomNetTables:SetTableValue("binds", tostring(nEntityIndex), tEntityBindNetTable)
+		end
+		
+		if not tEntityBindTable[nSlot] then
+			LogMessage("Tried to bind to nonexistant actionbar slot \"" .. nSlot .. "\"", LOG_SEVERITY_WARNING)
+		else
+			if not hAbility then
+				local nOldAbilityIndex = tEntityBindTable[nSlot]
+				if nOldAbilityIndex ~= -1 then 
+					local hOldAbility = EntIndexToHScript(nOldAbilityIndex)
+					hOldAbility:OnAbilityUnbind(hEntity)
+				end
+				tEntityBindTable[nSlot] = -1
+				tEntityBindNetTable[nSlot] = -1
+				CustomNetTables:SetTableValue("binds", tostring(nEntityIndex), tEntityBindNetTable)
+			else
+				local nAbilityIndex = hAbility:entindex()
+				local nOldAbilityIndex = tEntityBindTable[nSlot]
+				if nOldAbilityIndex ~= nAbilityIndex then
+					for k,v in pairs(tEntityBindTable) do
+						if v == nAbilityIndex then
+							tEntityBindTable[k] = nil
+							tEntityBindNetTable[k] = nil
+							hAbility:OnAbilityUnbind(hEntity)
+						end
+					end
+					if nOldAbilityIndex ~= -1 then 
+						local hOldAbility = EntIndexToHScript(nOldAbilityIndex)
+						hOldAbility:OnAbilityUnbind(hEntity)
+					end
+					tEntityBindTable[nSlot] = nAbilityIndex
+					tEntityBindNetTable[nSlot] = nAbilityIndex
+					hAbility:OnAbilityBind(hEntity, nSlot)
+					CustomNetTables:SetTableValue("binds", tostring(nEntityIndex), tEntityBindNetTable)
+				end
+			end
+		end
+	end
+end
+
+function CBindManager:OnClientActionBarBind(args)
+	local hEntity = EntIndexToHScript(args.entindex)
+	local hAbility = EntIndexToHScript(args.ability)
+	if hEntity then
+		CBindManager:SetActionBind(hEntity, args.slot, hAbility)
+	end
+end
+
+function CBindManager:OnClientActionBarInfoRequest(args)
+	local nEntityIndex = args.entindex
+	local tEntityBindTable = CBindManager._tActionBinds[nEntityIndex]
+	if not tEntityBindTable then
+		local hEntity = EntIndexToHScript(nEntityIndex)
+		tEntityBindTable = CBindManager:CreateFromDefaultActionBinds(hEntity)
+		CBindManager._tActionBinds[nEntityIndex] = tEntityBindTable
+	end
+	
+	local tEntityBindNetTable = {}
+	for k,v in pairs(stValidActionBindSlots) do
+		tEntityBindNetTable[k] = tEntityBindTable[k]	--This also gets the -1 values for the empty slots
+	end
+	CBindManager._tNetTable.Actions[nEntityIndex] = tEntityBindNetTable
+	CustomNetTables:SetTableValue("binds", tostring(nEntityIndex), tEntityBindNetTable)
+end
+
+CustomGameEventManager:RegisterListener("iw_actionbar_bind", Dynamic_Wrap(CBindManager, "OnClientActionBarBind"))
+CustomGameEventManager:RegisterListener("iw_actionbar_info", Dynamic_Wrap(CBindManager, "OnClientActionBarInfoRequest"))
+
+local stExtEntityData = LoadKeyValues("scripts/npc/npc_units_extended.txt")
+for k,v in pairs(stExtEntityData) do
+	local tAbilitiesList = v.Abilities
+	if tAbilitiesList then
+		local tDefaultActionBinds = CBindManager._stDefaultActionBinds[k]
+		if not tDefaultActionBinds then
+			tDefaultActionBinds = setmetatable({}, { __index = ActionBindIndexFunction })
+			CBindManager._stDefaultActionBinds[k] = tDefaultActionBinds
+		end
+		for k2,v2 in pairs(tAbilitiesList) do
+			local nSlot = tonumber(k2)
+			if nSlot then
+				tDefaultActionBinds[nSlot] = v2
+			end
+		end
+	end
+end
+stExtEntityData = nil
+	
+
+--[[	stDefaultBinds =
 {
 	iw_pause = "space",
 	iw_select_party_1 = "F1",
@@ -30,13 +177,13 @@ stDefaultBinds =
 	iw_select_all = "`",
 	iw_quicksave = "F5",
 	iw_quickload = "F9",
-	--[[iw_menu_characters = "C",
+	iw_menu_characters = "C",
 	iw_menu_party = "V",
 	iw_menu_inventory = "E",
 	iw_menu_skills = "D",
 	iw_menu_quests = "Q",
 	iw_menu_map = "W",
-	iw_menu_tactics = "T",]]
+	iw_menu_tactics = "T",
 	iw_menu_options = "ESC",
 	iw_toggle_run = "/",
 	iw_actionbar_1 = "1",
@@ -148,6 +295,5 @@ function CBindManager:RegisterDefaultBinds(tBindData)
 			CBindManager:RegisterBind(v,k)
 		end
 	end
-end
-
+end]]
 end

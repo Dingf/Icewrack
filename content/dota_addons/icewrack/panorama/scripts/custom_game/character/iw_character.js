@@ -109,14 +109,15 @@ function LoadCharacterLayout()
 	var hInfobox = $("#Character").FindChildTraverse("Infobox");
 	hInfobox.LoadLayoutAsync("file://{resources}/layout/custom_game/character/iw_character_infobox.xml", false, false);
 	
+	var hAttribContainer = $("#Character").FindChildTraverse("Attributes");
 	var szAttribPointsText = "<b>" + $.Localize("iw_ui_character_attribute_points") + "</b><br>";
 	szAttribPointsText = szAttribPointsText + "<font color=\"#c0c0c0\">" + $.Localize("iw_ui_character_attribute_points_desc") + "</font>";
-	var hAttribPointsLabel = CreateIconLabel(hContent, "AttribPointsLabel", "icons/iw_icon_attributes", "", "#ffffff", szAttribPointsText);
+	var hAttribPointsLabel = CreateIconLabel(hAttribContainer, "AttribPointsLabel", "icons/iw_icon_attributes", "", "#ffffff", szAttribPointsText);
 	hAttribPointsLabel.AddClass("CharacterAttributePointsIconLabel");
 	
 	var szSkillPointsText = "<b>" + $.Localize("iw_ui_character_skill_points") + "</b><br>";
 	szSkillPointsText = szSkillPointsText + "<font color=\"#c0c0c0\">" + $.Localize("iw_ui_character_skill_points_desc") + "</font>";
-	var hSkillPointsLabel = CreateIconLabel(hContent, "SkillPointsLabel", "icons/iw_icon_skills", "", "#ffffff", szSkillPointsText);
+	var hSkillPointsLabel = CreateIconLabel(hAttribContainer, "SkillPointsLabel", "icons/iw_icon_skills", "", "#ffffff", szSkillPointsText);
 	hSkillPointsLabel.AddClass("CharacterSkillPointsIconLabel");
 }
 
@@ -158,7 +159,7 @@ function LoadCharacterContent()
 
 (function()
 {
-	CreateWindowPanel($.GetContextPanel(), "Character", "character", "#iw_ui_character", false, true);
+	CreateWindowPanel($.GetContextPanel(), "Character", "character", "#iw_ui_character", WINDOW_OPTION_PARTY);
 	
 	LoadCharacterLayout();
 	LoadCharacterTabs();

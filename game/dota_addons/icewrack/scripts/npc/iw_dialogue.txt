@@ -1,0 +1,61 @@
+"IcewrackDialogueNodeDefinitions"
+{
+	"1"
+	{
+		"LeftID"		"-1"
+		"RightID"		"7"
+		
+		"Text"
+		{
+			"1"
+			{
+				"Speaker"	"2"
+				"Text"		""
+				"Precondition"	""
+				"Prescript"		""
+			}
+		}
+	}
+
+
+
+	"0"		//The dialogue entry ID; each entry must be a unique number
+	{
+		"LeftID"		//The instance ID for the left portrait, set to 0 to make empty or set to -1 to use the party member that initiated conversation
+		"RightID"		//The instance ID for the right portrait, same rules as above
+		
+		"Text"		//The list of text entries; each entry is displayed in numeric order if the conditions are met
+		{
+			"1"
+			{
+				"Speaker"	"0"			//0 = None, 1 = Left portrait entity, 2 = Right portrait entity
+				"Text"		""			//The text to display
+				"Precondition"	""		//The condition to meet in order to display this text
+				"Prescript"		""		//The script to run in order to display this text
+			}
+		}
+		
+		"OptionsSpeaker"		"0"		//0 = None, 1 = Left portrait entity, 2 = Right portrait entity
+		"Options"
+		{
+			"1"
+			{
+				"Text"			""		//The text to display
+				"ShowHistory"	"0"		//If set to 1, this option text will show up in the chat history
+				"Precondition"	""		//The condition to meet in order to display this text
+				
+				"Results"		//The list of possible results for this dialogue toption
+				{
+					"1"	
+					{
+						"NextNode"		"1"		//The node ID to transfer to; 0 to exit the conversation
+						"Precondition"	""		//The condition to meet in order to travel to this node
+						"Prescript"		""
+						"Postcondition"	""
+						"Postscript"	""
+					}
+				}
+			}
+		}
+	}
+}

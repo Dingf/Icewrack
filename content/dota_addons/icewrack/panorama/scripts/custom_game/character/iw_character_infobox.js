@@ -94,7 +94,7 @@ function OnInfoboxUpdate(hContextPanel, tArgs)
 		hManaLabel.text = Entities.GetMana(nEntityIndex) + " / " + Entities.GetMaxMana(nEntityIndex);
 		
 		var hStaminaLabel = hContextPanel.FindChildTraverse("Stat31").FindChild("Label");
-		hStaminaLabel.text = tEntityData.stamina.toFixed(0) + " / " + tEntityData.stamina_max.toFixed(0);
+		hStaminaLabel.text = Math.floor(Entities.GetStamina(nEntityIndex)) + " / " + Math.floor(tEntityData.stamina_max);
 		
 		var fDamageBase = 0;
 		var fDamageVar = 0;

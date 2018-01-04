@@ -13,7 +13,10 @@ function SetPauseScreenState(bState)
 				$("#ScreenFill").AddClass("FillActive");
 				$("#ScreenFill").RemoveClass("FillInactive");
 				$("#ScreenFill").style.opacity = "1.0";
-				GameEvents.SendCustomGameEventToServer("iw_pause", {});
+				if (Game.GetAllPlayerIDs().length == 1)
+				{
+					GameEvents.SendCustomGameEventToServer("iw_pause_override", {});
+				}
 			}
 		}
 		else
@@ -24,11 +27,25 @@ function SetPauseScreenState(bState)
 				$("#ScreenFill").AddClass("FillInactive");
 				$("#ScreenFill").RemoveClass("FillActive");
 				$("#ScreenFill").style.opacity = "0.0";
-				GameEvents.SendCustomGameEventToServer("iw_unpause", {});
+				if (Game.GetAllPlayerIDs().length == 1)
+				{
+					GameEvents.SendCustomGameEventToServer("iw_unpause_override", {});
+				}
 			}
 		}
 	}
 }
+
+
+Game.RegisterHotkey("SPACE", function()
+{
+	//TODO: Make this work for any player that has pause privileges
+	if (Game.GetLocalPlayerID() === 0)
+	{
+		GameEvents.SendCustomGameEventToServer("iw_pause_hotkey", {});
+		return true;
+	}
+});
 
 (function()
 {

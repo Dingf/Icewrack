@@ -13,8 +13,7 @@ end
 function CIcewrackMainMenu:OnGameRulesStateChange(keys)
 	local nGameState = GameRules:State_Get()
 	if nGameState == DOTA_GAMERULES_STATE_CUSTOM_GAME_SETUP then
-		Convars:SetFloat("dota_time_of_day_rate", 0.0)
-		GameRules:SetTimeOfDay(0.8)
+		GameRules:SetTimeOfDay(0.25)
 	end
 end
 

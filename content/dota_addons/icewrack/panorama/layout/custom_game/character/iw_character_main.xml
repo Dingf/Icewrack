@@ -18,5 +18,6 @@
 			<Image hittest="false" class="CharacterContentTabSpacer" src="file://{images}/custom_game/ui/iw_window_tab_spacer.tga" />
 		</Panel>
 		<Label hittest="false" class="CharacterContentTabLabel" id="TabLabel" text="" />
+		<Panel hittest="false" class="CharacterAttributeContainer" id="Attributes" />
 	</Panel>
 </root>

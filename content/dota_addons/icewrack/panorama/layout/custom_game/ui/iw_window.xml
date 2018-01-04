@@ -15,5 +15,6 @@
 	<Panel draggable="true" hittest="true" class="WindowRoot" onload="OnWindowLoad()">
 		<Image hittest="false" class="WindowBG" src="file://{images}/custom_game/ui/iw_window_bg.tga" />
 		<Label hittest="false" class="WindowTitle" id="Title" text="" />
+		<Panel hittest="false" class="WindowBody" id="Body" />
 	</Panel>
 </root>

@@ -13,8 +13,13 @@
 		"MaxResistCold"			"75"
 		"MaxResistLightning"		"75"
 		"MaxResistDeath"		"75"
+		"StaminaRechargePercent"	"10"
+		"StaminaRechargeTime"	"5.0"
 		"LifestealRate"			"0.1"
 		"VisibilityFlat"		"1.0"
+		"VisionDetectThreshold"		"1.0"
+		"NoiseDetectThreshold"		"1.0"
+		"ThreatFalloffRadius"		"1800"
 	}
 
 	"npc_dota_hero_axe"
@@ -49,18 +54,26 @@
 		"DodgeFlat"			"0"
 
 		"StrengthFlat"			"58"
-		"EnduranceFlat"			"47"
+		"ConstitutionFlat"			"47"
 		"AgilityFlat"			"15"
-		"CunningFlat"			"24"
+		"PerceptionFlat"			"24"
 		"IntelligenceFlat"		"12"
 		"WisdomFlat"			"11"
 
 		"SkillTwoHanded"		"4"
 		"SkillCombat"			"4"
-		"SkillAthletics"		"2"
+		"SkillHeavyArmor"		"2"
 
-		"MovementNoiseFlat"		"5"
-		"VisibilityFlat"		"1.5"
+		"MovementNoiseFlat"		"20"
+		"VisibilityFlat"		"0.5"
+
+		"Abilities"
+		{
+			"1"			"iw_axe_berserkers_call"
+			"2"			"iw_axe_counter_helix"
+			"3"			"iw_axe_culling_blade"
+			"4"			"iw_axe_battle_hunger"
+		}
 	}
 
 	"npc_dota_hero_dragon_knight"
@@ -91,20 +104,29 @@
 		"DodgeFlat"			"0"
 
 		"StrengthFlat"			"45"
-		"EnduranceFlat"			"51"
+		"ConstitutionFlat"			"51"
 		"AgilityFlat"			"14"
-		"CunningFlat"			"15"
+		"PerceptionFlat"			"15"
 		"IntelligenceFlat"		"19"
 		"WisdomFlat"			"33"
 
-		"SkillFire"			"2"
-		"SkillOneHanded"		"3"
-		"SkillCombat"			"3"
-		"SkillArmor"			"3"
+		"SkillOneHanded"		"2"
+		"SkillCombat"			"4"
+		"SkillHeavyArmor"		"3"
+		"SkillFire"			"1"
 		"SkillBody"			"2"
+		"SkillLeadership"		"2"
 
-		"MovementNoiseFlat"		"5"
-		"VisibilityFlat"		"1.25"
+		"MovementNoiseFlat"		"20"
+		"VisibilityFlat"		"0.25"
+
+		"Abilities"
+		{
+			"1"			"iw_dragon_knight_deafening_roar"
+			"2"			"iw_dragon_knight_shield_slam"
+			"3"			"iw_dragon_knight_endurance_aura"
+			"4"			"iw_dragon_knight_dragon_form"
+		}
 	}
 
 	"npc_dota_hero_drow_ranger"
@@ -140,9 +162,9 @@
 		"DodgeFlat"			"30"
 
 		"StrengthFlat"			"25"
-		"EnduranceFlat"			"17"
+		"ConstitutionFlat"			"17"
 		"AgilityFlat"			"35"
-		"CunningFlat"			"23"
+		"PerceptionFlat"			"23"
 		"IntelligenceFlat"		"15"
 		"WisdomFlat"			"16"
 
@@ -150,14 +172,18 @@
 
 		"SkillMarksmanship"		"4"
 		"SkillCombat"			"2"
-		"SkillSurvival"			"2"
-		"SkillPerception"		"2"
-		"SkillAthletics"		"2"
+		"SkillSurvival"			"3"
 		"SkillWater"			"1"
-		"SkillNature"			"2"
 
-		"MovementNoiseFlat"		"3"
-		"VisibilityFlat"		"1.0"
+		"MovementNoiseFlat"		"15"
+
+		"Abilities"
+		{
+			"1"			"iw_drow_ranger_frost_arrows"
+			"2"			"iw_drow_ranger_feral_bond"
+			"3"			"iw_drow_ranger_precision_aura"
+			"4"			"iw_drow_ranger_bullseye"
+		}
 	}
 
 	"npc_dota_hero_bounty_hunter"
@@ -193,22 +219,28 @@
 		"DodgeFlat"			"25"
 
 		"StrengthFlat"			"22"
-		"EnduranceFlat"			"18"
+		"ConstitutionFlat"			"18"
 		"AgilityFlat"			"32"
-		"CunningFlat"			"40"
+		"PerceptionFlat"			"40"
 		"IntelligenceFlat"		"20"
 		"WisdomFlat"			"14"
 
 		"SkillOneHanded"		"3"
-		"SkillCombat"			"2"
-		"SkillPerception"		"4"
-		"SkillStealth"			"3"
-		"SkillThievery"			"2"
+		"SkillCombat"			"1"
+		"SkillStealth"			"4"
+		"SkillThievery"			"4"
 		"SkillShadow"			"2"
 		"SkillSpeech"			"3"
 
-		"MovementNoiseFlat"		"2"
-		"VisibilityFlat"		"1.0"
+		"MovementNoiseFlat"		"10"
+
+		"Abilities"
+		{
+			"1"			"iw_bounty_hunter_smoke_bomb"
+			"2"			"iw_bounty_hunter_jinada"
+			"3"			"iw_bounty_hunter_ensnare"
+			"4"			"iw_bounty_hunter_track"
+		}
 	}
 
 	"npc_dota_hero_lina"
@@ -243,9 +275,9 @@
 		"DodgeFlat"			"0"
 
 		"StrengthFlat"			"13"
-		"EnduranceFlat"			"10"
+		"ConstitutionFlat"			"10"
 		"AgilityFlat"			"11"
-		"CunningFlat"			"26"
+		"PerceptionFlat"			"26"
 		"IntelligenceFlat"		"55"
 		"WisdomFlat"			"25"
 
@@ -253,12 +285,20 @@
 		"MaxResistFire"			"15"
 
 		"SkillFire"			"4"
-		"SkillLight"			"2"
-		"SkillAir"			"1"
+		"SkillAir"			"3"
+		"SkillMind"			"2"
+		"SkillLife"			"1"
 		"SkillMetamagic"		"2"
-		"SkillLore"			"2"
 
-		"VisibilityFlat"		"1.5"
+		"VisibilityFlat"		"0.5"
+		"MovementNoisePercent"		"-100"
+
+		"Abilities"
+		{
+			"1"			"iw_lina_lesser_fireball"
+			"3"			"iw_lina_inner_fire"
+			"4"			"iw_lina_pyrotheosis"
+		}
 	}
 
 	"npc_dota_hero_omniknight"
@@ -287,21 +327,22 @@
 		"DodgeFlat"			"0"
 
 		"StrengthFlat"			"38"
-		"EnduranceFlat"			"40"
+		"ConstitutionFlat"			"40"
 		"AgilityFlat"			"14"
-		"CunningFlat"			"11"
+		"PerceptionFlat"			"11"
 		"IntelligenceFlat"		"25"
 		"WisdomFlat"			"37"
 
-		"SkillDivine"			"3"
-		"SkillLight"			"3"
-		"SkillTwoHanded"		"3"
+		"SkillShape"			"3"
+		"SkillLight"			"4"
+		"SkillTwoHanded"		"2"
 		"SkillCombat"			"2"
-		"SkillArmor"			"2"
+		"SkillHeavyArmor"		"1"
 		"SkillSpeech"			"1"
+		"SkillLore"			"3"
 
-		"MovementNoiseFlat"		"5"
-		"VisibilityFlat"		"1.25"
+		"MovementNoiseFlat"		"20"
+		"VisibilityFlat"		"0.25"
 	}
 
 	"npc_dota_hero_legion_commander"
@@ -324,17 +365,18 @@
 		"AttackRange"			"150"
 		"MovementSpeedFlat"		"275"
 
+		"VisionRangeFlat"		"1000"
 		"AccuracyFlat"			"0"
 		"DodgeFlat"			"-70"
 
 		"StrengthFlat"			"49"
-		"EnduranceFlat"			"30"
+		"ConstitutionFlat"			"30"
 		"AgilityFlat"			"20"
-		"CunningFlat"			"44"
+		"PerceptionFlat"			"44"
 		"IntelligenceFlat"		"18"
 		"WisdomFlat"			"14"
 
-		"MovementNoiseFlat"		"5"
+		"MovementNoiseFlat"		"20"
 	}
 
 	"npc_dota_hero_warlock"
@@ -351,6 +393,7 @@
 		"MovementSpeedFlat"		"250"
 		"MaxStaminaFlat"		"50"
 
+		"VisionRangeFlat"		"1000"
 		"AccuracyFlat"			"10000"
 		"DodgeFlat"			"0"
 
@@ -363,7 +406,7 @@
 		"Intelligence"			"51"
 		"Wisdom"			"51"
 
-		"MovementNoiseFlat"		"5"
+		"MovementNoiseFlat"		"20"
 	}
 
 	"npc_dota_hero_crystal_maiden"
@@ -381,19 +424,20 @@
 		"MaxStaminaFlat"		"50"
 		"ManaRegenFlat"			"0.4"
 
+		"VisionRangeFlat"		"1000"
 		"AccuracyFlat"			"10000"
 		"DodgeFlat"			"0"
 
 		"CarryCapacity"			"70"
 
 		"StrengthFlat"			"17"
-		"EnduranceFlat"			"33"
+		"ConstitutionFlat"			"33"
 		"AgilityFlat"			"16"
-		"CunningFlat"			"12"
+		"PerceptionFlat"			"12"
 		"IntelligenceFlat"		"62"
 		"WisdomFlat"			"35"
 
-		"MovementNoiseFlat"		"5"
+		"MovementNoiseFlat"		"20"
 	}
 
 	"npc_dota_hero_tusk"
@@ -409,15 +453,16 @@
 
 		"MaxStaminaFlat"		"50"
 
+		"VisionRangeFlat"		"1000"
 		"AccuracyFlat"			"0"
 		"DodgeFlat"			"-70"
 
 		"CarryCapacity"			"100"
 
 		"StrengthFlat"			"52"
-		"EnduranceFlat"			"48"
+		"ConstitutionFlat"			"48"
 		"AgilityFlat"			"19"
-		"CunningFlat"			"20"
+		"PerceptionFlat"			"20"
 		"IntelligenceFlat"		"12"
 		"WisdomFlat"			"16"
 	}
@@ -434,15 +479,16 @@
 
 		"MaxStaminaFlat"		"50"
 
+		"VisionRangeFlat"		"1000"
 		"AccuracyFlat"			"0"
 		"DodgeFlat"			"-70"
 
 		"CarryCapacity"			"100"
 
 		"StrengthFlat"			"52"
-		"EnduranceFlat"			"48"
+		"ConstitutionFlat"			"48"
 		"AgilityFlat"			"19"
-		"CunningFlat"			"20"
+		"PerceptionFlat"			"20"
 		"IntelligenceFlat"		"12"
 		"WisdomFlat"			"16"
 	}
@@ -486,16 +532,14 @@
 		"MovementSpeedFlat"		"250"
 		"MaxStaminaFlat"		"100"
 
+		"VisionRangeFlat"		"750"
 		"AccuracyFlat"			"50"
 		"DodgeFlat"			"0"
 
 		"DamagePhysicalBase"		"17"
 		"DamagePhysicalVar"		"5"
 
-		"VisionMask"			"63"
-		"BehaviorAggressiveness"	"3"
-		"BehaviorCooperativeness"	"1"
-		"BehaviorSafety"		"3"
+		"VisionDetectMask"		"63"
 	}
 	
 	"npc_iw_expedition_merc_2"
@@ -511,26 +555,14 @@
 		"MovementSpeedFlat"		"200"
 		"MaxStaminaFlat"		"50"
 
+		"VisionRangeFlat"		"1000"
 		"AccuracyFlat"			"20"
 		"DodgeFlat"			"0"
 
 		"DamagePhysicalBase"		"11"
 		"DamagePhysicalVar"		"6"
 
-		"VisionMask"			"127"
-		"BehaviorAggressiveness"	"3"
-		"BehaviorCooperativeness"	"1"
-	}
-
-	"npc_iw_campfire_dummy"
-	{
-		"UnitClass"			"IW_UNIT_CLASS_NORMAL"
-		"UnitType"			"IW_UNIT_TYPE_NONE"
-		"UnitSubtype"			"IW_UNIT_SUBTYPE_NONE"
-		"UnitFlags"			"IW_UNIT_FLAG_DONT_RECEIVE_DAMAGE"
-		"UnitHeight"			"16"
-
-		"NoNPC"			"1"
+		"VisionDetectMask"		"127"
 	}
 	
 	"npc_iw_frostbitten"
@@ -546,15 +578,14 @@
 		"MovementSpeedFlat"		"200"
 		"MaxStaminaFlat"		"50"
 
+		"VisionRangeFlat"		"600"
 		"AccuracyFlat"			"50"
 		"DodgeFlat"			"0"
 
 		"DamageColdBase"		"26"
 		"DamageColdVar"			"11"
 
-		"VisionMask"			"63"
-		"BehaviorAggressiveness"	"3"
-		"BehaviorCooperativeness"	"1"
+		"VisionDetectMask"		"63"
 	}
 
 	"npc_iw_test_beast"
@@ -564,27 +595,26 @@
 		"UnitSubtype"			"IW_UNIT_SUBTYPE_BEAST | IW_UNIT_SUBTYPE_BIOLOGICAL"
 		"UnitFlags"			"IW_UNIT_FLAG_FLYING"
 		"UnitHeight"			"64"
+		"CorpseTime"			"69"
 
 		"BaseAttackTimeFlat"		"1.75"
 		"AttackRange"			"128"
 		"MovementSpeedFlat"		"250"
 		"MaxStaminaFlat"		"100"
 
+		"VisionRangeFlat"		"800"
 		"AccuracyFlat"			"50"
 		"DodgeFlat"			"0"
 
-		"DamageSlashBase"		"30"
-		"DamageSlashVar"		"10"
+		"DamageColdBase"		"1"
+		"DamageColdVar"		"1"
 
-		"VisionMask"			"63"
-		"BehaviorAggressiveness"	"3"
-		"BehaviorCooperativeness"	"1"
-		"BehaviorSafety"		"3"
+		"VisionDetectMask"		"63"
 
 		"StrengthFlat"			"50"
-		"EnduranceFlat"			"60"
+		"ConstitutionFlat"			"60"
 		"AgilityFlat"			"70"
-		"CunningFlat"			"80"
+		"PerceptionFlat"			"80"
 		"IntelligenceFlat"		"90"
 		"WisdomFlat"			"100"
 	}
@@ -612,6 +642,7 @@
 		"MovementSpeedFlat"		"300"
 		"MaxStaminaFlat"		"50"
 
+		"VisionRangeFlat"		"1000"
 		"AttackRange"			"650"
 		"ManaRegenFlat"			"0.35"
 
@@ -631,9 +662,9 @@
 		"EffectDurationFreeze"		"100"
 
 		"StrengthFlat"			"13"
-		"EnduranceFlat"			"18"
+		"ConstitutionFlat"			"18"
 		"AgilityFlat"			"22"
-		"CunningFlat"			"46"
+		"PerceptionFlat"			"46"
 		"IntelligenceFlat"		"49"
 		"WisdomFlat"			"33"
 

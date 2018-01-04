@@ -3,6 +3,7 @@
 	custom_net_tables =
 	[
 		"game",
+		"binds",
 		"entities",
 		"abilities",
 		"spellbook",
@@ -10,6 +11,7 @@
 		"items",
 		"aam",
 		"party",
+		"dialogue",
 		"modifier_args",
 	]
 }

@@ -9,6 +9,11 @@ if not ICEWRACK_GAME_DIR then
 	error("Unable to find Icewrack game directory")
 end
 
+if _VERSION < "Lua 5.2" then
+    bit = require("lib/numberlua")
+    bit32 = bit.bit32
+end
+
 for k,v in pairs(dofile("log_manager")) do _G[k] = v end
 require("constants")
 
@@ -16,9 +21,11 @@ stZeroDefaultMetatable = { __index = function(self, k) return 0 end }
 
 function GetFlagValue(szFlagString, tEnumTable)
 	local nFlagValue = 0
-	for k in string.gmatch(szFlagString or "", "[%w_]+") do
-		if tEnumTable[k] then
-			nFlagValue = nFlagValue + tEnumTable[k]
+	if type(szFlagString) == "string" and type(tEnumTable) == "table" then
+		for k in string.gmatch(szFlagString, "[%w_]+") do
+			if tEnumTable[k] then
+				nFlagValue = nFlagValue + tEnumTable[k]
+			end
 		end
 	end
 	return nFlagValue
@@ -26,16 +33,18 @@ end
 
 function GetBitshiftedFlagValue(szFlagString, tEnumTable)
 	local nFlagValue = 0
-	for k in string.gmatch(szFlagString or "", "[%w_]+") do
-		if tEnumTable[k] then
-			nFlagValue = nFlagValue + bit32.lshift(1, tEnumTable[k] - 1)
+	if type(szFlagString) == "string" and type(tEnumTable) == "table" then
+		for k in string.gmatch(szFlagString, "[%w_]+") do
+			if tEnumTable[k] then
+				nFlagValue = nFlagValue + bit32.lshift(1, tEnumTable[k] - 1)
+			end
 		end
 	end
 	return nFlagValue
 end
 
 function StringToVector(szString)
-	if szString then
+	if type(szString) == "string" then
 		local _,_,x,y,z = string.find(szString, "([^%s]+) ([^%s]+) ([^%s]+)")
 		x = tonumber(x)
 		y = tonumber(y)
@@ -107,24 +116,40 @@ function IsInstanceOf(tObject, class)
 	return false
 end
 
-function CreateDummyUnit(vPosition, hOwner, nTeamNumber)
-	local hDummy = CreateUnitByName("npc_iw_generic_dummy", vPosition, false, hOwner, hOwner, nTeamNumber)
-	hDummy:AddAbility("internal_dummy_buff")
-	hDummy:FindAbilityByName("internal_dummy_buff"):ApplyDataDrivenModifier(hDummy, hDummy, "modifier_internal_dummy_buff", {})
-	hDummy:RemoveAbility("internal_dummy_buff")
-	return hDummy
+function LoadFunctionSnippet(args, szCustomPrefix)
+	if type(args) == "table" then
+		local szScriptFilename = args.Filename
+		local szScriptFunction = args.Function
+		if szScriptFilename and szScriptFunction then
+			local tSandbox = setmetatable({}, { __index = getfenv() })
+			szScriptFilename = string.gsub(szScriptFilename, "\\", "/")
+			szScriptFilename = string.gsub(szScriptFilename, "scripts/vscripts/", "")
+			szScriptFilename = string.gsub(szScriptFilename, ".lua", "")
+			setfenv(1, tSandbox)
+			dofile(szScriptFilename)
+			return tSandbox[szScriptFunction]
+		end
+	elseif type(args) == "string" and args ~= "" then
+		if type(szCustomPrefix) ~= "string" then szCustomPrefix = "" end
+		local szArgsPrefix = "local args = {...} "
+		local szLoadString = szArgsPrefix .. szCustomPrefix .. string.gsub(args, "'", "\"")
+		local hFunction, szErrorMessage = load(szLoadString)
+		if szErrorMessage then
+			LogMessage(szErrorMessage, LOG_SEVERITY_ERROR)
+		end
+		return hFunction
+	end
 end
 
-function CreateAvoidanceZone(vPosition, fRadius, fValue, fDuration)
-	local hDummy = CreateUnitByName("npc_iw_avoidance_zone", vPosition, false, nil, nil, DOTA_TEAM_GOODGUYS)
+function CreateDummyUnit(vPosition, hOwner, nTeamNumber, bNoDraw)
+	local hDummy = CreateUnitByName("npc_iw_generic_dummy", vPosition, false, hOwner, hOwner, nTeamNumber)
+	if bNoDraw then
+		hDummy:AddNoDraw()
+	end
 	hDummy:AddAbility("internal_dummy_buff")
 	hDummy:FindAbilityByName("internal_dummy_buff"):ApplyDataDrivenModifier(hDummy, hDummy, "modifier_internal_dummy_buff", {})
 	hDummy:RemoveAbility("internal_dummy_buff")
-	hDummy._fAvoidanceRadius = fRadius
-	hDummy._fAvoidanceValue = fValue
-	hDummy:SetThink(function() if not hDummy:IsNull() then hDummy:RemoveSelf() end end, "RemoveAvoidanceZone", fDuration)
 	return hDummy
-
 end
 
 return getfenv()

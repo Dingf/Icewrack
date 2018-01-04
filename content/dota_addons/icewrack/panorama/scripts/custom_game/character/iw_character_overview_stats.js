@@ -25,9 +25,9 @@ function GetOverviewZeroPercent(bOptional, nProperty, tSourceData, tEntityIndex)
 
 function GetOverviewAttackSpeed(tSourceData, nEntityIndex)
 {
-	var fBaseAttackTime = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_BASE_ATTACK_FLAT) * (1.0 + GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_BASE_ATTACK_PCT)/100.0);
+	var fBaseAttackTime = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_BASE_ATTACK_FLAT) * (1.0 + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_BASE_ATTACK_PCT)/100.0);
 	var fAttackSpeed = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ATK_SPEED_DUMMY);
-	return Math.floor((100 + fAttackSpeed)/fBaseAttackTime)/100.0;
+	return Math.floor(Math.max(-90, Math.min(500, 100 + fAttackSpeed))/fBaseAttackTime)/100.0;
 }
 
 function GetOverviewAttackRange(tSourceData, nEntityIndex)
@@ -45,7 +45,7 @@ function GetOverviewAccuracy(tSourceData, nEntityIndex)
 function GetOverviewCritChance(tSourceData, nEntityIndex)
 {
 	var fBaseCritChance = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_CHANCE_FLAT);
-	var fIncCritChance = 1.0 + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_CUN_FLAT) * 0.05) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_CHANCE_PCT)/100.0;
+	var fIncCritChance = 1.0 + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_PER_FLAT) * 0.05) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_CHANCE_PCT)/100.0;
 	if (fBaseCritChance > 0.0)
 	{
 		return (fBaseCritChance * fIncCritChance * 100.0).toFixed(2) + "%";
@@ -55,7 +55,7 @@ function GetOverviewCritChance(tSourceData, nEntityIndex)
 function GetOverviewCritMultiplier(tSourceData, nEntityIndex)
 {
 	var fBaseCritMultiplier = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_MULTI_FLAT);
-	var fIncCritMultiplier = (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_CUN_FLAT) * 0.05) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_MULTI_PCT)/100.0;
+	var fIncCritMultiplier = (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_PER_FLAT) * 0.05) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_CRIT_MULTI_PCT)/100.0;
 	
 	if (fBaseCritMultiplier > 0.0)
 	{
@@ -99,30 +99,33 @@ function GetOverviewArmorIgnore(tSourceData, nEntityIndex)
 function GetOverviewAttackHealthCost(tSourceData, nEntityIndex)
 {
 	var fBaseAttackCost = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_HP_FLAT);
-	var fPercentAttackCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_HP_PCT)/100.0;
+	var fPercentAttackCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_HP_COST_PCT)/100.0;
+	var fFatigueMultiplier = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_FATIGUE_MULTI)/100.0;
 	if (fBaseAttackCost > 0.0)
 	{
-		return Math.round(fBaseAttackCost * (1.0 + fPercentAttackCost) * 100)/100.0;
+		return Math.floor(fBaseAttackCost * (1.0 + fPercentAttackCost + fFatigueMultiplier));
 	}
 }
 
 function GetOverviewAttackManaCost(tSourceData, nEntityIndex)
 {
 	var fBaseAttackCost = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_MP_FLAT);
-	var fPercentAttackCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_MP_PCT)/100.0;
+	var fPercentAttackCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MP_COST_PCT)/100.0;
+	var fFatigueMultiplier = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_FATIGUE_MULTI)/100.0;
 	if (fBaseAttackCost > 0.0)
 	{
-		return Math.round(fBaseAttackCost * (1.0 + fPercentAttackCost) * 100)/100.0;
+		return Math.floor(fBaseAttackCost * (1.0 + fPercentAttackCost + fFatigueMultiplier));
 	}
 }
 
 function GetOverviewAttackStaminaCost(tSourceData, nEntityIndex)
 {
 	var fBaseAttackCost = GetBasePropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_SP_FLAT);
-	var fPercentAttackCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_ATTACK_SP_PCT)/100.0;
+	var fPercentAttackCost = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_SP_COST_PCT)/100.0;
+	var fFatigueMultiplier = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_FATIGUE_MULTI)/100.0;
 	if (fBaseAttackCost > 0.0)
 	{
-		return Math.round(fBaseAttackCost * (1.0 + fPercentAttackCost) * 100)/100.0;
+		return Math.floor(fBaseAttackCost * (1.0 + fPercentAttackCost + fFatigueMultiplier));
 	}
 }
 
@@ -157,7 +160,7 @@ function GetOverviewDodge(tSourceData, nEntityIndex)
 function GetOverviewFatigueMultiplier(tSourceData, nEntityIndex)
 {
 	var fFatigueMultiplier = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_FATIGUE_MULTI);
-	return fFatigueMultiplier + " (" + Math.max(0, fFatigueMultiplier) + "%)"
+	return Math.round(Math.max(0, fFatigueMultiplier) * 100)/100.0 + "%";
 }
 
 function GetOverviewMovementSpeed(tSourceData, nEntityIndex)
@@ -165,7 +168,7 @@ function GetOverviewMovementSpeed(tSourceData, nEntityIndex)
 	var fBaseMoveSpeed = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MOVE_SPEED_FLAT) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_AGI_FLAT) * 1.0);
 	var fFatigueMultiplier = (GetPropertyValue(tSourceData, Instance.IW_PROPERTY_FATIGUE_MULTI) - GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_STR_FLAT) * 1.0)/100.0;
 	fBaseMoveSpeed *= (1.0 - Math.max(0, fFatigueMultiplier) + GetPropertyValue(tSourceData, Instance.IW_PROPERTY_MOVE_SPEED_PCT)/100)
-	return Math.floor(fBaseMoveSpeed) + " (" + (Math.max(fBaseMoveSpeed, 100)/100.0).toFixed(2) + "m/s)";
+	return Math.floor(fBaseMoveSpeed) + " (" + (Math.min(Math.max(fBaseMoveSpeed, 100), 550)/100.0).toFixed(2) + "m/s)";
 }
 
 function GetOverviewRunStaminaCost(tSourceData, nEntityIndex)
@@ -185,7 +188,7 @@ function GetOverviewSpellpower(tSourceData, nEntityIndex)
 
 function GetOverviewPhysicalDefense(tSourceData, nEntityIndex)
 {
-	var fDefense = Math.max(0, GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DEFENSE_PHYS) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_END_FLAT) * 1.00));
+	var fDefense = Math.max(0, GetPropertyValue(tSourceData, Instance.IW_PROPERTY_DEFENSE_PHYS) + (GetAttributeValue(tSourceData, Instance.IW_PROPERTY_ATTR_CON_FLAT) * 1.00));
 	return fDefense + " (" + (10000/(100 + fDefense)).toFixed(2) + "%)";
 }
 
@@ -256,7 +259,7 @@ function GetOverviewManaRegeneration(tSourceData, nEntityIndex)
 function GetOverviewStamina(tSourceData, nEntityIndex)
 {
 	var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
-	return tEntityData.stamina.toFixed(0) + " / " + tEntityData.stamina_max.toFixed(0);
+	return Entities.GetStamina(nEntityIndex).toFixed(0) + " / " + tEntityData.stamina_max.toFixed(0);
 }
 
 function GetOverviewStaminaRegeneration(tSourceData, nEntityIndex)
@@ -268,6 +271,20 @@ function GetOverviewStaminaRegeneration(tSourceData, nEntityIndex)
 	{
 		return fRegenPerSec.toFixed(2) + "/s";
 	}
+}
+
+function GetOverviewStaminaRechargeTime(tSourceData, nEntityIndex)
+{
+	var fRechargeTime = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_SP_RECHARGE_TIME);
+	return fRechargeTime.toFixed(2) + "s";
+}
+
+function GetOverviewStaminaRechargeRate(tSourceData, nEntityIndex)
+{
+	var tEntityData = CustomNetTables.GetTableValue("entities", nEntityIndex);
+	var fRechargeRate = GetPropertyValue(tSourceData, Instance.IW_PROPERTY_SP_RECHARGE_PCT);
+	var fMaxStamina = tEntityData.stamina_max;
+	return fRechargeRate + "% (" + (fMaxStamina * fRechargeRate/100.0) + "/s)";
 }
 
 function GetOverviewBuffDuration(nProperty, tSourceData, nEntityIndex)
@@ -366,6 +383,8 @@ var stOverviewMiscLabelFunctions =
 	"iw_ui_character_overview_mp_regen"      : GetOverviewManaRegeneration,
 	"iw_ui_character_overview_sp"            : GetOverviewStamina,
 	"iw_ui_character_overview_sp_regen"      : GetOverviewStaminaRegeneration,
+	"iw_ui_character_overview_sp_rc_time"    : GetOverviewStaminaRechargeTime,
+	"iw_ui_character_overview_sp_rc_rate"    : GetOverviewStaminaRechargeRate,
 	"iw_ui_character_overview_fatigue_multi" : GetOverviewFatigueMultiplier,
 	"iw_ui_character_overview_move_speed"    : GetOverviewMovementSpeed,
 	"iw_ui_character_overview_run_cost"      : GetOverviewRunStaminaCost,

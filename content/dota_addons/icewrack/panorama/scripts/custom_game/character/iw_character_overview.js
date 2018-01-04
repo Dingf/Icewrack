@@ -6,7 +6,7 @@ var stOverviewSections =
 ];
 
 var stOverviewDefenseDividers = [4, 9];
-var stOverviewMiscDividers = [6, 9];
+var stOverviewMiscDividers = [8, 11];
 
 function OnOverviewStatMouseOverThink(hContextPanel)
 {

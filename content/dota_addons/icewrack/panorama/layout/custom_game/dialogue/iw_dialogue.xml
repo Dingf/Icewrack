@@ -5,38 +5,65 @@
 	
 	<scripts>
 		<include src="file://{resources}/scripts/custom_game/custom_events.js" />
+		<include src="file://{resources}/scripts/custom_game/ui/iw_widget_scrollbar.js" />
 		<include src="file://{resources}/scripts/custom_game/dialogue/iw_dialogue_option.js" />
 		<include src="file://{resources}/scripts/custom_game/dialogue/iw_dialogue.js" />
 	</scripts>
 	
+	<snippets>
+		<snippet name="DialogueTextEntrySnippet">
+			<Panel hittest="false" class="DialogueTextEntry">
+				<Label hittest="false" class="DialogueTextSpeakerLabel" id="Speaker" />
+				<Label hittest="false" class="DialogueTextSeparator" text=" - " id="Separator" />
+				<Label hittest="false" class="DialogueTextBodyLabel" id="Text" />
+			</Panel>
+		</snippet>
+		<snippet name="DialogueOptionEntrySnippet">
+			<Panel hittest="true" class="DialogueOptionEntry">
+				<Label hittest="false" class="DialogueOptionNumberLabel" id="Number" />
+				<Label hittest="false" class="DialogueOptionBodyLabel" id="Text" />
+			</Panel>
+		</snippet>
+	</snippets>
+	
 	<Panel hittest="false" class="DialogueRoot" onload="OnDialogueLoad()">
 		<Panel hittest="false" id="Dialogue">
-			<Panel hittest="true" class="DialogueFill" id="Fill"/>
+			<Panel hittest="true" class="DialogueFiller" id="Filler" onactivate="OnDoNothing()"/>
 			<Panel hittest="false" class="DialogueBackgroundContainer">
-				<Image hittest="false" class="DialogueBlurEdge" src="file://{images}/custom_game/dialogue/iw_dialogue_blur_edge_1.tga" />
-				<Panel hittest="true" class="DialogueBackground" />
+				<Panel hittest="false" class="DialogueBackground" />
 			</Panel>
-			<Panel hittest="false" class="DialogueContentContainer">
-				<Panel hittest="false" class="DialogueSpeakerContainer">
-					<Panel hittest="false" class="DialoguePortraitContainer">
-						<Image hittest="false" class="DialoguePortrait" id="Portrait" src="file://{images}/portraits/default.png" />
+			<Panel hittest="false" class="DialogueBody" id="Body">
+				<Panel hittest="false" class="DialogueTextGroup" id="TextGroup">
+					<Panel hittest="false" class="DialogueCurrentNodeContainer">
+						<Panel hittest="false" class="DialogueTextEntryContainer" id="TextContainer" />
+						<Panel hittest="false" class="DialogueOptionsContainer" id="OptionsContainer" />
+					</Panel>
+					<Panel hittest="false" class="DialogueScrollBuffer" id="ScrollBuffer">
+						<Panel hittest="false" class="DialogueHistoryContainer" id="HistoryContainer"/>
 					</Panel>
 				</Panel>
-				<Panel hittest="false" class="DialogueTextContainer">
-					<Label hittest="false" class="DialogueName" id="Name" text="" />
-					<Panel hittest="false" class="DialogueTextDivider" />
-					<Label hittest="false" class="DialogueText" id="Text" text="" />
+				<Panel hittest="false" class="DialogueBorderContainer">
+					<Panel hittest="false" class="DialogueBorder" id="LowerBorder"/>
+					<Panel hittest="false" class="DialogueBorder" id="UpperBorder"/>
 				</Panel>
-				<Image hittest="false" class="DialogueSelector" src="file://{images}/custom_game/dialogue/iw_dialogue_selector.tga" />
-				<Panel hittest="false" class="DialogueOptionContainer">
-					<Panel hittest="false" class="DialogueOptionScrollContainer" id="ScrollContainer">
-						<Panel hittest="false" class="DialogueOptionTextContainer" id="TextContainer"/>
-					</Panel>
-					<Panel hittest="false" class="DialogueOptionBlurContainer">
-						<Image hittest="false" class="DialogueOptionBlurTop" src="file://{images}/custom_game/dialogue/iw_dialogue_blur_edge_3.tga" />
-						<Image hittest="false" class="DialogueOptionBlurBottom" src="file://{images}/custom_game/dialogue/iw_dialogue_blur_edge_2.tga" />
-					</Panel>
+			</Panel>
+			<Panel hittest="false" class="DialogueFrameContainer">
+				<Panel hittest="false" class="DialogueFrameFiller1" />
+				<Panel hittest="false" class="DialogueFrame">
+					<Image hittest="false" class="DialogueFramePortrait" id="LeftFramePortrait"/>
+					<Image hittest="false" id="LeftFrameOverlay" src="file://{images}/custom_game/dialogue/iw_dialogue_frame_left.tga"/>
+					<Label hittest="false" class="DialogueFrameTitle" id="LeftFrameTitle" />
 				</Panel>
+				<Panel hittest="false" class="DialogueFrameFiller2" />
+			</Panel>
+			<Panel hittest="false" class="DialogueFrameContainer">
+				<Panel hittest="false" class="DialogueFrameFiller2" />
+				<Panel hittest="false" class="DialogueFrame">
+					<Image hittest="false" class="DialogueFramePortrait" id="RightFramePortrait"/>
+					<Image hittest="false" id="RightFrameOverlay" src="file://{images}/custom_game/dialogue/iw_dialogue_frame_right.tga"/>
+					<Label hittest="false" class="DialogueFrameTitle" id="RightFrameTitle" />
+				</Panel>
+				<Panel hittest="false" class="DialogueFrameFiller1" />
 			</Panel>
 		</Panel>
 	</Panel>

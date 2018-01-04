@@ -93,6 +93,11 @@
 			m_OffsetMin = [ 0.0, 0.0, -50.0 ]
 			m_OffsetMax = [ 0.0, 0.0, -25.0 ]
 		},
+		{
+			_class = "C_INIT_RandomColor"
+			m_ColorMin = [ 62, 168, 255, 55 ]
+			m_ColorMax = [ 63, 99, 128, 55 ]
+		},
 	]
 	m_Emitters = 
 	[

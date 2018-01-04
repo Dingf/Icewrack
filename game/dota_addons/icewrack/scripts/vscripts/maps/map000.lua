@@ -2,7 +2,6 @@
 	Map 0 (Character select screen)
 ]]
 
-require("ext_entity")
 require("game_states")
 
 local stHeroAxeResponseLines =
@@ -74,7 +73,7 @@ local stHeroResponseTable =
 }
 
 --Prevents characters from spending stamina while running back and forth in the pick screen
-local shItemMap000BuffModifier = CreateItem("map000_buff", nil, nil)
+local shItemMap000BuffModifier = CreateItem("item_map000_buff", nil, nil)
 
 if CIcewrack_Map0_00 == nil then
 	CIcewrack_Map0_00 = class({})
@@ -133,10 +132,10 @@ function CIcewrack_Map0_00:OnCharacterSelectStart(keys)
 	local hEntity = EntIndexToHScript(keys.entindex)
 	if hEntity and keys.difficulty then
 		GameRules:SetCustomGameDifficulty(keys.difficulty)
-		CGameState:SetGameStateValue("game.hero_selection", hEntity:GetInstanceID())
+		GameRules:SetGameState("game.hero_selection", hEntity:GetInstanceID())
 		CParty:AddToParty(hEntity)
 		hEntity:SetControllableByPlayer(0, true)
-		hEntity:SetGoldAmount(CGameState:GetGameStateValue("game.start_gold_" .. keys.difficulty))
+		hEntity:SetGoldAmount(GameRules:GetGameState("game.start_gold_" .. keys.difficulty))
 		FireGameEventLocal("iw_map_transition", { map = "map101" })
 	end
 end
@@ -188,19 +187,20 @@ function CIcewrack_Map0_00:OnGameRulesStateChange(keys)
 				hEntity._vReturnPosition = hEntity:GetAbsOrigin() - (hEntity:GetForwardVector() * 32.0)
 				hEntity:AddNewModifier(hEntity, shItemMap000BuffModifier, "modifier_map000_buff", {})
 				
-				local hSpellbook = hEntity:GetSpellbook()
-				if hSpellbook then
-					for i = 0,hEntity:GetAbilityCount()-1 do
+				--TODO: Remove this code
+				--local hSpellbook = hEntity:GetSpellbook()
+				--if hSpellbook then
+					--[[for i = 0,hEntity:GetAbilityCount()-1 do
 						local hAbility = hEntity:GetAbilityByIndex(i)
 						if hAbility then
-							local hSpellbookAbility = hSpellbook:LearnAbility(hAbility:GetAbilityName(), 1)
+							local hSpellbookAbility = hEntity:LearnAbility(hAbility:GetAbilityName())
 							if hSpellbookAbility then
 								FireGameEventLocal("iw_actionbar_bind", { slot = i + 1, entindex = hEntity:entindex(), ability = hSpellbookAbility:entindex() });
 								hEntity:RemoveAbility(hAbility:GetAbilityName())
 							end
 						end
-					end
-				end
+					end]]
+				--end
 				hEntity:Hold()
 			end
 			hEntity = Entities:Next(hEntity)
@@ -210,8 +210,8 @@ function CIcewrack_Map0_00:OnGameRulesStateChange(keys)
 		hGameModeEntity:SetExecuteOrderFilter(Dynamic_Wrap(CIcewrack_Map0_00, "ExecuteOrderFilter"), self)
 		
 		
-		local hCharacterSelectDummy = CreateDummyUnit(Vector(64, 288, 0), nil, DOTA_TEAM_GOODGUYS)
-		local hDifficultyDummy = CreateDummyUnit(Vector(-224, -3400, 0), nil, DOTA_TEAM_GOODGUYS)
+		local hCharacterSelectDummy = CreateDummyUnit(Vector(64, 288, 0), nil, DOTA_TEAM_GOODGUYS, false)
+		local hDifficultyDummy = CreateDummyUnit(Vector(-224, -3400, 0), nil, DOTA_TEAM_GOODGUYS, false)
 		
 		--GameRules:GetPlayerHero():SetDayTimeVisionRange(200.0)
 		--GameRules:GetPlayerHero():SetNightTimeVisionRange(200.0)

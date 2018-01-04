@@ -37,4 +37,6 @@ var IW_ITEM_ACTION_READ         = 5;
 var IW_ITEM_ACTION_INSPECT      = 6;
 var IW_ITEM_ACTION_TAKE         = 7;
 var IW_ITEM_ACTION_STORE        = 8;
-var IW_ITEM_ACTION_MAX          = 9;
+var IW_ITEM_ACTION_BUY          = 9;
+var IW_ITEM_ACTION_SELL         = 10;
+var IW_ITEM_ACTION_MAX          = 11;

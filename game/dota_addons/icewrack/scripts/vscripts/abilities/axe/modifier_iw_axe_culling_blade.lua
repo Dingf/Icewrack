@@ -11,7 +11,7 @@ end
 function modifier_iw_axe_culling_blade:OnPostAttackDamage(args)
 	local hTarget = args.target
 	local hEntity = self:GetParent()
-	if hTarget and hEntity and args.result then
+	if IsValidExtendedEntity(hTarget) and hEntity and args.result then
 		local hAbility = self:GetAbility()
 		local nUnitClass = hTarget:GetUnitClass()
 		local fThreshold = hAbility:GetSpecialValueFor("threshold")/100.0

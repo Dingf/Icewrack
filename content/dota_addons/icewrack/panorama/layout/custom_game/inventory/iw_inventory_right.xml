@@ -4,6 +4,6 @@
 	</styles>
 	
 	<Panel hittest="false" class="InventoryRightContentRoot">
-		<Panel hittest="false" class="InventoryRightAttribContainer" id="RightAttribs" />
+		<Panel hittest="false" class="InventoryAttributesContainer" id="RightAttribs" />
 	</Panel>
 </root>

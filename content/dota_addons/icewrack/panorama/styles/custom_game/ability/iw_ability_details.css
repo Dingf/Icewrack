@@ -130,7 +130,7 @@
 
 .AbilityDetailsNotesContainer
 {
-	width: fill-parent-flow(1.0);
+	width: 100%;
 	flow-children: down;
 	margin-left: 32px;
 }

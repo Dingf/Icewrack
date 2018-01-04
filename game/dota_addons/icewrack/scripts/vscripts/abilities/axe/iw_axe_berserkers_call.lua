@@ -13,16 +13,8 @@ function iw_axe_berserkers_call:OnSpellStart()
 							    IW_STATUS_MASK_FEAR + 
 							    IW_STATUS_MASK_CHARM +
 								IW_STATUS_MASK_EXHAUSTION)
-	
-	local fRadius = self:GetAOERadius()
-	local fThreatAmount = self:GetSpecialValueFor("threat") + self:GetSpecialValueFor("threat_bonus") * hEntity:GetSpellpower()
-	local hNearbyEntities = FindUnitsInRadius(hEntity:GetTeamNumber(), hEntity:GetAbsOrigin(), nil, self:GetAOERadius(), DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
-
-	for k,v in pairs(hNearbyEntities) do
-		if v ~= hEntity and IsValidNPCEntity(v) and v:IsEnemy(hEntity) then
-			v:AddThreat(hEntity, fThreatAmount, false)
-		end
-	end
+								
+	hEntity:AddNewModifier(hEntity, self, "modifier_iw_axe_berserkers_call", { duration = self:GetSpecialValueFor("duration") })
 	
 	local nParticleID = ParticleManager:CreateParticle("particles/units/heroes/hero_axe/axe_beserkers_call_owner.vpcf", PATTACH_POINT, hEntity)
 	ParticleManager:ReleaseParticleIndex(nParticleID)

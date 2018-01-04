@@ -26,6 +26,18 @@ function UpdateLootableInfo()
 	DispatchCustomEvent($.GetContextPanel().FindChildTraverse("LootableRightList"), "ItemListUpdate");
 }
 
+function OnLootableTakeAllMouseOver()
+{
+	var hHeaderCenter = $("#Lootable").FindChildTraverse("TradeHeaderCenter");
+	$.DispatchEvent("DOTAShowTextTooltip", hHeaderCenter, $.Localize("#iw_ui_lootable_take_all"));
+}
+
+function OnLootableTakeAllMouseOut()
+{
+	var hHeaderCenter = $("#Lootable").FindChildTraverse("TradeHeaderCenter");
+	$.DispatchEvent("DOTAHideTextTooltip", hHeaderCenter);
+}
+
 function OnLootableInventoryUpdate(szTableName, szKey, tData)
 {
 	var nTargetIndex = parseInt(szKey);
@@ -39,25 +51,47 @@ function OnLootableInventoryUpdate(szTableName, szKey, tData)
 
 function OnLootableInteract(args)
 {
+	DispatchCustomEvent($("#Lootable"), "WindowOpen");
+	
 	var hLeftList = $.GetContextPanel().FindChildTraverse("LootableLeftList");
 	$.GetContextPanel().SetAttributeInt("lootable", args.lootable);
 	hLeftList.SetAttributeInt("entindex", args.lootable);
+	var hLeftTitle = $.GetContextPanel().FindChildTraverse("LeftNameTitle");
+	hLeftTitle.text = $.Localize("#" + Entities.GetUnitName(args.lootable));
+	
 	var hRightList = $.GetContextPanel().FindChildTraverse("LootableRightList");
-	hRightList.SetAttributeInt("entindex", args.entindex);
 	$.GetContextPanel().SetAttributeInt("entindex", args.entindex);
-	DispatchCustomEvent($("#Lootable"), "WindowOpen");
+	$("#Lootable").SetAttributeInt("entindex", args.entindex);
+	hRightList.SetAttributeInt("entindex", args.entindex);
+	var hRightTitle = $.GetContextPanel().FindChildTraverse("RightNameTitle");
+	hRightTitle.text = $.Localize("#" + Entities.GetUnitName(args.entindex));
+	DispatchCustomEvent($("#Lootable"), "WindowPartyUpdate", { entindex:args.entindex });
+	
+	UpdateLootableInfo();
 }
 
 function OnLootableLeftDragDrop(szPanelID, hDraggedPanel)
 {
-	//TODO: Implement me
-	$.Msg("left drop");
+	if (hDraggedPanel._nDragType == 0x01)
+	{
+		var nItemIndex = hDraggedPanel._tPanelData.itemindex;
+		var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
+		var nLootableIndex = $.GetContextPanel().GetAttributeInt("lootable", -1);
+		GameEvents.SendCustomGameEventToServer("iw_lootable_store_item", { entindex:nEntityIndex, lootable:nLootableIndex, itemindex:nItemIndex });
+		hDraggedPanel._bDragCompleted = true;
+	}
 }
 
 function OnLootableRightDragDrop(szPanelID, hDraggedPanel)
 {
-	//TODO: Implement me
-	$.Msg("right drop");
+	if (hDraggedPanel._nDragType == 0x01)
+	{
+		var nItemIndex = hDraggedPanel._tPanelData.itemindex;
+		var nEntityIndex = $.GetContextPanel().GetAttributeInt("entindex", -1);
+		var nLootableIndex = $.GetContextPanel().GetAttributeInt("lootable", -1);
+		GameEvents.SendCustomGameEventToServer("iw_lootable_take_item", { entindex:nEntityIndex, lootable:nLootableIndex, itemindex:nItemIndex });
+		hDraggedPanel._bDragCompleted = true;
+	}
 }
 
 function OnLootableTakeItem(hContextPanel, tArgs)
@@ -113,42 +147,58 @@ function OnLootablePartyUpdate(hContextPanel, tArgs)
 	return true;
 }
 
+function OnLootableButtonActivate(hContextPanel, tArgs)
+{
+	var szPanelID = tArgs.panel.id;
+	if (szPanelID === "TakeAllButton")
+	{
+		var nLootableIndex = hContextPanel.GetAttributeInt("lootable", -1);
+		var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
+		GameEvents.SendCustomGameEventToServer("iw_lootable_take_all", { lootable:nLootableIndex, entindex:nEntityIndex });
+	}
+	return true;
+}
+
 function LoadLootableLayout()
 {
 	var hLeftContent = $("#Lootable").FindChildTraverse("WindowLeftContent");
-	hLeftContent.AddClass("LootableLeftScreenPadding");
+	hLeftContent.style.position = "26px 0px 0px";
 	hLeftContent.BLoadLayout("file://{resources}/layout/custom_game/lootable/iw_lootable_left.xml", false, false);
 	CreateItemList(hLeftContent, "LootableLeftList", 192);
 	var hRightContent = $("#Lootable").FindChildTraverse("WindowRightContent");
 	hRightContent.BLoadLayout("file://{resources}/layout/custom_game/lootable/iw_lootable_right.xml", false, false);
 	CreateItemList(hRightContent, "LootableRightList", 320);
+	
+	var hHeaderCenter = $("#Lootable").FindChildTraverse("TradeHeaderCenter");
+	var hTakeAllButton = CreateButton(hHeaderCenter, "TakeAllButton", null, "ui/window/iw_window_take_all_button");
+	hTakeAllButton.SetPanelEvent("onmouseover", OnLootableTakeAllMouseOver);
+	hTakeAllButton.SetPanelEvent("onmouseout", OnLootableTakeAllMouseOut);
 }
 
 function LoadLootableAttribs()
 {
 	var hLeftAttribs = $("#Lootable").FindChildTraverse("LeftAttribs");
-	CreateIconLabel(hLeftAttribs, "LeftWeightAttrib", "icons/iw_icon_weight", "", "#ffffff80", $.Localize("#iw_ui_inventory_carry"), 126);
-	CreateIconLabel(hLeftAttribs, "LeftGoldAttrib", "icons/iw_icon_gold", "", "#ffc000ff", $.Localize("#iw_ui_inventory_gold"));
+	CreateIconLabel(hLeftAttribs, "LeftGoldAttrib", "icons/iw_icon_gold", "", "#ffc000ff", $.Localize("#iw_ui_inventory_gold"), 128);
+	CreateIconLabel(hLeftAttribs, "LeftWeightAttrib", "icons/iw_icon_weight", "", "#ffffff80", $.Localize("#iw_ui_inventory_carry"), 128);
 	
 	var hRightAttribs = $("#Lootable").FindChildTraverse("RightAttribs");
-	CreateIconLabel(hRightAttribs, "RightGoldAttrib", "icons/iw_icon_gold", "", "#ffc000ff", $.Localize("#iw_ui_inventory_gold"));
-	CreateIconLabel(hRightAttribs, "RightWeightAttrib", "icons/iw_icon_weight", "", "#ffffff80", $.Localize("#iw_ui_inventory_carry"), 126);
+	CreateIconLabel(hRightAttribs, "RightGoldAttrib", "icons/iw_icon_gold", "", "#ffc000ff", $.Localize("#iw_ui_inventory_gold"), 128);
+	CreateIconLabel(hRightAttribs, "RightWeightAttrib", "icons/iw_icon_weight", "", "#ffffff80", $.Localize("#iw_ui_inventory_carry"), 128);
 }
 
 (function()
 {
-	CreateWindowPanel($.GetContextPanel(), "Lootable", "", "#iw_ui_lootable", true, true);
+	CreateWindowPanel($.GetContextPanel(), "Lootable", "", "#iw_ui_lootable", WINDOW_OPTION_SPLIT | WINDOW_OPTION_TRADE);
 	$("#Lootable").visible = false;
 	
 	LoadLootableLayout();
 	LoadLootableAttribs();
-	//LoadInventorySlots();
-	//LoadInventoryAttribs();
 
 	RegisterCustomEventHandler($.GetContextPanel(), "WindowOpen", OnLootableOpen);
 	RegisterCustomEventHandler($.GetContextPanel(), "WindowClose", OnLootableClose);
 	RegisterCustomEventHandler($.GetContextPanel(), "WindowFocus", OnLootableFocus);
 	RegisterCustomEventHandler($.GetContextPanel(), "WindowPartyUpdate", OnLootablePartyUpdate);
+	RegisterCustomEventHandler($.GetContextPanel(), "ButtonActivate", OnLootableButtonActivate);
 	
 	RegisterCustomEventHandler($.GetContextPanel(), "ItemActionTake", OnLootableTakeItem);
 	RegisterCustomEventHandler($.GetContextPanel(), "ItemActionStore", OnLootableStoreItem);
@@ -159,6 +209,5 @@ function LoadLootableAttribs()
 	$.RegisterEventHandler("DragDrop", hRightList.FindChildTraverse("Hitbox"), OnLootableRightDragDrop);
 	
 	GameEvents.Subscribe("iw_lootable_interact", OnLootableInteract);
-	//GameEvents.Subscribe("iw_inventory_use_item", OnInventoryUseItem);
 	CustomNetTables.SubscribeNetTableListener("inventory", OnLootableInventoryUpdate);
 })();

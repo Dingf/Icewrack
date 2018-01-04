@@ -44,7 +44,9 @@
 	</snippets>
 	
 	<Panel hittest="false" class="AttributesRoot" onload="OnAttributesLoad()">
-		<Panel hittest="true" class="AttributeList" id="AttributeList" />
+		<Panel hittest="true" class="AttributeListContainer" id="ListContainer">
+			<Panel hittest="false" class="AttributeList" id="AttributeList" />
+		</Panel>
 		<Panel hittest="false" class="AttributesGraphContainer">
 			<Panel hittest="false" class="AttributesGraph" id="AttributesGraph">
 				<Image hittest="false" class="AttributesGraphBG" src="file://{images}/custom_game/character/iw_character_attribute_hex_bg.tga" />

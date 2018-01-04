@@ -1,5 +1,9 @@
 "use strict";
 
+var WINDOW_OPTION_SPLIT = 1;
+var WINDOW_OPTION_PARTY = 2;
+var WINDOW_OPTION_TRADE = 4;
+
 function OnWindowFocus(hContextPanel, tArgs)
 {
 	if (hContextPanel.GetParent().GetParent() == GameUI.GetWindowRoot())
@@ -19,7 +23,8 @@ function OnWindowFocus(hContextPanel, tArgs)
 
 function OnWindowChangePartyMember(hContextPanel, nOffset)
 {
-	if (hContextPanel._bIsPartyWindow)
+	var hHeaderPanel = hContextPanel.FindChild("WindowHeaderPanel");
+	if (hHeaderPanel)
 	{
 		var nEntityIndex = hContextPanel.GetAttributeInt("entindex", -1);
 		var tPartyMembers = CustomNetTables.GetTableValue("party", "Members");
@@ -52,8 +57,13 @@ function OnWindowChangePartyMember(hContextPanel, nOffset)
 				{
 					if (nTargetCount === nTargetSlot)
 					{
+						var hTitleText = hHeaderPanel.FindChildTraverse("NameTitle");
+						if (!hTitleText)
+						{
+							hTitleText = hHeaderPanel.FindChildTraverse("RightNameTitle");
+						}
 						hContextPanel.SetAttributeInt("entindex", nMemberIndex);
-						hContextPanel.FindChildTraverse("NameTitle").text = $.Localize("#" + Entities.GetUnitName(nMemberIndex));
+						hTitleText.text = $.Localize("#" + Entities.GetUnitName(nMemberIndex));
 						DispatchCustomEvent(hContextPanel, "WindowPartyUpdate", { entindex:nMemberIndex });
 						return;
 					}
@@ -197,11 +207,11 @@ function OnWindowTabBackward(hContextPanel, tArgs)
 function OnWindowButtonActivate(hContextPanel, tArgs)
 {
 	var szPanelID = tArgs.panel.id;
-	if (szPanelID === "CloseButton")
+	if (szPanelID === "WindowCloseButton")
 		DispatchCustomEvent(hContextPanel, "WindowClose");
-	else if (szPanelID === "LeftButton")
+	else if (szPanelID === "WindowLeftButton")
 		DispatchCustomEvent(hContextPanel, "WindowTabBackward");
-	else if (szPanelID === "RightButton")
+	else if (szPanelID === "WindowRightButton")
 		DispatchCustomEvent(hContextPanel, "WindowTabForward");
 }
 
@@ -224,61 +234,45 @@ function OnWindowLoad()
 	$.RegisterEventHandler("DragEnd", $.GetContextPanel(), OnWindowDragEnd);
 }
 
-function CreateWindowPanel(hParent, szName, szInternalName, szTitle, bIsSplitWindow, bIsPartyWindow)
+function CreateWindowPanel(hParent, szName, szInternalName, szTitle, nOptionsMask)
 {
 	hParent.SetParent(GameUI.GetWindowRoot());
 	var hPanel = $.CreatePanel("Panel", hParent, szName);
 	hPanel.BLoadLayout("file://{resources}/layout/custom_game/ui/iw_window.xml", false, false);
 	hPanel.FindChildTraverse("Title").text = $.Localize(szTitle);
+	hPanel.SetAttributeInt("options", nOptionsMask);
 	hPanel._szInternalName = szInternalName;
 	hPanel._fOffsetX = 0;
 	hPanel._fOffsetY = 0;
 	hPanel._bInputLock = false;
 	hParent._hWindowPanel = hPanel;
 	
-	var hCloseButton = CreateButton(hPanel, "CloseButton", null, "ui/window/iw_window_close_button");
-	hCloseButton.AddClass("WindowCloseButton");
+	var hCloseButton = CreateButton(hPanel, "WindowCloseButton", null, "ui/window/iw_window_close_button");
 	
-	if (bIsSplitWindow)
+	var hWindowBody = hPanel.FindChild("Body");
+	if (nOptionsMask & WINDOW_OPTION_SPLIT)
 	{
-		hPanel._bIsSplitWindow = true;
-		var hDivider = $.CreatePanel("Image", hPanel, "Divider");
-		hDivider.SetImage("file://{images}/custom_game/ui/iw_window_divider.tga");
-		hDivider.AddClass("WindowDivider");
-		hDivider.hittest = false;
-		var hLeftContent = $.CreatePanel("Panel", hPanel, "WindowLeftContent");
-		hLeftContent.AddClass("WindowLeftContent");
-		hLeftContent.hittest = false;
-		var hRightContent = $.CreatePanel("Panel", hPanel, "WindowRightContent");
-		hRightContent.AddClass("WindowRightContent");
-		hRightContent.hittest = false;
+		hWindowBody.BLoadLayout("file://{resources}/layout/custom_game/ui/iw_window_layout_split.xml", false, false);
 	}
 	else
 	{
-		hPanel._bIsSplitWindow = false;
-		var hContent = $.CreatePanel("Panel", hPanel, "WindowMainContent");
-		hContent.AddClass("WindowContent");
-		hContent.hittest = false;
+		hWindowBody.BLoadLayout("file://{resources}/layout/custom_game/ui/iw_window_layout_full.xml", false, false);
 	}
 	
-	if (bIsPartyWindow)
+	var nHeaderMask = nOptionsMask & (WINDOW_OPTION_PARTY | WINDOW_OPTION_TRADE);
+	if (nHeaderMask === WINDOW_OPTION_PARTY)
 	{
-		hPanel._bIsPartyWindow = true;
-		var hLeftButton = CreateButton(hPanel, "LeftButton", null, "ui/window/iw_window_left_button");
-		hLeftButton.AddClass("WindowLeftButton");
-		var hRightButton = CreateButton(hPanel, "RightButton", null, "ui/window/iw_window_right_button");
-		hRightButton.AddClass("WindowRightButton");
-		var hNameBar = $.CreatePanel("Image", hPanel, "NameBar");
-		hNameBar.SetImage("file://{images}/custom_game/ui/iw_window_name_overlay.tga");
-		hNameBar.AddClass("WindowNameBar");
-		hNameBar.hittest = false;
-		var hNameTitle = $.CreatePanel("Label", hPanel, "NameTitle");
-		hNameTitle.AddClass("WindowNameTitle");
-		hNameTitle.hittest = false;
+		var hHeaderPanel = $.CreatePanel("Panel", hPanel, "WindowHeaderPanel");
+		hHeaderPanel.BLoadLayout("file://{resources}/layout/custom_game/ui/iw_window_layout_party.xml", false, false);
+		var hLeftButton = CreateButton(hHeaderPanel, "WindowLeftButton", null, "ui/window/iw_window_left_button");
+		var hRightButton = CreateButton(hHeaderPanel, "WindowRightButton", null, "ui/window/iw_window_right_button");
 	}
-	else
+	else if (nHeaderMask == WINDOW_OPTION_TRADE) 
 	{
-		hPanel._bIsPartyWindow = false;
+		var hHeaderPanel = $.CreatePanel("Panel", hPanel, "WindowHeaderPanel");
+		hHeaderPanel.BLoadLayout("file://{resources}/layout/custom_game/ui/iw_window_layout_trade.xml", false, false);
+		var hLeftButton = CreateButton(hHeaderPanel, "WindowLeftButton", null, "ui/window/iw_window_left_button");
+		var hRightButton = CreateButton(hHeaderPanel, "WindowRightButton", null, "ui/window/iw_window_right_button");
 	}
 
 	RegisterCustomEventHandler(hPanel, "WindowOpen", OnWindowOpen);

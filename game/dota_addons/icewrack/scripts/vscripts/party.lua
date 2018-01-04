@@ -60,6 +60,10 @@ function CParty:GetSlotByMember(hEntity)
 	end
 end
 
+function CParty:IsPartyMember(hEntity)
+	return (CParty:GetSlotByMember(hEntity) ~= nil)
+end
+
 function CParty:GetPartySize()
 	return #CParty._tMembers
 end
@@ -122,13 +126,13 @@ end
 function CParty:AddToParty(hEntity, nSlot)
 	local nPartySize = CParty:GetPartySize()
 	if not nSlot then nSlot = nPartySize + 1 end
-	if IsValidExtendedEntity(hEntity) and hEntity:IsHero() then
+	if IsValidExtendedEntity(hEntity) and hEntity:IsRealHero() then
 		if nSlot <= IW_MAX_PARTY_SIZE and nSlot > 0 then
 			local nPrevSlot = CParty:GetSlotByMember(hEntity) or 0
 			if nSlot == nPartySize + 1 and nPrevSlot == 0 then
 				InitPartyEntity(hEntity, nSlot)
 				return true
-			elseif nSlot < nPartySize then
+			elseif nSlot <= nPartySize then
 				if nPrevSlot == 0 and nPartySize < IW_MAX_PARTY_SIZE then
 					CParty._tMembers[nPartySize + 1] = CParty._tMembers[nSlot]
 					InitPartyEntity(hEntity, nSlot)

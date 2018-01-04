@@ -4,7 +4,11 @@
 
 --Game states are variables used to keep track of quests and dialogue
 
-if not CGameState then CGameState = {} end
+if not GameRules.GetGameState then
+
+local stGameStateData = LoadKeyValues("scripts/npc/iw_game_states.txt")
+local stGameStateValues = {}
+local stModifiedGameStateValues = {}	--This records the game states that have been changed so that we don't need to save all of them
 
 local function ParseGameStateKeyValues(tKeyValues, szPrefix)
 	for k,v in pairs(tKeyValues) do
@@ -12,26 +16,26 @@ local function ParseGameStateKeyValues(tKeyValues, szPrefix)
 		if type(v) == "table" then
 			ParseGameStateKeyValues(v, szKeyName)
 		elseif type(v) == "number" then
-			CGameState._tValues[szKeyName] = v
+			stGameStateValues[szKeyName] = v
 		end
 	end
 end
 
-if next(CGameState) == nil then
-	local stGameStateData = LoadKeyValues("scripts/npc/iw_game_states.txt")
-	CGameState._tValues = {}
-	CGameState._tChangedValues = {}
-	ParseGameStateKeyValues(stGameStateData)
+function GameRules:GetGameState(szName)
+	return stGameStateValues[szName]
 end
 
-function CGameState:GetGameStateValue(szName)
-	return CGameState._tValues[szName]
-end
-
-function CGameState:SetGameStateValue(szName, nValue)
-	if type(szName) == "string" and CGameState._tValues[szName] then
-		CGameState._tValues[szName] = nValue
-		CGameState._tChangedValues[szName] = nValue
-		return nValue
+function GameRules:SetGameState(szName, nValue)
+	if stGameStateValues[szName] and type(nValue) == "number" then
+		stGameStateValues[szName] = nValue
+		stModifiedGameStateValues[szName] = nValue
 	end
+end
+
+function GameRules:GetModifiedGameStates()
+	return stModifiedGameStateValues
+end
+
+ParseGameStateKeyValues(stGameStateData)
+
 end

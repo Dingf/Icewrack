@@ -16,7 +16,7 @@ end
 function iw_axe_counter_helix:OnAbilityPhaseStart()
 	local hEntity = self:GetCaster()
 	local fBaseAttackInterval = self:GetSpecialValueFor("attack_interval")
-	self._fAttackRate = (1.0 + hEntity:GetIncreasedAttackSpeed()) * (0.5/fBaseAttackInterval)
+	self._fAttackRate = math.max(-0.9, math.min(1.0 + hEntity:GetIncreasedAttackSpeed(), 5.0))/fBaseAttackInterval
 	return true
 end
 
@@ -42,7 +42,8 @@ function iw_axe_counter_helix:OnSpellStart()
 		local tModifierArgs = 
 		{
 			avoidance = fAvoidanceValue,
-			move_speed = self:GetSpecialValueFor("move_speed")
+			move_speed = self:GetSpecialValueFor("move_speed"),
+			damage = self:GetSpecialValueFor("damage"),
 		}
 		self._fLastChannelTime = 0
 		hEntity:AddNewModifier(hEntity, self, "modifier_iw_axe_counter_helix", tModifierArgs)
@@ -72,34 +73,29 @@ end
 function iw_axe_counter_helix:OnChannelThink(fThinkRate)
 	local hEntity = self:GetCaster()
 	local fBaseAttackInterval = self:GetSpecialValueFor("attack_interval")
-	local fAttackRate = (1.0 + hEntity:GetIncreasedAttackSpeed()) * (0.5/fBaseAttackInterval)
-	local fRealAttackInterval = fBaseAttackInterval/fAttackRate
+	local fAttackRate = math.max(-0.9, math.min(1.0 + hEntity:GetIncreasedAttackSpeed(), 5.0))/fBaseAttackInterval
+	local fRealAttackInterval = 1.0/fAttackRate
 	
 	self._fAttackRate = fAttackRate
 	
 	local fCurrentTime = GameRules:GetGameTime()
 	if fCurrentTime - self._fLastChannelTime >= fRealAttackInterval then
-		if hEntity:GetStamina() >= self:GetStaminaCost() then
-			local tDamageTable =
-			{
-				attacker = hEntity,
-				Percent = self:GetSpecialValueFor("damage"),
-				CanDodge = true,
-			}
-			
-			local hNearbyEntities = FindUnitsInRadius(hEntity:GetTeamNumber(), hEntity:GetAbsOrigin(), nil, self:GetAOERadius(), DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
-			for k,v in pairs(hNearbyEntities) do
-				if v ~= hEntity and IsValidExtendedEntity(v) then
-					tDamageTable.target = v
-					DealAttackDamage(hEntity, tDamageTable)
-				end
+		local tDamageTable =
+		{
+			attacker = hEntity,
+			Percent = self:GetSpecialValueFor("damage"),
+			CanDodge = true,
+		}
+		
+		local hNearbyEntities = FindUnitsInRadius(hEntity:GetTeamNumber(), hEntity:GetAbsOrigin(), nil, self:GetAOERadius(), DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_ALL, 0, 0, false)
+		for k,v in pairs(hNearbyEntities) do
+			if v ~= hEntity and IsValidExtendedEntity(v) then
+				tDamageTable.target = v
+				DealAttackDamage(hEntity, tDamageTable)
 			end
-			self._fLastChannelTime = fCurrentTime
-			hEntity:SpendStamina(self:GetStaminaCost())
-			EmitSoundOn("Hero_Axe.CounterHelix", hEntity)
-		else
-			hEntity:Stop()
 		end
+		self._fLastChannelTime = fCurrentTime
+		EmitSoundOn("Hero_Axe.CounterHelix", hEntity)
 	end
 	--Disable stamina regen time during channel
 	hEntity:SpendStamina(0)

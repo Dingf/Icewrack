@@ -1,4 +1,4 @@
-"IcewrackLootListDefinitions"
+"IcewrackItemListDefinitions"
 {
 	"drop_list_test"
 	{
@@ -16,9 +16,9 @@
 			"Max"		"1"
 		}
 
-		"item_test2"
+		"item_test_potion2"
 		{
-			"Weight"	"0"
+			"Weight"	"10"
 			"Min"		"1"
 			"Max"		"1"
 		}

@@ -11,6 +11,7 @@ end
 
 require("instance")
 require("link_ext_ability")
+require("spellbook")
 
 stExtItemTypeEnum =
 {
@@ -57,13 +58,13 @@ local stExtItemData = LoadKeyValues("scripts/npc/npc_items_extended.txt")
 
 CExtItem = setmetatable(ext_class({}), { __call = 
 	function(self, hItem, nInstanceID)
-		LogAssert(IsInstanceOf(hItem, CDOTA_Item), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_Item", type(hItem))
+		LogAssert(IsInstanceOf(hItem, CDOTA_Item), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_Item")
 		if IsInstanceOf(hItem, CExtItem) then
-			LogMessage("Tried to create a CExtItem from \"" .. hItem:GetAbilityName() .."\", which is already a CExtItem", LOG_SEVERITY_WARNING)
+			LogMessage(LOG_MESSAGE_WARN_EXISTS, LOG_SEVERITY_WARNING, "CExtItem", hItem:GetName())
 			return hItem
 		end
 		
-		hItem = CInstance(hItem, nInstanceID)
+		hItem = CSpellbook(hItem, nInstanceID)
 		ExtendIndexTable(hItem, CExtItem, CExtAbilityLinker)
 		
 		local szItemName = hItem:GetName()
@@ -157,7 +158,7 @@ CExtItem = setmetatable(ext_class({}), { __call =
 			properties_base = {},
 			properties_bonus = {},
 		}
-		hItem:UpdateNetTable()
+		hItem:UpdateItemNetTable()
 			
 		return hItem
 	end})
@@ -243,7 +244,7 @@ function CExtItem:GetModifierSeed(szModifierName, nPropertyID)
 	return tModifierSeeds[nPropertyID]
 end
 
-function CExtItem:UpdateNetTable()
+function CExtItem:UpdateItemNetTable()
 	local tNetTable  = self._tNetTable
 	tNetTable.type   = self:GetItemType()
 	tNetTable.flags  = self:GetItemFlags()
@@ -261,6 +262,12 @@ function CExtItem:UpdateNetTable()
 	end
 	
 	CustomNetTables:SetTableValue("items", tostring(self:entindex()), tNetTable)
+end
+
+function CExtItem:OnAbilityBind(hEntity, nSlot)
+end
+
+function CExtItem:OnAbilityUnbind(hEntity)
 end
 
 function CExtItem:ApplyModifiers(nTrigger, hEntity)
@@ -297,6 +304,17 @@ function CExtItem:RemoveModifiers(nTrigger, hEntity)
 	end
 end
 
+function CExtItem:GetNetTable()
+	local tNetTable =
+	{
+		skill = hAbility:GetSkillRequirements(),
+		stamina = hAbility:GetStaminaCost(),
+		mana_upkeep = hAbility:GetManaUpkeep(),
+		stamina_upkeep = hAbility:GetStaminaUpkeep(),
+	}
+	return tNetTable
+end
+
 function CExtItem:RemoveSelf()
 	self:RemoveModifiers(IW_MODIFIER_ON_ACQUIRE)
 	for k,v in pairs(self._tComponentList) do
@@ -309,9 +327,10 @@ function IsValidExtendedItem(hItem)
     return (IsValidEntity(hItem) and IsInstanceOf(hItem, CExtItem))
 end
 
-for k,v in pairs(stBaseItemData) do
-	if v.BaseClass == "item_lua" then
-		CExtAbilityLinker:LinkExtAbility(k, v, stExtItemData[k] or {})
+for k,v in pairs(stExtItemData) do
+	local tBaseItemTemplate = stBaseItemData[k]
+	if tBaseItemTemplate then
+		CExtAbilityLinker:LinkExtAbility(k, tBaseItemTemplate, v)
 	end
 end
 

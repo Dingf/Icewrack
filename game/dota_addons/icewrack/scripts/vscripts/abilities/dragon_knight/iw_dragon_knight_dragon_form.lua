@@ -8,18 +8,24 @@ local stDragonFormResponseLines =
 	"dragon_knight_drag_ability_eldrag_04",
 }
 
-function iw_dragon_knight_dragon_form:OnAbilityLearned()
-	local hEntity = self:GetCaster()
-	local hAbility = CExtAbility(hEntity:AddAbility("iw_dragon_knight_breathe_fire"))
-	hAbility:SetLevel(1)
-	
-	local hAttackSource = self._hAttackSource
-	if not hAttackSource then
-		hAttackSource = CExtItem(CreateItem("iw_dragon_knight_dragon_form_source", nil, nil))
+function iw_dragon_knight_dragon_form:OnAbilityLearned(hEntity)
+	if IsValidExtendedEntity(hEntity) then
+		local hAbility = CExtAbility(hEntity:AddAbility("iw_dragon_knight_breathe_fire"))
+		hAbility:SetLevel(1)
+		
+		local hAttackSource = self._hAttackSource
+		if not hAttackSource then
+			hAttackSource = CExtItem(CreateItem("item_iw_dragon_knight_dragon_form_source", nil, nil))
+			hAttackSource._hParentAbility = self
+			self._hAttackSource = hAttackSource
+		end
+		
+		local hPreviousOwner = hAttackSource:GetOwner()
+		if hPreviousOwner then
+			hPreviousOwner:RemoveFromRefreshList(hAttackSource)
+		end
 		hAttackSource:SetOwner(hEntity)
 		hEntity:AddToRefreshList(hAttackSource)
-		hAttackSource._hParentAbility = self
-		self._hAttackSource = hAttackSource
 	end
 end
 

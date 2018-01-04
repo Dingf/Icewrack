@@ -1,0 +1,191 @@
+.TooltipItemRoot
+{
+	width: fit-children;
+	flow-children: down;
+}
+
+.TooltipItemHeader
+{
+	flow-children: right;
+}
+
+.TooltipItemIcon
+{
+	width: 64px;
+	height: 64px;
+	margin-right: 12px;
+	border: 2px solid #000000;
+	box-shadow: #00000080 0px 0px 4px 0px;
+}
+
+.TooltipItemHeaderContent
+{
+	width: fit-children;
+	flow-children: down;
+}
+
+.TooltipItemTitleContainer
+{
+	flow-children: right;
+}
+
+.TooltipItemTitle
+{
+	color: #ffffffff;
+	font-size: 18px;
+	font-weight: bold;
+	font-family: Goudy Trajan Medium,FZKai-Z03,TH Sarabun New;
+}
+
+.TooltipItemTypeIcon
+{
+	width: 16px;
+	height: 16px;
+	margin-right: 4px;
+	vertical-align: bottom;
+}
+
+.TooltipItemDivider
+{
+	height: 1px;
+	width: 100%;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	background-color: #ffffff20;
+}
+
+.TooltipItemSpacer
+{
+	height: 0px;
+	width: 256px;
+}
+
+.TooltipItemTypeContainer
+{
+	width: 100%;
+	flow-children: right;
+}
+
+.TooltipItemTypeLabel
+{
+	width: fill-parent-flow(1.0);
+	color: #ffffffc0;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.TooltipItemHeaderLabel
+{
+	color: #ffffffc0;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+.TooltipItemHeaderIcon
+{
+	width: 16px;
+	height: 16px;
+	margin-right: 8px;
+}
+
+.TooltipItemDamageContainer
+{
+	width: 100%;
+	flow-children: right;
+}
+
+.TooltipItemDamageGroup
+{
+	flow-children: down;
+	width: fill-parent-flow(1.0);
+}
+
+.TooltipItemDamage
+{
+	flow-children: right;
+}
+
+.TooltipItemArmorContainer
+{
+	width: 100%;
+	flow-children: right;
+	visibility: collapse;
+}
+
+.TooltipItemArmorGroup
+{
+	flow-children: right;
+}
+
+.TooltipItemDescriptionContainer
+{
+	flow-children: down;
+	margin-left: 8px;
+}
+
+.TooltipItemDescriptionLabel
+{
+	color: #ffffff60;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	vertical-align: center;
+}
+
+.TooltipItemLoreContainer
+{
+	height: fit-children;
+	width: 100%;
+}
+
+.TooltipItemLoreLabel
+{
+	width: 100%;
+	color: #ffffff30;
+	font-style: italics;
+	font-size: 15px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+	vertical-align: center;
+}
+
+.TooltipItemMiscContainer
+{
+	width: 100%;
+	flow-children: right;
+	margin-top: 8px;
+}
+
+.TooltipItemMiscStat
+{
+	width: 96px;
+	flow-children: right;
+	margin-right: 8px;
+}
+
+.TooltipItemMiscIcon
+{
+	width: 20px;
+	height: 20px;
+}
+
+.TooltipItemMiscLabel
+{
+	margin-top: 1px;
+	color: #ffffff30;
+	font-size: 16px;
+	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
+}
+
+#APSLabel
+{
+	vertical-align: center;
+}
+
+#GoldIcon
+{
+	wash-color: #ffc000ff;
+}
+
+#GoldLabel
+{
+	color: #ffc00080;
+}

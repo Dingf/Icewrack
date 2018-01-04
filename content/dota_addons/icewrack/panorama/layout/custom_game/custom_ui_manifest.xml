@@ -6,10 +6,12 @@
 		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_BAR_BACKGROUND, false);
 		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ACTION_PANEL, false);
 		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ACTION_MINIMAP, false);
-		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_PANEL, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_KILLCAM, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_PANEL, true);
 		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_HERO_SELECTION_TEAMS, false);
 		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_HERO_SELECTION_GAME_NAME, false);
 		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_HERO_SELECTION_CLOCK, false);
+		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_PREGAME_STRATEGYUI, false);
 		GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_ENDGAME, false);
 	</script>
 	
@@ -31,6 +33,7 @@
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/aam/iw_aam.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/lootable/iw_lootable.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/ui/iw_scrollable.xml" />
+		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/hotkeys/iw_hotkeys.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/iw_globals.xml" />
 	</Panel>
 </root>

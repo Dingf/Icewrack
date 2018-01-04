@@ -1,7 +1,7 @@
 iw_dragon_knight_shield_slam = class({})
 
 function iw_dragon_knight_shield_slam:CastFilterResultTarget(hTarget)
-	if IsServer() and IsValidExtendedEntity(hEntity) then
+	if IsServer() and IsValidExtendedEntity(hTarget) then
 		self._bEquipFailed = false
 		local hEntity = self:GetCaster()
 		for i = 1,IW_INVENTORY_SLOT_QUICK1-1 do

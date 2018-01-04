@@ -144,7 +144,7 @@ function OnAbilityEntryDeselectParent(hContextPanel, tArgs)
 function OnAbilitySkillMask(hContextPanel, tArgs)
 {
 	var nSkillMask = tArgs.mask;
-	for (var i = 0; i < 26; i++)
+	for (var i = 0; i < 24; i++)
 	{
 		var nState = (nSkillMask & (1 << i)) >>> i;
 		DispatchCustomEvent(hContextPanel.FindChildTraverse("SkillIcon" + i), "AbilitySkillIconSetState", { state:nState });
@@ -274,16 +274,16 @@ function LoadAbilityLayout()
 function LoadAbilityIcons()
 {
 	var hIconContainer = $("#Abilities").FindChildTraverse("IconContainer1");
-	for (var i = 0; i < 13; i++)
+	for (var i = 0; i < 12; i++)
 	{
 		var hIcon = CreateAbilitySkillIcon(hIconContainer, "SkillIcon" + i, i);
 		hIcon.style.position = (64 + (i * 40)) + "px 16px 0px";
 	}
 	
 	hIconContainer = $("#Abilities").FindChildTraverse("IconContainer2");
-	for (var i = 0; i < 13; i++)
+	for (var i = 0; i < 12; i++)
 	{
-		var hIcon = CreateAbilitySkillIcon(hIconContainer, "SkillIcon" + (i + 13), (i + 13));
+		var hIcon = CreateAbilitySkillIcon(hIconContainer, "SkillIcon" + (i + 12), (i + 12));
 		hIcon.style.position = (64 + (i * 40)) + "px 16px 0px";
 	}
 }
@@ -322,7 +322,7 @@ function LoadAbilityDetails()
 
 (function()
 {
-	CreateWindowPanel($.GetContextPanel(), "Abilities", "abilities", "#iw_ui_abilities", false, true);
+	CreateWindowPanel($.GetContextPanel(), "Abilities", "abilities", "#iw_ui_abilities", WINDOW_OPTION_PARTY);
 	
 	LoadAbilityLayout();
 	LoadAbilityIcons();

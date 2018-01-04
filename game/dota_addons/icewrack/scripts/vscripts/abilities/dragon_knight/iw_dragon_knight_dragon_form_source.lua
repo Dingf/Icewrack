@@ -1,6 +1,6 @@
 iw_dragon_knight_dragon_form_source = class({})
 
-function iw_dragon_knight_dragon_form_source:OnEntityRefresh()
+function iw_dragon_knight_dragon_form_source:OnRefreshEntity()
 	local hEntity = self:GetOwner()
 	local hAbility = self._hParentAbility
 	if hAbility and hEntity then
@@ -10,7 +10,7 @@ function iw_dragon_knight_dragon_form_source:OnEntityRefresh()
 			local fDamageMax = hBreatheFireAbility:GetSpecialValueFor("damage_max") + (hEntity:GetSpellpower() * hBreatheFireAbility:GetSpecialValueFor("damage_max_bonus"))
 			self:SetPropertyValue(IW_PROPERTY_DMG_FIRE_BASE, fDamageMin)
 			self:SetPropertyValue(IW_PROPERTY_DMG_FIRE_VAR, fDamageMax - fDamageMin)
-			self:UpdateNetTable()
+			self:UpdateItemNetTable()
 		end
 	end
 end

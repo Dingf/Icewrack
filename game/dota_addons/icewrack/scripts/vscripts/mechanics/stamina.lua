@@ -47,15 +47,22 @@ function modifier_internal_stamina:OnCreated(keys)
 	end
 end
 
---TODO: Fix the stamina percentage not being maintained when equipping items that provide extra stamina or endurance
+--TODO: Fix the stamina percentage not being maintained when equipping items that provide extra stamina or constitution
 function modifier_internal_stamina:OnIntervalThink()
 	if IsServer() then
 		local hEntity = self:GetParent()
+		local tNetTable = hEntity._tNetTable
 		local fStamina = hEntity:GetStamina()
 		local fMaxStamina = hEntity:GetMaxStamina()
 		if fMaxStamina ~= hEntity._fLastMaxStamina then
 			fStamina = math.max(0, math.min(fMaxStamina, hEntity._fLastStaminaPercent * fMaxStamina))
 			hEntity._fLastMaxStamina = fMaxStamina
+			hEntity:SetStamina(fStamina)
+			hEntity:SetPhysicalArmorBaseValue(fStamina)
+			if tNetTable then
+				tNetTable.stamina_max = fMaxStamina
+				hEntity:UpdateEntityNetTable(true)
+			end
 		end
 		if not GameRules:IsGamePaused() and hEntity:IsAlive() then
 			if hEntity:IsMoving() and hEntity._bRunMode then
@@ -71,7 +78,7 @@ function modifier_internal_stamina:OnIntervalThink()
 			if fStamina ~= fMaxStamina then
 				local fStaminaRegenPerSec = hEntity:GetPropertyValue(IW_PROPERTY_SP_REGEN_FLAT) + (hEntity:GetPropertyValue(IW_PROPERTY_MAX_SP_REGEN)/100.0 * hEntity:GetMaxStamina())
 				if GameRules:GetGameTime() > fStaminaRegenTime then
-					fStaminaRegenPerSec = fStaminaRegenPerSec + (0.1 * fMaxStamina)
+					fStaminaRegenPerSec = fStaminaRegenPerSec + (hEntity:GetPropertyValue(IW_PROPERTY_SP_RECHARGE_PCT)/100.0 * fMaxStamina)
 				end
 				fStaminaRegenPerSec = fStaminaRegenPerSec * (1.0 + self:GetPropertyValue(IW_PROPERTY_SP_REGEN_PCT)/100.0)
 				if hEntity:IsMoving() then
@@ -79,16 +86,12 @@ function modifier_internal_stamina:OnIntervalThink()
 				end
 				hEntity:SetStamina(fStamina + fStaminaRegenPerSec/30.0)
 				hEntity._fLastStaminaPercent = fStamina/fMaxStamina
+			else
+				hEntity._fLastStaminaPercent = 1.0
 			end
-			local tNetTable = hEntity._tNetTable
-			if tNetTable then
-				if fStamina ~= tNetTable.stamina or fMaxStamina ~= tNetTable.stamina_max or fStaminaRegenTime ~= tNetTable.stamina_time then
-					tNetTable.stamina = fStamina
-					tNetTable.stamina_max = fMaxStamina
-					tNetTable.stamina_time = fStaminaRegenTime
-					hEntity:UpdateEntityNetTable(true)
-				end
-			end
+			
+			--This is a hack to get stamina values clientside without constantly updating the entity nettables
+			hEntity:SetPhysicalArmorBaseValue(fStamina)
 		end
 	end
 end

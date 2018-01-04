@@ -5,6 +5,7 @@
 
 if not CEntityBase then
 
+IW_PLAYER_FACTION = 1
 IW_DEFAULT_INTERACT_RANGE = 128
 
 local stInteractableResultEnum =
@@ -16,9 +17,26 @@ local stInteractableResultEnum =
 
 for k,v in pairs(stInteractableResultEnum) do _G[k] = v end
 
+local stFactionList = {}
+local stFactionData = LoadKeyValues("scripts/npc/iw_faction_list.txt")
+for k,v in pairs(stFactionData) do
+	local nFactionID = tonumber(k)
+	local fDefaultWeight = v.WeightDefault
+	if nFactionID and type(fDefaultWeight) == "number" then
+		local tFactionWeights = setmetatable({}, { __index = function() return fDefaultWeight end })
+		for k2,v2 in pairs(v.WeightOverride or {}) do
+			local nTargetID = tonumber(k2)
+			if nTargetID and type(v2) == "number" then
+				tFactionWeights[nTargetID] = v2
+			end
+		end
+		stFactionList[nFactionID] = tFactionWeights
+	end
+end
+
 CEntityBase = setmetatable(ext_class({}), { __call = 
 	function(self, hEntity, nInstanceID)
-		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC")
 		if IsInstanceOf(hEntity, CEntityBase) then
 			return hEntity
 		end
@@ -26,31 +44,111 @@ CEntityBase = setmetatable(ext_class({}), { __call =
 		hEntity = CInstance(hEntity, nInstanceID)
 		ExtendIndexTable(hEntity, CEntityBase)
 		
-		hEntity._nFactionMask = 0
+		hEntity._nFactionID = 0
+		hEntity._tFactionWeights = {}
+		
+		hEntity._nLastOrderID = 0
+		hEntity._tOrderTable = { UnitIndex = hEntity:entindex() }
+		
 		hEntity._fInteractRange = IW_DEFAULT_INTERACT_RANGE
 		hEntity._szInteractZone = nil
+		
+		hEntity._tExtModifierEventTable = {}
+		hEntity._tExtModifierEventIndex = {}
 		
 		hEntity._tRefreshList = {}
 		
 		return hEntity
 	end})
-	
-function CEntityBase:IsEnemy(hTarget)
-	if IsValidFactionEntity(hTarget) then
-	--TODO: Implement me
-	
+
+function CEntityBase:GetFactionID()
+	return self._nFactionID
+end
+
+function CEntityBase:SetFactionID(nFactionID)
+	if type(nFactionID) == "number" then
+		self._nFactionID = nFactionID
+		self._tFactionWeights = setmetatable(self._tFactionWeights, { __index = stFactionList[nFactionID] })
+		local nPlayerFactionWeight = self:GetPlayerFactionWeight()
+		if nPlayerFactionWeight < 0.0 then
+			self:SetTeam(DOTA_TEAM_BADGUYS)
+		elseif nPlayerFactionWeight == 0.0 then
+			self:SetTeam(DOTA_TEAM_NEUTRALS)
+		else
+			self:SetTeam(DOTA_TEAM_GOODGUYS)
+		end
 	end
 end
 
-function CEntityBase:SetFactionMask(nFactionMask)
-	if type(nFactionMask) == "number" then
-		self._nFactionMask = nFactionMask
+function CEntityBase:GetFactionWeight(nFactionID)
+	if nFactionID == self:GetFactionID() then
+		return 100.0
+	else
+		return self._tFactionWeights[nFactionID]
+	end
+end
+
+function CEntityBase:GetPlayerFactionWeight()
+	return self:GetFactionWeight(IW_PLAYER_FACTION)
+end
+
+function CEntityBase:SetOverrideFactionWeight(nFactionID, nWeight)
+	if stFactionList[nFactionID] and type(nWeight) == "number" then
+		self._tFactionWeights[nFactionID] = nWeight
+		if nWeight < 0.0 then
+			self:SetTeam(DOTA_TEAM_BADGUYS)
+		elseif nWeight == 0.0 then
+			self:SetTeam(DOTA_TEAM_NEUTRALS)
+		else
+			self:SetTeam(DOTA_TEAM_GOODGUYS)
+		end
 	end
 end
 	
-function CEntityBase:GetFactionWeight(nFactionMask)
+function CEntityBase:IsTargetEnemy(hTarget)
+	if IsInstanceOf(hTarget, CEntityBase) then
+		local fTargetWeight = self:GetFactionWeight(hTarget:GetFactionID())
+		if type(fTargetWeight) == "number" then
+			return fTargetWeight < 0.0
+		end
+	end
+	return false
+end
+	
+function CEntityBase:IsTargetTeam(hTarget, nTargetTeam)
+	if IsInstanceOf(hTarget, CEntityBase) then
+		local fTargetWeight = self:GetFactionWeight(hTarget:GetFactionID())
+		if type(fTargetWeight) == "number" then
+			local nUnitTeamFlag = (fTargetWeight < 0.0) and DOTA_UNIT_TARGET_TEAM_ENEMY or DOTA_UNIT_TARGET_TEAM_FRIENDLY
+			return bit32.btest(nTargetTeam, nUnitTeamFlag)
+		end
+	end
+	return false
+end
 
-	--TODO: Implement me
+function CEntityBase:IssueOrder(nOrder, hTarget, hAbility, vPosition, bQueue, bRepeatOnly)
+    local tOrderTable = self._tOrderTable
+	local nTargetEntindex = IsValidEntity(hTarget) and hTarget:entindex() or 0
+	local nAbilityEntindex = IsValidEntity(hAbility) and hAbility:entindex() or 0
+	if bRepeatOnly == true then
+		if tOrderTable.OrderType ~= nOrder then
+			return false
+		elseif hTarget and tOrderTable.TargetIndex ~= nTargetEntindex then
+			return false
+		elseif hAbility and tOrderTable.AbilityIndex ~= nAbilityEntindex then
+			return false
+		elseif vPosition and tOrderTable.Position ~= vPosition then
+			return false
+		end
+	end
+	
+	tOrderTable.OrderType = nOrder
+	tOrderTable.TargetIndex = nTargetEntindex
+	tOrderTable.AbilityIndex = nAbilityEntindex
+	tOrderTable.Position = vPosition
+	tOrderTable.Queue = bQueue
+    ExecuteOrderFromTable(tOrderTable)
+	return true
 end
 
 function CEntityBase:AddToRefreshList(hEntity)
@@ -68,14 +166,15 @@ end
 
 function CEntityBase:RefreshEntity()
 	for k,v in ipairs(self._tRefreshList) do
-		v:OnEntityRefresh()
+		v:OnRefreshEntity()
 	end
 	
+	local tRefreshStack = {}
 	local tEntityMetatable = getmetatable(self).__index
 	while type(tEntityMetatable) == "table" do
-		local hEventFunction = rawget(tEntityMetatable, "OnEntityRefresh")
+		local hEventFunction = rawget(tEntityMetatable, "OnRefreshEntity")
 		if hEventFunction then
-			hEventFunction(self)
+			table.insert(tRefreshStack, 1, hEventFunction)
 		end
 		local tParentMetatable = getmetatable(tEntityMetatable)
 		if tParentMetatable then
@@ -83,6 +182,9 @@ function CEntityBase:RefreshEntity()
 		else
 			break
 		end
+	end
+	for k,v in ipairs(tRefreshStack) do
+		v(self)
 	end
 end
 
@@ -142,14 +244,14 @@ function CEntityBase:SetInteractZone(szInteractZone)
 end
 
 function CEntityBase:OnInteractFilter(hEntity)
+	if not (hEntity:IsControllableByAnyPlayer() and hEntity:IsRealHero()) then
+		return false
+	end
 	local tIndexMetatable = self
 	while tIndexMetatable do
-		local hIncludeFunction = rawget(tIndexMetatable, "InteractFilterInclude")
-		local hExcludeFunction = rawget(tIndexMetatable, "InteractFilterExclude")
-		if hIncludeFunction and hIncludeFunction(self, hEntity) then
+		local hFilterFunction = rawget(tIndexMetatable, "InteractFilter")
+		if hFilterFunction and hFilterFunction(self, hEntity) then
 			return true
-		elseif hExcludeFunction and not hExcludeFunction(self, hEntity) then
-			return false
 		end
 		tIndexMetatable = getmetatable(tIndexMetatable).__index
 	end
@@ -157,11 +259,15 @@ function CEntityBase:OnInteractFilter(hEntity)
 end
 
 function CEntityBase:OnInteract(hEntity)
+	if not (hEntity:IsControllableByAnyPlayer() and hEntity:IsRealHero()) then
+		return false
+	end
 	local tIndexMetatable = self
 	while tIndexMetatable do
-		local hFunction = rawget(tIndexMetatable, "Interact")
-		if hFunction then
-			local bResult = hFunction(self, hEntity)
+		local hInteractFunction = rawget(tIndexMetatable, "Interact")
+		local hFilterFunction = rawget(tIndexMetatable, "InteractFilter")
+		if hInteractFunction and hFilterFunction and hFilterFunction(self, hEntity) then
+			local bResult = hInteractFunction(self, hEntity)
 			if type(bResult) == "boolean" then return bResult end
 		end
 		tIndexMetatable = getmetatable(tIndexMetatable).__index
@@ -181,5 +287,41 @@ function CEntityBase:OnGetCustomInteractError(hEntity)
 	end
 	return true
 end
-	
+
+function CEntityBase:TriggerExtendedEvent(nEventID, args)
+	local szEventAlias = stExtModifierEventAliases[nEventID]
+	if szEventAlias and self._tExtModifierEventIndex[nEventID] then
+		for k,v in ipairs(self._tExtModifierEventIndex[nEventID]) do
+			local hEventFunction = v[szEventAlias]
+			if type(hEventFunction) == "function" then
+				local result = hEventFunction(v, args)
+				if result ~= nil then
+					return result
+				end
+			end
+		end
+	end
+end
+
+function ExtUnitFilter(hEntity, hTarget, nTargetTeam, nTargetType, nTargetFlags)
+	if IsInstanceOf(hEntity, CEntityBase) and IsInstanceOf(hTarget, CEntityBase) then
+		if not hEntity:IsControllableByAnyPlayer() and not hTarget:IsControllableByAnyPlayer() then
+			local nResult = UnitFilter(hTarget, DOTA_UNIT_TARGET_TEAM_BOTH, nTargetType, nTargetFlags, hEntity:GetTeamNumber())
+			if nResult == UF_SUCCESS then
+				local bIsEnemy = hEntity:IsTargetEnemy(hTarget)
+				if nTargetTeam == DOTA_UNIT_TARGET_TEAM_FRIENDLY and bIsEnemy then
+					return UF_FAIL_ENEMY
+				elseif nTargetTeam == DOTA_UNIT_TARGET_TEAM_ENEMY and not bIsEnemy then
+					return UF_FAIL_FRIENDLY
+				end
+			end
+			return nResult
+		else
+			local nResult = UnitFilter(hTarget, nTargetTeam, nTargetType, nTargetFlags, hEntity:GetTeamNumber())
+			return nResult
+		end
+	end
+	return UF_FAIL_OTHER
+end
+
 end

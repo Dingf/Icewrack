@@ -54,10 +54,7 @@ function OnItemActionUse(hContextPanel, tArgs)
 	{
 		var nItemIndex = tArgs.itemindex;
 		var nEntityIndex = tArgs.entindex;
-		if (GameUI.GetClickBehaviors() !== CLICK_BEHAVIORS.DOTA_CLICK_BEHAVIOR_CAST)
-		{
-			GameEvents.SendCustomGameEventToServer("iw_inventory_use_item", { entindex:nEntityIndex, itemindex:nItemIndex });
-		}
+		GameEvents.SendCustomGameEventToServer("iw_inventory_use_item", { entindex:nEntityIndex, itemindex:nItemIndex });
 	}
 	return true;
 }

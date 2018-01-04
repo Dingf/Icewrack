@@ -1,0 +1,8 @@
+"IcewrackDialogueEntryDefinitions"
+{
+	"test"
+	"local x = 10
+	 x = x + 15
+         print('hi', x)
+         return x"
+}

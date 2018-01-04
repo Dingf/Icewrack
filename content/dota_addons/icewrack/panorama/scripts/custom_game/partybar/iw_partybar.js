@@ -2,18 +2,51 @@
 
 //TODO: Implement back to dashboard with <Button onactivate="DOTAHUDShowDashboard() "/> etc.
 
-var MAX_PARTY_MEMBERS = 4;
-
 var nLastSelectTime = 0;
 var nLastSelectMask = 0;
 var tPartybarMemberPanels = [];
+
+var tLastHotkeyTime = [];
+function OnHotkeyPartyMemberSelect(nSelectFlag)
+{
+	if (!GameUI.IsHidden())
+	{
+		var nMask = nSelectFlag & 0x0f;
+		var bIsFirstPanel = true;
+		for (var i = 0; i < 4; i++)
+		{
+			if (nMask & (1 << i))
+			{
+				var hPartyMemberPanel = $("#PartyMember" + (i + 1));
+				if (!(nMask & ~(1 << i)) && tLastHotkeyTime[i] && ((Game.Time() - tLastHotkeyTime[i]) < 0.5))
+				{
+					DispatchCustomEvent(hPartyMemberPanel, "PartybarMemberCenter");
+					tLastHotkeyTime[i] = 0.0;
+				}
+				else
+				{
+					DispatchCustomEvent(hPartyMemberPanel, "PartybarMemberSelect", { addflag:!bIsFirstPanel });
+					tLastHotkeyTime[i] = Game.Time();
+				}
+				bIsFirstPanel = false;
+			}
+		}
+		return true;
+	}
+}
+
+Game.RegisterHotkey("F1", OnHotkeyPartyMemberSelect.bind(this, 1));
+Game.RegisterHotkey("F2", OnHotkeyPartyMemberSelect.bind(this, 2));
+Game.RegisterHotkey("F3", OnHotkeyPartyMemberSelect.bind(this, 4));
+Game.RegisterHotkey("F4", OnHotkeyPartyMemberSelect.bind(this, 8));
+Game.RegisterHotkey("`", OnHotkeyPartyMemberSelect.bind(this, 15));
 
 function OnPartyBarSelect(tArgs)
 {
 	var tSelectedPanelList = [];
 	var bIsDoubleSelect = ((Game.Time() - nLastSelectTime < 0.25) && (nLastSelectMask === tArgs.value));
 	
-	for (var i = 0; i < MAX_PARTY_MEMBERS; i++)
+	for (var i = 0; i < 4; i++)
 	{
 		if (tArgs.value & (1 << i))
 		{
@@ -93,7 +126,7 @@ function OnPartyInfoUpdate(szTableName, szKey, tData)
 (function()
 {
 	var hMemberContainer = $("#MemberContainer");
-	for (var i = 0; i < MAX_PARTY_MEMBERS; i++)
+	for (var i = 0; i < 4; i++)
 	{
 		var hMember = $.CreatePanel("Panel", hMemberContainer, "PartyMember" + (i + 1));
 		hMember.BLoadLayout("file://{resources}/layout/custom_game/partybar/iw_partybar_member.xml", false, false);

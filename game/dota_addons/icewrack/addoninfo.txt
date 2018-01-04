@@ -2,11 +2,158 @@
 
 {
 
-	"TeamCount"		"1"
+	"TeamCount"		"3"
 	"maps"			"main_menu"
 	"IsPlayable"		"1"
 	"main_menu"
 	{
 		"MaxPlayers"                    "1"
+	}
+	"Default_Keys"
+	{
+		"01"
+		{
+			"Key"		"F1"
+			"Command"	"IcewrackHotkeyF1"
+			"Name"		"HotkeyF1"
+		}
+		"02"
+		{
+			"Key"		"F2"
+			"Command"	"IcewrackHotkeyF2"
+			"Name"		"HotkeyF2"
+		}
+		"03"
+		{
+			"Key"		"F3"
+			"Command"	"IcewrackHotkeyF3"
+			"Name"		"HotkeyF3"
+		}
+		"04"
+		{
+			"Key"		"F4"
+			"Command"	"IcewrackHotkeyF4"
+			"Name"		"HotkeyF4"
+		}
+		"05"
+		{
+			"Key"		"F5"
+			"Command"	"IcewrackHotkeyF5"
+			"Name"		"HotkeyF5"
+		}
+		"06"
+		{
+			"Key"		"F6"
+			"Command"	"IcewrackHotkeyF6"
+			"Name"		"HotkeyF6"
+		}
+		"07"
+		{
+			"Key"		"F7"
+			"Command"	"IcewrackHotkeyF7"
+			"Name"		"HotkeyF7"
+		}
+		"08"
+		{
+			"Key"		"F8"
+			"Command"	"IcewrackHotkeyF8"
+			"Name"		"HotkeyF8"
+		}
+		"09"
+		{
+			"Key"		"F9"
+			"Command"	"IcewrackHotkeyF9"
+			"Name"		"HotkeyF9"
+		}
+		"10"
+		{
+			"Key"		"10"
+			"Command"	"IcewrackHotkeyF10"
+			"Name"		"HotkeyF10"
+		}
+		"11"
+		{
+			"Key"		"F11"
+			"Command"	"IcewrackHotkeyF11"
+			"Name"		"HotkeyF11"
+		}
+		"12"
+		{
+			"Key"		"F12"
+			"Command"	"IcewrackHotkeyF12"
+			"Name"		"HotkeyF12"
+		}
+		"13"
+		{
+			"Key"		"SPACE"
+			"Command"	"IcewrackHotkeySpace"
+			"Name"		"HotkeySpace"
+		}
+		"14"
+		{
+			"Key"		"1"
+			"Command"	"IcewrackHotkey1"
+			"Name"		"Hotkey1"
+		}
+		"15"
+		{
+			"Key"		"2"
+			"Command"	"IcewrackHotkey2"
+			"Name"		"Hotkey2"
+		}
+		"16"
+		{
+			"Key"		"3"
+			"Command"	"IcewrackHotkey3"
+			"Name"		"Hotkey3"
+		}
+		"17"
+		{
+			"Key"		"4"
+			"Command"	"IcewrackHotkey4"
+			"Name"		"Hotkey4"
+		}
+		"18"
+		{
+			"Key"		"5"
+			"Command"	"IcewrackHotkey5"
+			"Name"		"Hotkey5"
+		}
+		"19"
+		{
+			"Key"		"6"
+			"Command"	"IcewrackHotkey6"
+			"Name"		"Hotkey6"
+		}
+		"20"
+		{
+			"Key"		"7"
+			"Command"	"IcewrackHotkey7"
+			"Name"		"Hotkey7"
+		}
+		"21"
+		{
+			"Key"		"8"
+			"Command"	"IcewrackHotkey8"
+			"Name"		"Hotkey8"
+		}
+		"22"
+		{
+			"Key"		"9"
+			"Command"	"IcewrackHotkey9"
+			"Name"		"Hotkey9"
+		}
+		"23"
+		{
+			"Key"		"0"
+			"Command"	"IcewrackHotkey0"
+			"Name"		"Hotkey0"
+		}
+		"24"
+		{
+			"Key"		"`"
+			"Command"	"IcewrackHotkeyTilde"
+			"Name"		"HotkeyTilde"
+		}
 	}
 }

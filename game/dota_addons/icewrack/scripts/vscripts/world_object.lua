@@ -2,33 +2,34 @@ if not CWorldObject then
 
 require("instance")
 require("entity_base")
-require("expression")
---require("interactable")
 
-local stInteractableData = LoadKeyValues("scripts/npc/npc_interactables_extended.txt")
+local stWorldObjectData = LoadKeyValues("scripts/npc/npc_world_objects.txt")
 
 local stWorldObjectScriptData = {}
 CWorldObject = setmetatable(ext_class({}), { __call =
 	function(self, hEntity, nInstanceID)
-		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC", type(hEntity))
+		LogAssert(IsInstanceOf(hEntity, CDOTA_BaseNPC), LOG_MESSAGE_ASSERT_TYPE, "CDOTA_BaseNPC")
 		if IsInstanceOf(hEntity, CWorldObject) then
-			LogMessage("Tried to create a CWorldObject from \"" .. hEntity:GetUnitName() .."\", which is already a CWorldObject", LOG_SEVERITY_WARNING)
+			LogMessage(LOG_MESSAGE_WARN_EXISTS, LOG_SEVERITY_WARNING, "CWorldObject", hEntity:GetUnitName())
 			return hEntity
 		end
 		
 		local szEntityName = hEntity:GetUnitName()
-		local tInteractableTemplate = stInteractableData[hEntity:GetUnitName()]
-		LogAssert(tInteractableTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
+		local tWorldObjectTemplate = stWorldObjectData[hEntity:GetUnitName()]
+		LogAssert(tWorldObjectTemplate, LOG_MESSAGE_ASSERT_TEMPLATE, hEntity:GetUnitName())
 		
 		hEntity = CEntityBase(hEntity, nInstanceID)
 		--hEntity = CInteractable(hEntity, nInstanceID)
 		ExtendIndexTable(hEntity, CWorldObject)
 		
 		hEntity._fObjectState = 0
-		hEntity._hPrecondition = CExpression(tInteractableTemplate.Precondition or "")
-		hEntity._hPostcondition = CExpression(tInteractableTemplate.Postcondition or "")
+		hEntity._hPrecondition = LoadFunctionSnippet(tWorldObjectTemplate.Precondition)
+		hEntity._hPostcondition = LoadFunctionSnippet(tWorldObjectTemplate.Postcondition)
 		
-		local szScriptFilename = tInteractableTemplate.ScriptFile
+		hEntity:SetInteractRange(tWorldObjectTemplate.InteractRange)
+		hEntity:SetInteractZone(tWorldObjectTemplate.InteractZone)
+		
+		local szScriptFilename = tWorldObjectTemplate.ScriptFile
 		if szScriptFilename then
 			szScriptFilename = string.gsub(szScriptFilename, "\\", "/")
 			szScriptFilename = string.gsub(szScriptFilename, "scripts/vscripts/", "")
@@ -82,17 +83,20 @@ function CWorldObject:OnChangeState(fNewState)
 end
 
 function CWorldObject:Interact(hEntity)
-	if self._hPostcondition then
-		self._hPostcondition:EvaluateExpression()
-	end
+	local bResult = true
 	if self.OnInteract then
-		return self:OnInteract(hEntity)
+		bResult = self:OnInteract(hEntity)
 	end
-	return true
+	local hPostcondition = self._hPostcondition
+	if hPostcondition then
+		hPostcondition()
+	end
+	return bResult
 end
 
 function CWorldObject:InteractFilterExclude(hEntity)
-	if not self._hPrecondition:EvaluateExpression() then
+	local hPrecondition = self._hPrecondition
+	if (hPrecondition and not hPrecondition()) then
 		return false
 	elseif self.OnInteractFilterExclude then
 		return self:OnInteractFilterExclude(hEntity)
@@ -108,7 +112,8 @@ function CWorldObject:InteractFilterInclude(hEntity)
 end
 
 function CWorldObject:GetCustomInteractError(hEntity)
-	if not self._hPrecondition:EvaluateExpression() then
+	local hPrecondition = self._hPrecondition
+	if (hPrecondition and not hPrecondition()) then
 		return "TODO: The precondition failed. Replace me."
 	elseif self.OnGetCustomInteractError then
 		return self:OnGetCustomInteractError(hEntity)

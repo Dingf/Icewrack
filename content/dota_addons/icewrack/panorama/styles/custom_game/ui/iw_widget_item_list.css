@@ -1,15 +1,16 @@
 .ItemListRoot
 {
-	width: 520px;
-	height: 736px;
+	width: 100%;
+	height: fill-parent-flow(1.0);
 }
 
 .ItemListContent
 {
-	width: 492px;
-	height: 460px;
+	width: 100%;
+	height: 100%;
 	background-color: #000000C0;
-	margin-top: 258px;
+	margin: 258px 28px 16px 0px;
+	
 }
 
 .ItemListContainer
@@ -22,9 +23,9 @@
 
 .ItemListHitbox
 {
-	width: 492px;
-	height: 460px;
-	margin-top: 258px;
+	width: 100%;
+	height: 100%;
+	margin: 258px 28px 16px 0px;
 }
 
 .ItemListBody
@@ -44,12 +45,11 @@
 .ItemListTabLabel
 {
 	color: #ffffff40;
-	width: 492px;
+	width: 100%;
 	font-size: 20px;
 	font-family: RadianceM,Radiance,FZLanTingHei-R-GBK,TH Sarabun New,Gulim,MingLiU;
 	text-align: center;
-	margin-top: 230px;
-	margin-left: 0px;
+	margin: 230px 28px 0px 0px;
 }
 
 .ItemListSorter
@@ -83,12 +83,6 @@
 	flow-children: left;
 }
 
-.ItemListSorterSpacer
-{
-	height: 100%;
-	width: 40px;
-}
-
 .ItemListSorterLabel
 {
 	text-align: center;
@@ -101,16 +95,21 @@
 
 .ItemListSorterDirectionIcon
 {
-	height: 24px;
+	height: 22px;
 	width: 9px;
-	margin-left: 2px;
 	vertical-align: center;
-	opacity: 0.4;
+	opacity: 0.1;
 }
 
 .DirectionIconSortAscending
 {
 	transform: scale3d(1.0, -1.0, 1.0);
+}
+
+#TypeCategory
+{
+	padding-left: 14px;
+	width: 40px;
 }
 
 #NameCategory
